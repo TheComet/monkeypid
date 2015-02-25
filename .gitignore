@@ -1,2 +1,7 @@
-.gradle/
+# ignore gradle/build folders
 /build
+.gradle/
+
+# ignore IntelliJ IDEA files
+.idea/
+*.iml
