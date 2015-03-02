@@ -2,8 +2,6 @@ package com.thecomet.monkeypid;
 
 import com.thecomet.monkeypid.view.MainWindow;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
