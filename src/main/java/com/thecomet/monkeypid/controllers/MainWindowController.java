@@ -1,6 +1,5 @@
 package com.thecomet.monkeypid.controllers;
 
-import com.thecomet.monkeypid.interfaces.MathBlock;
 import com.thecomet.monkeypid.interfaces.MathBlockInterface;
 import com.thecomet.monkeypid.models.MathChainFactory;
 import javafx.event.ActionEvent;
@@ -26,7 +25,7 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         XYChart.Series<Number, Number> series = new XYChart.Series();
-        double timeStep = 0.1;
+        double timeStep = 0.01;
 
         double ks = 2.0;
         double tu = 1.25;
@@ -34,13 +33,17 @@ public class MainWindowController implements Initializable {
 
         // faustregel 20%
         // http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29
-        double p = 1.2 * tg / (tu * tg);
-        double i = 2 * tu;
-        double d = 0.47 * tu;
-        MathBlockInterface chain = MathChainFactory.pidOpen(p, i, d);
+        double kp = 0.6 * tg / (tu * tg);
+        double ki = 0.2 * tu;
+        double kd = 0.42 * tu;
 
-        for(double time = 0.0; time < 100; time += timeStep) {
-            double result = chain.stepAll(1, timeStep);
+        MathBlockInterface pid = MathChainFactory.pidController(kp, ki, kd);
+        MathBlockInterface controlledSystem = MathChainFactory.controlledSystem(ks, tu, tg);
+        MathBlockInterface closedSystem = MathChainFactory.closedSystem(pid, controlledSystem);
+
+        series.getData().add(new XYChart.Data(0, 0));
+        for(double time = timeStep; time < 100; time += timeStep) {
+            double result = closedSystem.stepAll(1, timeStep);
             series.getData().add(new XYChart.Data(time, result));
         }
         lineChart.getData().add(series);
