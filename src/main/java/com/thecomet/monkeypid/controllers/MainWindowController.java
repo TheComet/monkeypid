@@ -26,23 +26,24 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         XYChart.Series<Number, Number> series = new XYChart.Series();
         double timeStep = 0.01;
+        double endTime = 1000;
 
-        double ks = 2.0;
+        double ks = 2;
         double tu = 1.25;
         double tg = 6.95;
 
         // faustregel 20%
         // http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29
-        double kp = 0.6 * tg / (tu * tg);
-        double ki = 0.2 * tu;
-        double kd = 0.42 * tu;
+        double kp = 0.95 * tg / (tu * tg);
+        double ki = 1.35 * tu;
+        double kd = 0.47 * tu;
 
         MathBlockInterface pid = MathChainFactory.pidController(kp, ki, kd);
-        MathBlockInterface controlledSystem = MathChainFactory.controlledSystem(ks, tu, tg);
+        MathBlockInterface controlledSystem = MathChainFactory.controlledSystemPT1(ks, tu, tg);
         MathBlockInterface closedSystem = MathChainFactory.closedSystem(pid, controlledSystem);
 
         series.getData().add(new XYChart.Data(0, 0));
-        for(double time = timeStep; time < 100; time += timeStep) {
+        for(double time = timeStep; time < endTime; time += timeStep) {
             double result = closedSystem.stepAll(1, timeStep);
             series.getData().add(new XYChart.Data(time, result));
         }
