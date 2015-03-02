@@ -50,7 +50,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <LineChart fx:id="lineChart" prefHeight="69.0" prefWidth="500.0" GridPane.rowIndex="1">
+      <LineChart fx:id="lineChart" createSymbols="false" prefHeight="69.0" prefWidth="500.0" GridPane.rowIndex="1">
         <xAxis>
           <NumberAxis label="Zeit" side="BOTTOM" />
         </xAxis>

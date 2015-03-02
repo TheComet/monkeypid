@@ -26,11 +26,22 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         XYChart.Series<Number, Number> series = new XYChart.Series();
-        double timeStep = 1.0;
-        MathBlockInterface chain = MathChainFactory.testChain();
+        double timeStep = 0.1;
+
+        double ks = 2.0;
+        double tu = 1.25;
+        double tg = 6.95;
+
+        // faustregel 20%
+        // http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29
+        double p = 1.2 * tg / (tu * tg);
+        double i = 2 * tu;
+        double d = 0.47 * tu;
+        MathBlockInterface chain = MathChainFactory.pidOpen(p, i, d);
 
         for(double time = 0.0; time < 100; time += timeStep) {
-            series.getData().add(new XYChart.Data(time, chain.stepAll(1, timeStep)));
+            double result = chain.stepAll(1, timeStep);
+            series.getData().add(new XYChart.Data(time, result));
         }
         lineChart.getData().add(series);
     }
