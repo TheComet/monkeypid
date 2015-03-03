@@ -1,18 +1,11 @@
-package com.thecomet.monkeypid.view;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.view;
 
-import com.thecomet.monkeypid.Assets;
-import com.thecomet.monkeypid.controllers.MainWindowController;
-import javafx.fxml.FXML;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.MainWindowController;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Pane;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * @author Alex Murray

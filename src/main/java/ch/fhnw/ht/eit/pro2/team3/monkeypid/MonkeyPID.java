@@ -1,6 +1,6 @@
-package com.thecomet.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import com.thecomet.monkeypid.view.MainWindow;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.view.MainWindow;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

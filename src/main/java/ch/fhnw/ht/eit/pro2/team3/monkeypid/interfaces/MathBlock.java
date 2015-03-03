@@ -1,4 +1,4 @@
-package com.thecomet.monkeypid.interfaces;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces;
 
 public abstract class MathBlock implements MathBlockInterface {
 

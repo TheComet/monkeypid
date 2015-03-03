@@ -1,7 +1,7 @@
-package com.thecomet.monkeypid.models;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import com.thecomet.monkeypid.interfaces.MathBlock;
-import com.thecomet.monkeypid.interfaces.MathBlockInterface;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlock;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlockInterface;
 
 import java.util.ArrayList;
 
