@@ -24,8 +24,8 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        XYChart.Series<Number, Number> series = new XYChart.Series();
-        double timeStep = 0.01;
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        double numPoints = 1000;
         double endTime = 1000;
 
         double ks = 2;
@@ -42,10 +42,11 @@ public class MainWindowController implements Initializable {
         MathBlockInterface controlledSystem = MathChainFactory.controlledSystemPT1(ks, tu, tg);
         MathBlockInterface closedSystem = MathChainFactory.closedSystem(pid, controlledSystem);
 
-        series.getData().add(new XYChart.Data(0, 0));
+        series.getData().add(new XYChart.Data<>(0, 0));
+        double timeStep = endTime / numPoints;
         for(double time = timeStep; time < endTime; time += timeStep) {
             double result = closedSystem.stepAll(1, timeStep);
-            series.getData().add(new XYChart.Data(time, result));
+            series.getData().add(new XYChart.Data<>(time, result));
         }
         lineChart.getData().add(series);
     }

@@ -22,7 +22,8 @@ public class MathChainFactory {
      *
      * Note how there is no feedback loop (the loop is open). This is so other math
      * chains can be inserted in between, if necessary. The loop can be closed by
-     * passing a "current" value into block.set().
+     * passing a "current" value into block.set() (or, more precisely,
+     * block.getBlock("error").set())
      *
      * Valid math block names for getBlock() are:
      *  + "error" for the error block.
@@ -42,6 +43,7 @@ public class MathChainFactory {
             public double stepSingle(double inputValue, double deltaTime) {
                 return (inputValue - this.error) * deltaTime;
             }
+
             public void set(double value) {
                 this.error = value;
             }
@@ -83,6 +85,7 @@ public class MathChainFactory {
                 public double dueTime;
                 public double value;
             }
+
             private double e = 2.718281828459045235360;
             private double pi = 3.141592653589793238462;
             private double normalisationFactor = ks;
@@ -97,7 +100,9 @@ public class MathChainFactory {
             public double stepSingle(double inputValue, double deltaTime) {
                 // PT1 simulation of model, *should* be accurate enough if tu/tg is small.
                 // formula used is G(s) = k/(1 + s*T)
-                this.value += (inputValue - this.value) / Math.sqrt(1.0 + Math.pow(2.0*pi*period/deltaTime, 2.0));
+                this.value += (inputValue - this.value) / (
+                        Math.sqrt(1.0 + Math.pow(2.0*pi*period/deltaTime, 2.0)) *
+                        Math.sqrt(1.0 + Math.pow(2.0*pi*period*0.1/deltaTime, 2.0)));
 
                 // simulate dead time by saving the current value into a list and returning
                 // it when it's time
