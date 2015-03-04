@@ -23,5 +23,3 @@ public class MonkeyPID extends Application {
         stage.show();
     }
 }
-
-//test
