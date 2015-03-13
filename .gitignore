@@ -5,3 +5,9 @@
 # ignore IntelliJ IDEA files
 .idea/
 *.iml
+/bin/
+
+# ignore eclipse stuff
+.classpath
+.project
+.settings/
