@@ -2,17 +2,13 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlockInterface;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.MathChainFactory;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.input.DragEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,44 +18,28 @@ import java.util.ResourceBundle;
  */
 public class MainWindowController implements Initializable {
     @FXML private LineChart<Number, Number> lineChartPIDStepResponse;
-    @FXML private Slider sliderNumPoints;
-    @FXML private Slider sliderEndTime;
-    @FXML private TextField textFieldNumPoints;
-    @FXML private TextField textFieldEndTime;
+    @FXML private GridPane mainPane;
+    @FXML private GridPane inputPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // listen to slider changes
-        sliderNumPoints.valueChangingProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                sliderNumPoints.setMax(sliderNumPoints.getValue() * 2);
-                doPIDStepResponseCalculations();
-            }
-        });
-        sliderEndTime.valueChangingProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
-                sliderEndTime.setMax(sliderEndTime.getValue() * 2);
-                doPIDStepResponseCalculations();
-            }
-        });
-        sliderNumPoints.valueProperty().addListener((observable, oldValue, newValue) -> {
-            textFieldNumPoints.setText(newValue.toString());
-        });
-        sliderEndTime.valueProperty().addListener((observable, oldValue, newValue) -> {
-            textFieldEndTime.setText(newValue.toString());
-        });
+    }
 
-        // calculate first set
-        doPIDStepResponseCalculations();
+    public GridPane getMainPane() {
+        return mainPane;
+    }
+
+    public GridPane getInputPane() {
+        return inputPane;
     }
 
     public void doPIDStepResponseCalculations() {
         // delete all existing series
         lineChartPIDStepResponse.getData().clear();
 
-        double numPoints = sliderNumPoints.getValue();
-        double endTime = sliderEndTime.getValue();
+        double numPoints = 1000;
+        double endTime = 10;
 
         double ks = 2;
         double tu = 1.25;
@@ -82,6 +62,7 @@ public class MainWindowController implements Initializable {
             double result = closedSystem.stepAll(1, timeStep);
             series.getData().add(new XYChart.Data<>(time, result));
         }
+
         lineChartPIDStepResponse.getData().add(series);
     }
 }

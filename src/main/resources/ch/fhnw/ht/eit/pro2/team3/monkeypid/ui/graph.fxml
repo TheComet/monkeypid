@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.GraphController">
+   <tabs>
+      <Tab closable="false" text="Step Response">
+         <content>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                  <LineChart fx:id="lineChartDynamicStepResponse" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <xAxis>
+                        <NumberAxis side="BOTTOM" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </content>
+      </Tab>
+      <Tab closable="false" text="sani (debug)">
+         <content>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
+               <children>
+                  <LineChart fx:id="lineChartSaniTuTg" createSymbols="false" prefHeight="80.0">
+                     <xAxis>
+                        <NumberAxis side="BOTTOM" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+                  <LineChart fx:id="lineChartSaniTg" createSymbols="false" prefHeight="80.0" prefWidth="500.0" GridPane.rowIndex="1">
+                     <xAxis>
+                        <NumberAxis side="BOTTOM" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+                  <GridPane GridPane.rowIndex="2">
+                     <children>
+                        <Slider fx:id="sliderEndTime" max="2000.0" min="1.0" value="1000.0" GridPane.columnIndex="1" />
+                        <Slider fx:id="sliderNumPoints" max="1000.0" min="1.0" value="500.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="endTime" />
+                        <Label text="numPoints" GridPane.rowIndex="1" />
+                        <TextField fx:id="textFieldEndTime" GridPane.columnIndex="2" />
+                        <TextField fx:id="textFieldNumPoints" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="77.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="335.0" minWidth="10.0" prefWidth="331.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="79.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="89.0" minHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>

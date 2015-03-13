@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.view.MainWindow;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.view.MainWindowView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,7 +14,7 @@ public class MonkeyPID extends Application {
     public void start(Stage stage) throws Exception {
 
         // load main window
-        MainWindow mainWindow = new MainWindow();
+        MainWindowView mainWindow = new MainWindowView();
         mainWindow.initialise();
 
         Scene scene = new Scene(mainWindow.getRoot(), 300, 275);
