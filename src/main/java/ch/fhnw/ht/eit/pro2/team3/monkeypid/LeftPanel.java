@@ -82,6 +82,9 @@ public class LeftPanel extends JPanel implements ActionListener {
 
 	// Simulationsbutton
 	private JButton btSimulate = new JButton("Simulieren");
+	
+	// Simulation
+	private JLabel lbSimulationTitle = new JLabel("Simulation");
 
 	// Beschriftung der Liste
 	private JLabel lbOutputSimulation = new JLabel("Ausgangssimulation:");
@@ -94,9 +97,12 @@ public class LeftPanel extends JPanel implements ActionListener {
 	// Test Tabelle
 	private JTable tbTest = new JTable(10, 5);
 
-	// Button Loeschen
+	// 
+	
+	// Button Loeschen und Uebernehmen
 	private JButton btDelete = new JButton("Löschen");
-
+	private JButton btAdopt = new JButton("Übernehmen");
+	
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());
 
@@ -155,6 +161,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 		add(btSimulate, new GridBagConstraints(0, 8, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
+		
 
 		/*
 		 * // Liste der Ausgangssimulationen add(lbOutputSimulation, new
@@ -179,18 +186,23 @@ public class LeftPanel extends JPanel implements ActionListener {
 		 */
 
 		// Button Loeschen
-		add(btDelete, new GridBagConstraints(0, 13, 6, 1, 0.0, 0.0,
+		add(btDelete, new GridBagConstraints(4, 15, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
+		// Button Uebernehmen
+		add(btAdopt, new GridBagConstraints(2, 15, 2, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.NONE,
+				new Insets(10, 10, 10, 10), 0, 0));
+		
 		// Test
 		tbTest.setEnabled(false);
-		add(tbTest, new GridBagConstraints(0, 14, 7, 1, 0.0, 0.0,
+		add(tbTest, new GridBagConstraints(0, 14, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// Vertikaler Dummy
-		add(new JPanel(), new GridBagConstraints(0, 14, 1, 1, 0.0, 1.0,
+		add(new JPanel(), new GridBagConstraints(0, 13, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
 				new Insets(10, 10, 10, 10), 0, 0));
 	}

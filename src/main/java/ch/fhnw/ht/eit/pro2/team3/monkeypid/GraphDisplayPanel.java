@@ -70,7 +70,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 	public GraphDisplayPanel(Controller controller) {
 		super(new FlowLayout(FlowLayout.LEADING));
 
-		
 		add(cbPhasengangmethode);
 		add(cbFaustformel1a);
 		add(cbFaustformel1b);

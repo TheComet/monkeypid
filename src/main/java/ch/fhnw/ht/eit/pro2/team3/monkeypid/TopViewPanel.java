@@ -70,7 +70,7 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		
 		//Menu "Datei" erstellen
 		JMenu menuDatei = new JMenu("Datei");
-		JMenuItem eintrag1Datei = new JMenuItem("Option1");
+		JMenuItem eintrag1Datei = new JMenuItem("Mini-Version");
 		menuDatei.add(eintrag1Datei);
 		JMenuItem eintrag2Datei = new JMenuItem("Exit");
 		menuDatei.add(eintrag2Datei);
