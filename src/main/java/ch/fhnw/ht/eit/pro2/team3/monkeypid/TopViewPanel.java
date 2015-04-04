@@ -23,7 +23,7 @@ public class TopViewPanel extends JPanel implements ActionListener {
 	public TopViewPanel(Controller controller) {
 		super(new GridBagLayout());
 
-		LeftPanel leftPanel = new LeftPanel(controller);	//LeftPanel hinzufügen
+		LeftPanel leftPanel = new LeftPanel(controller);	//LeftPanel hinzufuegen
 		GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel(controller);
 		GraphPanel graphPanel = new GraphPanel(controller);
 		
@@ -32,12 +32,12 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		
 		//Menu "Datei" erstellen
 		JMenu menuDatei = new JMenu("Datei");
-		JMenuItem eintrag1Datei = new JMenuItem("Option1");
+		JMenuItem eintrag1Datei = new JMenuItem("Mini-Version");
 		menuDatei.add(eintrag1Datei);
 		JMenuItem eintrag2Datei = new JMenuItem("Exit");
 		menuDatei.add(eintrag2Datei);
 	
-		menuBar.add(menuDatei); //Menu Datei der MenuBar hinzufügen
+		menuBar.add(menuDatei); //Menu Datei der MenuBar hinzufuegen
 
 		//Help
 		JMenu menuHilfe = new JMenu("Help");
@@ -49,25 +49,26 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		menuBar.add(menuHilfe);
 
 		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 10, 10, 10), 0, 0));
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL,
+				new Insets(0, 10, 0, 0), 0, 0));
 				
-
-		add(leftPanel, new GridBagConstraints(0, 1, 2, 1, 0.0, 1.0,
+		//LeftPanel hinzufuegen
+		add(leftPanel, new GridBagConstraints(0, 1, 1, 2, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(10, 10, 10, 0), 0, 0));
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
-		add(graphPanel, new GridBagConstraints(2, 0, 1, 2, 1.0, 1.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10), 400, 200));
-		graphPanel.setBorder(new TitledBorder((null), "Graph"));
-		
-		add(graphDisplayPanel, new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
+		//GraphPanel hinzufuegen
+		add(graphPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 10, 10, 10), 0, 0));
+		graphPanel.setBorder(new TitledBorder((null), "Graph"));
+		
+		//GraphDisplayPanel hinzufuegen
+		add(graphDisplayPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(0, 10, 10, 10), 0, 0));
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
-
 	}
 
 	public static void main(String args[]) {
