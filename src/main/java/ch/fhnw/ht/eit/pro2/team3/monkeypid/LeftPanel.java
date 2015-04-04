@@ -1,61 +1,18 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.PopupMenu;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Random;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JRootPane;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.MaskFormatter;
 
 public class LeftPanel extends JPanel implements ActionListener {
 
 	// Eingabefeld Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
-			"Eingabe der Kenngrösse der Regelstrecke:");
+			"Eingabe der Kenngrï¿½sse der Regelstrecke:");
 	private JLabel lbKs = new JLabel("Ks");
 	private JLabel lbTu = new JLabel("Tu");
 	private JLabel lbTg = new JLabel("Tg");
@@ -64,9 +21,9 @@ public class LeftPanel extends JPanel implements ActionListener {
 	private JTextField tfTg = new JTextField(5);
 
 	// Parasitaere Zeitkonstante
-	private JLabel lbTimeConstantTitle = new JLabel("Parasitäre Zeitkonstante:");
+	private JLabel lbTimeConstantTitle = new JLabel("Parasitï¿½re Zeitkonstante:");
 	private JLabel lbTp = new JLabel("Tp");
-	private JLabel lbTuInfo = new JLabel("%   (standardmässig 10% von Tg)");
+	private JLabel lbTuInfo = new JLabel("%   (standardmï¿½ssig 10% von Tg)");
 	private JTextField tfTp = new JTextField("10", 5);
 
 	// Wahl des Reglers
@@ -76,7 +33,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 
 	// Phasengangmethode Ueberschwingen
 	private JLabel lbPhasengangmethodTitle = new JLabel(
-			"Überschwingen der Phasengangmethode:");
+			"ï¿½berschwingen der Phasengangmethode:");
 	private JComboBox<String> cbOvershoot = new JComboBox<String>(new String[] {
 			"0%", "4.6%", "16.3%" });
 
@@ -89,13 +46,13 @@ public class LeftPanel extends JPanel implements ActionListener {
 	private JLabel lbListeTitelKp = new JLabel("KP");
 	private JLabel lbListeTitelKi = new JLabel("Ki");
 	private JLabel lbListeTitelKd = new JLabel("Kd");
-	private JLabel lbListeTitelUeberschwingen = new JLabel("Überschwingen");
+	private JLabel lbListeTitelUeberschwingen = new JLabel("ï¿½berschwingen");
 
 	// Test Tabelle
 	private JTable tbTest = new JTable(10, 5);
 
 	// Button Loeschen
-	private JButton btDelete = new JButton("Löschen");
+	private JButton btDelete = new JButton("Lï¿½schen");
 
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());
