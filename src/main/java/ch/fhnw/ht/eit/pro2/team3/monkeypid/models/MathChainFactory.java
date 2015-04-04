@@ -1,7 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlock;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlockInterface;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.interfaces.MathBlock;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.interfaces.MathBlockInterface;
 
 import java.util.ArrayList;
 
