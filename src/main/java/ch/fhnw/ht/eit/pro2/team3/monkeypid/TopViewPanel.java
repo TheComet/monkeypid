@@ -23,7 +23,7 @@ public class TopViewPanel extends JPanel implements ActionListener {
 	public TopViewPanel(Controller controller) {
 		super(new GridBagLayout());
 
-		LeftPanel leftPanel = new LeftPanel(controller);	//LeftPanel hinzufügen
+		LeftPanel leftPanel = new LeftPanel(controller);	//LeftPanel hinzufuegen
 		GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel(controller);
 		GraphPanel graphPanel = new GraphPanel(controller);
 		
@@ -37,7 +37,7 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		JMenuItem eintrag2Datei = new JMenuItem("Exit");
 		menuDatei.add(eintrag2Datei);
 	
-		menuBar.add(menuDatei); //Menu Datei der MenuBar hinzufügen
+		menuBar.add(menuDatei); //Menu Datei der MenuBar hinzufuegen
 
 		//Help
 		JMenu menuHilfe = new JMenu("Help");
@@ -49,7 +49,7 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		menuBar.add(menuHilfe);
 
 		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 10, 0, 0), 0, 0));
 				
 		//LeftPanel hinzufuegen
@@ -59,17 +59,16 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
 		//GraphPanel hinzufuegen
-		add(graphPanel, new GridBagConstraints(1, 0, 1, 2, 1.0, 1.0,
+		add(graphPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 10, 10, 10), 0, 0));
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 		
 		//GraphDisplayPanel hinzufuegen
-		add(graphDisplayPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10), 0, 0));
+		add(graphDisplayPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(0, 10, 10, 10), 0, 0));
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
-
 	}
 
 	public static void main(String args[]) {
