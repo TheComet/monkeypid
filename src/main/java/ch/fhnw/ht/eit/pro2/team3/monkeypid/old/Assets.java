@@ -1,9 +1,7 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.old;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Path;
 
 /**
  * @author Alex Murray

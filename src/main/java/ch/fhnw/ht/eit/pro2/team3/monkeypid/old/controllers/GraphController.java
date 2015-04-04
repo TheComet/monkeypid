@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.old.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 import javafx.fxml.FXML;

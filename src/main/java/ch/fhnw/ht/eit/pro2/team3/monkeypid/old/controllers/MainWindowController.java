@@ -1,14 +1,12 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.old.controllers;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathBlockInterface;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.interfaces.MathBlockInterface;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.MathChainFactory;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
