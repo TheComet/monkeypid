@@ -43,11 +43,12 @@ public class GraphPanel extends JPanel implements ActionListener {
         // renderer
         XYItemRenderer renderer = new StandardXYItemRenderer();
 
-        // axis
-        NumberAxis yAxis = new NumberAxis("Test Range");
+        // axes
+        NumberAxis xAxis = new NumberAxis("Y Data");
+        NumberAxis yAxis = new NumberAxis("X Data");
 
         // create plot
-        XYPlot plot = new XYPlot(data, null, yAxis, renderer);
+        XYPlot plot = new XYPlot(data, xAxis, yAxis, renderer);
 
         // add plot into a new chart
         JFreeChart chart = new JFreeChart("Test Plot", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
@@ -57,6 +58,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 
         // finally, add panel as an element in our GraphPanel
         this.add(panel);
+
 	}
 
 	/*public static void main(String args[]) {
