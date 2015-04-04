@@ -159,7 +159,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// Vertikaler Dummy
-		add(new JPanel(), new GridBagConstraints(0, 13, 1, 1, 0.0, 1.0,
+		add(new JPanel(), new GridBagConstraints(0, 16, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
 				new Insets(10, 10, 10, 10), 0, 0));
 	}

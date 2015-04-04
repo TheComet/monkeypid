@@ -50,20 +50,22 @@ public class TopViewPanel extends JPanel implements ActionListener {
 
 		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 10, 10, 10), 0, 0));
+				new Insets(0, 10, 0, 0), 0, 0));
 				
-
-		add(leftPanel, new GridBagConstraints(0, 1, 2, 1, 0.0, 1.0,
+		//LeftPanel hinzufuegen
+		add(leftPanel, new GridBagConstraints(0, 1, 1, 2, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(10, 10, 10, 0), 0, 0));
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
-		add(graphPanel, new GridBagConstraints(2, 0, 1, 2, 1.0, 1.0,
+		//GraphPanel hinzufuegen
+		add(graphPanel, new GridBagConstraints(1, 0, 1, 2, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10), 400, 200));
+				new Insets(10, 10, 10, 10), 0, 0));
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 		
-		add(graphDisplayPanel, new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
+		//GraphDisplayPanel hinzufuegen
+		add(graphDisplayPanel, new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 10, 10, 10), 0, 0));
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
