@@ -1,6 +1,6 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.old;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.view.MainWindowView;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.view.MainWindowView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

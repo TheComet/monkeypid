@@ -1,6 +1,6 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid.view;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.old.view;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
