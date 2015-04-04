@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 import java.awt.Cursor;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -67,8 +68,22 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 
 
 	public GraphDisplayPanel(Controller controller) {
-		super(new GridBagLayout());
+		super(new FlowLayout(FlowLayout.LEADING));
 
+		
+		add(cbPhasengangmethode);
+		add(cbFaustformel1a);
+		add(cbFaustformel1b);
+		add(cbFaustformel2a);
+		add(cbFaustformel2b);
+		add(cbFaustformel3a);
+		add(cbFaustformel3b);
+		add(cbFaustformel4a);
+		add(cbFaustformel4b);
+		add(cbFaustformel5a);
+		add(cbFaustformel5b);
+
+		/*
 		add(cbPhasengangmethode, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
@@ -101,7 +116,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 				new Insets(10, 10, 10, 10), 0, 0));
 		add(cbFaustformel5b, new GridBagConstraints(5, 1, 1, 1, 1.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(10, 10, 10, 10), 0, 0));*/
 	}
 
 	/*public static void main(String args[]) {

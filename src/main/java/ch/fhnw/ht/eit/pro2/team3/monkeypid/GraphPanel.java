@@ -50,22 +50,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
+
 public class GraphPanel extends JPanel implements ActionListener {
 
 	// Eingabefeld Ks Tu Tg
 	private JLabel lbEingabeTitel = new JLabel(
 			"Darstellung des Graphen");
-
 	
 
 	public GraphPanel(Controller controller) {
 		super(new GridBagLayout());
 
-		add(lbEingabeTitel, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
-
-	
 
 	}
 

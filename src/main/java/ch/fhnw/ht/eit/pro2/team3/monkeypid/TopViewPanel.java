@@ -56,7 +56,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 
 public class TopViewPanel extends JPanel implements ActionListener {
-
+	
 	public TopViewPanel(Controller controller) {
 		super(new GridBagLayout());
 
@@ -87,24 +87,24 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		
 		menuBar.add(menuHilfe);
 
-		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
 				
 
-		add(leftPanel, new GridBagConstraints(0, 1, 2, 1, 1.0, 1.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+		add(leftPanel, new GridBagConstraints(0, 1, 2, 1, 0.0, 1.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
 				new Insets(10, 10, 10, 10), 0, 0));
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
 		add(graphPanel, new GridBagConstraints(2, 0, 1, 2, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10), 500, 500));
+				new Insets(10, 10, 10, 10), 400, 200));
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 		
 		add(graphDisplayPanel, new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 10, 10, 10), 500, 40));
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 10, 10), 0, 0));
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
 
 	}
