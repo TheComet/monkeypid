@@ -139,8 +139,6 @@ public class LeftPanel extends JPanel implements ActionListener {
 				new Insets(10, 10, 10, 10), 0, 0));
 		
 		// Slider
-
-		
 		add(slKp, new GridBagConstraints(0, 12, 5, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
@@ -160,7 +158,6 @@ public class LeftPanel extends JPanel implements ActionListener {
 		add(btAdopt, new GridBagConstraints(0, 15, 3, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(
 						10, 10, 10, 10), 0, 0));
-
 
 		// Vertikaler Dummy
 		add(new JPanel(), new GridBagConstraints(0, 16, 1, 1, 0.0, 1.0,
