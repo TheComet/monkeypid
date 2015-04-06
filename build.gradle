@@ -1,12 +1,11 @@
+apply plugin: 'application'
 apply plugin: 'java'
-apply from: 'javafx.plugin'
+apply plugin: 'eclipse'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-javafx {
-    mainClass = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.TopViewPanel'
-}
+mainClassName = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.TopViewPanel'
 
 repositories {
     mavenCentral()
@@ -16,18 +15,6 @@ dependencies {
     compile group: 'org.jfree', name: 'jfreechart', version: '1.0.18'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     testCompile group: 'junit', name: 'junit', version: '4.10'
-}
-
-run {
-    if (project.hasProperty('args')) {
-        args project.args.split('\\s+')
-    }
-}
-
-debug {
-    if (project.hasProperty('args')) {
-        args project.args.split('\\s+')
-    }
 }
 
 task wrapper(type: Wrapper) {
