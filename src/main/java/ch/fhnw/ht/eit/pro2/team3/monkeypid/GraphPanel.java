@@ -23,10 +23,6 @@ import javax.swing.*;
 
 public class GraphPanel extends JPanel implements ActionListener {
 
-	// Eingabefeld Ks Tu Tg
-	private JLabel lbEingabeTitel = new JLabel(
-			"Darstellung des Graphen");
-
 	public GraphPanel(Controller controller) {
 		//super(new GridBagLayout());
 		super(new BorderLayout());
@@ -58,12 +54,12 @@ public class GraphPanel extends JPanel implements ActionListener {
         // need a panel to add the chart to
         ChartPanel panel = new ChartPanel(chart);
         
-       // panel.setPreferredSize(new java.awt.Dimension( 1400 , 800 ) );
+       panel.setPreferredSize(new java.awt.Dimension( 800 , 400 ) );
         
         //panel.setMinimumDrawWidth( 0 );
         //panel.setMinimumDrawHeight( 0 );
-        panel.setMaximumDrawWidth( 1000 );
-        panel.setMaximumDrawHeight( 500 );
+        //panel.setMaximumDrawWidth( 500 );
+        //panel.setMaximumDrawHeight( 500 );
         
         // finally, add panel as an element in our GraphPanel
         this.add(panel);
