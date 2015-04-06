@@ -59,8 +59,8 @@ public class LeftPanel extends JPanel implements ActionListener {
 	private JSlider slTv = new JSlider(JSlider.HORIZONTAL,0,5,3);
 
 	// Button Loeschen und Uebernehmen
-	private JButton btDelete = new JButton("Löschen");
-	private JButton btAdopt = new JButton("Übernehmen");
+	private JButton btDelete = new JButton("Loeschen");
+	private JButton btAdopt = new JButton("Uebernehmen");
 
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());

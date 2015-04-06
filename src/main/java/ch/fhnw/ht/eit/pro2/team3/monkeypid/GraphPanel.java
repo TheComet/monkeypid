@@ -13,6 +13,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +28,8 @@ public class GraphPanel extends JPanel implements ActionListener {
 			"Darstellung des Graphen");
 
 	public GraphPanel(Controller controller) {
-		super(new GridBagLayout());
+		//super(new GridBagLayout());
+		super(new BorderLayout());
 
         // Create a test series of data
         XYSeries series = new XYSeries("Test Series");
@@ -55,32 +57,19 @@ public class GraphPanel extends JPanel implements ActionListener {
 
         // need a panel to add the chart to
         ChartPanel panel = new ChartPanel(chart);
-
+        
+       // panel.setPreferredSize(new java.awt.Dimension( 1400 , 800 ) );
+        
+        //panel.setMinimumDrawWidth( 0 );
+        //panel.setMinimumDrawHeight( 0 );
+        panel.setMaximumDrawWidth( 1000 );
+        panel.setMaximumDrawHeight( 500 );
+        
         // finally, add panel as an element in our GraphPanel
         this.add(panel);
 
 	}
 
-	/*public static void main(String args[]) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager
-							.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-				JFrame frame = new JFrame();
-				frame.setUndecorated(true);
-				frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setTitle("TopView");
-				frame.getContentPane().add(new GraphDisplayPanel(null));
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
-	}*/
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

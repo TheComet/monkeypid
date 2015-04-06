@@ -28,7 +28,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 
 		add(cbPhasengangmethode);
 		add(cbFaustformel1a);
-		add(cbFaustformel1b);
+		/*add(cbFaustformel1b);
 		add(cbFaustformel2a);
 		add(cbFaustformel2b);
 		add(cbFaustformel3a);
@@ -36,7 +36,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 		add(cbFaustformel4a);
 		add(cbFaustformel4b);
 		add(cbFaustformel5a);
-		add(cbFaustformel5b);
+		add(cbFaustformel5b);*/
 
 		/*
 		add(cbPhasengangmethode, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
@@ -74,26 +74,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 				new Insets(10, 10, 10, 10), 0, 0));*/
 	}
 
-	/*public static void main(String args[]) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager
-							.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-				JFrame frame = new JFrame();
-				frame.setUndecorated(true);
-				frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setTitle("TopView");
-				frame.getContentPane().add(new GraphDisplayPanel(null));
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
-	}*/
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
