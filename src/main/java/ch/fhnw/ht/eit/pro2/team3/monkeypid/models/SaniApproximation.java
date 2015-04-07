@@ -22,6 +22,12 @@ public class SaniApproximation {
         return instance;
     }
 
+    /**
+     * Returns a list of time constants which can be fed into the Zellweger method.
+     * @param tu Controller parameter Tu.
+     * @param tg Controller parameter Tg.
+     * @return
+     */
     public static ArrayList<Double> saniApproximation(double tu, double tg) {
         ArrayList<Double> returnArray = new ArrayList<>();
 
