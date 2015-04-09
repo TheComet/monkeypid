@@ -20,9 +20,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-
+/**
+ * 
+ * @author Josua
+ *
+ */
 public class GraphPanel extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 * @param controller
+	 */
 	public GraphPanel(Controller controller) {
 		//super(new GridBagLayout());
 		super(new BorderLayout());

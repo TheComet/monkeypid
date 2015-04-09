@@ -17,8 +17,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
+/**
+ * 
+ * @author Josua
+ *
+ */
 public class TopViewPanel extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 * @param controller
+	 */
 	public TopViewPanel(Controller controller) {
 		super(new GridBagLayout());
 		
@@ -31,8 +40,8 @@ public class TopViewPanel extends JPanel implements ActionListener {
 
 		// Menu "Datei" erstellen
 		JMenu menuDatei = new JMenu("Datei");
-		JMenuItem eintrag1Datei = new JMenuItem("Mini-Version");
-		menuDatei.add(eintrag1Datei);
+		JMenuItem eintragMiniVersion = new JMenuItem("Mini-Version");
+		menuDatei.add(eintragMiniVersion);
 		JMenuItem eintrag2Datei = new JMenuItem("Exit");
 		menuDatei.add(eintrag2Datei);
 
@@ -72,7 +81,9 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		//graphPanel.setVisible(false);
 		//graphDisplayPanel.setVisible(false);
 	}
-
+	/**
+	 * 
+	 */
 	public static void main(String args[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -94,8 +105,10 @@ public class TopViewPanel extends JPanel implements ActionListener {
 		});
 	}
 
-	@Override
+	/**
+	 * 
+	 */
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+	
 	}
 }

@@ -7,6 +7,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ * 
+ * @author Josua
+ *
+ */
 public class GraphDisplayPanel extends JPanel implements ActionListener {
 
 	
@@ -23,6 +28,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 	private JCheckBox cbFaustformel5b = new JCheckBox("Faustformel 5(X%)", true);
 
 
+	/**
+	 * 
+	 * @param controller
+	 */
 	public GraphDisplayPanel(Controller controller) {
 		super(new FlowLayout(FlowLayout.LEADING));
 
