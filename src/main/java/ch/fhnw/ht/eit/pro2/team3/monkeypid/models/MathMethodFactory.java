@@ -4,10 +4,8 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathMethodInterface;
 
 class MathMethodFactory {
     public enum MethodID {
-        TEST,
         ZELLWEGER_PI,
-        ZELLWEGER_PID,
-        SANI
+        ZELLWEGER_PID
     }
 
     /**
@@ -17,10 +15,6 @@ class MathMethodFactory {
      */
     public MathMethodInterface getMethod(MethodID method)
     {
-        switch(method) {
-            case TEST:
-                return new TestMathMethod();
-        }
 
         // invalid method ID
         throw new RuntimeException("Invalid MethodID");
