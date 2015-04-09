@@ -1,5 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
+import Model;
+import View;
+
 import java.awt.event.ActionEvent;
 
 /**
@@ -8,8 +11,8 @@ import java.awt.event.ActionEvent;
  *
  */
 public class Controller {
-
 	private Model model;
+	private TopViewPanel view;
 
 	/**
 	 * 
@@ -17,6 +20,13 @@ public class Controller {
 	 */
 	public Controller(Model model) {
 		this.model = model;
+	}
+	/**
+	 * 
+	 * 
+	 */
+	public void setView(TopViewPanel view) {
+		this.view = view;
 	}
 	/**
 	 * 
