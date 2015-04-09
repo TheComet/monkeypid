@@ -1,8 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import Model;
-import View;
-
 import java.awt.event.ActionEvent;
 
 /**

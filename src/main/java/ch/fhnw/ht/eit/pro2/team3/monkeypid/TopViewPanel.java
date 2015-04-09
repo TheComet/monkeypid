@@ -1,15 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import Controller;
-import Model;
-import View;
-
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,16 +23,20 @@ import javax.swing.border.TitledBorder;
  * @author Josua
  *
  */
-public class TopViewPanel extends JPanel implements ActionListener {
+public class TopViewPanel extends JPanel implements ActionListener, Observer {
+
+    private Model model;
+    private Controller controller;
 
 	/**
 	 * 
 	 * @param controller
 	 */
-	public TopViewPanel(Controller controller) {
+	public TopViewPanel(Controller controller, Model model) {
 		super(new GridBagLayout());
 		
-		
+		this.controller = controller;
+        this.model = model;
 
 		LeftPanel leftPanel = new LeftPanel(controller); // LeftPanel
 		GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel(controller);
@@ -121,38 +122,6 @@ public class TopViewPanel extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
-	public static void main(String args[]) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager
-							.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-				JFrame frame = new JFrame();
-				frame.setUndecorated(true);
-				frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setTitle("Dimensionierungstool Phasengang-Methode");
-				//frame.getContentPane().add(new TopViewPanel(null));
-				
-				Model model = new Model();
-				Controller controller = new Controller(model);
-				TopViewPanel view = new TopViewPanel(controller);
-				controller.setView(view);
-				//model.addObserver(view);
-					
-				
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
-	}
-
-	/**
-	 * 
-	 */
 	public void actionPerformed(ActionEvent e) {
 		/*if (e.getSource() == TestLink) {
 			try {
@@ -160,4 +129,9 @@ public class TopViewPanel extends JPanel implements ActionListener {
 			} catch (Exception e) {}
 		}*/
 	}
+
+    @Override
+    public void update(Observable observable, Object o) {
+
+    }
 }
