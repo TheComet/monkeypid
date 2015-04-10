@@ -1,12 +1,25 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import java.awt.Frame;
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class MonkeyPID extends Frame {
+
+public class MonkeyPID extends JFrame {
 
     public void init() {
+
+        try {
+            UIManager
+                    .setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        
+        setUndecorated(true);
+        getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Dimensionierungstool Phasengang-Methode");
 
         // initialise MVC stuff
         Model model = new Model();
