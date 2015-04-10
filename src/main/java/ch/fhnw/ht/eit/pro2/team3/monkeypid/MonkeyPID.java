@@ -4,8 +4,6 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.UIManager;
-
 public class MonkeyPID extends Frame {
 
     public void init() {
@@ -22,12 +20,6 @@ public class MonkeyPID extends Frame {
     public static void main(String[] args) {
         MonkeyPID app = new MonkeyPID();
 
-        try {
-            UIManager
-                    .setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
         // handle window close event
         app.addWindowListener(new WindowAdapter() {
             @Override
