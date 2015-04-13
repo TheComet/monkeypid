@@ -78,6 +78,8 @@ public class LeftPanel extends JPanel implements ActionListener {
 	 */
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());
+		
+		this.controller = controller;
 
 		//Eingabefelder
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,

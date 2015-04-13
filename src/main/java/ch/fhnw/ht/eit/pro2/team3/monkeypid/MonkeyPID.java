@@ -1,23 +1,26 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
-public class MonkeyPID {
+public class MonkeyPID extends JFrame {
 
-    public static void main(String[] args) {
+	// TODO Josua Stierli - Remove
+    /*public void init() {
+
         try {
             UIManager
                     .setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
-        JFrame frame = new JFrame();
-        frame.setUndecorated(true);
-        frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Dimensionierungstool Phasengang-Methode");
+        
+        setUndecorated(true);
+        getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Dimensionierungstool Phasengang-Methode");
 
         // initialise MVC stuff
         Model model = new Model();
@@ -25,11 +28,10 @@ public class MonkeyPID {
         TopViewPanel view = new TopViewPanel(controller, model);
         controller.setView(view);
         model.addObserver(view);
+        add(view);
+    }*/
 
-        frame.getContentPane().add(view);
-        frame.setVisible(true);
-
-        /*
+    /*public static void main(String[] args) {
         MonkeyPID app = new MonkeyPID();
 
         // handle window close event
@@ -43,11 +45,11 @@ public class MonkeyPID {
         // init app and run
         app.init();
         app.setVisible(true);
-        app.setTitle("Monkey PID");*/
-    }
+        app.setTitle("Monkey PID");
+    }*/
 
-    // TODO Josua Stierli - Remove
-    /*
+    
+    
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -62,11 +64,12 @@ public class MonkeyPID {
                 frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setTitle("Dimensionierungstool Phasengang-Methode");
-                //frame.getContentPane().add(new TopViewPanel(null));
 
                 Model model = new Model();
                 Controller controller = new Controller(model);
-                TopViewPanel view = new TopViewPanel(controller);
+                TopViewPanel view = new TopViewPanel(controller,model);
+                frame.getContentPane().add(view);
+
                 controller.setView(view);
                 //model.addObserver(view);
 
@@ -75,5 +78,5 @@ public class MonkeyPID {
                 frame.setVisible(true);
             }
         });
-    }*/
+    }
 }
