@@ -1,11 +1,18 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathMethod;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-class ZellwegerPI
+class Zellweger implements MathMethod
 {
+    private MathMethodFactory.Mode mode;
+
+    public Zellweger(MathMethodFactory.Mode mode) {
+        this.mode = mode;
+    }
 
     public void exec(double phiDamping, double ks, double[] timeConstants) {
 
@@ -172,5 +179,19 @@ class ZellwegerPI
      */
     private double amplitudeControllerPI(double omega, double tn) {
         return Math.sqrt(1.0 + Math.pow(omega * tn, 2)) / (omega * tn);
+    }
+
+    @Override
+    public void setOverSwing(double percent) {
+
+    }
+
+    @Override
+    public void doCalculation(double tg, double tu, double ks) {
+    }
+
+    @Override
+    public ControllerParameters getResult() {
+        return null;
     }
 }

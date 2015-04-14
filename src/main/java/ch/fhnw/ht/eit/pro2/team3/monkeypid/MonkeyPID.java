@@ -1,11 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
 import javax.swing.*;
-
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 
 public class MonkeyPID extends JFrame {
 
