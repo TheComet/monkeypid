@@ -36,7 +36,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 		super(new BorderLayout());
 
         // Create a test series of data
-        XYSeries series = new XYSeries("Test Series");
+        XYSeries series = new XYSeries("");
         series.add(0, 2);
         series.add(1, 4);
         series.add(2, 3);
@@ -62,7 +62,7 @@ public class GraphPanel extends JPanel implements ActionListener {
         // need a panel to add the chart to
         ChartPanel panel = new ChartPanel(chart);
         
-       panel.setPreferredSize(new java.awt.Dimension( 800 , 400 ) );
+       panel.setPreferredSize(new java.awt.Dimension( 600 , 400 ) );
         
         //panel.setMinimumDrawWidth( 0 );
         //panel.setMinimumDrawHeight( 0 );

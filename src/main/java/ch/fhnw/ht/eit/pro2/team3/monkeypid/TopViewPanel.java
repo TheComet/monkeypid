@@ -142,7 +142,7 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
 		// GraphPanel hinzufuegen
-		add(graphPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+		add(graphPanel, new GridBagConstraints(1, 0, 1, 2, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
 						10, 0, 10, 10), 0, 0));
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
@@ -250,7 +250,7 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 																// ein-/ausblenden
 			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
 			leftPanel.setMiniVersion(miniVersionSelected);
-
+			
 			miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht
 		}
 	}
