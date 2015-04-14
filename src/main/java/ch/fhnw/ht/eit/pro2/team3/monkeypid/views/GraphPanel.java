@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.StepResponse;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -32,11 +32,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 		super(new BorderLayout());
 
         // Create a test series of data
-        XYSeries series = new XYSeries("");
-        series.add(0, 2);
-        series.add(1, 4);
-        series.add(2, 3);
-        series.add(3, 5);
+        XYSeries series = StepResponse.exampleCalculate();
 
         // add series to collection (collection derives from XYDataset)
         XYSeriesCollection data = new XYSeriesCollection();
@@ -58,7 +54,7 @@ public class GraphPanel extends JPanel implements ActionListener {
         // need a panel to add the chart to
         ChartPanel panel = new ChartPanel(chart);
         
-       panel.setPreferredSize(new java.awt.Dimension( 600 , 400 ) );
+        panel.setPreferredSize(new java.awt.Dimension( 600 , 400 ) );
         
         //panel.setMinimumDrawWidth( 0 );
         //panel.setMinimumDrawHeight( 0 );
@@ -78,4 +74,5 @@ public class GraphPanel extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
+
 }
