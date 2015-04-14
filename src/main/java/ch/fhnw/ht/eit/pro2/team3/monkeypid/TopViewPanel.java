@@ -34,26 +34,41 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 	private Controller controller;
 
 	// Projektname
-	String projektName = "monkeypid";
+	private String projektName = "monkeypid";
 
-	//Submenu Hilfreiche Links
-	JMenuItem LinkWikiRegelungstechnik = new JMenuItem("Regelungstechnik Wiki",
-			'R');
-	JMenuItem LinkWikiFaustformelverfahren = new JMenuItem(
+	// TODO besserer Name
+	private boolean miniVersionSelected = false;
+
+	// MenuBar
+	private JMenuBar menuBar = new JMenuBar();
+
+	// Menu Datei
+	private JMenu menuData = new JMenu("Datei");
+
+	// Submenu Hilfreiche Links
+	private JMenuItem LinkWikiRegelungstechnik = new JMenuItem(
+			"Regelungstechnik Wiki", 'R');
+	private JMenuItem LinkWikiFaustformelverfahren = new JMenuItem(
 			"Faustformelverfahren Wiki", 'F');
-	JMenuItem LinkRnWissenRegelungstechnik = new JMenuItem(
+	private JMenuItem LinkRnWissenRegelungstechnik = new JMenuItem(
 			"Regelungstechnik RnWissen", 'e');
-	JMenuItem LinkPhasengangMethodePDF = new JMenuItem(
+	private JMenuItem LinkPhasengangMethodePDF = new JMenuItem(
 			"Phasengang-Methode.pdf", 'P');
-	JMenuItem LinkRegelkreiseUndRegelungenPDF = new JMenuItem(
+	private JMenuItem LinkRegelkreiseUndRegelungenPDF = new JMenuItem(
 			"Regelkreise und Regelungen.pdf", 'R');
-	JMenuItem LinkPidEinstellenPDF = new JMenuItem("pid-einstellen.pdf", 'p');
-	JMenuItem LinkBuergieSolenickiV3PDF = new JMenuItem(
+	private JMenuItem LinkPidEinstellenPDF = new JMenuItem(
+			"pid-einstellen.pdf", 'p');
+	private JMenuItem LinkBuergieSolenickiV3PDF = new JMenuItem(
 			"Buergi_Solenicki-V3.pdf", 'P');
 
-	//Menueintraege
-	JMenuItem menuItemExit = new JMenuItem("Exit");
-	JMenuItem menuItemInfo = new JMenuItem("Info");
+	// Menueintraege
+	private JMenuItem menuItemExit = new JMenuItem("Exit");
+	private JMenuItem menuItemInfo = new JMenuItem("Info");
+	private JMenuItem menuItemMiniVersion = new JMenuItem("Mini-Version");
+
+	private LeftPanel leftPanel;
+	private GraphDisplayPanel graphDisplayPanel;
+	private GraphPanel graphPanel;
 
 	/**
 	 * 
@@ -65,9 +80,12 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 		this.controller = controller;
 		this.model = model;
 
+		leftPanel = new LeftPanel(controller); // LeftPanel
+		graphDisplayPanel = new GraphDisplayPanel(controller);
+		graphPanel = new GraphPanel(controller);
+		
 		// TODO
-		// Registriert die Eintraege des Submenu Hilfreiche Links beim
-		// ActionListener
+		// Registriert die Eintraege der MenuBar beim ActionListener
 		LinkWikiRegelungstechnik.addActionListener(this);
 		LinkWikiFaustformelverfahren.addActionListener(this);
 		LinkRnWissenRegelungstechnik.addActionListener(this);
@@ -77,26 +95,15 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 		LinkBuergieSolenickiV3PDF.addActionListener(this);
 		menuItemExit.addActionListener(this);
 		menuItemInfo.addActionListener(this);
+		menuItemMiniVersion.addActionListener(this);
 
-		LeftPanel leftPanel = new LeftPanel(controller); // LeftPanel
-		GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel(controller);
-		GraphPanel graphPanel = new GraphPanel(controller);
-
-		// MenuBar
-		JMenuBar menuBar = new JMenuBar();
-
-		// Menu "Datei" erstellen
-		JMenu menuDatei = new JMenu("Datei");
-		JMenuItem eintragMiniVersion = new JMenuItem("Mini-Version");
-		menuDatei.add(eintragMiniVersion);
-
-		menuDatei.add(menuItemExit);
-
-		menuBar.add(menuDatei); // Menu Datei der MenuBar hinzufuegen
+		// Menu Datei erstellen
+		menuData.add(menuItemMiniVersion);
+		menuData.add(menuItemExit);
+		menuBar.add(menuData); // Menu Datei der MenuBar hinzufuegen
 
 		// Help
 		JMenu menuHilfe = new JMenu("Help");
-
 		menuHilfe.add(menuItemInfo);
 
 		// Submenu Hilfreiche Links
@@ -114,15 +121,24 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 
 		menuBar.add(menuHilfe);
 
+		// TODO Remove
+		// menuBar.setPreferredSize(new Dimension(100,50));
+		// menuBar.setMinimumSize(new Dimension(100,50));
 		// MenuBar hinzufuegen
 		add(menuBar, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 10, 0, 10), 60, 10));
+				new Insets(0, 10, 0, 10), 50, 10));
+		// TODO TEST ENTFERNEN JOSUA
+		/*
+		 * add(new MenuPanel(controller), new GridBagConstraints(0, 0, 1, 1,
+		 * 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		 * new Insets(0, 10, 0, 10), 50, 10));
+		 */
 
 		// LeftPanel hinzufuegen
 		add(leftPanel, new GridBagConstraints(0, 1, 1, 2, 0.0, 1.0,
-				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-				new Insets(10, 10, 10, 10), 60, 0));
+				GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 50, 0));
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
 		// GraphPanel hinzufuegen
@@ -136,24 +152,22 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 10, 10), 0, 0));
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
-
-		// graphPanel.setVisible(false);
-		// graphDisplayPanel.setVisible(false);
 	}
 
 	/**
 	 * 
 	 */
-
-	// TODO josua exception a???
 	public void actionPerformed(ActionEvent e) {
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkWikiRegelungstechnik) {
 			try {
 				Desktop.getDesktop().browse(
 						new URL("http://de.wikipedia.org/wiki/Regler").toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkWikiFaustformelverfahren) {
 			try {
 				Desktop.getDesktop()
@@ -161,8 +175,10 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 								"http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29")
 								.toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkRnWissenRegelungstechnik) {
 			try {
 				Desktop.getDesktop()
@@ -170,43 +186,52 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 								"http://rn-wissen.de/wiki/index.php/Regelungstechnik")
 								.toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkPhasengangMethodePDF) {
 			try {
 				Desktop.getDesktop().browse(
 						new URL("http://simonwyss.me/" + projektName
 								+ "/rt_phasengang-methode.pdf").toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkRegelkreiseUndRegelungenPDF) {
 			try {
 				Desktop.getDesktop().browse(
 						new URL("http://simonwyss.me/" + projektName
 								+ "/Regelkreise_und_Regelungen.pdf").toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkPidEinstellenPDF) {
 			try {
 				Desktop.getDesktop().browse(
 						new URL("http://simonwyss.me/" + projektName
 								+ "/pid-einstellregeln.pdf").toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		// ruft den Link im Standardwebbrowser auf
 		if (e.getSource() == LinkBuergieSolenickiV3PDF) {
 			try {
 				Desktop.getDesktop().browse(
 						new URL("http://simonwyss.me/" + projektName
 								+ "/Buergi_Solenicki-V3.pdf").toURI());
 			} catch (Exception a) {
+				a.printStackTrace(); // TODO Kommentar
 			}
 		}
-
+		// Beendet das Tool und schliesst das Fenster
 		if (e.getSource() == menuItemExit) {
-			System.exit(1); // beendet das Tool und schliesst das Fenster
+			System.exit(1);
 		}
 		if (e.getSource() == menuItemInfo) {
 			JOptionPane
@@ -215,9 +240,21 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 							"Titel\nVersion: 1.0\n\nFHNW Brugg Windisch\nProjekt 2 Team 3\nYanick Frei\nSimon Wyss\nSimonSturm\nJosua Stierli\nAlex Murray",
 							"Info", JOptionPane.INFORMATION_MESSAGE);
 		}
+
+		// Umschalten zwischen Normal- und Mini-Version
+		if (e.getSource() == menuItemMiniVersion) {
+
+			graphPanel.setVisible(miniVersionSelected); // graphPanel
+														// ein-/ausblenden
+			graphDisplayPanel.setVisible(miniVersionSelected); // graphDisplayPanel
+																// ein-/ausblenden
+			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
+			leftPanel.setMiniVersion(miniVersionSelected);
+
+			miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht
+		}
 	}
 
 	public void update(Observable observable, Object o) {
-
 	}
 }

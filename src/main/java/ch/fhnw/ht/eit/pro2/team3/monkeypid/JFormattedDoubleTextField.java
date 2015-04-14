@@ -17,6 +17,7 @@ import javax.swing.JTextField;
  * 
  */
 
+//TODO kommentieren
 public class JFormattedDoubleTextField extends JTextField implements
 		FocusListener {
 	private static final long serialVersionUID = 1L;
@@ -57,11 +58,11 @@ public class JFormattedDoubleTextField extends JTextField implements
 				try {
 					v = Double.parseDouble(txtField.getText());
 				} catch (NumberFormatException e) {
-					errorMsg();
+					//errorMsg();
 					return false;
 				}
 				if (v > maxValue || v < minValue) {
-					errorMsg();
+					//errorMsg();
 					return false;
 				} else {
 					if (edited)
@@ -168,7 +169,8 @@ public class JFormattedDoubleTextField extends JTextField implements
 		return String.format(stFormatter, engVal, engExp);
 	}
 
-	private void errorMsg() {
+	//TODO auskommentiert weil wir keine Errormeldungen möchten
+	/*private void errorMsg() {
 		if (errorDisplayed)
 			return;
 		errorDisplayed = true;
@@ -193,5 +195,5 @@ public class JFormattedDoubleTextField extends JTextField implements
 				});
 		timer.setRepeats(false);
 		timer.start();
-	}
+	}*/
 }

@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
 import javax.swing.*;
+
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -64,6 +66,9 @@ public class MonkeyPID extends JFrame {
                 frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setTitle("Dimensionierungstool Phasengang-Methode");
+                
+                //TODO Bessere Methode fuer Minimalgroesse finden!!!
+                frame.setMinimumSize(new Dimension(1300, 900));
 
                 Model model = new Model();
                 Controller controller = new Controller(model);
