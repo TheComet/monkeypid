@@ -1,4 +1,6 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
+
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,7 +19,7 @@ import javax.swing.*;
  */
 public class LeftPanel extends JPanel implements ActionListener {
 
-	private Controller controller;
+    Controller controller;
 	
 	// Eingabefeld Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -81,8 +83,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 	 */
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());
-		
-		this.controller = controller;
+        this.controller = controller;
 
 		//Eingabefelder
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,

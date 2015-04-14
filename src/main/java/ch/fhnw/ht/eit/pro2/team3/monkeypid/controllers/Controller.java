@@ -1,4 +1,7 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
+
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 
 import java.awt.event.ActionEvent;
 
@@ -9,7 +12,6 @@ import java.awt.event.ActionEvent;
  */
 public class Controller {
 	private Model model;
-	private TopViewPanel view;
 
 	/**
 	 * 
@@ -18,13 +20,7 @@ public class Controller {
 	public Controller(Model model) {
 		this.model = model;
 	}
-	/**
-	 * 
-	 * 
-	 */
-	public void setView(TopViewPanel view) {
-		this.view = view;
-	}
+
 	/**
 	 * 
 	 * @param ksValue
@@ -37,6 +33,7 @@ public class Controller {
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue, String selectedRegulatorName, double overshootValue){
 		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overshootValue);
 	}
+
 	/**
 	 * 
 	 */
@@ -57,6 +54,6 @@ public class Controller {
 	 * @param e
 	 */
 	public void bt2(ActionEvent e) {
-		StatusBar.showStatus(this, e, "Button2");		
+		StatusBar.showStatus(this, e, "Button2");
 	}
 }

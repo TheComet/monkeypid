@@ -1,7 +1,9 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
+
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,17 +13,11 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -29,9 +25,10 @@ import javax.swing.border.TitledBorder;
  * @author Josua
  *
  */
-public class TopViewPanel extends JPanel implements ActionListener, Observer {
-	private Model model;
-	private Controller controller;
+public class View extends JPanel implements ActionListener, Observer {
+
+    private Controller controller;
+    private Model model;
 
 	// Projektname
 	private String projektName = "monkeypid";
@@ -74,15 +71,15 @@ public class TopViewPanel extends JPanel implements ActionListener, Observer {
 	 * 
 	 * @param controller
 	 */
-	public TopViewPanel(Controller controller, Model model) {
+	public View(Controller controller, Model model) {
 		super(new GridBagLayout());
 
-		this.controller = controller;
-		this.model = model;
+        this.controller = controller;
+        this.model = model;
 
 		leftPanel = new LeftPanel(controller); // LeftPanel
-		graphDisplayPanel = new GraphDisplayPanel(controller);
-		graphPanel = new GraphPanel(controller);
+		graphDisplayPanel = new GraphDisplayPanel();
+		graphPanel = new GraphPanel();
 		
 		// TODO
 		// Registriert die Eintraege der MenuBar beim ActionListener

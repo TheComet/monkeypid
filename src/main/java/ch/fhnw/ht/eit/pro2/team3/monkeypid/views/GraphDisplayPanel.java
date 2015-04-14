@@ -1,6 +1,5 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +31,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 	 * 
 	 * @param controller
 	 */
-	public GraphDisplayPanel(Controller controller) {
+	public GraphDisplayPanel() {
 		super(new FlowLayout(FlowLayout.LEADING));
 
 		add(cbPhasengangmethode);

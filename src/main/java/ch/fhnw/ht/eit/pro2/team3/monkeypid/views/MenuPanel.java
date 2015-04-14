@@ -1,15 +1,11 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
+
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-//import javafx.geometry.HorizontalDirection;
-
 
 import java.net.URL;
 
@@ -62,8 +58,8 @@ public class MenuPanel extends JPanel implements ActionListener {
 				menuItemInfo.addActionListener(this);
 
 				LeftPanel leftPanel = new LeftPanel(controller); // LeftPanel
-				GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel(controller);
-				GraphPanel graphPanel = new GraphPanel(controller);
+				GraphDisplayPanel graphDisplayPanel = new GraphDisplayPanel();
+				GraphPanel graphPanel = new GraphPanel();
 
 				// MenuBar
 				JMenuBar menuBar = new JMenuBar();

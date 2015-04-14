@@ -1,5 +1,6 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -26,7 +27,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 	 * 
 	 * @param controller
 	 */
-	public GraphPanel(Controller controller) {
+	public GraphPanel() {
 		//super(new GridBagLayout());
 		super(new BorderLayout());
 

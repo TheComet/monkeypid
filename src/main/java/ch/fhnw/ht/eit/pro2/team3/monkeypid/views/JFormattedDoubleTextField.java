@@ -1,7 +1,5 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
+
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -169,7 +167,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 		return String.format(stFormatter, engVal, engExp);
 	}
 
-	//TODO auskommentiert weil wir keine Errormeldungen möchten
+	//TODO auskommentiert weil wir keine Errormeldungen mï¿½chten
 	/*private void errorMsg() {
 		if (errorDisplayed)
 			return;

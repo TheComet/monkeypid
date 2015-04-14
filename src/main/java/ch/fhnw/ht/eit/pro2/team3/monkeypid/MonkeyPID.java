@@ -1,5 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
+
 import javax.swing.*;
 import java.awt.Dimension;
 
@@ -68,10 +72,9 @@ public class MonkeyPID extends JFrame {
 
                 Model model = new Model();
                 Controller controller = new Controller(model);
-                TopViewPanel view = new TopViewPanel(controller,model);
+                View view = new View(controller, model);
                 frame.getContentPane().add(view);
 
-                controller.setView(view);
                 //model.addObserver(view);
 
 
