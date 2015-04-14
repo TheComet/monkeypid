@@ -67,6 +67,9 @@ public class LeftPanel extends JPanel implements ActionListener {
 	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
 	private JSlider slTn = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
 	private JSlider slTv = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
+	private JFormattedDoubleTextField tfAdaptKp = new JFormattedDoubleTextField(1);
+	private JFormattedDoubleTextField tfAdaptTn = new JFormattedDoubleTextField(1);
+	private JFormattedDoubleTextField tfAdaptTv = new JFormattedDoubleTextField(1);
 
 	// Button Loeschen und Uebernehmen
 	private JButton btDelete = new JButton("Loeschen");
@@ -154,17 +157,28 @@ public class LeftPanel extends JPanel implements ActionListener {
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
-		// Slider
-		add(slKp, new GridBagConstraints(0, 12, 5, 1, 0.0, 0.0,
+		// Manuelles Anpassen Slider
+		add(slKp, new GridBagConstraints(0, 12, 4, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						10, 10, 10, 10), 0, 0));
-		add(slTn, new GridBagConstraints(0, 13, 5, 1, 0.0, 0.0,
+		add(slTn, new GridBagConstraints(0, 13, 4, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						10, 10, 10, 10), 0, 0));
-		add(slTv, new GridBagConstraints(0, 14, 5, 1, 0.0, 0.0,
+		add(slTv, new GridBagConstraints(0, 14, 4, 1, 0.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						10, 10, 10, 10), 0, 0));
-
+		// Manuelles Anpassen Textfelder
+		add(tfAdaptKp, new GridBagConstraints(5, 12, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
+						10, 10, 10, 10), 0, 0));
+		add(tfAdaptTn, new GridBagConstraints(5, 13, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
+						10, 10, 10, 10), 0, 0));
+		add(tfAdaptTv, new GridBagConstraints(5, 14, 1, 1, 0.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
+						10, 10, 10, 10), 0, 0));
+		
+		
 		// Button Loeschen
 		add(btDelete, new GridBagConstraints(3, 15, 3, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
@@ -184,6 +198,25 @@ public class LeftPanel extends JPanel implements ActionListener {
 		btSimulate.addActionListener(this);
 		btAdopt.addActionListener(this);
 		btDelete.addActionListener(this);
+	}
+	/**
+	 * Setzt die Elemente auf sichtbar/unsichtbar welche sich 
+	 * in der Normal- und der Mini-Version unterscheiden
+	 * 
+	 * @param MiniVersionOn
+	 */
+	public void setMiniVersion(boolean miniVersionSelected){
+		lbSimulationTitle.setVisible(miniVersionSelected);
+		lbListeTitelName.setVisible(miniVersionSelected);
+		tbTest.setVisible(miniVersionSelected);
+		slKp.setVisible(miniVersionSelected);
+		slTn.setVisible(miniVersionSelected);
+		slTv.setVisible(miniVersionSelected);
+		tfAdaptKp.setVisible(miniVersionSelected);
+		tfAdaptTn.setVisible(miniVersionSelected);
+		tfAdaptTv.setVisible(miniVersionSelected);
+		btDelete.setVisible(miniVersionSelected);
+		btAdopt.setVisible(miniVersionSelected);
 	}
 
 	/**
