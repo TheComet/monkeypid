@@ -1,10 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
+
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
 import javax.swing.*;
+
 import java.awt.Dimension;
 
 public class MonkeyPID extends JFrame {
@@ -49,8 +52,8 @@ public class MonkeyPID extends JFrame {
         app.setVisible(true);
         app.setTitle("Monkey PID");
     }*/
+	
 
-    
     
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -67,16 +70,16 @@ public class MonkeyPID extends JFrame {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setTitle("Dimensionierungstool Phasengang-Methode");
                 
-                //TODO Bessere Methode fuer Minimalgroesse finden!!!
-                frame.setMinimumSize(new Dimension(1300, 900));
-
                 Model model = new Model();
                 Controller controller = new Controller(model);
                 View view = new View(controller, model);
                 frame.getContentPane().add(view);
+                
+                //Fuegt die MenuBar dem Window hinzu
+            	MenuBar menuBar = new MenuBar(controller, view);
+                frame.setJMenuBar(menuBar);
 
                 //model.addObserver(view);
-
 
                 frame.pack();
                 frame.setVisible(true);

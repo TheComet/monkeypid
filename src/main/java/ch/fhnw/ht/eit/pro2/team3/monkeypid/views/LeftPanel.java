@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,7 +11,10 @@ import java.awt.event.ActionListener;
 
 //import javafx.geometry.HorizontalDirection;
 
+
+
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 
 /**
  * 
@@ -154,6 +158,10 @@ public class LeftPanel extends JPanel implements ActionListener {
 
 		// Test
 		tbTest.setEnabled(false);
+
+		//JTableHeader header = tbTest.getTableHeader();
+		//tbTest.setValueAt(aValue, row, column);
+		
 		add(tbTest, new GridBagConstraints(0, 11, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
