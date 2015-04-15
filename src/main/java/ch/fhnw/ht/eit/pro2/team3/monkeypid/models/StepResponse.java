@@ -1,9 +1,14 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
+
 import org.jfree.data.xy.XYSeries;
 
+<<<<<<< HEAD
 import java.io.FileReader;
+=======
+import java.io.File;
+>>>>>>> bacbd49e6181b32e6e43a35e0cb2516265fe6a65
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
