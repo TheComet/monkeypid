@@ -1,9 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
+
 import org.jfree.data.xy.XYSeries;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +26,9 @@ public class StepResponse {
         try {
             // reads the data into a 2D array "data"
             ArrayList<ArrayList<Double>> data = new ArrayList<>();
-            Path path = Paths.get(Assets.get().getResourceURL("curves/example_step_response_pid").getPath());
+            URL url = Assets.get().getResourceURL("curves" + File.pathSeparator + "example_step_response_pid");
+            String pathStr = url.getPath();
+            Path path = Paths.get(pathStr);
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
                 ArrayList<Double> row = new ArrayList<>();
