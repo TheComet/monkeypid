@@ -18,7 +18,7 @@ import javax.swing.*;
 public class MenuBar extends JMenuBar implements ActionListener {
 	private Controller controller;
 	private View view;
-	
+
 	// Projektname fuer Link-Pfad
 	private String projektName = "monkeypid";
 
@@ -29,7 +29,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private JMenu menuData = new JMenu("Datei");
 
 	// Menueintraege Menu Datei
-	private JMenuItem menuItemMiniVersion = new JMenuItem("Mini-Version");
+	private JMenuItem menuItemMiniVersion = new JMenuItem("Zur Mini-Version wechseln");
 	private JMenuItem menuItemExit = new JMenuItem("Exit");
 
 	// Menu Hilfe
@@ -94,7 +94,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		menuHelp.add(menuItemInfo);
 		menuHelp.add(usefulLinksSubMenu);
 
-		//Menues der MenuBar hinzuefuegen
+		// Menues der MenuBar hinzuefuegen
 		add(menuData);
 		add(menuHelp);
 	}
@@ -179,19 +179,28 @@ public class MenuBar extends JMenuBar implements ActionListener {
 							"Info", JOptionPane.INFORMATION_MESSAGE);
 		}
 		// Umschalten zwischen Normal- und Mini-Version
-		
-		  if (e.getSource() == menuItemMiniVersion) {
-		  
-		  view.graphPanel.setVisible(miniVersionSelected); 
-		  // graphPanel ein-/ausblenden 
-		  view.graphDisplayPanel.setVisible(miniVersionSelected); 
-		  //graphDisplayPanel ein-/ausblenden 
-		  // schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
-		  view.leftPanel.setMiniVersion(miniVersionSelected);
-		  
-		  miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht 
-		  } 
-		 
+
+		if (e.getSource() == menuItemMiniVersion) {		
+			// graphPanel ein-/ausblenden
+			view.graphPanel.setVisible(miniVersionSelected);
+			// graphDisplayPanel ein-/ausblenden
+			view.graphDisplayPanel.setVisible(miniVersionSelected);
+			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
+			view.leftPanel.setMiniVersion(miniVersionSelected);
+			
+			//Aendert die bezeichnung des MenuItemMiniVersion 
+			if (miniVersionSelected) {
+				//wenn von der Mini zur Normal-Ansicht gewechselt wird
+				menuItemMiniVersion.setText("Zur Mini-Version wechseln"); 
+			}else{
+				//wenn von der Normal- zur Mini-Version gewechsetl wird
+				menuItemMiniVersion.setText("Zur Normal-Version wechseln");
+			}
+			
+			miniVersionSelected = !miniVersionSelected; // invertiert die
+														// Zustandsvariable fuer
+														// die Ansicht*/
+		}
 
 	}
 }

@@ -28,8 +28,8 @@ import javax.swing.border.TitledBorder;
  */
 public class View extends JPanel implements ActionListener, Observer {
 
-    private Controller controller;
-    private Model model;
+	private Controller controller;
+	private Model model;
 
 	public LeftPanel leftPanel;
 	public GraphDisplayPanel graphDisplayPanel;
@@ -41,14 +41,13 @@ public class View extends JPanel implements ActionListener, Observer {
 	 */
 	public View(Controller controller, Model model) {
 		super(new GridBagLayout());
-        this.controller = controller;
-        this.model = model;
+		this.controller = controller;
+		this.model = model;
 
 		leftPanel = new LeftPanel(controller); // LeftPanel
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
-		
-		
+
 		// LeftPanel hinzufuegen
 		add(leftPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
@@ -68,22 +67,12 @@ public class View extends JPanel implements ActionListener, Observer {
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
 	}
 
-	/*
-		if (e.getSource() == menuItemInfo) {
-			JOptionPane
-					.showMessageDialog(
-							this,
-							"Titel\nVersion: 1.0\n\nFHNW Brugg Windisch\nProjekt 2 Team 3\nYanick Frei\nSimon Wyss\nSimonSturm\nJosua Stierli\nAlex Murray",
-							"Info", JOptionPane.INFORMATION_MESSAGE);
-		}*/
-
-		
 	public void update(Observable observable, Object o) {
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
