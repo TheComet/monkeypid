@@ -188,7 +188,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		  //graphDisplayPanel ein-/ausblenden 
 		  // schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
 		  view.leftPanel.setMiniVersion(miniVersionSelected);
-		  
+		  JFrame myParent =  (JFrame) view.getTopLevelAncestor(); //get frame
+		  myParent.pack(); //pack frame (make as small as possible)
 		  miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht 
 		  } 
 		 
