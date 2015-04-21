@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +17,13 @@ import java.util.stream.Stream;
  */
 public class SaniCurves {
     private static SaniCurves instance = null;
-    private ArrayList<ArrayList<Double>> Tu_Tg_ratio;
-    private ArrayList<ArrayList<Double>> Tg_inverse;
+    private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
+    private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
 
     /**
      * Loads
      */
     protected SaniCurves() {
-        Tu_Tg_ratio = new ArrayList<>();
-        Tg_inverse = new ArrayList<>();
         loadMatlabTables();
     }
 
@@ -42,38 +42,40 @@ public class SaniCurves {
      * element in the array of rows is power 2, and the last is power 8.
      */
     private void loadMatlabTables() {
-        // load data from tables exported from matlab
-        // Tu/Tg
+        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio");
+        Tg_inverse = loadAndInterpolate("math_tables/tg_inverse");
+    }
+
+    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName) {
+
+        // this is the return value - it holds a list of all spline functions
+        ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
+
+        // load the data points from disk
         try {
-            Path path = Paths.get(Assets.get().getResourceURL("math_tables" + File.pathSeparator + "tu_tg_ratio").getPath());
+            Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
-                ArrayList<Double> row = new ArrayList<>();
-                Tu_Tg_ratio.add(row);
-                for(String str : s.split("\t")) {
-                    row.add(Double.parseDouble(str));
+
+                // load the data points into two double arrays for x and y coordinates
+                String[] yValuesStr = s.split("\t");
+                double[] xValues = new double[yValuesStr.length];
+                double[] yValues = new double[yValuesStr.length];
+                for(int i = 0; i < yValuesStr.length; i++) {
+                    xValues[i] = yValuesStr.length / (double)i;
+                    yValues[i] = Double.parseDouble(yValuesStr[i]);
                 }
+
+                // apply cubic interpolation to the data points and store curve into return value
+                SplineInterpolator interpolator = new SplineInterpolator();
+                listOfSplines.add(interpolator.interpolate(xValues, yValues));
             });
         } catch(IOException e) {
             System.out.println("Failed to load matlab table: " + e.getMessage());
             e.printStackTrace();
         }
 
-        // 1/Tg
-        try {
-            Path path = Paths.get(Assets.get().getResourceURL("math_tables/tg_inverse").getPath());
-            Stream<String> lines = Files.lines(path);
-            lines.forEach(s -> {
-                ArrayList<Double> row = new ArrayList<>();
-                Tg_inverse.add(row);
-                for(String str : s.split("\t")) {
-                    row.add(Double.parseDouble(str));
-                }
-            });
-        } catch (IOException e) {
-            System.out.println("Failed to load matlab table: " + e.getMessage());
-            e.printStackTrace();
-        }
+        return listOfSplines;
     }
 
     public double lookupTuTgValue(double inputTuTgRatio) {
@@ -103,20 +105,20 @@ public class SaniCurves {
                 throw new RuntimeException("Order is larger than 8, don't have a lookup table for that");
             }
         }
-
+/*
         for(int index = 0; index < getTuTgRatioCurve(power).size(); index++) {
             if(getTuTgRatioCurve(power).get(index) >= inputTuTgRatio)
                 return (double)index / (double)getTuTgRatioCurve(power).size();
-        }
+        }*/
 
         throw new RuntimeException("Failed to lookup Tu/Tg in sani curve: It doesn't intersect!");
     }
 
-    public ArrayList<Double> getTuTgRatioCurve(int power) {
+    public PolynomialSplineFunction getTuTgRatioCurve(int power) {
         return Tu_Tg_ratio.get(power - 2);
     }
 
-    public ArrayList<Double> getTgInverseCurve(int power) {
+    public PolynomialSplineFunction getTgInverseCurve(int power) {
         return Tg_inverse.get(power - 2);
     }
 }
