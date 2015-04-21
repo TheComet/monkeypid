@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.old;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -8,7 +9,12 @@ import java.net.URL;
  */
 public class Assets {
     private static Assets instance = null;
-    private static String RESOURCE_PREFIX = "/ch/fhnw/ht/eit/pro2/team3/monkeypid/";
+    private static String RESOURCE_PREFIX = File.separator +
+            pathToPlatform("ch/fhnw/ht/eit/pro2/team3/monkeypid/");
+
+    private static String pathToPlatform(String path) {
+        return String.join(File.separator, path.split("/"));
+    }
 
     protected Assets() {
         // Singleton
@@ -22,6 +28,9 @@ public class Assets {
     }
 
     public URL getResourceURL(String relativePath) throws IOException {
-        return getClass().getResource(RESOURCE_PREFIX + relativePath);
+        String path = RESOURCE_PREFIX +
+                File.separator +
+                pathToPlatform(relativePath);
+        return getClass().getResource(path);
     }
 }

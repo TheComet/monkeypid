@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +45,7 @@ public class SaniCurves {
         // load data from tables exported from matlab
         // Tu/Tg
         try {
-            Path path = Paths.get(Assets.get().getResourceURL("math_tables/tu_tg_ratio").getPath());
+            Path path = Paths.get(Assets.get().getResourceURL("math_tables" + File.pathSeparator + "tu_tg_ratio").getPath());
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
                 ArrayList<Double> row = new ArrayList<>();
