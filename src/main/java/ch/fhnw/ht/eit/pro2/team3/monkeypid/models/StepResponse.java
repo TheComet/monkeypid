@@ -1,50 +1,22 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.Assets;
-
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.jfree.data.xy.XYSeries;
-
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class StepResponse {
 
     public static XYSeries exampleCalculate() {
 
-        // load XY points from disk
-        ArrayList<Double> time = new ArrayList<>();
-        ArrayList<Double> response = new ArrayList<>();
-        try {
-            // reads the data into a 2D array "data"
-            ArrayList<ArrayList<Double>> data = new ArrayList<>();
-            URL url = Assets.get().getResourceURL("curves/example_step_response_pid");
-            String path = url.getPath();
-            Stream<String> lines = Files.lines(Paths.get(path));
-            lines.forEach(s -> {
-                ArrayList<Double> row = new ArrayList<>();
-                for(String str : s.split("\t")) {
-                    row.add(Double.parseDouble(str));
-                }
-                data.add(row);
-            });
+        double[][] data = {{0, 1, 2, 3}, {2, 7, 3, 8}};
 
-            // extract the relevant rows
-            time = data.get(0);
-            response = data.get(1);
-        } catch(IOException e) {
-            System.out.println("Failed to load matlab table: " + e.getMessage());
-            e.printStackTrace();
-        }
+        SplineInterpolator interpolator = new SplineInterpolator();
+        PolynomialSplineFunction function = interpolator.interpolate(data[0], data[1]);
 
         // construct XY dataset from the loaded data
-        XYSeries series = new XYSeries("PID step response");
-        for(int i = 0; i < time.size(); i++) {
-            series.add(time.get(i), response.get(i));
+        XYSeries series = new XYSeries("Test");
+        for(double x = 0.0; x < 3.0; x += 0.01) {
+            series.add(x, function.value(x));
         }
 
         return series;
