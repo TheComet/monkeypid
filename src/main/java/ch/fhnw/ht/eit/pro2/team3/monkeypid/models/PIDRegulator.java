@@ -4,7 +4,7 @@ public class PIDRegulator extends AbstractRegulator {
 
     public PIDRegulator(double kr, double tu, double tv) {
         this.parameters.kr = kr;
-        this.parameters.tu = tu;
+        this.parameters.tn = tu;
         this.parameters.tv = tv;
     }
 

@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValue;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
@@ -32,8 +33,10 @@ public class Controller {
 	 * @param chooseRegulatorIndex
 	 * @param overshootIndex
 	 */
-	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue, String selectedRegulatorName, double overshootValue){
-		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overshootValue);
+	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
+                                 String selectedRegulatorName,
+                                 OverswingValue overswing){
+		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overswing.asAngle());
 	}
 
 	/**

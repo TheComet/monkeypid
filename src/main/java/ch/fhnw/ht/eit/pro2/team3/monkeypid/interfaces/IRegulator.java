@@ -4,7 +4,7 @@ public interface IRegulator {
 
     public class ControllerParameters {
         public double kr = 0.0;
-        public double tu = 0.0;
+        public double tn = 0.0;
         public double tv = 0.0;
     }
 

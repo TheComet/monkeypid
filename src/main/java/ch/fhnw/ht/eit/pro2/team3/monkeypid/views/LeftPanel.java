@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValue;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -32,6 +33,8 @@ import javax.swing.text.TabExpander;
 public class LeftPanel extends JPanel implements ActionListener {
 
     Controller controller;
+
+    private OverswingValue[] overswingTable = new OverswingValue[4];
 	
 	// Eingabefeld Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -62,8 +65,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 	// Phasengangmethode Ueberschwingen
 	private JLabel lbPhasengangmethodTitle = new JLabel(
 			"Ueberschwingen der Phasengangmethode:");
-	private JComboBox<String> cbSelectOvershoot = new JComboBox<String>(new String[] {
-			"0%", "4.6%", "16.3%" });
+	private JComboBox<String> cbSelectOvershoot = new JComboBox<>();
 
 	// Simulationsbutton
 	private JButton btSimulate = new JButton("Simulieren");
@@ -96,6 +98,18 @@ public class LeftPanel extends JPanel implements ActionListener {
 	public LeftPanel(Controller controller) {
 		super(new GridBagLayout());
         this.controller = controller;
+
+        // init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
+        overswingTable[0] = new OverswingValue(-103.7, "0%");
+        overswingTable[1] = new OverswingValue(-114.6, "4.6%");
+        overswingTable[2] = new OverswingValue(-118.5, "16.3%");
+        overswingTable[3] = new OverswingValue(-135, "23.3%");
+
+        // add overswing table strings to combo box
+        for(int i = 0; i < overswingTable.length; i++) {
+            cbSelectOvershoot.addItem(overswingTable[i].asString());
+            System.out.println(overswingTable[i].toString());
+        }
 
 		//Eingabefelder
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
@@ -195,10 +209,10 @@ public class LeftPanel extends JPanel implements ActionListener {
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		
-		tableModel.addColumn("Überschwingen");
+		tableModel.addColumn("ï¿½berschwingen");
 		/*
 		TableColumn tcUs = new TableColumn();
-		tcUs.setHeaderValue(new Object[]{"überschwingen"});
+		tcUs.setHeaderValue(new Object[]{"ï¿½berschwingen"});
 		tableModel.addColumn(tcUs);
 		*/
 		
@@ -302,15 +316,12 @@ public class LeftPanel extends JPanel implements ActionListener {
 			String selectedRegulatorName = String.valueOf( cbSelectRegulator.getSelectedItem());
 			
 			//String des ausgewaehlten Ueberschwingens auslesen
-			String overshootName = String.valueOf( cbSelectOvershoot.getSelectedItem());
-			//Prozentzeichen entfernen
-			overshootName = overshootName.substring(0,overshootName.length() - 1);
-			//zu double wandeln und dezimale Darstellung
-			double overshootValue = (Double.parseDouble(overshootName));
-			overshootValue = overshootValue/100;
+            int overswingIndex = cbSelectOvershoot.getSelectedIndex();
 
 			//die ausgelesenen und angepassten Werte dem Controller uebergeben
-			controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue, tfTpValue, selectedRegulatorName, overshootValue);
+			controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue, tfTpValue,
+                    selectedRegulatorName,
+                    overswingTable[overswingIndex]);
 		}
 		//Wenn btDelete gedrueckt wird
 		if (e.getSource() == btDelete) {

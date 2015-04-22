@@ -5,8 +5,12 @@ public class Model extends Observable {
 
 	public Model()
     {
+    }
+
+    public void simulateAll() {
 
     }
+
 	public void notifyObservers() {
 		setChanged();
 		super.notifyObservers();

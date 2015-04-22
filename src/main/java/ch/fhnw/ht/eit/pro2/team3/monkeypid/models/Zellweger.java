@@ -10,13 +10,16 @@ public class Zellweger extends AbstractPlant
 {
     @Override
     public IRegulator calculateRegulator() {
+        //return zellwegerPI(this.parameters.ks);
         return null;
     }
 
-    private void zellwegerPI(double phiDamping, double ks, double[] timeConstants) {
+    private IRegulator zellwegerPI(double phiDamping, double ks) {
 
         // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
         int maxIterations = 18;
+
+        double[] timeConstants = SaniCurves.get().calculateTimeConstants(parameters.tu, parameters.tg);
 
         // get minimum and maximum time constants
         List timeConstantsList = Arrays.asList(timeConstants);
@@ -114,6 +117,8 @@ public class Zellweger extends AbstractPlant
 
         // Kr is the reciprocal of the amplitude at wDamping
         double kr = 1.0 / ampOpenLoopKr;
+
+        return new PIDRegulator(kr, tn, 0.0);
     }
 
     private double[] linspace(double start, double end, int num) {
