@@ -108,7 +108,6 @@ public class LeftPanel extends JPanel implements ActionListener {
         // add overswing table strings to combo box
         for(int i = 0; i < overswingTable.length; i++) {
             cbSelectOvershoot.addItem(overswingTable[i].asString());
-            System.out.println(overswingTable[i].toString());
         }
 
 		//Eingabefelder
@@ -209,10 +208,10 @@ public class LeftPanel extends JPanel implements ActionListener {
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		
-		tableModel.addColumn("�berschwingen");
+		tableModel.addColumn("Überschwingen");
 		/*
 		TableColumn tcUs = new TableColumn();
-		tcUs.setHeaderValue(new Object[]{"�berschwingen"});
+		tcUs.setHeaderValue(new Object[]{"Überschwingen"});
 		tableModel.addColumn(tcUs);
 		*/
 		
