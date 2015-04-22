@@ -38,6 +38,7 @@ public class Controller {
                                  String selectedRegulatorName,
                                  OverswingValue overswing){
         model.setControlPath(new ControlPath(ksValue, tuValue, tgValue));
+        model.simulateAll();
 		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overswing.asAngle());
 	}
 

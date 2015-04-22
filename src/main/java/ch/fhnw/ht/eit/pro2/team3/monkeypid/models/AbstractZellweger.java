@@ -1,13 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.RegulatorCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Zellweger;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractZellweger implements RegulatorCalculator, Zellweger
+public abstract class AbstractZellweger extends AbstractRegulatorCalculator implements Zellweger
 {
     protected ControlPath controlPath = null;
     protected double phiDamping;
@@ -18,10 +18,12 @@ public abstract class AbstractZellweger implements RegulatorCalculator, Zellwege
 
     protected int numSamplePoints = 1000;
 
-    public AbstractZellweger() {
+    @Override
+    public void setControlPath(ControlPath path) {
+        controlPath = path;
 
         // get minimum and maximum time constants
-        List timeConstantsList = Arrays.asList(controlPath.getTimeConstants());
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(controlPath.getTimeConstants()));
         double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
 
@@ -29,11 +31,6 @@ public abstract class AbstractZellweger implements RegulatorCalculator, Zellwege
         // based on the time constants.
         startFreq = 1.0 / (tcMax * 10.0);
         endFreq = 1.0 / (tcMin * 10.0);
-    }
-
-    @Override
-    public void setControlPath(ControlPath path) {
-        controlPath = path;
     }
 
     @Override
