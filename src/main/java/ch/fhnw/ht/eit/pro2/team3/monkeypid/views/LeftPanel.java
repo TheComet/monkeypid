@@ -13,8 +13,15 @@ import java.awt.event.ActionListener;
 
 
 
+import java.util.Enumeration;
+
 import javax.swing.*;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.text.TabExpander;
 
 /**
  * 
@@ -122,6 +129,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 		add(lbTuInfo, new GridBagConstraints(2, 3, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 0, 10, 10), 0, 0));
+		tfTp.setText("10"); //setzt 
 		add(tfTp, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 10, 0), 50, 0));
@@ -151,20 +159,52 @@ public class LeftPanel extends JPanel implements ActionListener {
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
 
-		// Liste der Ausgangssimulationen
-		add(lbListeTitelName, new GridBagConstraints(0, 10, 6, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 10), 0, 0));
-
 		// Test
-		tbTest.setEnabled(false);
-
+		//tbTest.setEnabled(false);
 		//JTableHeader header = tbTest.getTableHeader();
 		//tbTest.setValueAt(aValue, row, column);
 		
-		add(tbTest, new GridBagConstraints(0, 11, 7, 1, 0.0, 0.0,
+		
+		/*DefaultTableModel model = new DefaultTableModel();
+	    JTable table = new JTable(model);
+
+	    model.addColumn("Col1");
+	    model.addColumn("Col2");
+	    model.addColumn("Col3");
+
+	    String testheader[] = new String[] { "Prority", "Task Title", "Start",
+	            "Pause", "Stop", "Statulses" };
+	    
+	    model.setColumnIdentifiers(testheader);
+	    table.setModel(model);
+	    
+	    model.addRow(new Object[] { "v1", "v2" });
+
+	    model.addRow(new Object[] { "v1" });
+
+	    model.addRow(new Object[] { "v1", "v2", "v3" });
+
+		*/
+	
+		DefaultTableModel tableModel = new DefaultTableModel();
+		JTable table = new JTable(tableModel);
+		
+		tableModel.addColumn("Name");
+		tableModel.addColumn("Kp");
+		tableModel.addColumn("Tn");
+		tableModel.addColumn("Tv");
+		tableModel.addColumn("Überschwingen");
+		
+		tableModel.addRow(new Object[] {"1","2","3","4","5"});
+		
+		//Header der Tabelle
+		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(10, 10, 0, 10), 0, 0));
+		//Tabelle
+		add(table, new GridBagConstraints(0, 11, 7, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(0, 10, 10, 10), 0, 0));
 
 		// Manuelles Anpassen Slider
 		add(slKp, new GridBagConstraints(0, 12, 4, 1, 0.0, 0.0,
@@ -245,13 +285,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 			double tfTuValue = tfTu.doubleValue();
 			double tfTgValue = tfTg.doubleValue();
 			double tfTpValue = tfTp.doubleValue();
-			
-			//TEST-AUSGABE
-			System.out.println(tfKsValue);
-			System.out.println(tfTuValue);
-			System.out.println(tfTgValue);
-			System.out.println(tfTpValue);
-			
+				
 			//String des ausgewaehlten Reglers auslesen
 			String selectedRegulatorName = String.valueOf( cbSelectRegulator.getSelectedItem());
 			
@@ -263,6 +297,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 			double overshootValue = (Double.parseDouble(overshootName));
 			overshootValue = overshootValue/100;
 
+			//die ausgelesenen und angepassten Werte dem Controller uebergeben
 			controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue, tfTpValue, selectedRegulatorName, overshootValue);
 		}
 		//Wenn btDelete gedrueckt wird

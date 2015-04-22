@@ -18,7 +18,7 @@ import javax.swing.*;
 public class MenuBar extends JMenuBar implements ActionListener {
 	private Controller controller;
 	private View view;
-	
+
 	// Projektname fuer Link-Pfad
 	private String projektName = "monkeypid";
 
@@ -29,7 +29,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private JMenu menuData = new JMenu("Datei");
 
 	// Menueintraege Menu Datei
-	private JMenuItem menuItemMiniVersion = new JMenuItem("Mini-Version");
+	private JMenuItem menuItemMiniVersion = new JMenuItem(
+			"Zur Mini-Version wechseln");
 	private JMenuItem menuItemExit = new JMenuItem("Exit");
 
 	// Menu Hilfe
@@ -64,13 +65,53 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// Registriert die Eintraege des Submenu Hilfreiche Links beim
 		// ActionListener
-		LinkWikiRegelungstechnik.addActionListener(this);
-		LinkWikiFaustformelverfahren.addActionListener(this);
-		LinkRnWissenRegelungstechnik.addActionListener(this);
-		LinkPhasengangMethodePDF.addActionListener(this);
-		LinkRegelkreiseUndRegelungenPDF.addActionListener(this);
-		LinkPidEinstellenPDF.addActionListener(this);
-		LinkBuergieSolenickiV3PDF.addActionListener(this);
+		LinkWikiRegelungstechnik.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://de.wikipedia.org/wiki/Regler");
+			}
+		});
+
+		LinkWikiFaustformelverfahren.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29");
+			}
+		});
+		LinkRnWissenRegelungstechnik.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://rn-wissen.de/wiki/index.php/Regelungstechnik");
+			}
+		});
+		LinkPhasengangMethodePDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/rt_phasengang-methode.pdf");
+			}
+		});
+		LinkRegelkreiseUndRegelungenPDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/Regelkreise_und_Regelungen.pdf");
+			}
+		});
+		LinkPidEinstellenPDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/pid-einstellregeln.pdf");
+			}
+		});
+		LinkBuergieSolenickiV3PDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/Buergi_Solenicki-V3.pdf");
+			}
+		});
 		menuItemExit.addActionListener(this);
 		menuItemInfo.addActionListener(this);
 		menuItemMiniVersion.addActionListener(this);
@@ -94,78 +135,53 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		menuHelp.add(menuItemInfo);
 		menuHelp.add(usefulLinksSubMenu);
 
-		//Menues der MenuBar hinzuefuegen
+		// Menues der MenuBar hinzuefuegen
 		add(menuData);
 		add(menuHelp);
 	}
 
+	private void openURLInBrowser(String stringURL) {
+		try {
+			Desktop.getDesktop().browse(new URL(stringURL).toURI());
+		} catch (Exception a) { // catch only necessary exceptions
+			// a.printStackTrace();
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == LinkWikiRegelungstechnik) {
-			try {
-				Desktop.getDesktop().browse(
-						new URL("http://de.wikipedia.org/wiki/Regler").toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkWikiFaustformelverfahren) {
-			try {
-				Desktop.getDesktop()
-						.browse(new URL(
-								"http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29")
-								.toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkRnWissenRegelungstechnik) {
-			try {
-				Desktop.getDesktop()
-						.browse(new URL(
-								"http://rn-wissen.de/wiki/index.php/Regelungstechnik")
-								.toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkPhasengangMethodePDF) {
-			try {
-				Desktop.getDesktop().browse(
-						new URL("http://simonwyss.me/" + projektName
-								+ "/rt_phasengang-methode.pdf").toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkRegelkreiseUndRegelungenPDF) {
-			try {
-				Desktop.getDesktop().browse(
-						new URL("http://simonwyss.me/" + projektName
-								+ "/Regelkreise_und_Regelungen.pdf").toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkPidEinstellenPDF) {
-			try {
-				Desktop.getDesktop().browse(
-						new URL("http://simonwyss.me/" + projektName
-								+ "/pid-einstellregeln.pdf").toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-		if (e.getSource() == LinkBuergieSolenickiV3PDF) {
-			try {
-				Desktop.getDesktop().browse(
-						new URL("http://simonwyss.me/" + projektName
-								+ "/Buergi_Solenicki-V3.pdf").toURI());
-			} catch (Exception a) {
-				a.printStackTrace(); // TODO Kommentar
-			}
-		}
-
+		/*
+		 * if (e.getSource() == LinkWikiRegelungstechnik) { try {
+		 * Desktop.getDesktop().browse( new
+		 * URL("http://de.wikipedia.org/wiki/Regler").toURI()); } catch
+		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } }
+		 */
+		/*
+		 * if (e.getSource() == LinkWikiFaustformelverfahren) { try {
+		 * Desktop.getDesktop() .browse(new URL(
+		 * "http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29"
+		 * ) .toURI()); } catch (Exception a) { a.printStackTrace(); // TODO
+		 * Kommentar } } if (e.getSource() == LinkRnWissenRegelungstechnik) {
+		 * try { Desktop.getDesktop() .browse(new URL(
+		 * "http://rn-wissen.de/wiki/index.php/Regelungstechnik") .toURI()); }
+		 * catch (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
+		 * (e.getSource() == LinkPhasengangMethodePDF) { try {
+		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
+		 * projektName + "/rt_phasengang-methode.pdf").toURI()); } catch
+		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
+		 * (e.getSource() == LinkRegelkreiseUndRegelungenPDF) { try {
+		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
+		 * projektName + "/Regelkreise_und_Regelungen.pdf").toURI()); } catch
+		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
+		 * (e.getSource() == LinkPidEinstellenPDF) { try {
+		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
+		 * projektName + "/pid-einstellregeln.pdf").toURI()); } catch (Exception
+		 * a) { a.printStackTrace(); // TODO Kommentar } } if (e.getSource() ==
+		 * LinkBuergieSolenickiV3PDF) { try { Desktop.getDesktop().browse( new
+		 * URL("http://simonwyss.me/" + projektName +
+		 * "/Buergi_Solenicki-V3.pdf").toURI()); } catch (Exception a) {
+		 * a.printStackTrace(); // TODO Kommentar } }
+		 */
 		// Beendet das Tool und schliesst das Fenster
 		if (e.getSource() == menuItemExit) {
 			System.exit(1);
@@ -179,19 +195,32 @@ public class MenuBar extends JMenuBar implements ActionListener {
 							"Info", JOptionPane.INFORMATION_MESSAGE);
 		}
 		// Umschalten zwischen Normal- und Mini-Version
-		
-		  if (e.getSource() == menuItemMiniVersion) {
-		  
-		  view.graphPanel.setVisible(miniVersionSelected); 
-		  // graphPanel ein-/ausblenden 
-		  view.graphDisplayPanel.setVisible(miniVersionSelected); 
-		  //graphDisplayPanel ein-/ausblenden 
-		  // schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
-		  view.leftPanel.setMiniVersion(miniVersionSelected);
-		  
-		  miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht 
-		  } 
-		 
 
+		if (e.getSource() == menuItemMiniVersion) {
+
+			view.graphPanel.setVisible(miniVersionSelected);
+			// graphPanel ein-/ausblenden
+			view.graphDisplayPanel.setVisible(miniVersionSelected);
+			// graphDisplayPanel ein-/ausblenden
+			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
+			view.leftPanel.setMiniVersion(miniVersionSelected);
+
+			// Aendert die bezeichnung des MenuItemMiniVersion
+			if (miniVersionSelected) {
+				// wenn von der Normal- zur Mini-Version gewechsetl wird
+				// wenn von der Mini zur Normal-Ansicht gewechselt wird
+				menuItemMiniVersion.setText("Zur Mini-Version wechseln");
+			} else {
+				// wenn von der Normal- zur Mini-Version gewechsetl wird
+				menuItemMiniVersion.setText("Zur Normal-Version wechseln");
+			}
+
+			// pack frame
+			JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
+			myParent.pack(); // pack frame (make as small as possible)
+			miniVersionSelected = !miniVersionSelected; // invertiert die
+														// Zustandsvariable fuer
+														// die Ansicht
+		}
 	}
 }

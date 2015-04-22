@@ -68,18 +68,19 @@ public class MonkeyPID extends JFrame {
                 frame.setUndecorated(true);
                 frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setTitle("Dimensionierungstool Phasengang-Methode");
+                frame.setTitle("Easy-PID Dimensionierungstool Phasengang-Methode");
                 
                 Model model = new Model();
                 Controller controller = new Controller(model);
                 View view = new View(controller, model);
+                controller.setView(view);
                 frame.getContentPane().add(view);
                 
                 //Fuegt die MenuBar dem Window hinzu
             	MenuBar menuBar = new MenuBar(controller, view);
                 frame.setJMenuBar(menuBar);
 
-                //model.addObserver(view);
+                model.addObserver(view);
 
                 frame.pack();
                 frame.setVisible(true);
