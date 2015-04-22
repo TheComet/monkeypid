@@ -17,6 +17,7 @@ import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -193,8 +194,19 @@ public class LeftPanel extends JPanel implements ActionListener {
 		tableModel.addColumn("Kp");
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
-		tableModel.addColumn("Überschwingen");
 		
+		tableModel.addColumn("Überschwingen");
+		/*
+		TableColumn tcUs = new TableColumn();
+		tcUs.setHeaderValue(new Object[]{"überschwingen"});
+		tableModel.addColumn(tcUs);
+		*/
+		
+		tableModel.addRow(new Object[] {"1","2","3","4","5"});
+		table.removeColumn(table.getColumnModel().getColumn(4));
+		//table.addColumn(new TableColumn().se);
+		//tableModel.fireTableChanged(new TableModelEvent(tableModel.get));
+		//tableModel.addColumn("neu2");
 		tableModel.addRow(new Object[] {"1","2","3","4","5"});
 		
 		//Header der Tabelle
