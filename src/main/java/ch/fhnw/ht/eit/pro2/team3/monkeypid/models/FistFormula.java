@@ -1,8 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.AbstractMathMethod;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Plant;
 
-public class FistFormula extends AbstractMathMethod {
+public class FistFormula extends Plant {
 
     public enum Method {
         RESWICK,
@@ -35,7 +35,7 @@ public class FistFormula extends AbstractMathMethod {
     }
 
     @Override
-    public void doCalculation(double tg, double tu, double ks) {
+    public void calculate(double tg, double tu, double ks) {
 
         // here, we go through all combinations of:
         // - methods (Reswick, Oppelt, and Rosenberg)

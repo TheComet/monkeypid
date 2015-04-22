@@ -1,20 +1,18 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathMethod;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-class Zellweger implements MathMethod
+public class Zellweger extends Regulator
 {
-    private MathMethodFactory.Mode mode;
 
-    public Zellweger(MathMethodFactory.Mode mode) {
-        this.mode = mode;
+    @Override
+    public void calculate(double tg, double tu, double ks) {
+
     }
 
-    public void exec(double phiDamping, double ks, double[] timeConstants) {
+    private void zellwegerPI(double phiDamping, double ks, double[] timeConstants) {
 
         // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
         int maxIterations = 18;
@@ -179,19 +177,5 @@ class Zellweger implements MathMethod
      */
     private double amplitudeControllerPI(double omega, double tn) {
         return Math.sqrt(1.0 + Math.pow(omega * tn, 2)) / (omega * tn);
-    }
-
-    @Override
-    public void setOverSwing(double percent) {
-
-    }
-
-    @Override
-    public void doCalculation(double tg, double tu, double ks) {
-    }
-
-    @Override
-    public ControllerParameters getResult() {
-        return null;
     }
 }

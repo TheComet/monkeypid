@@ -42,11 +42,11 @@ public class SaniCurves {
      * element in the array of rows is power 2, and the last is power 8.
      */
     private void loadMatlabTables() {
-        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio");
-        Tg_inverse = loadAndInterpolate("math_tables/tg_inverse");
+        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio", true);
+        Tg_inverse = loadAndInterpolate("math_tables/tg_inverse", false);
     }
 
-    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName) {
+    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName, boolean swapXY) {
 
         // this is the return value - it holds a list of all spline functions
         ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
@@ -62,13 +62,17 @@ public class SaniCurves {
                 double[] xValues = new double[yValuesStr.length];
                 double[] yValues = new double[yValuesStr.length];
                 for(int i = 0; i < yValuesStr.length; i++) {
-                    xValues[i] = yValuesStr.length / (double)i;
+                    xValues[i] = (double)i / yValuesStr.length;
                     yValues[i] = Double.parseDouble(yValuesStr[i]);
                 }
 
                 // apply cubic interpolation to the data points and store curve into return value
+                // for Tu_Tg the x and y data points are swapped - no idea why
                 SplineInterpolator interpolator = new SplineInterpolator();
-                listOfSplines.add(interpolator.interpolate(xValues, yValues));
+                if(swapXY)
+                    listOfSplines.add(interpolator.interpolate(yValues, xValues));
+                else
+                    listOfSplines.add(interpolator.interpolate(xValues, yValues));
             });
         } catch(IOException e) {
             System.out.println("Failed to load matlab table: " + e.getMessage());
@@ -78,7 +82,9 @@ public class SaniCurves {
         return listOfSplines;
     }
 
-    public double lookupTuTgValue(double inputTuTgRatio) {
+    public double lookupTuTgValue(double tu, double tg) {
+
+        double TuTgRation = tu / tg;
 
         // These are magic numbers extracted from the matlab file "p2_sani.m", based on
         // the document "Buergi, Solenicki - V3.pdf", page 5.
@@ -97,7 +103,7 @@ public class SaniCurves {
         // magic numbers compared to the ratio. If the ratio is larger than all of
         // the magic numbers, then throw an exception.
         int power = 2;
-        while(inputTuTgRatio > orderThresholds[power - 2]) {
+        while(TuTgRation > orderThresholds[power - 2]) {
             power++;
 
             // ratio is larger than all thresholds
