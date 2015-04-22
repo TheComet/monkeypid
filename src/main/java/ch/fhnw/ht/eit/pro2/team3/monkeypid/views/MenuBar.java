@@ -232,7 +232,6 @@ public class MenuBar extends JMenuBar implements ActionListener {
 							"Info", JOptionPane.INFORMATION_MESSAGE);
 		}
 		// Umschalten zwischen Normal- und Mini-Version
-<<<<<<< HEAD
 		
 		  if (e.getSource() == menuItemMiniVersion) {
 		  
@@ -246,31 +245,5 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		  myParent.pack(); //pack frame (make as small as possible)
 		  miniVersionSelected = !miniVersionSelected; // invertiert die Zustandsvariable fuer die Ansicht 
 		  } 
-		 
-=======
-
-		if (e.getSource() == menuItemMiniVersion) {
-			// graphPanel ein-/ausblenden
-			view.graphPanel.setVisible(miniVersionSelected);
-			// graphDisplayPanel ein-/ausblenden
-			view.graphDisplayPanel.setVisible(miniVersionSelected);
-			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
-			view.leftPanel.setMiniVersion(miniVersionSelected);
-
-			// Aendert die bezeichnung des MenuItemMiniVersion
-			if (miniVersionSelected) {
-				// wenn von der Mini zur Normal-Ansicht gewechselt wird
-				menuItemMiniVersion.setText("Zur Mini-Version wechseln");
-			} else {
-				// wenn von der Normal- zur Mini-Version gewechsetl wird
-				menuItemMiniVersion.setText("Zur Normal-Version wechseln");
-			}
-
-			miniVersionSelected = !miniVersionSelected; // invertiert die
-														// Zustandsvariable fuer
-														// die Ansicht*/
-		}
->>>>>>> b79907173cd6699f1a293c43b761de1682efdba0
-
 	}
 }
