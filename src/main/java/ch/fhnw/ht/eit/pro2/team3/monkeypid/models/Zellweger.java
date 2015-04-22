@@ -1,11 +1,18 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.AbstractRegulator;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Zellweger extends Regulator
+public class Zellweger extends AbstractRegulator
 {
+
+    @Override
+    public void setOverswing(double percent) {
+
+    }
 
     @Override
     public void calculate(double tg, double tu, double ks) {

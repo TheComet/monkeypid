@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.StepResponse;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -32,7 +32,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 		super(new BorderLayout());
 
         // Create a test series of data
-        XYSeries series = StepResponse.exampleCalculate();
+        XYSeries series = ClosedLoop.exampleCalculate();
 
         // add series to collection (collection derives from XYDataset)
         XYSeriesCollection data = new XYSeriesCollection();

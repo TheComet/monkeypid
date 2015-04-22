@@ -1,15 +1,10 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.RegulatorInterface;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IRegulator;
 
-public abstract class Regulator implements RegulatorInterface {
+public abstract class AbstractRegulator implements IRegulator {
 
     private ControllerParameters result = new ControllerParameters();
-
-    @Override
-    public void setOverSwing(double percent) {
-
-    }
 
     @Override
     public ControllerParameters getResult() {

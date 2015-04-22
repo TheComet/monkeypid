@@ -1,9 +1,19 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IPlant;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IRegulator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.jfree.data.xy.XYSeries;
 
-public class StepResponse {
+public class ClosedLoop {
+
+    private IPlant plant;
+    private IRegulator regulator;
+
+    public ClosedLoop(IPlant plant, IRegulator regulator) {
+        this.plant = plant;
+        this.regulator = regulator;
+    }
 
     public static XYSeries exampleCalculate() {
 

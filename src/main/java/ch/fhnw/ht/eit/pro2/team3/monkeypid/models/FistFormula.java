@@ -1,8 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Plant;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IPlant;
 
-public class FistFormula extends Plant {
+public class FistFormula extends IPlant {
 
     public enum Method {
         RESWICK,
@@ -15,18 +15,24 @@ public class FistFormula extends Plant {
         TWENTY
     }
 
-    private Method method;
-    private MathMethodFactory.Mode mode;
-    private Overswing overswing = Overswing.ZERO;
-    private double overSwing;
+    public enum Mode {
+        I,
+        PI,
+        PID
+    }
 
-    public FistFormula(Method method, MathMethodFactory.Mode mode) {
+    private Method method;
+    private Mode mode;
+    private Overswing overswing;
+
+    public FistFormula(Method method, Mode mode, Overswing overswing) {
         this.method = method;
         this.mode = mode;
+        this.overswing = overswing;
     }
 
     @Override
-    public void setOverSwing(double percent) {
+    public void setOverswing(double percent) {
         // Fist formula only supports 0% or 20%. Snap to the nearest valid value.
         if(percent > 10.0)
             overswing = Overswing.TWENTY;
