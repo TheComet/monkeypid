@@ -32,7 +32,8 @@ public class GraphPanel extends JPanel implements ActionListener {
 		super(new BorderLayout());
 
         // Create a test series of data
-        XYSeries series = ClosedLoop.exampleCalculate();
+        ClosedLoop system = new ClosedLoop(null, null);
+        XYSeries series = system.exampleCalculate();
 
         // add series to collection (collection derives from XYDataset)
         XYSeriesCollection data = new XYSeriesCollection();

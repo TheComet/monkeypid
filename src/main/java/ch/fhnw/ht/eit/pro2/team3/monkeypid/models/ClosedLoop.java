@@ -15,7 +15,11 @@ public class ClosedLoop {
         this.regulator = regulator;
     }
 
-    public static XYSeries exampleCalculate() {
+    public XYSeries calculateStepResponse() {
+        return null;
+    }
+
+    public XYSeries exampleCalculate() {
 
         PolynomialSplineFunction function = SaniCurves.get().getTgInverseCurve(2);
         // construct XY dataset from the loaded data
