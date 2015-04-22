@@ -1,7 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.old.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.old.interfaces.MathBlockInterface;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.MathChainFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -49,18 +48,6 @@ public class MainWindowController implements Initializable {
         double ki = 1.35 * tu;
         double kd = 0.47 * tu;
 
-        MathBlockInterface pid = MathChainFactory.pidController(kp, ki, kd);
-        MathBlockInterface controlledSystem = MathChainFactory.controlledSystemPT1(ks, tu, tg);
-        MathBlockInterface closedSystem = MathChainFactory.closedSystem(pid, controlledSystem);
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.getData().add(new XYChart.Data<>(0, 0));
-        double timeStep = endTime / numPoints;
-        for(double time = timeStep; time < endTime; time += timeStep) {
-            double result = closedSystem.stepAll(1, timeStep);
-            series.getData().add(new XYChart.Data<>(time, result));
-        }
-
-        lineChartPIDStepResponse.getData().add(series);
     }
 }

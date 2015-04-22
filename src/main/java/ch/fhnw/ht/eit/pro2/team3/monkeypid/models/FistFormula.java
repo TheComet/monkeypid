@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class FistFormula extends AbstractRegulator {
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IRegulator;
+
+public class FistFormula extends AbstractPlant {
 
     public enum Method {
         RESWICK,
@@ -23,29 +25,27 @@ public class FistFormula extends AbstractRegulator {
     private Mode mode;
     private Overswing overswing;
 
-    public FistFormula(Method method, Mode mode, Overswing overswing) {
+    public FistFormula(Method method, Mode mode, double overswingPercent) {
         this.method = method;
         this.mode = mode;
-        this.overswing = overswing;
-    }
 
-    @Override
-    public void setOverswing(double percent) {
         // Fist formula only supports 0% or 20%. Snap to the nearest valid value.
-        if(percent > 10.0)
+        if(overswingPercent > 10.0)
             overswing = Overswing.TWENTY;
         else
             overswing = Overswing.ZERO;
     }
 
     @Override
-    public void calculate(double tg, double tu, double ks) {
+    public IRegulator calculateRegulator() {
 
         // here, we go through all combinations of:
         // - methods (Reswick, Oppelt, and Rosenberg)
         // - modes (PI and PID)
         // - overswing (0% and 20%)
         // this produces a huge nested switch-case statement.
+        
+        double result_kr = 0.0, result_tu = 0.0, result_tv = 0.0;
 
         switch(method) {
             case RESWICK:
@@ -55,18 +55,18 @@ public class FistFormula extends AbstractRegulator {
                         switch(overswing) {
                             case ZERO:
                                 // Reswick, PI, 0%
-                                this.result.kr = 0.6 * tg / (ks * tu);
-                                this.result.tu = 4 * tu;
+                                result_kr = 0.6 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                                result_tu = 4 * this.parameters.tu;
                                 break;
                             case TWENTY:
                                 // Reswick, PI, 20%
-                                this.result.kr = 0.7 * tg / (ks * tu);
-                                this.result.tu = 2.3 * tu;
+                                result_kr = 0.7 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                                result_tu = 2.3 * this.parameters.tu;
                                 break;
                             default: break;
                         }
                         // PI, so no D factor
-                        this.result.tv = 0.0;
+                        result_tv = 0.0;
                         break;
 
                     case PID:
@@ -74,15 +74,15 @@ public class FistFormula extends AbstractRegulator {
                         switch(overswing) {
                             case ZERO:
                                 // Reswick, PID, 0%
-                                this.result.kr = 0.95 * tg / (ks * tu);
-                                this.result.tu = 2.4 * tu;
-                                this.result.tv = 0.42 * tu;
+                                result_kr = 0.95 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                                result_tu = 2.4 * this.parameters.tu;
+                                result_tv = 0.42 * this.parameters.tu;
                                 break;
                             case TWENTY:
                                 // Reswick, PID, 20%
-                                this.result.kr = 1.2 * tg / (ks * tu);
-                                this.result.tu = 2 * tu;
-                                this.result.tv = 0.42 * tu;
+                                result_kr = 1.2 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                                result_tu = 2 * this.parameters.tu;
+                                result_tv = 0.42 * this.parameters.tu;
                                 break;
                             default: break;
                         }
@@ -96,15 +96,15 @@ public class FistFormula extends AbstractRegulator {
                 switch(mode) {
                     case PI:
                         // Oppelt, PI
-                        this.result.kr = 0.8 * tg / (ks * tu);
-                        this.result.tu = 3.0 * tu;
-                        this.result.tv = 0.0;
+                        result_kr = 0.8 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                        result_tu = 3.0 * this.parameters.tu;
+                        result_tv = 0.0;
                         break;
                     case PID:
                         // Oppelt, PID
-                        this.result.kr = 1.2 * tg / (ks * tu);
-                        this.result.tu = 2.0 * tu;
-                        this.result.tv = 0.42 * tu;
+                        result_kr = 1.2 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                        result_tu = 2.0 * this.parameters.tu;
+                        result_tv = 0.42 * this.parameters.tu;
                         break;
                 }
                 break;
@@ -113,26 +113,25 @@ public class FistFormula extends AbstractRegulator {
                 switch(mode) {
                     case PI:
                         // Rosenberg, PI
-                        this.result.kr = 0.91 * tg / (ks * tu);
-                        this.result.tu = 3.3 * tu;
-                        this.result.tv = 0.0;
+                        result_kr = 0.91 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                        result_tu = 3.3 * this.parameters.tu;
+                        result_tv = 0.0;
                         break;
                     case PID:
                         // Rosenberg, PID
-                        this.result.kr = 1.2 * tg / (ks * tu);
-                        this.result.tu = 2.0 * tu;
-                        this.result.tv = 0.44 * tu;
+                        result_kr = 1.2 * this.parameters.tg / (this.parameters.ks * this.parameters.tu);
+                        result_tu = 2.0 * this.parameters.tu;
+                        result_tv = 0.44 * this.parameters.tu;
                         break;
                 }
                 break;
 
             default:
-                // unknown, set everything to 0
-                this.result.kr = 0.0;
-                this.result.tu = 0.0;
-                this.result.tv = 0.0;
+                // unknown
                 break;
         }
+
+        return new PIDRegulator(result_kr, result_tu, result_tv);
     }
 
 }
