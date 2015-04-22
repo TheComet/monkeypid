@@ -1,8 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IPlant;
-
-public class FistFormula extends IPlant {
+public class FistFormula extends AbstractRegulator {
 
     public enum Method {
         RESWICK,
