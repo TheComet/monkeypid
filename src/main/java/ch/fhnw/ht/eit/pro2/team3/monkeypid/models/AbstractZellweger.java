@@ -1,53 +1,59 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IRegulator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.RegulatorCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Zellweger;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Zellweger extends AbstractPlant
+public abstract class AbstractZellweger implements RegulatorCalculator, Zellweger
 {
-    @Override
-    public IRegulator calculateRegulator() {
-        //return zellwegerPI(this.parameters.ks);
-        return null;
-    }
+    protected ControlPath controlPath = null;
+    protected double phiDamping;
+    double startFreq, endFreq;
 
-    private IRegulator zellwegerPI(double phiDamping, double ks) {
+    // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
+    protected double maxIterations = 18;
 
-        // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
-        int maxIterations = 18;
+    protected int numSamplePoints = 1000;
 
-        double[] timeConstants = SaniCurves.get().calculateTimeConstants(parameters.tu, parameters.tg);
+    public AbstractZellweger() {
 
         // get minimum and maximum time constants
-        List timeConstantsList = Arrays.asList(timeConstants);
-        double tcMin = (double)Collections.min(timeConstantsList);
-        double tcMax = (double)Collections.max(timeConstantsList);
+        List timeConstantsList = Arrays.asList(controlPath.getTimeConstants());
+        double tcMin = (double) Collections.min(timeConstantsList);
+        double tcMax = (double) Collections.max(timeConstantsList);
 
         // calculate the frequency range to use in all following calculations,
         // based on the time constants.
-        double startFreq = 1.0 / (tcMax * 10.0);
-        double endFreq = 1.0 / (tcMin * 10.0);
+        startFreq = 1.0 / (tcMax * 10.0);
+        endFreq = 1.0 / (tcMin * 10.0);
+    }
 
-        int numSamplePoints = 1000;
+    @Override
+    public void setControlPath(ControlPath path) {
+        controlPath = path;
+    }
+
+    @Override
+    public void setNumSamplePoints(int samples) {
+        numSamplePoints = samples;
+    }
+
+    @Override
+    public void setPhiDamping(double phiDamping) {
+        this.phiDamping = phiDamping;
+    }
+
+    @Override
+    public void setMaxIterations(int iterations) {
+        maxIterations = iterations;
+    }
+
+    public double calculateTn() {
+
         double[] freq = linspace(startFreq, endFreq, numSamplePoints);
-        double[] omega = linspace(startFreq, endFreq, numSamplePoints);
-
-        // calculate amplitude control path, both in linear and dB
-        double[] ampControlPath = new double[numSamplePoints];
-        double[] ampControlPathdB = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; ++i) {
-            ampControlPath[i] = amplitudeControlPath(omega[i], ks, timeConstants);
-            ampControlPathdB[i] = 20.0 * Math.log10(ampControlPath[i]);
-        }
-
-        // calculate phase control path, both in linear and dB
-        double[] phiControlPath = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; ++i) {
-            phiControlPath[i] = phaseControlPath(omega[i], timeConstants);
-        }
 
         // TODO this is user-adjustable in the GUI
         double phiPI = -90.0;
@@ -57,12 +63,12 @@ public class Zellweger extends AbstractPlant
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         double phiControlPathPI;
-        for(int i = 0; i != maxIterations; ++i) {
-            phiControlPathPI = phaseControlPath(actualFreq, timeConstants);
-            if(phiControlPathPI < phiPI) {
+        for (int i = 0; i != maxIterations; ++i) {
+            phiControlPathPI = phaseControlPath(actualFreq, controlPath.getTimeConstants());
+            if (phiControlPathPI < phiPI) {
                 topFreq = actualFreq;
                 actualFreq = (topFreq + bottomFreq) / 2.0;
-            } else if(phiControlPathPI > phiPI) {
+            } else if (phiControlPathPI > phiPI) {
                 bottomFreq = actualFreq;
                 actualFreq = (topFreq + bottomFreq) / 2.0;
             }
@@ -72,7 +78,27 @@ public class Zellweger extends AbstractPlant
         double wPI = actualFreq;
 
         // Tn parameter of controller
-        double tn = 1.0 / wPI;
+        return 1.0 / wPI;
+    }
+
+    public double calculateKr(double tn) {
+
+        double[] omega = linspace(startFreq, endFreq, numSamplePoints);
+
+        // calculate amplitude control path, both in linear and dB
+        double[] ampControlPath = new double[numSamplePoints];
+        for (int i = 0; i != numSamplePoints; ++i) {
+            ampControlPath[i] = amplitudeControlPath(
+                    omega[i],
+                    controlPath.getKs(),
+                    controlPath.getTimeConstants());
+        }
+
+        // calculate phase control path, both in linear and dB
+        double[] phiControlPath = new double[numSamplePoints];
+        for (int i = 0; i != numSamplePoints; ++i) {
+            phiControlPath[i] = phaseControlPath(omega[i], controlPath.getTimeConstants());
+        }
 
         // phase controller for plot
         double[] phiController = new double[numSamplePoints];
@@ -85,19 +111,17 @@ public class Zellweger extends AbstractPlant
         // amplitude controller
         double[] ampController = new double[numSamplePoints];
         double[] ampOpenLoop = new double[numSamplePoints];
-        double[] ampOpenLoopdB = new double[numSamplePoints];
         for(int i = 0; i != numSamplePoints; i++) {
             ampController[i] = amplitudeControllerPI(omega[i], tn);
             ampOpenLoop[i] = ampController[i] * ampControlPath[i];
-            ampOpenLoopdB[i] = 20.0 * Math.log10(ampOpenLoop[i]);
         }
 
         // find phiDamping on the phase of the open loop
-        topFreq = endFreq;
-        bottomFreq = startFreq;
-        actualFreq = (topFreq + bottomFreq) / 2.0;
+        double topFreq = endFreq;
+        double bottomFreq = startFreq;
+        double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = phaseControlPath(actualFreq, timeConstants) +
+            double phiOpenLoopBuffer = phaseControlPath(actualFreq, controlPath.getTimeConstants()) +
                     phaseControllerPI(actualFreq, tn);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;
@@ -112,13 +136,13 @@ public class Zellweger extends AbstractPlant
         double wDamping = actualFreq;
 
         // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = amplitudeControlPath(wDamping, ks, timeConstants) *
-                amplitudeControllerPI(wDamping, tn);
+        double ampOpenLoopKr = amplitudeControlPath(
+                wDamping,
+                controlPath.getKs(),
+                controlPath.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
 
         // Kr is the reciprocal of the amplitude at wDamping
-        double kr = 1.0 / ampOpenLoopKr;
-
-        return new PIDRegulator(kr, tn, 0.0);
+        return 1.0 / ampOpenLoopKr;
     }
 
     private double[] linspace(double start, double end, int num) {

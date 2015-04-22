@@ -15,22 +15,14 @@ import java.util.stream.Stream;
  * @author Alex Murray
  */
 public class SaniCurves {
-    private static SaniCurves instance = null;
     private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
     private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
 
     /**
      * Loads
      */
-    protected SaniCurves() {
+    public SaniCurves() {
         loadMatlabTables();
-    }
-
-    public static SaniCurves get() {
-        if(instance == null) {
-            instance = new SaniCurves();
-        }
-        return instance;
     }
 
     /**
