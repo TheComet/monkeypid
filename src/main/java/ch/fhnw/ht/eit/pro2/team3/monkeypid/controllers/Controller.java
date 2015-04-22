@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
 import java.awt.event.ActionEvent;
 
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
  */
 public class Controller {
 	private Model model;
+	private View view;
 
 	/**
 	 * 
@@ -55,5 +57,10 @@ public class Controller {
 	 */
 	public void bt2(ActionEvent e) {
 		StatusBar.showStatus(this, e, "Button2");
+	}
+
+	public void setView(View view) {
+		this.view=view;
+		
 	}
 }

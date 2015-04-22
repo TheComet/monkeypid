@@ -29,7 +29,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private JMenu menuData = new JMenu("Datei");
 
 	// Menueintraege Menu Datei
-	private JMenuItem menuItemMiniVersion = new JMenuItem("Zur Mini-Version wechseln");
+	private JMenuItem menuItemMiniVersion = new JMenuItem(
+			"Zur Mini-Version wechseln");
 	private JMenuItem menuItemExit = new JMenuItem("Exit");
 
 	// Menu Hilfe
@@ -64,13 +65,53 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// Registriert die Eintraege des Submenu Hilfreiche Links beim
 		// ActionListener
-		LinkWikiRegelungstechnik.addActionListener(this);
-		LinkWikiFaustformelverfahren.addActionListener(this);
-		LinkRnWissenRegelungstechnik.addActionListener(this);
-		LinkPhasengangMethodePDF.addActionListener(this);
-		LinkRegelkreiseUndRegelungenPDF.addActionListener(this);
-		LinkPidEinstellenPDF.addActionListener(this);
-		LinkBuergieSolenickiV3PDF.addActionListener(this);
+		LinkWikiRegelungstechnik.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://de.wikipedia.org/wiki/Regler");
+			}
+		});
+
+		LinkWikiFaustformelverfahren.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29");
+			}
+		});
+		LinkRnWissenRegelungstechnik.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://rn-wissen.de/wiki/index.php/Regelungstechnik");
+			}
+		});
+		LinkPhasengangMethodePDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/rt_phasengang-methode.pdf");
+			}
+		});
+		LinkRegelkreiseUndRegelungenPDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/Regelkreise_und_Regelungen.pdf");
+			}
+		});
+		LinkPidEinstellenPDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/pid-einstellregeln.pdf");
+			}
+		});
+		LinkBuergieSolenickiV3PDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/Buergi_Solenicki-V3.pdf");
+			}
+		});
 		menuItemExit.addActionListener(this);
 		menuItemInfo.addActionListener(this);
 		menuItemMiniVersion.addActionListener(this);
@@ -98,9 +139,19 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		add(menuData);
 		add(menuHelp);
 	}
+	
+	private void openURLInBrowser(String stringURL){
+		try {
+			Desktop.getDesktop().browse(
+					new URL(stringURL).toURI());
+		} catch (Exception a) { //catch only necessary exceptions
+			//a.printStackTrace();
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		/*
 		if (e.getSource() == LinkWikiRegelungstechnik) {
 			try {
 				Desktop.getDesktop().browse(
@@ -109,6 +160,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				a.printStackTrace(); // TODO Kommentar
 			}
 		}
+		*/
+		/*
 		if (e.getSource() == LinkWikiFaustformelverfahren) {
 			try {
 				Desktop.getDesktop()
@@ -165,7 +218,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				a.printStackTrace(); // TODO Kommentar
 			}
 		}
-
+	*/
 		// Beendet das Tool und schliesst das Fenster
 		if (e.getSource() == menuItemExit) {
 			System.exit(1);
@@ -180,23 +233,23 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 		// Umschalten zwischen Normal- und Mini-Version
 
-		if (e.getSource() == menuItemMiniVersion) {		
+		if (e.getSource() == menuItemMiniVersion) {
 			// graphPanel ein-/ausblenden
 			view.graphPanel.setVisible(miniVersionSelected);
 			// graphDisplayPanel ein-/ausblenden
 			view.graphDisplayPanel.setVisible(miniVersionSelected);
 			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
 			view.leftPanel.setMiniVersion(miniVersionSelected);
-			
-			//Aendert die bezeichnung des MenuItemMiniVersion 
+
+			// Aendert die bezeichnung des MenuItemMiniVersion
 			if (miniVersionSelected) {
-				//wenn von der Mini zur Normal-Ansicht gewechselt wird
-				menuItemMiniVersion.setText("Zur Mini-Version wechseln"); 
-			}else{
-				//wenn von der Normal- zur Mini-Version gewechsetl wird
+				// wenn von der Mini zur Normal-Ansicht gewechselt wird
+				menuItemMiniVersion.setText("Zur Mini-Version wechseln");
+			} else {
+				// wenn von der Normal- zur Mini-Version gewechsetl wird
 				menuItemMiniVersion.setText("Zur Normal-Version wechseln");
 			}
-			
+
 			miniVersionSelected = !miniVersionSelected; // invertiert die
 														// Zustandsvariable fuer
 														// die Ansicht*/
