@@ -41,7 +41,7 @@ public class SaniCurves {
      * element in the array of rows is power 2, and the last is power 8.
      */
     private void loadMatlabTables() {
-        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio", true);
+        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio", true); // x and y data points are swapped - no idea why
         Tg_inverse = loadAndInterpolate("math_tables/tg_inverse", false);
     }
 
@@ -110,14 +110,6 @@ public class SaniCurves {
         }
 
         return power;
-
-        /*
-        for(int index = 0; index < getTuTgRatioCurve(power).size(); index++) {
-            if(getTuTgRatioCurve(power).get(index) >= inputTuTgRatio)
-                return (double)index / (double)getTuTgRatioCurve(power).size();
-        }
-
-        throw new RuntimeException("Failed to lookup Tu/Tg in sani curve: It doesn't intersect!");*/
     }
 
     public double[] calculateTimeConstants(double tu, double tg) {
