@@ -81,9 +81,7 @@ public class SaniCurves {
         return listOfSplines;
     }
 
-    public double lookupTuTgValue(double tu, double tg) {
-
-        double TuTgRation = tu / tg;
+    public int lookupPower(double TuTgRatio) {
 
         // These are magic numbers extracted from the matlab file "p2_sani.m", based on
         // the document "Buergi, Solenicki - V3.pdf", page 5.
@@ -102,7 +100,7 @@ public class SaniCurves {
         // magic numbers compared to the ratio. If the ratio is larger than all of
         // the magic numbers, then throw an exception.
         int power = 2;
-        while(TuTgRation > orderThresholds[power - 2]) {
+        while(TuTgRatio > orderThresholds[power - 2]) {
             power++;
 
             // ratio is larger than all thresholds
@@ -110,13 +108,41 @@ public class SaniCurves {
                 throw new RuntimeException("Order is larger than 8, don't have a lookup table for that");
             }
         }
-/*
+
+        return power;
+
+        /*
         for(int index = 0; index < getTuTgRatioCurve(power).size(); index++) {
             if(getTuTgRatioCurve(power).get(index) >= inputTuTgRatio)
                 return (double)index / (double)getTuTgRatioCurve(power).size();
-        }*/
+        }
 
-        throw new RuntimeException("Failed to lookup Tu/Tg in sani curve: It doesn't intersect!");
+        throw new RuntimeException("Failed to lookup Tu/Tg in sani curve: It doesn't intersect!");*/
+    }
+
+    public double[] calculateTimeConstants(double tu, double tg) {
+
+        double TuTgRatio = tu / tg;
+
+        // get power level
+        int power = lookupPower(TuTgRatio);
+
+        // prepare return array (it has as many indices as the power, starting at ^2)
+        double[] timeConstants = new double[power - 1];
+
+        // look up intersection points in inerpolated matlab tables
+        double r = getTuTgRatioCurve(power).value(TuTgRatio);
+        double w = getTgInverseCurve(power).value(r);
+
+        // last time constant can now be calculated
+        timeConstants[power-2] = w * tg;
+
+        // calculate the other time constants
+        for(int i = power - 2; i >= 0; i--) {
+            timeConstants[i] = timeConstants[power - 2] * Math.pow(r, power - i);
+        }
+
+        return timeConstants;
     }
 
     public PolynomialSplineFunction getTuTgRatioCurve(int power) {
