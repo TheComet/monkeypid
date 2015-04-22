@@ -19,6 +19,7 @@ public class GraphController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /*
         for(int power = 2; power <= 8; power++) {
             int index = 0;
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -37,6 +38,6 @@ public class GraphController implements Initializable {
                 series.getData().add(new XYChart.Data<>(index, value));
                 index++;
             }
-        }
+        }*/
     }
 }
