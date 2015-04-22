@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.MathMethod;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.RegulatorInterface;
 
 class MathMethodFactory {
 
@@ -22,11 +22,11 @@ class MathMethodFactory {
      * @param method The method to instantiate.
      * @return The object implementing the method.
      */
-    public MathMethod getMethod(Method method, Mode mode)
+    public RegulatorInterface getMethod(Method method, Mode mode)
     {
         switch(method) {
             case ZELLWEGER:
-                return new Zellweger(mode);
+                break;
             case FISTFORMULA_RESWICK:
                 return new FistFormula(FistFormula.Method.RESWICK, mode);
             case FISTFORMULA_OPPELT:
@@ -34,8 +34,8 @@ class MathMethodFactory {
             case FISTFORMULA_ROSENBERG:
                 return new FistFormula(FistFormula.Method.ROSENBERG, mode);
             default:
-                throw new RuntimeException("Invalid MethodID");
+                break;
         }
-
+        throw new RuntimeException("Invalid MethodID");
     }
 }

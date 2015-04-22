@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces;
 
-public abstract class AbstractMathMethod implements MathMethod {
+public abstract class Plant implements RegulatorInterface {
 
     public ControllerParameters result = new ControllerParameters();
 
