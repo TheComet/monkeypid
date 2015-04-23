@@ -1,7 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
+import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import java.io.IOException;
@@ -15,8 +17,8 @@ import java.util.stream.Stream;
  * @author Alex Murray
  */
 public class SaniCurves {
-    private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
-    private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
+    private ArrayList<PolynomialFunctionLagrangeForm> Tu_Tg_ratio = null;
+    private ArrayList<PolynomialFunctionLagrangeForm> Tg_inverse = null;
 
     /**
      * Loads
@@ -37,14 +39,15 @@ public class SaniCurves {
         Tg_inverse = loadAndInterpolate("math_tables/tg_inverse", false);
     }
 
-    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName, boolean swapXY) {
+    private ArrayList<PolynomialFunctionLagrangeForm> loadAndInterpolate(String fileName, boolean swapXY) {
 
         // this is the return value - it holds a list of all spline functions
-        ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
+        ArrayList<PolynomialFunctionLagrangeForm> listOfSplines = new ArrayList<>();
 
         // load the data points from disk
         try {
             //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
+            // TODO get classpath working
             Path path = Paths.get("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid/" + fileName);
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
@@ -54,13 +57,13 @@ public class SaniCurves {
                 double[] xValues = new double[yValuesStr.length];
                 double[] yValues = new double[yValuesStr.length];
                 for(int i = 0; i < yValuesStr.length; i++) {
-                    xValues[i] = (double)i / yValuesStr.length;
+                    xValues[i] = (double)i / (double)(yValuesStr.length - 1);
                     yValues[i] = Double.parseDouble(yValuesStr[i]);
                 }
 
                 // apply cubic interpolation to the data points and store curve into return value
                 // for Tu_Tg the x and y data points are swapped - no idea why
-                SplineInterpolator interpolator = new SplineInterpolator();
+                NevilleInterpolator interpolator = new NevilleInterpolator();
                 if(swapXY)
                     listOfSplines.add(interpolator.interpolate(yValues, xValues));
                 else
@@ -130,11 +133,11 @@ public class SaniCurves {
         return timeConstants;
     }
 
-    public PolynomialSplineFunction getTuTgRatioCurve(int power) {
+    public PolynomialFunctionLagrangeForm getTuTgRatioCurve(int power) {
         return Tu_Tg_ratio.get(power - 2);
     }
 
-    public PolynomialSplineFunction getTgInverseCurve(int power) {
+    public PolynomialFunctionLagrangeForm getTgInverseCurve(int power) {
         return Tg_inverse.get(power - 2);
     }
 }
