@@ -44,7 +44,8 @@ public class SaniCurves {
 
         // load the data points from disk
         try {
-            Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
+            //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
+            Path path = Paths.get("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid/" + fileName);
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
 

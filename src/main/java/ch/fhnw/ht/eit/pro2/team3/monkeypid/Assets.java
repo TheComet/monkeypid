@@ -9,8 +9,8 @@ import java.net.URL;
  */
 public class Assets {
     private static Assets instance = null;
-    private static String RESOURCE_PREFIX = File.separator +
-            pathToPlatform("ch/fhnw/ht/eit/pro2/team3/monkeypid/");
+    private static String RESOURCE_PREFIX =
+            pathToPlatform("../resources/ch/fhnw/ht/eit/pro2/team3/monkeypid/");
 
     private static String pathToPlatform(String path) {
         return String.join(File.separator, path.split("/"));
@@ -31,6 +31,6 @@ public class Assets {
         String path = RESOURCE_PREFIX +
                 File.separator +
                 pathToPlatform(relativePath);
-        return getClass().getResource(path);
+        return Assets.class.getResource(path);
     }
 }
