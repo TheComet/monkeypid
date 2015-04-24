@@ -1,12 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class PIDRegulator extends AbstractRegulator {
+public class PIDController extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
     private double tv = 0.0;
 
-    public PIDRegulator(double kr, double tn, double tv) {
+    public PIDController(double kr, double tn, double tv) {
         setKr(kr);
         setTn(tn);
         setTv(tv);
@@ -18,8 +18,8 @@ public class PIDRegulator extends AbstractRegulator {
     }
 
     @Override
-    public PIDRegulator clone() throws CloneNotSupportedException {
-        return (PIDRegulator)super.clone();
+    public PIDController clone() throws CloneNotSupportedException {
+        return (PIDController)super.clone();
     }
 
     public double getKr() {

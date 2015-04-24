@@ -1,16 +1,16 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Regulator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Controller;
 import org.jfree.data.xy.XYSeries;
 
 public class ClosedLoop {
 
-    private ControlPath controlPath;
-    private Regulator regulator;
+    private Plant plant;
+    private Controller controller;
 
-    public ClosedLoop(ControlPath controlPath, Regulator regulator) {
-        this.controlPath = controlPath;
-        this.regulator = regulator;
+    public ClosedLoop(Plant plant, Controller controller) {
+        this.plant = plant;
+        this.controller = controller;
     }
 
     public XYSeries calculateStepResponse() {

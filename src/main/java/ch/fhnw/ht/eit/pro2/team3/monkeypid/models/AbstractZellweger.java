@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractZellweger extends AbstractRegulatorCalculator implements Zellweger
+public abstract class AbstractZellweger extends AbstractControllerCalculator implements Zellweger
 {
-    protected ControlPath controlPath = null;
+    protected Plant plant = null;
     protected double phiDamping;
     double startFreq, endFreq;
 
@@ -19,11 +19,11 @@ public abstract class AbstractZellweger extends AbstractRegulatorCalculator impl
     protected int numSamplePoints = 1000;
 
     @Override
-    public void setControlPath(ControlPath path) {
-        controlPath = path;
+    public void setPlant(Plant path) {
+        plant = path;
 
         // get minimum and maximum time constants
-        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(controlPath.getTimeConstants()));
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
         double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
 
@@ -61,7 +61,7 @@ public abstract class AbstractZellweger extends AbstractRegulatorCalculator impl
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         double phiControlPathPI;
         for (int i = 0; i != maxIterations; ++i) {
-            phiControlPathPI = phaseControlPath(actualFreq, controlPath.getTimeConstants());
+            phiControlPathPI = phaseControlPath(actualFreq, plant.getTimeConstants());
             if (phiControlPathPI < phiPI) {
                 topFreq = actualFreq;
                 actualFreq = (topFreq + bottomFreq) / 2.0;
@@ -87,14 +87,14 @@ public abstract class AbstractZellweger extends AbstractRegulatorCalculator impl
         for (int i = 0; i != numSamplePoints; ++i) {
             ampControlPath[i] = amplitudeControlPath(
                     omega[i],
-                    controlPath.getKs(),
-                    controlPath.getTimeConstants());
+                    plant.getKs(),
+                    plant.getTimeConstants());
         }
 
         // calculate phase control path, both in linear and dB
         double[] phiControlPath = new double[numSamplePoints];
         for (int i = 0; i != numSamplePoints; ++i) {
-            phiControlPath[i] = phaseControlPath(omega[i], controlPath.getTimeConstants());
+            phiControlPath[i] = phaseControlPath(omega[i], plant.getTimeConstants());
         }
 
         // phase controller for plot
@@ -118,7 +118,7 @@ public abstract class AbstractZellweger extends AbstractRegulatorCalculator impl
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = phaseControlPath(actualFreq, controlPath.getTimeConstants()) +
+            double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
                     phaseControllerPI(actualFreq, tn);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;
@@ -135,8 +135,8 @@ public abstract class AbstractZellweger extends AbstractRegulatorCalculator impl
         // amplitude of the open loop at the wDamping frequency
         double ampOpenLoopKr = amplitudeControlPath(
                 wDamping,
-                controlPath.getKs(),
-                controlPath.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
+                plant.getKs(),
+                plant.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
 
         // Kr is the reciprocal of the amplitude at wDamping
         return 1.0 / ampOpenLoopKr;

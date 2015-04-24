@@ -1,11 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class PIRegulator extends AbstractRegulator {
+public class PIController extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
 
-    public PIRegulator(double kr, double tn) {
+    public PIController(double kr, double tn) {
         setKr(kr);
         setTn(tn);
     }
@@ -16,8 +16,8 @@ public class PIRegulator extends AbstractRegulator {
     }
 
     @Override
-    public PIRegulator clone() throws CloneNotSupportedException {
-        return (PIRegulator)super.clone();
+    public PIController clone() throws CloneNotSupportedException {
+        return (PIController)super.clone();
     }
 
     public double getKr() {

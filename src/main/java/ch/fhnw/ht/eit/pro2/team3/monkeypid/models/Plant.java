@@ -1,13 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class ControlPath {
+public class Plant {
 
     private double ks = 0.0;
     private double tu = 0.0;
     private double tg = 0.0;
     private double[] timeConstants;
 
-    public ControlPath(double ks, double tu, double tg) {
+    public Plant(double ks, double tu, double tg) {
         this.ks = ks;
         this.tu = tu;
         this.tg = tg;

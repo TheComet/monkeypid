@@ -1,13 +1,10 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Regulator;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.RegulatorCalculator;
-
-public class FistFormulaRosenbergPID extends AbstractRegulatorCalculator {
+public class FistFormulaRosenbergPID extends AbstractControllerCalculator {
 
     @Override
-    public void calculate(ControlPath path) {
-        this.regulator = new PIDRegulator(
+    public void calculate(Plant path) {
+        this.controller = new PIDController(
                 1.2 * path.getTg() / (path.getKs() * path.getTu()),
                 2.0 * path.getTu(),
                 0.44 * path.getTu()

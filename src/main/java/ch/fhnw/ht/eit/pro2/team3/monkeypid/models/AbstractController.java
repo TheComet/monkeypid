@@ -1,8 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Regulator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Controller;
 
-public abstract class AbstractRegulator implements Regulator, Cloneable {
+public abstract class AbstractController implements Controller, Cloneable {
     protected double tp;
 
     @Override

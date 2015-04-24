@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ControlPath;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValue;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
@@ -37,7 +37,7 @@ public class Controller {
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
                                  String selectedRegulatorName,
                                  OverswingValue overswing){
-        model.setControlPath(new ControlPath(ksValue, tuValue, tgValue));
+        model.setPlant(new Plant(ksValue, tuValue, tgValue));
         model.simulateAll();
 		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overswing.asAngle());
 	}
