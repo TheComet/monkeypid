@@ -7,20 +7,6 @@ sourceCompatibility = '1.8'
 
 mainClassName = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID'
 
-sourceSets {
-    main {
-        java {
-            'src/main/java'
-        }
-        resources {
-            'src/main/resources'
-        }
-    }
-    test {
-        'test'
-    }
-}
-
 repositories {
     mavenCentral()
 }
