@@ -1,4 +1,4 @@
-package ch.fhnw.ht.eit.pro2.team3.monkeypid.models.test;
+package ch.fhnw.ht.eit.pro2.team3.monkeypid.test.models;
 
 import static org.junit.Assert.*;
 
@@ -15,8 +15,8 @@ public class FistFormulaOppeltPITest {
 		ControllerCalculator calc=new FistFormulaOppeltPI();
 		Plant plant=new Plant(1,1,1);
 		calc.calculate(plant);
-		calc.getController
-		assertEquals("OppeltPI Test failed",calc.getController(),); //Insert Matlab Value
+		// TODO: calc.getController();
+		// TODO: assertEquals("OppeltPI Test failed",calc.getController(),); //Insert Matlab Value
 	}
 
 	@Test
