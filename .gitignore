@@ -12,3 +12,6 @@
 .project
 .settings/
 .metadata/
+
+# ignore Windows Thumbs.db file
+Thumbs.db
