@@ -52,10 +52,14 @@ public class Model extends Observable {
 
         methods.add(new FistFormulaOppeltPI());
         methods.add(new FistFormulaOppeltPID());
-        methods.add(new FistFormulaReswickPI0());
-        methods.add(new FistFormulaReswickPI20());
-        methods.add(new FistFormulaReswickPID0());
-        methods.add(new FistFormulaReswickPID20());
+        methods.add(new FistFormulaReswickStoerPI0());
+        methods.add(new FistFormulaReswickStoerPI20());
+        methods.add(new FistFormulaReswickStoerPID0());
+        methods.add(new FistFormulaReswickStoerPID20());
+        methods.add(new FistFormulaReswickFuehrungPI0());
+        methods.add(new FistFormulaReswickFuehrungPI20());
+        methods.add(new FistFormulaReswickFuehrungPID0());
+        methods.add(new FistFormulaReswickFuehrungPID20());
         methods.add(new FistFormulaRosenbergPI());
         methods.add(new FistFormulaRosenbergPID());
         methods.add(new ZellwegerPI());
