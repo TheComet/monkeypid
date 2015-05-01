@@ -13,7 +13,6 @@ import javax.swing.*;
  */
 public class GraphDisplayPanel extends JPanel implements ActionListener {
 
-	
 	private JCheckBox cbPhasengangmethode = new JCheckBox("Phasengangmethode", true);
 	private JCheckBox cbFaustformel1a = new JCheckBox("Faustformel 1(XX%)", true);
 	private JCheckBox cbFaustformel1b = new JCheckBox("Faustformel 1(X%)", true);
@@ -25,7 +24,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 	private JCheckBox cbFaustformel4b = new JCheckBox("Faustformel 4(X%)", true);
 	private JCheckBox cbFaustformel5a = new JCheckBox("Faustformel 5(XX%)", true);
 	private JCheckBox cbFaustformel5b = new JCheckBox("Faustformel 5(X%)", true);
-
 
 	/**
 	 * 
@@ -82,10 +80,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 				new Insets(10, 10, 10, 10), 0, 0));*/
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 }

@@ -14,9 +14,6 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -26,7 +23,7 @@ import javax.swing.border.TitledBorder;
  * @author Josua
  *
  */
-public class View extends JPanel implements ActionListener, Observer {
+public class View extends JPanel implements Observer {
 
 	private Controller controller;
 	private Model model;
@@ -41,38 +38,39 @@ public class View extends JPanel implements ActionListener, Observer {
 	 */
 	public View(Controller controller, Model model) {
 		super(new GridBagLayout());
+
 		this.controller = controller;
 		this.model = model;
 
-		leftPanel = new LeftPanel(controller); // LeftPanel
+		//creat the panels
+		leftPanel = new LeftPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
 
-		// LeftPanel hinzufuegen
+		//add leftPanel to GridBagLayout
 		add(leftPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
+		//set border and title of leftPanel
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
-		// GraphPanel hinzufuegen
+		//add graphPanel to GridBagLayout
 		add(graphPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
 						10, 0, 10, 10), 0, 0));
+		//set border and title of graphPanel
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 
-		// GraphDisplayPanel hinzufuegen
+		//add graphDisplayPanel to GridBagLayout
 		add(graphDisplayPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 10, 10), 0, 0));
+		//set border and title of graphDisplayPanel
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
 	}
-
+	/**
+	 * 
+	 */
 	public void update(Observable observable, Object o) {
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 }

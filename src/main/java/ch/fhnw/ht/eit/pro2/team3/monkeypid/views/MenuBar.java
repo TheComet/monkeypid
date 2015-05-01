@@ -1,11 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.*;
@@ -19,27 +21,27 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private Controller controller;
 	private View view;
 
-	// Projektname fuer Link-Pfad
+	// projectname is used for link-path
 	private String projektName = "monkeypid";
 
 	// TODO besserer Name
 	private boolean miniVersionSelected = false;
 
-	// Menu Datei
+	// menu data
 	private JMenu menuData = new JMenu("Datei");
 
-	// Menueintraege Menu Datei
+	// menu item of menu data
 	private JMenuItem menuItemMiniVersion = new JMenuItem(
 			"Zur Mini-Version wechseln");
 	private JMenuItem menuItemExit = new JMenuItem("Exit");
 
-	// Menu Hilfe
+	// menu help
 	private JMenu menuHelp = new JMenu("Help");
 
-	// Menueintraege Menu Hilfe
+	// menu item about
 	private JMenuItem menuItemInfo = new JMenuItem("Info");
 
-	// Submenu MenuDatei Hilfreiche Links
+	// submenu useful links of menu data
 	private JMenuItem LinkWikiRegelungstechnik = new JMenuItem(
 			"Regelungstechnik Wiki", 'R');
 	private JMenuItem LinkWikiFaustformelverfahren = new JMenuItem(
@@ -63,27 +65,28 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		this.controller = controller;
 		this.view = view;
 
-		// Registriert die Eintraege des Submenu Hilfreiche Links beim
-		// ActionListener
+		// item of submenu useful links
 		LinkWikiRegelungstechnik.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				openURLInBrowser("http://de.wikipedia.org/wiki/Regler");
 			}
 		});
-
+		// item of submenu useful links
 		LinkWikiFaustformelverfahren.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				openURLInBrowser("http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29");
 			}
 		});
+		// item of submenu useful links
 		LinkRnWissenRegelungstechnik.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				openURLInBrowser("http://rn-wissen.de/wiki/index.php/Regelungstechnik");
 			}
 		});
+		// item of submenu useful links
 		LinkPhasengangMethodePDF.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,6 +94,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 						+ "/rt_phasengang-methode.pdf");
 			}
 		});
+		// item of submenu useful links
 		LinkRegelkreiseUndRegelungenPDF.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -98,6 +102,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 						+ "/Regelkreise_und_Regelungen.pdf");
 			}
 		});
+		// item of submenu useful links
 		LinkPidEinstellenPDF.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -105,6 +110,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 						+ "/pid-einstellregeln.pdf");
 			}
 		});
+		// item of submenu useful links
 		LinkBuergieSolenickiV3PDF.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -112,15 +118,17 @@ public class MenuBar extends JMenuBar implements ActionListener {
 						+ "/Buergi_Solenicki-V3.pdf");
 			}
 		});
+
+		// add actionListener to the menuItems
 		menuItemExit.addActionListener(this);
 		menuItemInfo.addActionListener(this);
 		menuItemMiniVersion.addActionListener(this);
 
-		// Menueintraege dem Menu Datei hinzufuegen
+		// add menu item to the menu data
 		menuData.add(menuItemMiniVersion);
 		menuData.add(menuItemExit);
 
-		// Submenu Hilfreiche Links
+		// submenu for useful links
 		JMenu usefulLinksSubMenu = new JMenu("Hilfreiche Links");
 		usefulLinksSubMenu.setMnemonic('H');
 		usefulLinksSubMenu.add(LinkWikiRegelungstechnik);
@@ -131,11 +139,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		usefulLinksSubMenu.add(LinkPidEinstellenPDF);
 		usefulLinksSubMenu.add(LinkBuergieSolenickiV3PDF);
 
-		// Menueintraege dem Menu Hilfe hinzufuegen
+		// add menu items to the menu help
 		menuHelp.add(menuItemInfo);
 		menuHelp.add(usefulLinksSubMenu);
 
-		// Menues der MenuBar hinzuefuegen
+		// add menus to menuBar
 		add(menuData);
 		add(menuHelp);
 	}
@@ -150,77 +158,49 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*
-		 * if (e.getSource() == LinkWikiRegelungstechnik) { try {
-		 * Desktop.getDesktop().browse( new
-		 * URL("http://de.wikipedia.org/wiki/Regler").toURI()); } catch
-		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } }
-		 */
-		/*
-		 * if (e.getSource() == LinkWikiFaustformelverfahren) { try {
-		 * Desktop.getDesktop() .browse(new URL(
-		 * "http://de.wikipedia.org/wiki/Faustformelverfahren_%28Automatisierungstechnik%29"
-		 * ) .toURI()); } catch (Exception a) { a.printStackTrace(); // TODO
-		 * Kommentar } } if (e.getSource() == LinkRnWissenRegelungstechnik) {
-		 * try { Desktop.getDesktop() .browse(new URL(
-		 * "http://rn-wissen.de/wiki/index.php/Regelungstechnik") .toURI()); }
-		 * catch (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
-		 * (e.getSource() == LinkPhasengangMethodePDF) { try {
-		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
-		 * projektName + "/rt_phasengang-methode.pdf").toURI()); } catch
-		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
-		 * (e.getSource() == LinkRegelkreiseUndRegelungenPDF) { try {
-		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
-		 * projektName + "/Regelkreise_und_Regelungen.pdf").toURI()); } catch
-		 * (Exception a) { a.printStackTrace(); // TODO Kommentar } } if
-		 * (e.getSource() == LinkPidEinstellenPDF) { try {
-		 * Desktop.getDesktop().browse( new URL("http://simonwyss.me/" +
-		 * projektName + "/pid-einstellregeln.pdf").toURI()); } catch (Exception
-		 * a) { a.printStackTrace(); // TODO Kommentar } } if (e.getSource() ==
-		 * LinkBuergieSolenickiV3PDF) { try { Desktop.getDesktop().browse( new
-		 * URL("http://simonwyss.me/" + projektName +
-		 * "/Buergi_Solenicki-V3.pdf").toURI()); } catch (Exception a) {
-		 * a.printStackTrace(); // TODO Kommentar } }
-		 */
-		// Beendet das Tool und schliesst das Fenster
+
+		// menu item exit is pressed
 		if (e.getSource() == menuItemExit) {
-			System.exit(1);
+			System.exit(1); // close pogramm
 		}
 
+		// menu item info is pressed
 		if (e.getSource() == menuItemInfo) {
+
+			// ImageIcon icon = new ImageIcon(path);
+			
+			//shows dialogBox with informations about the project and the authors
 			JOptionPane
 					.showMessageDialog(
 							this,
-							"Titel\nVersion: 1.0\n\nFHNW Brugg Windisch\nProjekt 2 Team 3\nYanick Frei\nSimon Wyss\nSimonSturm\nJosua Stierli\nAlex Murray",
+							"Easy-PID\nSmart Controller Design\nVersion: 1.0\n\nFHNW Brugg Windisch\nProjekt 2 Team 3\nYanick Frei\nSimon Wyss\nSimonSturm\nJosua Stierli\nAlex Murray",
 							"Info", JOptionPane.INFORMATION_MESSAGE);
 		}
-		// Umschalten zwischen Normal- und Mini-Version
 
+		// switch between normal- and mini-version
 		if (e.getSource() == menuItemMiniVersion) {
-
+			// set visibility of graphPanel
 			view.graphPanel.setVisible(miniVersionSelected);
-			// graphPanel ein-/ausblenden
+			// set visibility of graphDisplayPanel
 			view.graphDisplayPanel.setVisible(miniVersionSelected);
-			// graphDisplayPanel ein-/ausblenden
-			// schaltet alle unerwuenschten Komponenten auf dem leftPanel aus
+			// set visibility of components on the leftPanel
 			view.leftPanel.setMiniVersion(miniVersionSelected);
 
-			// Aendert die bezeichnung des MenuItemMiniVersion
+			// change text of menuItem
 			if (miniVersionSelected) {
-				// wenn von der Normal- zur Mini-Version gewechsetl wird
-				// wenn von der Mini zur Normal-Ansicht gewechselt wird
+				// change text, normal-version is selected
 				menuItemMiniVersion.setText("Zur Mini-Version wechseln");
 			} else {
-				// wenn von der Normal- zur Mini-Version gewechsetl wird
+				// change text, mini-version is selected
 				menuItemMiniVersion.setText("Zur Normal-Version wechseln");
 			}
 
 			// pack frame
 			JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
 			myParent.pack(); // pack frame (make as small as possible)
-			miniVersionSelected = !miniVersionSelected; // invertiert die
-														// Zustandsvariable fuer
-														// die Ansicht
+
+			// invert state variable
+			miniVersionSelected = !miniVersionSelected;
 		}
 	}
 }
