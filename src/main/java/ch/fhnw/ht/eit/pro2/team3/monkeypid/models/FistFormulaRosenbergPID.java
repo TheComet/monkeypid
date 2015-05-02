@@ -4,7 +4,7 @@ public class FistFormulaRosenbergPID extends AbstractControllerCalculator {
 
     @Override
     public void calculate(Plant path) {
-        this.controller = new PIDController(
+        this.IController = new PIDController(
                 1.2 * path.getTg() / (path.getKs() * path.getTu()),
                 2.0 * path.getTu(),
                 0.44 * path.getTu()

@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.ControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -25,11 +25,11 @@ public class Model extends Observable {
         long startTime = System.nanoTime();
 
         // get all calculators
-        ArrayList<ControllerCalculator> calculators = getCalculators();
+        ArrayList<IControllerCalculator> calculators = getCalculators();
 
         // generate a lis of threads for calculating each method
         ArrayList<Thread> threads = new ArrayList<>();
-        for(ControllerCalculator calc : calculators) {
+        for(IControllerCalculator calc : calculators) {
             threads.add(new Thread(() -> {
                 calc.calculate(plant);
             }));
@@ -47,8 +47,8 @@ public class Model extends Observable {
         System.out.println("Finished in " + ((System.nanoTime() - startTime) * 0.000001) + "ms");
     }
 
-    private ArrayList<ControllerCalculator> getCalculators() {
-        ArrayList<ControllerCalculator> methods = new ArrayList<>();
+    private ArrayList<IControllerCalculator> getCalculators() {
+        ArrayList<IControllerCalculator> methods = new ArrayList<>();
 
         methods.add(new FistFormulaOppeltPI());
         methods.add(new FistFormulaOppeltPID());

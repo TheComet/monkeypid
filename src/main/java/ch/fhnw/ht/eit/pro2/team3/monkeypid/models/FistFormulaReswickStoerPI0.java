@@ -4,7 +4,7 @@ public class FistFormulaReswickStoerPI0 extends AbstractControllerCalculator {
 
     @Override
     public void calculate(Plant path) {
-        this.controller = new PIController(
+        this.IController = new PIController(
                 0.6 * path.getTg() / (path.getKs() * path.getTu()),
                 4.0 * path.getTu()
         );

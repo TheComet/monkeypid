@@ -1,13 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.ControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 
-public abstract class AbstractControllerCalculator implements ControllerCalculator {
+public abstract class AbstractControllerCalculator implements IControllerCalculator {
 
-    protected Controller controller;
+    protected IController IController;
 
-    public Controller getController() {
-        return this.controller;
+    public IController getController() {
+        return this.IController;
     }
 }

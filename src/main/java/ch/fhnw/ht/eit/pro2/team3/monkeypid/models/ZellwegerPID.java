@@ -8,6 +8,6 @@ public class ZellwegerPID extends AbstractZellweger {
         double tn = calculateTn();
         double kr = calculateKr(tn);
         // TODO Calculate Tv
-        this.controller = new PIDController(kr, tn, 0.0);
+        this.IController = new PIDController(kr, tn, 0.0);
     }
 }

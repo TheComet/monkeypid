@@ -7,6 +7,6 @@ public class ZellwegerPI extends AbstractZellweger {
         setPlant(path);
         double tn = calculateTn();
         double kr = calculateKr(tn);
-        this.controller = new PIController(kr, tn);
+        this.IController = new PIController(kr, tn);
     }
 }

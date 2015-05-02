@@ -4,7 +4,7 @@ public class FistFormulaOppeltPI extends AbstractControllerCalculator {
 
     @Override
     public void calculate(Plant path) {
-        this.controller = new PIController(
+        this.IController = new PIController(
                 0.8 * path.getTg() / (path.getKs() * path.getTu()),
                 3.0 * path.getTu()
         );
