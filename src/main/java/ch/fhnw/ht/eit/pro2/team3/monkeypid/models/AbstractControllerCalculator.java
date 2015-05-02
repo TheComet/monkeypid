@@ -5,9 +5,9 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 
 public abstract class AbstractControllerCalculator implements IControllerCalculator {
 
-    protected IController IController;
+    protected IController controller;
 
     public IController getController() {
-        return this.IController;
+        return this.controller;
     }
 }
