@@ -8,5 +8,4 @@ public interface IZellweger {
     public void setPhi(double phi);
     public void setPhiDamping(double phiDamping);
     public void setMaxIterations(int iterations);
-    public IController getController();
 }

@@ -5,8 +5,8 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 public class ZellwegerPI extends AbstractZellweger {
 
     @Override
-    public void calculate(Plant path) {
-        setPlant(path);
+    public void calculate(Plant plant) {
+        setPlant(plant);
         setPhi(-90.0);
         this.controller = calculatePI();
     }

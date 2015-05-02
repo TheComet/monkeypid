@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class Model extends Observable {
     private Plant plant = null;
 
     public void setPlant(Plant plant) {
-        System.out.println("Updating control path");
+        System.out.println("Updating plant, recalculating time constants");
         this.plant = plant;
 
         // recalculate time constants
@@ -21,6 +22,11 @@ public class Model extends Observable {
 
     public void simulateAll() {
 
+        IControllerCalculator cc = new ZellwegerPI();
+        cc.calculate(plant);
+        IController c = cc.getController();
+
+        /*
         System.out.println("Calculating regulator params...");
         long startTime = System.nanoTime();
 
@@ -44,7 +50,7 @@ public class Model extends Observable {
         } catch(InterruptedException e) {
         }
 
-        System.out.println("Finished in " + ((System.nanoTime() - startTime) * 0.000001) + "ms");
+        System.out.println("Finished in " + ((System.nanoTime() - startTime) * 0.000001) + "ms");*/
     }
 
     private ArrayList<IControllerCalculator> getCalculators() {
