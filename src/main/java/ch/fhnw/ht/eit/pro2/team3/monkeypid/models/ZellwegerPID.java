@@ -1,11 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class ZellwegerPID extends AbstractZellweger {
 
@@ -18,51 +13,8 @@ public class ZellwegerPID extends AbstractZellweger {
 
     private IController calculatePID() {
 
-        // get minimum and maximum time constants
-        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
-        double tcMin = (double) Collections.min(timeConstantsList);
-        double tcMax = (double) Collections.max(timeConstantsList);
-
-        // calculate the frequency range to use in all following calculations,
-        // based on the time constants.
-        startFreq = 1.0 / (tcMax * 10.0);
-        endFreq = 1.0 / (tcMin / 10.0);
-
-        double[] omega = linspace(startFreq, endFreq, numSamplePoints);
-
-        // calculate amplitude control path, both in linear and dB
-        double[] ampControlPath = new double[numSamplePoints];
-        for (int i = 0; i != numSamplePoints; ++i) {
-            ampControlPath[i] = amplitudeControlPath(
-                    omega[i],
-                    plant.getKs(),
-                    plant.getTimeConstants());
-        }
-
-        // calculate phase control path
-        double[] phiControlPath = new double[numSamplePoints];
-        for (int i = 0; i != numSamplePoints; ++i) {
-            phiControlPath[i] = phaseControlPath(omega[i], plant.getTimeConstants());
-        }
-
-        // find phiPI on the phase of the control path
-        double topFreq = endFreq;
-        double bottomFreq = startFreq;
-        double actualFreq = (topFreq + bottomFreq) / 2.0;
-        double phiControlPathPI;
-        for (int i = 0; i != maxIterations; ++i) {
-            phiControlPathPI = phaseControlPath(actualFreq, plant.getTimeConstants());
-            if (phiControlPathPI < phi) {
-                topFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            } else if (phiControlPathPI > phi) {
-                bottomFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            }
-        }
-
-        // found wPID
-        double wPID = actualFreq;
+        // find phi on the phase of the control path
+        double wPID = findPhaseOnControlPath();
 
         double beta = beta(wPID, plant.getTimeConstants());
 
@@ -70,42 +22,8 @@ public class ZellwegerPID extends AbstractZellweger {
         double tvk = beta / wPID;
         double tp = tvk / 10.0; // Tp is one decade higher than Tvk
 
-        // TODO Apparently this isn't required?
-        /*
-        // phase controller
-        double[] phiController = new double[numSamplePoints];
-        double[] phiOpenLoop = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; i++) {
-            phiController[i] = phaseControllerPID(omega[i], tnk, tvk, tp);
-            phiOpenLoop[i] = phiControlPath[i] + phiController[i];
-        }
-
-        // amplitude controller
-        double[] ampController = new double[numSamplePoints];
-        double[] ampOpenLoop = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; i++) {
-            ampController[i] = amplitudeControllerPID(omega[i], tnk, tvk, tp);
-            ampOpenLoop[i] = ampController[i] * ampControlPath[i];
-        }*/
-
         // find phiDamping on the phase of the open loop
-        topFreq = endFreq;
-        bottomFreq = startFreq;
-        actualFreq = (topFreq + bottomFreq) / 2.0;
-        for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
-                    phaseControllerPID(actualFreq, tnk, tvk, tp);
-            if(phiOpenLoopBuffer < phiDamping) {
-                topFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            } else if(phiOpenLoopBuffer > phiDamping) {
-                bottomFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            }
-        }
-
-        // found damping
-        double wDamping = actualFreq;
+        double wDamping = findPhaseOnOpenLoop(tnk, tvk, tp);
 
         // amplitude of the open loop at the wDamping frequency
         double ampOpenLoopKr = amplitudeControlPath(
@@ -119,6 +37,27 @@ public class ZellwegerPID extends AbstractZellweger {
         double[] krtntv = bodeToController(tnk, tvk, tp, krk);
 
         return new PIDController(krtntv[0], krtntv[1], krtntv[2]);
+    }
+
+    private double findPhaseOnOpenLoop(double tnk, double tvk, double tp) {
+
+        // find phiDamping on the phase of the open loop
+        double topFreq = endFreq;
+        double bottomFreq = startFreq;
+        double actualFreq = (topFreq + bottomFreq) / 2.0;
+        for(int i = 0; i != maxIterations; i++) {
+            double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
+                    phaseControllerPID(actualFreq, tnk, tvk, tp);
+            if(phiOpenLoopBuffer < phiDamping) {
+                topFreq = actualFreq;
+                actualFreq = (topFreq + bottomFreq) / 2.0;
+            } else if(phiOpenLoopBuffer > phiDamping) {
+                bottomFreq = actualFreq;
+                actualFreq = (topFreq + bottomFreq) / 2.0;
+            }
+        }
+
+        return actualFreq;
     }
 
     /**

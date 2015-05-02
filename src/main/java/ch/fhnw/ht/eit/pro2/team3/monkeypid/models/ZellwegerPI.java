@@ -13,68 +13,30 @@ public class ZellwegerPI extends AbstractZellweger {
 
     private IController calculatePI() {
 
-        double[] omega = linspace(startFreq, endFreq, numSamplePoints);
+        // Tn parameter of controller
+        double tn = 1.0 / findPhaseOnControlPath();
 
-        /* TODO Apparently this isn't required?
-        // calculate amplitude control path, both in linear and dB
-        double[] ampControlPath = new double[numSamplePoints];
-        for (int i = 0; i != numSamplePoints; ++i) {
-            ampControlPath[i] = amplitudeControlPath(
-                    omega[i],
-                    plant.getKs(),
-                    plant.getTimeConstants());
-        }
+        // get omega damping
+        double wDamping = findPhaseOnOpenLoopPI(tn);
 
-        // calculate phase control path
-        double[] phiControlPath = new double[numSamplePoints];
-        for (int i = 0; i != numSamplePoints; ++i) {
-            phiControlPath[i] = phaseControlPath(omega[i], plant.getTimeConstants());
-        }*/
+        // amplitude of the open loop at the wDamping frequency
+        double ampOpenLoopKr = amplitudeControlPath(
+                wDamping,
+                plant.getKs(),
+                plant.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
 
-        // find phiPI on the phase of the control path
+        // Kr is the reciprocal of the amplitude at wDamping
+        double kr = 1.0 / ampOpenLoopKr;
+
+        return new PIController(kr, tn);
+    }
+
+    protected double findPhaseOnOpenLoopPI(double tn) {
+
+        // find phiDamping on the phase of the open loop
         double topFreq = endFreq;
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
-        double phiControlPathPI;
-        for (int i = 0; i != maxIterations; ++i) {
-            phiControlPathPI = phaseControlPath(actualFreq, plant.getTimeConstants());
-            if (phiControlPathPI < phi) {
-                topFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            } else if (phiControlPathPI > phi) {
-                bottomFreq = actualFreq;
-                actualFreq = (topFreq + bottomFreq) / 2.0;
-            }
-        }
-
-        // found wPI
-        double wPI = actualFreq;
-
-        // Tn parameter of controller
-        double tn = 1.0 / wPI;
-
-        // TODO Apparently this isn't required?
-        /*
-        // phase controller
-        double[] phiController = new double[numSamplePoints];
-        double[] phiOpenLoop = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; i++) {
-            phiController[i] = phaseControllerPI(omega[i], tn);
-            phiOpenLoop[i] = phiControlPath[i] + phiController[i];
-        }
-
-        // amplitude controller
-        double[] ampController = new double[numSamplePoints];
-        double[] ampOpenLoop = new double[numSamplePoints];
-        for(int i = 0; i != numSamplePoints; i++) {
-            ampController[i] = amplitudeControllerPI(omega[i], tn);
-            ampOpenLoop[i] = ampController[i] * ampControlPath[i];
-        }*/
-
-        // find phiDamping on the phase of the open loop
-        topFreq = endFreq;
-        bottomFreq = startFreq;
-        actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
             double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
                     phaseControllerPI(actualFreq, tn);
@@ -87,19 +49,7 @@ public class ZellwegerPI extends AbstractZellweger {
             }
         }
 
-        // found damping
-        double wDamping = actualFreq;
-
-        // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = amplitudeControlPath(
-                wDamping,
-                plant.getKs(),
-                plant.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
-
-        // Kr is the reciprocal of the amplitude at wDamping
-        double kr = 1.0 / ampOpenLoopKr;
-
-        return new PIController(kr, tn);
+        return actualFreq;
     }
 
     /**

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 public abstract class AbstractZellweger extends AbstractControllerCalculator implements IZellweger
 {
@@ -65,19 +66,6 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
         endFreq = 1.0 / (tcMin / 10.0);
     }
 
-    protected double[] linspace(double start, double end, int num) {
-        double ret[] = new double[num];
-        double value = start;
-        double step = (end - start) / num;
-
-        for(int i = 0; i != ret.length; i++) {
-            ret[i] = value;
-            value += step;
-        }
-
-        return ret;
-    }
-
     /**
      * Calcualtes the phase of the control path (without the regulator)
      * @param omega Omega
@@ -107,5 +95,26 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
             denominator += Math.sqrt(1.0 + Math.pow(omega * timeConstant, 2));
         }
         return ks / denominator;
+    }
+
+    protected double findPhaseOnControlPath() {
+
+        // find phi on the phase of the control path
+        double topFreq = endFreq;
+        double bottomFreq = startFreq;
+        double actualFreq = (topFreq + bottomFreq) / 2.0;
+        double phiControlPath;
+        for (int i = 0; i != maxIterations; ++i) {
+            phiControlPath = phaseControlPath(actualFreq, plant.getTimeConstants());
+            if (phiControlPath < phi) {
+                topFreq = actualFreq;
+                actualFreq = (topFreq + bottomFreq) / 2.0;
+            } else if (phiControlPath > phi) {
+                bottomFreq = actualFreq;
+                actualFreq = (topFreq + bottomFreq) / 2.0;
+            }
+        }
+
+        return actualFreq;
     }
 }
