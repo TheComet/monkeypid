@@ -16,7 +16,7 @@ public class ZellwegerPIDTest {
         PIDController c;
 
         // calculate zellweger PID with Tu=0.1, Tg=0.3, Ks=1, angleOfInflection=45°
-        cc = new ZellwegerPID(45, new Plant(0.1, 0.3, 1, sani));
+        cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 45);
         cc.calculate();
         c = (PIDController)cc.getController();
 

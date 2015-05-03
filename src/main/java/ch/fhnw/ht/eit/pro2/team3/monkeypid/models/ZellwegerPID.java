@@ -6,14 +6,19 @@ public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
 
-    public ZellwegerPID(double phaseMargin, Plant plant) {
-        super(phaseMargin, plant);
+    public ZellwegerPID(Plant plant, double phaseMargin) {
+        super(plant, phaseMargin);
     }
 
     @Override
     public void calculate() {
         setAngleOfInflection(-135.0);
         this.controller = calculatePID();
+    }
+
+    @Override
+    public String getName() {
+        return "Zellweger PID";
     }
 
     private IController calculatePID() {
@@ -41,7 +46,7 @@ public class ZellwegerPID extends AbstractZellweger {
 
         double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
 
-        return new PIDController(tntvkr[0], tntvkr[1], tntvkr[2], tp);
+        return new PIDController(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
     }
 
     private double findPhaseOpenLoop(double tnk, double tvk, double tp) {

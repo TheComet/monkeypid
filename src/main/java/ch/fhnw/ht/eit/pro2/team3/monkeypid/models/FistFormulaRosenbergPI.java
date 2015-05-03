@@ -9,8 +9,14 @@ public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
     @Override
     public void calculate() {
         this.controller = new PIController(
+                getName(),
                 0.91 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 3.3 * plant.getTu()
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Faustformel Rosenberg PI";
     }
 }

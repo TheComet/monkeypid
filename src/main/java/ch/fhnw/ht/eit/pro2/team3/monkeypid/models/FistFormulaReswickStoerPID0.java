@@ -9,10 +9,16 @@ public class FistFormulaReswickStoerPID0 extends AbstractControllerCalculator {
     @Override
     public void calculate() {
         this.controller = new PIDController(
+                getName(),
                 2.4 * plant.getTu(),
                 0.42 * plant.getTu(),
                 0.95 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 0.0
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Faustformel Reswick PID, 0%, Gutes Störverhalten";
     }
 }

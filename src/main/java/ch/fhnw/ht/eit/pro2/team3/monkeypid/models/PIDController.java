@@ -1,15 +1,16 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import javax.swing.table.DefaultTableModel;
 
-public class PIDController implements IController {
+public class PIDController extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
     private double tv = 0.0;
     private double tp = 0.0;
 
-    public PIDController(double tn, double tv, double kr, double tp) {
+    public PIDController(String name, double tn, double tv, double kr, double tp) {
+        super(name);
         setKr(kr);
         setTn(tn);
         setTv(tv);
@@ -17,8 +18,14 @@ public class PIDController implements IController {
     }
 
     @Override
-    public void fillTable() {
-        // TODO fill the table with parameters -- do we even need this?
+    public void addToTable(DefaultTableModel table) {
+        table.addRow(new String[] {
+                getName(),
+                Double.toString(getKr()),
+                Double.toString(getTn()),
+                Double.toString(getTv()),
+                Double.toString(getTp())
+        });
     }
 
     public double getTn() {

@@ -9,8 +9,14 @@ public class FistFormulaReswickStoerPI20 extends AbstractControllerCalculator {
     @Override
     public void calculate() {
         this.controller = new PIController(
+                getName(),
                 0.7 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 2.3 * plant.getTu()
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Faustformel Reswick PI, 20%, Gutes Störverhalten";
     }
 }

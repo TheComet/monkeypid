@@ -9,8 +9,14 @@ public class FistFormulaReswickFuehrungPI0 extends AbstractControllerCalculator 
     @Override
     public void calculate() {
         this.controller = new PIController(
+                getName(),
                 0.45 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 1.2 * plant.getTg()
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Faustformel Reswick PI, 0%, Gute Führung";
     }
 }

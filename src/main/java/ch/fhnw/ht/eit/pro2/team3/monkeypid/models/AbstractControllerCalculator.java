@@ -2,13 +2,14 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
-import java.util.Observable;
+import java.util.ArrayList;
 
 public abstract class AbstractControllerCalculator
-        extends Observable
         implements IControllerCalculator {
 
+    private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
     protected IController controller;
 
@@ -19,8 +20,7 @@ public abstract class AbstractControllerCalculator
     @Override
     public void run() {
         calculate();
-        setChanged();
-        notifyObservers();
+        notifyNewController();
     }
 
     @Override
@@ -31,5 +31,19 @@ public abstract class AbstractControllerCalculator
     @Override
     public IController getController() {
         return controller;
+    }
+
+    public void registerListener(IControllerCalculatorListener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregisterListener(IControllerCalculatorListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void notifyNewController() {
+        for(IControllerCalculatorListener listener : listeners) {
+            listener.notifyNewController(controller);
+        }
     }
 }

@@ -4,14 +4,19 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
 public class ZellwegerPI extends AbstractZellweger {
 
-    public ZellwegerPI(double phaseMargin, Plant plant) {
-        super(phaseMargin, plant);
+    public ZellwegerPI(Plant plant, double phaseMargin) {
+        super(plant, phaseMargin);
     }
 
     @Override
     public void calculate() {
         setAngleOfInflection(-90.0);
         this.controller = calculatePI();
+    }
+
+    @Override
+    public String getName() {
+        return "Zellweger PI";
     }
 
     private IController calculatePI() {
@@ -31,7 +36,7 @@ public class ZellwegerPI extends AbstractZellweger {
         // Kr is the reciprocal of the amplitude at wDamping
         double kr = 1.0 / ampOpenLoopKr;
 
-        return new PIController(kr, tn);
+        return new PIController(getName(), kr, tn);
     }
 
     protected double findPhaseOnOpenLoopPI(double tn) {

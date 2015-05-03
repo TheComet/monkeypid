@@ -18,7 +18,7 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
     // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
     protected double maxIterations = 18;
 
-    public AbstractZellweger(double phaseMargin, Plant plant) {
+    public AbstractZellweger(Plant plant, double phaseMargin) {
         super(plant);
         setPhaseMargin(phaseMargin);
     }

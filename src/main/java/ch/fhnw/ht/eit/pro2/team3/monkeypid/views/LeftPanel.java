@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
 import java.awt.GridBagConstraints;
@@ -8,8 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener, Observer {
+public class LeftPanel extends JPanel
+        implements ActionListener, IControllerCalculatorListener {
 
 	Controller controller;
 
@@ -80,6 +81,10 @@ public class LeftPanel extends JPanel implements ActionListener, Observer {
 	// buttons delete and adopt
 	private JButton btDelete = new JButton("Loeschen");
 	private JButton btAdopt = new JButton("Uebernehmen");
+
+    // table and table model
+    DefaultTableModel tableModel = new DefaultTableModel();
+    JTable table = new JTable(tableModel);
 
 	/**
 	 * 
@@ -188,26 +193,11 @@ public class LeftPanel extends JPanel implements ActionListener, Observer {
 		 * model.addRow(new Object[] { "v1", "v2", "v3" });
 		 */
 
-		DefaultTableModel tableModel = new DefaultTableModel();
-		JTable table = new JTable(tableModel);
-
 		tableModel.addColumn("Name");
-		tableModel.addColumn("Kp");
+		tableModel.addColumn("Kr");
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
-
-		tableModel.addColumn("Überschwingen");
-		/*
-		 * TableColumn tcUs = new TableColumn(); tcUs.setHeaderValue(new
-		 * Object[]{"Überschwingen"}); tableModel.addColumn(tcUs);
-		 */
-
-		tableModel.addRow(new Object[] { "1", "2", "3", "4", "5" });
-		table.removeColumn(table.getColumnModel().getColumn(4));
-		// table.addColumn(new TableColumn().se);
-		// tableModel.fireTableChanged(new TableModelEvent(tableModel.get));
-		// tableModel.addColumn("neu2");
-		tableModel.addRow(new Object[] { "1", "2", "3", "4", "5" });
+		tableModel.addColumn("Tp");
 
 		// add header of table to GridBagLaout
 		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0,
@@ -327,7 +317,7 @@ public class LeftPanel extends JPanel implements ActionListener, Observer {
 	}
 
     @Override
-	public void update(Observable modelObject, Object dataObject) {
-
-	}
+    public void notifyNewController(IController controller) {
+        controller.addToTable(tableModel);
+    }
 }

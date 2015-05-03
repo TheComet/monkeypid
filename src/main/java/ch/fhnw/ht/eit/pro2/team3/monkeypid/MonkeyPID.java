@@ -13,7 +13,7 @@ import javax.swing.*;
  * @author Josua
  *
  */
-public class MonkeyPID extends JFrame {
+public class MonkeyPID {
 
     public void setLookAndFeel() {
         try {
@@ -40,7 +40,7 @@ public class MonkeyPID extends JFrame {
         Model model = new Model();
         Controller controller = new Controller(model);
         View view = new View(controller);
-        model.addObserver(view);
+        model.registerControllerCalculatorListener(view.leftPanel);
 
         // add the view to the root pane
         frame.getContentPane().add(view);

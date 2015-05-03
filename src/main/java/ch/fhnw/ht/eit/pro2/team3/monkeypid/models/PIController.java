@@ -2,19 +2,26 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
-public class PIController implements IController {
+import javax.swing.table.DefaultTableModel;
+
+public class PIController extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
 
-    public PIController(double kr, double tn) {
+    public PIController(String name, double kr, double tn) {
+        super(name);
         setKr(kr);
         setTn(tn);
     }
 
     @Override
-    public void fillTable() {
-        // TODO fill the table with stuff -- do we even need this?
+    public void addToTable(DefaultTableModel table) {
+        table.addRow(new String[] {
+                getName(),
+                Double.toString(getKr()),
+                Double.toString(getTn())
+        });
     }
 
     public double getKr() {
