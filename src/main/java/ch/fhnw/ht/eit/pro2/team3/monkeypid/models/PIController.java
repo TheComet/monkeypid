@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class PIController extends AbstractController {
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+
+public class PIController implements IController {
 
     private double kr = 0.0;
     private double tn = 0.0;
@@ -12,12 +14,7 @@ public class PIController extends AbstractController {
 
     @Override
     public void fillTable() {
-        // TODO fill the table with
-    }
-
-    @Override
-    public PIController clone() throws CloneNotSupportedException {
-        return (PIController)super.clone();
+        // TODO fill the table with stuff -- do we even need this?
     }
 
     public double getKr() {

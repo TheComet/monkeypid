@@ -13,15 +13,14 @@ public class Model extends Observable {
     private SaniCurves sani = new SaniCurves();
     private Plant plant = null;
 
-    public void newPlant(double ks, double tu, double tg) {
+    public void updatePlant(double ks, double tu, double tg) {
         System.out.println("Updating plant, recalculating time constants");
         this.plant = new Plant(tu, tg, ks, sani);
     }
 
     public void simulateAll() {
 
-        IControllerCalculator cc = new ZellwegerPI(45 - 180);
-        cc.calculate(plant);
+        IControllerCalculator cc = new ZellwegerPI(45, plant);
         IController c = cc.getController();
 
         /*
@@ -35,7 +34,7 @@ public class Model extends Observable {
         ArrayList<Thread> threads = new ArrayList<>();
         for(IControllerCalculator calc : calculators) {
             threads.add(new Thread(() -> {
-                calc.calculate(plant);
+                calc.run(plant);
             }));
         }
 
@@ -54,18 +53,18 @@ public class Model extends Observable {
     private ArrayList<IControllerCalculator> getCalculators() {
         ArrayList<IControllerCalculator> methods = new ArrayList<>();
 
-        methods.add(new FistFormulaOppeltPI());
-        methods.add(new FistFormulaOppeltPID());
-        methods.add(new FistFormulaReswickStoerPI0());
-        methods.add(new FistFormulaReswickStoerPI20());
-        methods.add(new FistFormulaReswickStoerPID0());
-        methods.add(new FistFormulaReswickStoerPID20());
-        methods.add(new FistFormulaReswickFuehrungPI0());
-        methods.add(new FistFormulaReswickFuehrungPI20());
-        methods.add(new FistFormulaReswickFuehrungPID0());
-        methods.add(new FistFormulaReswickFuehrungPID20());
-        methods.add(new FistFormulaRosenbergPI());
-        methods.add(new FistFormulaRosenbergPID());
+        methods.add(new FistFormulaOppeltPI(plant));
+        methods.add(new FistFormulaOppeltPID(plant));
+        methods.add(new FistFormulaReswickStoerPI0(plant));
+        methods.add(new FistFormulaReswickStoerPI20(plant));
+        methods.add(new FistFormulaReswickStoerPID0(plant));
+        methods.add(new FistFormulaReswickStoerPID20(plant));
+        methods.add(new FistFormulaReswickFuehrungPI0(plant));
+        methods.add(new FistFormulaReswickFuehrungPI20(plant));
+        methods.add(new FistFormulaReswickFuehrungPID0(plant));
+        methods.add(new FistFormulaReswickFuehrungPID20(plant));
+        methods.add(new FistFormulaRosenbergPI(plant));
+        methods.add(new FistFormulaRosenbergPID(plant));
 
         return methods;
     }

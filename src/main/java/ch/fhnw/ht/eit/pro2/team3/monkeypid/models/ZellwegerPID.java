@@ -6,13 +6,12 @@ public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
 
-    public ZellwegerPID(double phiDamping) {
-        super(phiDamping);
+    public ZellwegerPID(double phaseMargin, Plant plant) {
+        super(phaseMargin, plant);
     }
 
     @Override
-    public void calculate(Plant plant) {
-        setPlant(plant);
+    public void run() {
         setAngleOfInflection(-135.0);
         this.controller = calculatePID();
     }

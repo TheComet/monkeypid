@@ -1,7 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import org.junit.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static org.junit.Assert.*;
 

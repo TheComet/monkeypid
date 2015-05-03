@@ -10,21 +10,25 @@ import java.util.List;
 
 public abstract class AbstractZellweger extends AbstractControllerCalculator implements IZellweger
 {
-    protected Plant plant = null;
     protected double phiDamping;
     protected double angleOfInflection;
     protected double startFreq, endFreq;
+    protected int numSamplePoints = 1000;
 
     // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
     protected double maxIterations = 18;
 
-    protected int numSamplePoints = 1000;
-
-    public AbstractZellweger(double phaseMargin) {
+    public AbstractZellweger(double phaseMargin, Plant plant) {
+        super(plant);
         setPhaseMargin(phaseMargin);
     }
 
-	@Override
+    /**
+     * Because Zellweger has to do some additional calculations whenever the plant changes,
+     * override the method.
+     * @param plant The new plant to use for future calculations.
+     */
+    @Override
     public void setPlant(Plant plant) {
         this.plant = plant;
         updateFrequencyRange();
@@ -57,7 +61,7 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
         double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
 
-        // calculate the frequency range to use in all following calculations,
+        // run the frequency range to use in all following calculations,
         // based on the time constants.
         startFreq = 1.0 / (tcMax * 10.0);
         endFreq = 1.0 / (tcMin / 10.0);

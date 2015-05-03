@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-public class PIDController extends AbstractController {
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+
+public class PIDController implements IController {
 
     private double kr = 0.0;
     private double tn = 0.0;
@@ -16,12 +18,7 @@ public class PIDController extends AbstractController {
 
     @Override
     public void fillTable() {
-        // TODO fill the table with parameters
-    }
-
-    @Override
-    public PIDController clone() throws CloneNotSupportedException {
-        return (PIDController)super.clone();
+        // TODO fill the table with parameters -- do we even need this?
     }
 
     public double getTn() {

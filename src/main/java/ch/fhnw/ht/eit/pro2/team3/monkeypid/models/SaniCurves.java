@@ -123,7 +123,7 @@ public class SaniCurves {
         // last time constant can now be calculated
         timeConstants[power - 1] = w * tg;
 
-        // calculate the other time constants
+        // run the other time constants
         for(int i = power - 2; i >= 0; i--) {
             timeConstants[i] = timeConstants[power - 1] * Math.pow(r, power - i - 1);
         }

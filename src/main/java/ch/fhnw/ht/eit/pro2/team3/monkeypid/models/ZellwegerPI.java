@@ -4,13 +4,12 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
 public class ZellwegerPI extends AbstractZellweger {
 
-    public ZellwegerPI(double phiDamping) {
-        super(phiDamping);
+    public ZellwegerPI(double phaseMargin, Plant plant) {
+        super(phaseMargin, plant);
     }
 
     @Override
-    public void calculate(Plant plant) {
-        setPlant(plant);
+    public void run() {
         setAngleOfInflection(-90.0);
         this.controller = calculatePI();
     }
