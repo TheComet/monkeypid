@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
  */
 public class Controller {
 	private Model model;
-	private View view;
 
 	/**
 	 * 
@@ -55,17 +54,5 @@ public class Controller {
 	 */
 	public void btAdoptAction(int slKpValue, int slTnValue, int slTvValue){
 
-	}
-	/**
-	 * 
-	 * @param e
-	 */
-	public void bt2(ActionEvent e) {
-		StatusBar.showStatus(this, e, "Button2");
-	}
-
-	public void setView(View view) {
-		this.view=view;
-		
 	}
 }

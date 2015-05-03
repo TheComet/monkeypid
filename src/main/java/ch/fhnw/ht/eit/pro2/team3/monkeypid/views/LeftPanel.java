@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener {
+public class LeftPanel extends JPanel implements ActionListener, Observer {
 
 	Controller controller;
 
@@ -322,5 +324,10 @@ public class LeftPanel extends JPanel implements ActionListener {
 			//give over values to controller
 			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
 		}
+	}
+
+    @Override
+	public void update(Observable modelObject, Object dataObject) {
+
 	}
 }
