@@ -7,7 +7,7 @@ public class FistFormulaReswickFuehrungPID0 extends AbstractControllerCalculator
     }
 
     @Override
-    public void run() {
+    public void calculate() {
         this.controller = new PIDController(
                 1.0 * plant.getTg(),
                 0.5 * plant.getTu(),

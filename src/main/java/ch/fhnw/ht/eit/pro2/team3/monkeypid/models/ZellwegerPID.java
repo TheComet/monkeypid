@@ -11,7 +11,7 @@ public class ZellwegerPID extends AbstractZellweger {
     }
 
     @Override
-    public void run() {
+    public void calculate() {
         setAngleOfInflection(-135.0);
         this.controller = calculatePID();
     }

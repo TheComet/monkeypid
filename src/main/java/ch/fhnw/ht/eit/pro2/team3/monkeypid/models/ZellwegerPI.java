@@ -9,7 +9,7 @@ public class ZellwegerPI extends AbstractZellweger {
     }
 
     @Override
-    public void run() {
+    public void calculate() {
         setAngleOfInflection(-90.0);
         this.controller = calculatePI();
     }

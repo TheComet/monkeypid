@@ -1,7 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValue;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,7 +22,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 	Controller controller;
 
 	// create test table
-	private OverswingValue[] overswingTable = new OverswingValue[4];
+	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -88,14 +88,14 @@ public class LeftPanel extends JPanel implements ActionListener {
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValue(-103.7, "0%");
-		overswingTable[1] = new OverswingValue(-114.6, "4.6%");
-		overswingTable[2] = new OverswingValue(-118.5, "16.3%");
-		overswingTable[3] = new OverswingValue(-135, "23.3%");
+		overswingTable[0] = new OverswingValueTuple(-103.7, "0%");
+		overswingTable[1] = new OverswingValueTuple(-114.6, "4.6%");
+		overswingTable[2] = new OverswingValueTuple(-118.5, "16.3%");
+		overswingTable[3] = new OverswingValueTuple(-135, "23.3%");
 
 		// add overswing table strings to combo box
 		for (int i = 0; i < overswingTable.length; i++) {
-			cbSelectOvershoot.addItem(overswingTable[i].asString());
+			cbSelectOvershoot.addItem(overswingTable[i].percent());
 		}
 
 		// add items for input fields to GridBagLayout

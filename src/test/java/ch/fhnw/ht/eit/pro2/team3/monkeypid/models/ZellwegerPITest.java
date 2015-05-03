@@ -15,25 +15,25 @@ public class ZellwegerPITest {
         IControllerCalculator cc;
         PIController c;
 
-        // run zellweger PI with Tu=2, Tg=6, Ks=1, angleOfInflection=45°
+        // calculate zellweger PI with Tu=2, Tg=6, Ks=1, angleOfInflection=45°
         cc = new ZellwegerPI(45, new Plant(2, 6, 1, sani));
-        cc.run();
+        cc.calculate();
         c = (PIController)cc.getController();
 
         assertEquals(3.3122, c.getTn(), delta);
         assertEquals(0.984, c.getKr(), delta);
 
-        // run zellweger PI with Tu=2, Tg=19, Ks=3, angleOfInflection=45°
+        // calculate zellweger PI with Tu=2, Tg=19, Ks=3, angleOfInflection=45°
         cc.setPlant(new Plant(2, 19, 3, sani));
-        cc.run();
+        cc.calculate();
         c = (PIController)cc.getController();
 
         assertEquals(6.541, c.getTn(), delta);
         assertEquals(0.5453, c.getKr(), delta);
 
-        // run zellweger PI with Tu=2, Tg=19, Ks=3, angleOfInflection=76.3°
+        // calculate zellweger PI with Tu=2, Tg=19, Ks=3, angleOfInflection=76.3°
         cc = new ZellwegerPI(76.3, new Plant(2, 19, 3, sani));
-        cc.run();
+        cc.calculate();
         c = (PIController)cc.getController();
 
         assertEquals(6.541, c.getTn(), delta);

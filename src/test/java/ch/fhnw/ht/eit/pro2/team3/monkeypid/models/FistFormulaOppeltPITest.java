@@ -11,7 +11,7 @@ public class FistFormulaOppeltPITest {
 	@Test
 	public void testCalculate() {
 		IControllerCalculator c = new FistFormulaOppeltPI(new Plant(1, 1, 1, new SaniCurves()));
-		c.run();
+		c.calculate();
 		// TODO: calc.getController();
 		// TODO: assertEquals("OppeltPI Test failed",calc.getController(),); //Insert Matlab Value
 	}

@@ -7,7 +7,7 @@ public class FistFormulaRosenbergPID extends AbstractControllerCalculator {
     }
 
     @Override
-    public void run() {
+    public void calculate() {
         this.controller = new PIDController(
                 2.0 * plant.getTu(),
                 0.44 * plant.getTu(),

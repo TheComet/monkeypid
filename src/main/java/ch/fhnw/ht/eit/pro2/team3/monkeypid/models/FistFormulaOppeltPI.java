@@ -7,7 +7,7 @@ public class FistFormulaOppeltPI extends AbstractControllerCalculator {
     }
 
     @Override
-    public void run() {
+    public void calculate() {
         this.controller = new PIController(
                 0.8 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 3.0 * plant.getTu()

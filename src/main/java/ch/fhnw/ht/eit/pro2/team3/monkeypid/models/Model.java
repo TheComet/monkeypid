@@ -19,11 +19,7 @@ public class Model extends Observable {
     }
 
     public void simulateAll() {
-
-        IControllerCalculator cc = new ZellwegerPI(45, plant);
-        IController c = cc.getController();
-
-        /*
+/*
         System.out.println("Calculating regulator params...");
         long startTime = System.nanoTime();
 
@@ -34,7 +30,7 @@ public class Model extends Observable {
         ArrayList<Thread> threads = new ArrayList<>();
         for(IControllerCalculator calc : calculators) {
             threads.add(new Thread(() -> {
-                calc.run(plant);
+                calc.calculate(plant);
             }));
         }
 
@@ -68,9 +64,4 @@ public class Model extends Observable {
 
         return methods;
     }
-
-	public void notifyObservers() {
-		setChanged();
-		super.notifyObservers();
-	}
 }

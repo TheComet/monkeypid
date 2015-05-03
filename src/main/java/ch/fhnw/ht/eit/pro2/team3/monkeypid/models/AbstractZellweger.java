@@ -61,7 +61,7 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
         double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
 
-        // run the frequency range to use in all following calculations,
+        // calculate the frequency range to use in all following calculations,
         // based on the time constants.
         startFreq = 1.0 / (tcMax * 10.0);
         endFreq = 1.0 / (tcMin / 10.0);

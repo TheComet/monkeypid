@@ -42,7 +42,7 @@ public class View extends JPanel implements Observer {
 		this.controller = controller;
 		this.model = model;
 
-		//creat the panels
+		//create the panels
 		leftPanel = new LeftPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
@@ -68,6 +68,7 @@ public class View extends JPanel implements Observer {
 		//set border and title of graphDisplayPanel
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
 	}
+
 	/**
 	 * 
 	 */
