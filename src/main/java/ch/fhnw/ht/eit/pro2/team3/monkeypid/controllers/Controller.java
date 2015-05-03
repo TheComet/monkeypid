@@ -37,7 +37,7 @@ public class Controller {
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
                                  String selectedRegulatorName,
                                  OverswingValue overswing){
-        model.setPlant(new Plant(ksValue, tuValue, tgValue));
+        model.newPlant(ksValue, tuValue, tgValue);
         model.simulateAll();
 		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overswing.asAngle());
 	}

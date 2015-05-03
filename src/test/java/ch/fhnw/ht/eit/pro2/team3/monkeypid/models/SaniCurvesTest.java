@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 
 public class SaniCurvesTest {
 
+    double delta = 0.00025; // seems to be the closest accuracy we can get
+
     @Test
     public void testLookupPower() throws Exception {
         SaniCurves c = new SaniCurves();
@@ -44,7 +46,6 @@ public class SaniCurvesTest {
     @Test
     public void testCalculateTimeConstants() throws Exception {
         SaniCurves c = new SaniCurves();
-        double delta = 0.00025; // seems to be the closest we can get
 
         // test powers 2 to 8
         double[] tc = c.calculateTimeConstants(1, 10);

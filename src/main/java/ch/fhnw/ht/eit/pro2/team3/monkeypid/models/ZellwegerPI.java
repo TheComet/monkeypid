@@ -4,10 +4,14 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
 public class ZellwegerPI extends AbstractZellweger {
 
+    public ZellwegerPI(double phiDamping) {
+        super(phiDamping);
+    }
+
     @Override
     public void calculate(Plant plant) {
         setPlant(plant);
-        setPhi(-90.0);
+        setAngleOfInflection(-90.0);
         this.controller = calculatePI();
     }
 
@@ -20,7 +24,7 @@ public class ZellwegerPI extends AbstractZellweger {
         double wDamping = findPhaseOnOpenLoopPI(tn);
 
         // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = amplitudeControlPath(
+        double ampOpenLoopKr = calculatePlantAmplitude(
                 wDamping,
                 plant.getKs(),
                 plant.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
@@ -38,7 +42,7 @@ public class ZellwegerPI extends AbstractZellweger {
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
+            double phiOpenLoopBuffer = calculatePlantPhase(actualFreq, plant.getTimeConstants()) +
                     phaseControllerPI(actualFreq, tn);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;

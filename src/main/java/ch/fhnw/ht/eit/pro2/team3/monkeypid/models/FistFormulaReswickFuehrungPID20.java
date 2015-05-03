@@ -5,9 +5,10 @@ public class FistFormulaReswickFuehrungPID20 extends AbstractControllerCalculato
     @Override
     public void calculate(Plant path) {
         this.controller = new PIDController(
-                0.95 * path.getTg() / (path.getKs() * path.getTu()),
                 1.35 * path.getTg(),
-                0.47 * path.getTu()
+                0.47 * path.getTu(),
+                0.95 * path.getTg() / (path.getKs() * path.getTu()),
+                0.0
         );
     }
 }

@@ -4,29 +4,35 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
 public class ZellwegerPID extends AbstractZellweger {
 
+    private double beta = 0.0;
+
+    public ZellwegerPID(double phiDamping) {
+        super(phiDamping);
+    }
+
     @Override
     public void calculate(Plant plant) {
         setPlant(plant);
-        setPhi(-135.0);
+        setAngleOfInflection(-135.0);
         this.controller = calculatePID();
     }
 
     private IController calculatePID() {
 
-        // find phi on the phase of the control path
+        // find angleOfInflection on the phase of the control path
         double wPID = findPhaseOnControlPath();
 
-        double beta = beta(wPID, plant.getTimeConstants());
+        beta = calculateBeta(wPID, plant.getTimeConstants());
 
         double tnk = 1.0 / (wPID * beta);
         double tvk = beta / wPID;
         double tp = tvk / 10.0; // Tp is one decade higher than Tvk
 
         // find phiDamping on the phase of the open loop
-        double wDamping = findPhaseOnOpenLoop(tnk, tvk, tp);
+        double wDamping = findPhaseOpenLoop(tnk, tvk, tp);
 
         // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = amplitudeControlPath(
+        double ampOpenLoopKr = calculatePlantAmplitude(
                 wDamping,
                 plant.getKs(),
                 plant.getTimeConstants()) * amplitudeControllerPID(wDamping, tnk, tvk, tp);
@@ -34,19 +40,19 @@ public class ZellwegerPID extends AbstractZellweger {
         // Kr is the reciprocal of the amplitude at wDamping
         double krk = 1.0 / ampOpenLoopKr;
 
-        double[] krtntv = bodeToController(tnk, tvk, tp, krk);
+        double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
 
-        return new PIDController(krtntv[0], krtntv[1], krtntv[2]);
+        return new PIDController(tntvkr[0], tntvkr[1], tntvkr[2], tp);
     }
 
-    private double findPhaseOnOpenLoop(double tnk, double tvk, double tp) {
+    private double findPhaseOpenLoop(double tnk, double tvk, double tp) {
 
         // find phiDamping on the phase of the open loop
         double topFreq = endFreq;
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = phaseControlPath(actualFreq, plant.getTimeConstants()) +
+            double phiOpenLoopBuffer = calculatePlantPhase(actualFreq, plant.getTimeConstants()) +
                     phaseControllerPID(actualFreq, tnk, tvk, tp);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;
@@ -94,7 +100,7 @@ public class ZellwegerPID extends AbstractZellweger {
     }
 
     /**
-     * Calculates beta for Tnk and Twk
+     * Calculates calculateBeta for Tnk and Twk
      *
      * Calculation is:
      * Z = -wPID * (-(atan(w*T1)+atan(w*T2)+atan(w*Tc)));
@@ -104,16 +110,16 @@ public class ZellwegerPID extends AbstractZellweger {
      *   For Z > 1 -> set Z to 1 -> Beta is 1
      * @param wPID Omega of the found angle phiPID
      * @param timeConstants Array of time constants to use
-     * @return Returns beta.
+     * @return Returns calculateBeta.
      */
-    private double beta(double wPID, double[] timeConstants) {
+    private double calculateBeta(double wPID, double[] timeConstants) {
         double phiBuffer = 0;
         for(double timeConstant : timeConstants) {
             phiBuffer -= Math.atan(wPID * timeConstant);
         }
 
         double z = -wPID * phiBuffer - 0.5;
-        z = Math.max(z, 1.0); // clamp z to 1.0 so no complex betas are calculated
+        z = Math.min(z, 1.0); // clamp z to 1.0 so no complex betas are calculated
 
         return 1.0 / z - Math.sqrt(1.0 / Math.pow(z, 2.0) - 1.0);
     }
@@ -134,7 +140,11 @@ public class ZellwegerPID extends AbstractZellweger {
         double[] tntvkr = new double[3]; // return Tn, Tv, and Kr in an array
         tntvkr[0] = tnk + tvk - tp;
         tntvkr[1] = (tnk * tvk) / tntvkr[0] - tp;
-        tntvkr[2] = krk * (1.0 + tvk / tnk);
+        tntvkr[2] = krk * (tnk + tvk - tp) / tnk;
         return tntvkr;
+    }
+
+    public double getBeta() {
+        return beta;
     }
 }

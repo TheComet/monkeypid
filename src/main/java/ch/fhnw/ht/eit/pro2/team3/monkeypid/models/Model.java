@@ -8,21 +8,19 @@ import java.util.Observable;
 
 public class Model extends Observable {
 
+    // have the model own the sani curves, so they don't have to be reloaded from
+    // disk every time a new calculation is performed.
     private SaniCurves sani = new SaniCurves();
     private Plant plant = null;
 
-    public void setPlant(Plant plant) {
+    public void newPlant(double ks, double tu, double tg) {
         System.out.println("Updating plant, recalculating time constants");
-        this.plant = plant;
-
-        // recalculate time constants
-        double[] timeConstants = sani.calculateTimeConstants(plant.getTu(), plant.getTg());
-        plant.setTimeConstants(timeConstants);
+        this.plant = new Plant(tu, tg, ks, sani);
     }
 
     public void simulateAll() {
 
-        IControllerCalculator cc = new ZellwegerPI();
+        IControllerCalculator cc = new ZellwegerPI(45 - 180);
         cc.calculate(plant);
         IController c = cc.getController();
 
@@ -68,8 +66,6 @@ public class Model extends Observable {
         methods.add(new FistFormulaReswickFuehrungPID20());
         methods.add(new FistFormulaRosenbergPI());
         methods.add(new FistFormulaRosenbergPID());
-        methods.add(new ZellwegerPI());
-        methods.add(new ZellwegerPID());
 
         return methods;
     }
