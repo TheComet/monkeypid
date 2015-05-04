@@ -1,11 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 public class OverswingValueTuple {
-    private double phiSt;
+    private double phaseMargin;
     private String overswing;
 
-    public OverswingValueTuple(double phiSt, String overswing) {
-        this.phiSt = phiSt;
+    public OverswingValueTuple(double phaseMargin, String overswing) {
+        this.phaseMargin = phaseMargin;
         this.overswing = overswing;
     }
 
@@ -14,6 +14,6 @@ public class OverswingValueTuple {
     }
 
     public double angle() {
-        return phiSt;
+        return phaseMargin;
     }
 }
