@@ -48,4 +48,14 @@ public class MathStuff {
         }
         return res;
     }
+
+    public static final Complex[] ifft(Complex[] f){
+        double log2f = Math.log(f.length)/Math.log(2);
+        int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
+        int difLength = minLength - f.length;
+
+        //Complex[] res = transformer.transform(f, TransformType.INVERSE);
+        //return res;
+        return null;
+    }
 }

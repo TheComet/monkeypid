@@ -1,13 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import java.io.Serializable;
-
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
 
 public class TransferFunctionClosedLoop {
 
@@ -38,8 +34,7 @@ public class TransferFunctionClosedLoop {
 		}*/
 		
 		schrittIfft(new TransferFunction(A, B), 100, 10);
-		
-				
+
 	}
 	
 	
@@ -68,7 +63,7 @@ public class TransferFunctionClosedLoop {
 		for (int i = 0; i < HmirrorConjugate.length; i++) {
 			HmirrorConjugate[i] = new Complex(H[i].getReal(), H[i].getImaginary());
 		}
-				
+
 		//mirror
 		for (int i = 0; i < HmirrorConjugate.length/2; i++) {
 			Complex temp = HmirrorConjugate[i];
@@ -100,8 +95,6 @@ public class TransferFunctionClosedLoop {
 		for (int j = HConcat.length/2+1; j < HConcat.length; j++) {
 			HConcat[j] = HmirrorConjugate[j-(HConcat.length/2+1)];
 		}
-		
-		
 
 		/*System.out.println("H");
 		for (int i = 0; i < H.length; i++) {
@@ -127,18 +120,6 @@ public class TransferFunctionClosedLoop {
 		}		
 		*/
 		
-		return null;
-	}
-	
-	
-	
-	public static final Complex[] ifft(Complex[] f){
-		double log2f = Math.log(f.length)/Math.log(2);
-		int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
-		int difLength = minLength - f.length;
-		
-		//Complex[] res = transformer.transform(f, TransformType.INVERSE);
-		//return res;
 		return null;
 	}
 	
