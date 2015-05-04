@@ -24,7 +24,7 @@ public class ZellwegerPID extends AbstractZellweger {
     private IController calculatePID() {
 
         // find angleOfInflection on the phase of the control path
-        double wPID = findPhaseOnControlPath();
+        double wPID = findPhaseOfPlant();
 
         beta = calculateBeta(wPID, plant.getTimeConstants());
 
@@ -36,10 +36,7 @@ public class ZellwegerPID extends AbstractZellweger {
         double wDamping = findPhaseOpenLoop(tnk, tvk, tp);
 
         // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(
-                wDamping,
-                plant.getKs(),
-                plant.getTimeConstants()) * amplitudeControllerPID(wDamping, tnk, tvk, tp);
+        double ampOpenLoopKr = calculatePlantAmplitude(wDamping) * amplitudeControllerPID(wDamping, tnk, tvk, tp);
 
         // Kr is the reciprocal of the amplitude at wDamping
         double krk = 1.0 / ampOpenLoopKr;

@@ -22,16 +22,13 @@ public class ZellwegerPI extends AbstractZellweger {
     private IController calculatePI() {
 
         // Tn parameter of controller
-        double tn = 1.0 / findPhaseOnControlPath();
+        double tn = 1.0 / findPhaseOfPlant();
 
         // get omega damping
         double wDamping = findPhaseOnOpenLoopPI(tn);
 
         // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(
-                wDamping,
-                plant.getKs(),
-                plant.getTimeConstants()) * amplitudeControllerPI(wDamping, tn);
+        double ampOpenLoopKr = calculatePlantAmplitude(wDamping) * amplitudeControllerPI(wDamping, tn);
 
         // Kr is the reciprocal of the amplitude at wDamping
         double kr = 1.0 / ampOpenLoopKr;
