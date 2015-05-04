@@ -1,5 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
@@ -38,6 +40,13 @@ public class TransferFunctionClosedLoop {
 		
 				
 	}
+	
+	
+	public double[][] calculate(){
+		return null;
+		
+	}
+	
 	public double[] getA(){
 		return A;
 	}
@@ -62,41 +71,45 @@ public class TransferFunctionClosedLoop {
 		
 		Complex[] H = freqs(g, omega);
 		
-		Complex[] HmirrCon = new Complex[H.length];
+		Complex[] HmirrorConjugate = new Complex[H.length];
 		
-		for (int i = 0; i < HmirrCon.length; i++) {
-			HmirrCon[i] = new Complex(H[i].getReal(), H[i].getImaginary());
+		//copy H in HmirrCon 
+		for (int i = 0; i < HmirrorConjugate.length; i++) {
+			HmirrorConjugate[i] = new Complex(H[i].getReal(), H[i].getImaginary());
 		}
 				
 		//mirror
-		for (int i = 0; i < HmirrCon.length/2; i++) {
-			Complex temp = HmirrCon[i];
-			HmirrCon[i] = HmirrCon[HmirrCon.length - i -1];
-			HmirrCon[HmirrCon.length - i -1] = temp;
+		for (int i = 0; i < HmirrorConjugate.length/2; i++) {
+			Complex temp = HmirrorConjugate[i];
+			HmirrorConjugate[i] = HmirrorConjugate[HmirrorConjugate.length - i -1];
+			HmirrorConjugate[HmirrorConjugate.length - i -1] = temp;
 		}
 		
 		//conj
-		for (int i = 0; i < HmirrCon.length; i++) {
-			HmirrCon[i] = new Complex(HmirrCon[i].getReal(),-HmirrCon[i].getImaginary());
+		for (int i = 0; i < HmirrorConjugate.length; i++) {
+			HmirrorConjugate[i] = new Complex(HmirrorConjugate[i].getReal(),-HmirrorConjugate[i].getImaginary());
 		}
 				
 		//H2 = ArrayUtils.remove(H2, H2.length-1);
 		//H2 = ArrayUtils.remove(H2, H2.length-1);
 		
 		//Complex[] H0 = new Complex[1];
-		//H0[0] = new Complex();
+		//H0[0] = new Complex(0);
 		
-		//H=(Complex[]) ArrayUtils.addAll(H, H0, H2);
+		//Complex[] Hall = ArrayUtils.<Complex>addAll(H, H0, HmirrCon);
+		//Complex[] Hall = ObjectA (H, H0, HmirrCon);
 		
-		Complex[] HCon = new Complex[H.length];
+		
+		Complex[] HConcat = new Complex[H.length];
 		
 		for (int i = 0; i < H.length/2; i++) {
-			HCon[i]=H[i];
+			HConcat[i]=H[i];
 		}
-		HCon[H.length/2]=new Complex(0, 0);
-		for (int j = HCon.length/2+1; j < HCon.length; j++) {
-			HCon[j] = HmirrCon[j-(HCon.length/2+1)];
+		HConcat[H.length/2]=new Complex(0, 0);
+		for (int j = HConcat.length/2+1; j < HConcat.length; j++) {
+			HConcat[j] = HmirrorConjugate[j-(HConcat.length/2+1)];
 		}
+		
 		
 
 		/*System.out.println("H");
@@ -108,8 +121,9 @@ public class TransferFunctionClosedLoop {
 			System.out.println("Real " + HmirrCon[i].re + " Imag " + HmirrCon[i].im);
 		}*/
 		
-		Complex[] transferDomain = ifft(HCon);
+		//Complex[] transferDomain = ifft(HConcat);
 		
+		/*
 		Complex[] y = new Complex[transferDomain.length];
 		Complex temp = new Complex(0,0);
 		for (int i = 0; i < transferDomain.length; i++) {
@@ -120,7 +134,7 @@ public class TransferFunctionClosedLoop {
 		for (int i = 0; i < y.length; i++) {
 			System.out.println("conv " + y);
 		}		
-
+		*/
 		
 		return null;
 	}
@@ -132,8 +146,9 @@ public class TransferFunctionClosedLoop {
 		int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
 		int difLength = minLength - f.length;
 		
-		Complex[] res = transformer.transform(f, TransformType.INVERSE);
-		return res;
+		//Complex[] res = transformer.transform(f, TransformType.INVERSE);
+		//return res;
+		return null;
 	}
 	
 	public static final double[] linspace(double startValue, double endValue, int nValues){

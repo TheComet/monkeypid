@@ -1,20 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunctionClosedLoop;
 
-import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+
 
 import javax.swing.*;
 
@@ -173,14 +165,9 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		// menu item info is pressed
 		if (e.getSource() == menuItemInfo) {
 			
-			//TODO remove test 
 			
-			double[] Bs = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-			double[] Br = {11, 12, 13, 14};
-			double[] As = {15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
-			double[] Ar = {25, 26, 27, 28, 29};
 			
-			TransferFunctionClosedLoop tFCL= new TransferFunctionClosedLoop(new TransferFunction(As, Bs), new TransferFunction(Ar , Br));
+			
 			/*double[] result = tFCL.getA();
 			for (int i = 0; i < result.length; i++) {
 				System.out.println(result[i]);
