@@ -90,7 +90,7 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
         return plant.getKs() / denominator;
     }
 
-    protected double findPhaseOfPlant() {
+    protected double findAngleOnPlantPhase() {
 
         // find angleOfInflection on the phase of the control path
         double topFreq = endFreq;

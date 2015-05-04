@@ -22,21 +22,21 @@ public class ZellwegerPI extends AbstractZellweger {
     private IController calculatePI() {
 
         // Tn parameter of controller
-        double tn = 1.0 / findPhaseOfPlant();
+        double tn = 1.0 / findAngleOnPlantPhase();
 
         // get omega damping
-        double wDamping = findPhaseOnOpenLoopPI(tn);
+        double omegaDamping = findAngleOnOpenLoopPhase(tn);
 
-        // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(wDamping) * amplitudeControllerPI(wDamping, tn);
+        // amplitude of the open loop at the omegaDamping frequency
+        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tn);
 
-        // Kr is the reciprocal of the amplitude at wDamping
+        // Kr is the reciprocal of the amplitude at omegaDamping
         double kr = 1.0 / ampOpenLoopKr;
 
         return new PIController(getName(), kr, tn);
     }
 
-    protected double findPhaseOnOpenLoopPI(double tn) {
+    protected double findAngleOnOpenLoopPhase(double tn) {
 
         // find phiDamping on the phase of the open loop
         double topFreq = endFreq;
@@ -44,7 +44,7 @@ public class ZellwegerPI extends AbstractZellweger {
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
             double phiOpenLoopBuffer = calculatePlantPhase(actualFreq, plant.getTimeConstants()) +
-                    phaseControllerPI(actualFreq, tn);
+                    calculateControllerPhase(actualFreq, tn);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;
                 actualFreq = (topFreq + bottomFreq) / 2.0;
@@ -63,7 +63,7 @@ public class ZellwegerPI extends AbstractZellweger {
      * @param tn Controller parameter Tn
      * @return atan(w*Tn)-pi/2
      */
-    private double phaseControllerPI(double omega, double tn) {
+    private double calculateControllerPhase(double omega, double tn) {
         return (Math.atan(omega * tn) - Math.PI / 2.0) * 180 / Math.PI;
     }
 
@@ -73,7 +73,7 @@ public class ZellwegerPI extends AbstractZellweger {
      * @param tn Controller parameter Tn
      * @return (sqrt(1+(w*Tn).^2)./(w*Tn))
      */
-    private double amplitudeControllerPI(double omega, double tn) {
+    private double calculateControllerAmplitude(double omega, double tn) {
         return Math.sqrt(1.0 + Math.pow(omega * tn, 2)) / (omega * tn);
     }
 }
