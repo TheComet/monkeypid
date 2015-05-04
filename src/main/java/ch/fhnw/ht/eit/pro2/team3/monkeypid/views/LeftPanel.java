@@ -5,6 +5,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -199,6 +200,8 @@ public class LeftPanel extends JPanel
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
 
+		table.setPreferredSize(new Dimension(300, 300));
+		
 		// add header of table to GridBagLaout
 		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
