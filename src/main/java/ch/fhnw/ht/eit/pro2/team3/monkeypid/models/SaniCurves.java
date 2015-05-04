@@ -1,8 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.Assets;
-import org.apache.commons.math3.analysis.interpolation.NevilleInterpolator;
-import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
@@ -17,8 +15,8 @@ import java.util.stream.Stream;
  * @author Alex Murray
  */
 public class SaniCurves {
-    private ArrayList<PolynomialFunctionLagrangeForm> Tu_Tg_ratio = null;
-    private ArrayList<PolynomialFunctionLagrangeForm> Tg_inverse = null;
+    private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
+    private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
 
     /**
      * Loads
@@ -39,10 +37,10 @@ public class SaniCurves {
         Tg_inverse = loadAndInterpolate("math_tables/tg_inverse", false);
     }
 
-    private ArrayList<PolynomialFunctionLagrangeForm> loadAndInterpolate(String fileName, boolean swapXY) {
+    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName, boolean swapXY) {
 
         // this is the return value - it holds a list of all spline functions
-        ArrayList<PolynomialFunctionLagrangeForm> listOfSplines = new ArrayList<>();
+        ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
 
         // load the data points from disk
         try {
@@ -63,7 +61,7 @@ public class SaniCurves {
 
                 // apply cubic interpolation to the data points and store curve into return value
                 // for Tu_Tg the x and y data points are swapped - no idea why
-                NevilleInterpolator interpolator = new NevilleInterpolator();
+                LinearInterpolator interpolator = new LinearInterpolator();
                 if(swapXY)
                     listOfSplines.add(interpolator.interpolate(yValues, xValues));
                 else
@@ -116,28 +114,28 @@ public class SaniCurves {
         int power = lookupPower(TuTgRatio);
 
         // prepare return array (it has as many indices as the power, starting at ^2)
-        double[] timeConstants = new double[power - 1];
+        double[] timeConstants = new double[power];
 
-        // look up intersection points in inerpolated matlab tables
+        // look up intersection points in interpolated matlab tables
         double r = getTuTgRatioCurve(power).value(TuTgRatio);
         double w = getTgInverseCurve(power).value(r);
 
         // last time constant can now be calculated
-        timeConstants[power-2] = w * tg;
+        timeConstants[power - 1] = w * tg;
 
         // calculate the other time constants
         for(int i = power - 2; i >= 0; i--) {
-            timeConstants[i] = timeConstants[power - 2] * Math.pow(r, power - i);
+            timeConstants[i] = timeConstants[power - 1] * Math.pow(r, power - i - 1);
         }
 
         return timeConstants;
     }
 
-    public PolynomialFunctionLagrangeForm getTuTgRatioCurve(int power) {
+    public PolynomialSplineFunction getTuTgRatioCurve(int power) {
         return Tu_Tg_ratio.get(power - 2);
     }
 
-    public PolynomialFunctionLagrangeForm getTgInverseCurve(int power) {
+    public PolynomialSplineFunction getTgInverseCurve(int power) {
         return Tg_inverse.get(power - 2);
     }
 }

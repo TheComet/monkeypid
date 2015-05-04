@@ -1,75 +1,68 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.ControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
-public class Model extends Observable {
+public class Model {
 
+    // have the model own the sani curves, so they don't have to be reloaded from
+    // disk every time a new calculation is performed.
     private SaniCurves sani = new SaniCurves();
     private Plant plant = null;
+    private double phaseMargin = 0.0;
+    private ArrayList<IControllerCalculatorListener> controllerCalculatorListeners = new ArrayList<>();
 
-    public void setPlant(Plant plant) {
-        System.out.println("Updating control path");
-        this.plant = plant;
+    public void updatePlant(double ks, double tu, double tg) {
+        this.plant = new Plant(tu, tg, ks, sani);
+    }
 
-        // recalculate time constants
-        double[] timeConstants = sani.calculateTimeConstants(plant.getTu(), plant.getTg());
-        plant.setTimeConstants(timeConstants);
+    public void updatePhaseMargin(double phaseMargin) {
+        this.phaseMargin = phaseMargin;
+    }
+
+    public void clearSimulations() {
+
     }
 
     public void simulateAll() {
+        ArrayList<IControllerCalculator> ccs = getCalculators();
 
-        System.out.println("Calculating regulator params...");
-        long startTime = System.nanoTime();
-
-        // get all calculators
-        ArrayList<ControllerCalculator> calculators = getCalculators();
-
-        // generate a lis of threads for calculating each method
-        ArrayList<Thread> threads = new ArrayList<>();
-        for(ControllerCalculator calc : calculators) {
-            threads.add(new Thread(() -> {
-                calc.calculate(plant);
-            }));
+        for(IControllerCalculator cc : ccs) {
+            cc.run();
         }
+    }
 
-        // launch all threads and wait for them to finish
-        threads.forEach(java.lang.Thread::start);
-        try {
-            for (Thread thread : threads) {
-                thread.join();
+    private ArrayList<IControllerCalculator> getCalculators() {
+        ArrayList<IControllerCalculator> calculators = new ArrayList<>();
+
+        calculators.add(new FistFormulaOppeltPI(plant));
+        calculators.add(new FistFormulaOppeltPID(plant));
+        calculators.add(new FistFormulaReswickStoerPI0(plant));
+        calculators.add(new FistFormulaReswickStoerPI20(plant));
+        calculators.add(new FistFormulaReswickStoerPID0(plant));
+        calculators.add(new FistFormulaReswickStoerPID20(plant));
+        calculators.add(new FistFormulaReswickFuehrungPI0(plant));
+        calculators.add(new FistFormulaReswickFuehrungPI20(plant));
+        calculators.add(new FistFormulaReswickFuehrungPID0(plant));
+        calculators.add(new FistFormulaReswickFuehrungPID20(plant));
+        calculators.add(new FistFormulaRosenbergPI(plant));
+        calculators.add(new FistFormulaRosenbergPID(plant));
+        calculators.add(new ZellwegerPI(plant, phaseMargin));
+        calculators.add(new ZellwegerPID(plant, phaseMargin));
+
+        // register any listeners that want to know about the results of the calculators
+        for(IControllerCalculatorListener listener : controllerCalculatorListeners) {
+            for(IControllerCalculator c : calculators) {
+                c.registerListener(listener);
             }
-        } catch(InterruptedException e) {
         }
 
-        System.out.println("Finished in " + ((System.nanoTime() - startTime) * 0.000001) + "ms");
+        return calculators;
     }
 
-    private ArrayList<ControllerCalculator> getCalculators() {
-        ArrayList<ControllerCalculator> methods = new ArrayList<>();
-
-        methods.add(new FistFormulaOppeltPI());
-        methods.add(new FistFormulaOppeltPID());
-        methods.add(new FistFormulaReswickStoerPI0());
-        methods.add(new FistFormulaReswickStoerPI20());
-        methods.add(new FistFormulaReswickStoerPID0());
-        methods.add(new FistFormulaReswickStoerPID20());
-        methods.add(new FistFormulaReswickFuehrungPI0());
-        methods.add(new FistFormulaReswickFuehrungPI20());
-        methods.add(new FistFormulaReswickFuehrungPID0());
-        methods.add(new FistFormulaReswickFuehrungPID20());
-        methods.add(new FistFormulaRosenbergPI());
-        methods.add(new FistFormulaRosenbergPID());
-        methods.add(new ZellwegerPI());
-        methods.add(new ZellwegerPID());
-
-        return methods;
+    public void registerControllerCalculatorListener(IControllerCalculatorListener listener) {
+        controllerCalculatorListeners.add(listener);
     }
-
-	public void notifyObservers() {
-		setChanged();
-		super.notifyObservers();
-	}
 }

@@ -1,20 +1,14 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 
-import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
+
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -26,7 +20,6 @@ import javax.swing.border.TitledBorder;
 public class View extends JPanel implements Observer {
 
 	private Controller controller;
-	private Model model;
 
 	public LeftPanel leftPanel;
 	public GraphDisplayPanel graphDisplayPanel;
@@ -36,13 +29,12 @@ public class View extends JPanel implements Observer {
 	 * 
 	 * @param controller
 	 */
-	public View(Controller controller, Model model) {
+	public View(Controller controller) {
 		super(new GridBagLayout());
 
 		this.controller = controller;
-		this.model = model;
 
-		//creat the panels
+		//create the panels
 		leftPanel = new LeftPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
@@ -68,6 +60,7 @@ public class View extends JPanel implements Observer {
 		//set border and title of graphDisplayPanel
 		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
 	}
+
 	/**
 	 * 
 	 */

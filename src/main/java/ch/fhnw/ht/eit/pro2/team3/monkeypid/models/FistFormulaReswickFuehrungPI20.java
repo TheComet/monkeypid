@@ -2,11 +2,21 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 public class FistFormulaReswickFuehrungPI20 extends AbstractControllerCalculator {
 
+    public FistFormulaReswickFuehrungPI20(Plant plant) {
+        super(plant);
+    }
+
     @Override
-    public void calculate(Plant path) {
+    public void calculate() {
         this.controller = new PIController(
-                0.6 * path.getTg() / (path.getKs() * path.getTu()),
-                1.0 * path.getTg()
+                getName(),
+                0.6 * plant.getTg() / (plant.getKs() * plant.getTu()),
+                1.0 * plant.getTg()
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Faustformel Reswick PI, 20%, Gute Führung";
     }
 }

@@ -7,14 +7,11 @@ public class Plant {
     private double tg = 0.0;
     private double[] timeConstants;
 
-    public Plant(double ks, double tu, double tg) {
+    public Plant(double tu, double tg, double ks, SaniCurves sani) {
         this.ks = ks;
         this.tu = tu;
         this.tg = tg;
-    }
-
-    public void setTimeConstants(double[] timeConstants) {
-        this.timeConstants = timeConstants;
+        timeConstants = sani.calculateTimeConstants(tu, tg);
     }
 
     public double getKs() {

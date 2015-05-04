@@ -1,8 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValue;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -17,12 +20,13 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener {
+public class LeftPanel extends JPanel
+        implements ActionListener, IControllerCalculatorListener {
 
 	Controller controller;
 
 	// create test table
-	private OverswingValue[] overswingTable = new OverswingValue[4];
+	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -79,6 +83,10 @@ public class LeftPanel extends JPanel implements ActionListener {
 	private JButton btDelete = new JButton("Loeschen");
 	private JButton btAdopt = new JButton("Uebernehmen");
 
+    // table and table model
+    DefaultTableModel tableModel = new DefaultTableModel();
+    JTable table = new JTable(tableModel);
+
 	/**
 	 * 
 	 * @param controller
@@ -88,14 +96,14 @@ public class LeftPanel extends JPanel implements ActionListener {
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValue(-103.7, "0%");
-		overswingTable[1] = new OverswingValue(-114.6, "4.6%");
-		overswingTable[2] = new OverswingValue(-118.5, "16.3%");
-		overswingTable[3] = new OverswingValue(-135, "23.3%");
+		overswingTable[0] = new OverswingValueTuple(-103.7, "0%");
+		overswingTable[1] = new OverswingValueTuple(-114.6, "4.6%");
+		overswingTable[2] = new OverswingValueTuple(-118.5, "16.3%");
+		overswingTable[3] = new OverswingValueTuple(-135, "23.3%");
 
 		// add overswing table strings to combo box
 		for (int i = 0; i < overswingTable.length; i++) {
-			cbSelectOvershoot.addItem(overswingTable[i].asString());
+			cbSelectOvershoot.addItem(overswingTable[i].percent());
 		}
 
 		// add items for input fields to GridBagLayout
@@ -186,27 +194,14 @@ public class LeftPanel extends JPanel implements ActionListener {
 		 * model.addRow(new Object[] { "v1", "v2", "v3" });
 		 */
 
-		DefaultTableModel tableModel = new DefaultTableModel();
-		JTable table = new JTable(tableModel);
-
 		tableModel.addColumn("Name");
-		tableModel.addColumn("Kp");
+		tableModel.addColumn("Kr");
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
+		tableModel.addColumn("Tp");
 
-		tableModel.addColumn("Überschwingen");
-		/*
-		 * TableColumn tcUs = new TableColumn(); tcUs.setHeaderValue(new
-		 * Object[]{"Überschwingen"}); tableModel.addColumn(tcUs);
-		 */
-
-		tableModel.addRow(new Object[] { "1", "2", "3", "4", "5" });
-		table.removeColumn(table.getColumnModel().getColumn(4));
-		// table.addColumn(new TableColumn().se);
-		// tableModel.fireTableChanged(new TableModelEvent(tableModel.get));
-		// tableModel.addColumn("neu2");
-		tableModel.addRow(new Object[] { "1", "2", "3", "4", "5" });
-
+		table.setPreferredSize(new Dimension(300, 300));
+		
 		// add header of table to GridBagLaout
 		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
@@ -323,4 +318,9 @@ public class LeftPanel extends JPanel implements ActionListener {
 			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
 		}
 	}
+
+    @Override
+    public void notifyNewController(IController controller) {
+        controller.addToTable(tableModel);
+    }
 }

@@ -1,12 +1,16 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
-public abstract class AbstractController implements Controller, Cloneable {
-    protected double tp;
+public abstract class AbstractController implements IController{
+    private String name;
+
+    public AbstractController(String name) {
+        this.name = name;
+    }
 
     @Override
-    public void setParasiticTimeConstant(double tp) {
-        this.tp = tp;
+    public String getName() {
+        return name;
     }
 }

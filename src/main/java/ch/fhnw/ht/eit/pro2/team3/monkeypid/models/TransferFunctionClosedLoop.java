@@ -1,6 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
 
 public class TransferFunctionClosedLoop {
 
@@ -101,6 +104,7 @@ public class TransferFunctionClosedLoop {
 			System.out.println("Real " + HmirrCon[i].re + " Imag " + HmirrCon[i].im);
 		}
 		
+		FastFourierTransformer myIFFT = new FastFourierTransformer(DftNormalization.STANDARD);
 		
 		
 		return null;

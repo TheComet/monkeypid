@@ -13,43 +13,57 @@ import javax.swing.*;
  * @author Josua
  *
  */
-public class MonkeyPID extends JFrame {
+public class MonkeyPID {
+
+    public void setLookAndFeel() {
+        try {
+            UIManager
+                    .setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public JFrame createFrame() {
+        JFrame frame = new JFrame();
+        frame.setUndecorated(true);
+        frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Easy-PID Smart Controller Design");
+
+        return frame;
+    }
+
+    public void createMVC(JFrame frame) {
+
+        // typical MVC pattern
+        Model model = new Model();
+        Controller controller = new Controller(model);
+        View view = new View(controller);
+        model.registerControllerCalculatorListener(view.leftPanel);
+
+        // add the view to the root pane
+        frame.getContentPane().add(view);
+
+        // add a menu bar to the frame
+        MenuBar menuBar = new MenuBar(controller, view);
+        frame.setJMenuBar(menuBar);
+
+    }
+
+	public void go() {
+        SwingUtilities.invokeLater(() -> {
+            setLookAndFeel();
+            JFrame frame = createFrame();
+            createMVC(frame);
+
+            frame.pack();
+            frame.setVisible(true);
+        });
+    }
 
 	public static void main(String args[]) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				//set look and feel
-				try {
-					UIManager
-							.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-				JFrame frame = new JFrame();
-				frame.setUndecorated(true);
-				frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-				// set title of window
-				frame.setTitle("Easy-PID Smart Controller Design");
-
-				// create Model, Controller and View
-				Model model = new Model();
-				Controller controller = new Controller(model);
-				View view = new View(controller, model);
-
-				controller.setView(view);
-				frame.getContentPane().add(view);
-
-				// create new menuBar and add it to the frame
-				MenuBar menuBar = new MenuBar(controller, view);
-				frame.setJMenuBar(menuBar);
-
-				model.addObserver(view);
-
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
+        MonkeyPID app = new MonkeyPID();
+        app.go();
 	}
 }

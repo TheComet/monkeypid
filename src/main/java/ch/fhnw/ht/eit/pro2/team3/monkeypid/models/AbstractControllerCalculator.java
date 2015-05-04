@@ -1,13 +1,49 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.ControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
-public abstract class AbstractControllerCalculator implements ControllerCalculator {
+import java.util.ArrayList;
 
-    protected Controller controller;
+public abstract class AbstractControllerCalculator
+        implements IControllerCalculator {
 
-    public Controller getController() {
-        return this.controller;
+    private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
+    protected Plant plant = null;
+    protected IController controller;
+
+    public AbstractControllerCalculator(Plant plant) {
+        setPlant(plant);
+    }
+
+    @Override
+    public void run() {
+        calculate();
+        notifyNewController();
+    }
+
+    @Override
+    public void setPlant(Plant plant) {
+        this.plant = plant;
+    }
+
+    @Override
+    public IController getController() {
+        return controller;
+    }
+
+    public void registerListener(IControllerCalculatorListener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregisterListener(IControllerCalculatorListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void notifyNewController() {
+        for(IControllerCalculatorListener listener : listeners) {
+            listener.notifyNewController(controller);
+        }
     }
 }
