@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 public class ZellwegerPIDTest {
 
     double delta = 0.001; // seems to be the closest accuracy we can get
+    SaniCurves sani = new SaniCurves();
 
     @Test
     public void testCalculate() throws Exception {
-        SaniCurves sani = new SaniCurves();
         IControllerCalculator cc;
         PIDController c;
 
@@ -25,5 +25,15 @@ public class ZellwegerPIDTest {
         assertEquals(1.7656, c.getKr(), delta);
         assertEquals(0.0102, c.getTp(), delta);
         assertEquals(1.0000, ((ZellwegerPID)cc).getBeta(), delta);
+
+        // calculate zellweger PID with Tu=2, Tg=6, Ks=1, angleOfInflection=45
+        cc = new ZellwegerPID(new Plant(2, 6, 1, sani), 45);
+        cc.calculate();
+        c = (PIDController)cc.getController();
+
+        assertEquals(3.8576, c.getTn(), delta);
+        assertEquals(0.8656, c.getTv(), delta);
+        assertEquals(1.7656, c.getKr(), delta);
+        assertEquals(0.203, c.getTp(), delta);
     }
 }

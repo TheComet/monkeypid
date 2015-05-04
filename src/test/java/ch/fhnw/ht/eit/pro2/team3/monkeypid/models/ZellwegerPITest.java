@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 public class ZellwegerPITest {
 
     double delta = 0.001; // seems to be the closest accuracy we can get
+    SaniCurves sani = new SaniCurves();
 
     @Test
     public void testCalculate() throws Exception {
-        SaniCurves sani = new SaniCurves();
         IControllerCalculator cc;
         PIController c;
 
