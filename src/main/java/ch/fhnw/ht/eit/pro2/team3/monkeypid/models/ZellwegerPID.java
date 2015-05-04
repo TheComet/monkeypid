@@ -26,7 +26,7 @@ public class ZellwegerPID extends AbstractZellweger {
         // find angleOfInflection on the phase of the control path
         double wPID = findPhaseOfPlant();
 
-        beta = calculateBeta(wPID, plant.getTimeConstants());
+        beta = calculateBeta(wPID);
 
         double tnk = 1.0 / (wPID * beta);
         double tvk = beta / wPID;
@@ -110,13 +110,12 @@ public class ZellwegerPID extends AbstractZellweger {
      *   ATTENTION: Beta has to be in the interval ]0,1]
      *   For Z > 1 -> set Z to 1 -> Beta is 1
      * @param wPID Omega of the found angle phiPID
-     * @param timeConstants Array of time constants to use
      * @return Returns calculateBeta.
      */
-    private double calculateBeta(double wPID, double[] timeConstants) {
+    private double calculateBeta(double wPID) {
         double phiBuffer = 0;
-        for(double timeConstant : timeConstants) {
-            phiBuffer -= Math.atan(wPID * timeConstant);
+        for(double timeConstant : plant.getTimeConstants()) {
+            phiBuffer -= timeConstant / (1.0 + Math.pow(wPID * timeConstant, 2.0));
         }
 
         double z = -wPID * phiBuffer - 0.5;
