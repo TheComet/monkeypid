@@ -18,7 +18,7 @@ public abstract class AbstractControllerCalculator
     }
 
     @Override
-    public void run() {
+    public final void run() {
         calculate();
         notifyNewController();
     }
@@ -29,22 +29,22 @@ public abstract class AbstractControllerCalculator
     }
 
     @Override
-    public IController getController() {
+    public final IController getController() {
         return controller;
     }
 
     @Override
-    public void registerListener(IControllerCalculatorListener listener) {
+    public final void registerListener(IControllerCalculatorListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void unregisterListener(IControllerCalculatorListener listener) {
+    public final void unregisterListener(IControllerCalculatorListener listener) {
         listeners.remove(listener);
     }
 
     @Override
-    public void notifyNewController() {
+    public final void notifyNewController() {
         for(IControllerCalculatorListener listener : listeners) {
             listener.notifyNewController(controller);
         }

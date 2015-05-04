@@ -34,21 +34,21 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
     }
 
     @Override
-    public void setPhaseMargin(double phi) {
+    public final void setPhaseMargin(double phi) {
         this.phiDamping = phi - 180;
     }
 
     @Override
-    public void setAngleOfInflection(double angleOfInflection) {
+    public final void setAngleOfInflection(double angleOfInflection) {
         this.angleOfInflection = angleOfInflection;
     }
 
     @Override
-    public void setMaxIterations(int iterations) {
+    public final void setMaxIterations(int iterations) {
         maxIterations = iterations;
     }
 
-    private void updateFrequencyRange() {
+    private final void updateFrequencyRange() {
 
         // get minimum and maximum time constants
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));

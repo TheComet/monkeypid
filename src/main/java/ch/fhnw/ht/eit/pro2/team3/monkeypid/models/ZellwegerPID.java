@@ -5,6 +5,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
+    private double parasiticTimeConstantFactor;
 
     public ZellwegerPID(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
@@ -30,7 +31,7 @@ public class ZellwegerPID extends AbstractZellweger {
 
         double tnk = 1.0 / (omegaInflection * beta);
         double tvk = beta / omegaInflection;
-        double tp = tvk / 10.0; // Tp is one decade higher than Tvk
+        double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
 
         // find phiDamping on the phase of the open loop
         double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);
