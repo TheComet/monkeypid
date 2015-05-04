@@ -1,15 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
  * @author Alex Murray
@@ -33,46 +26,8 @@ public class SaniCurves {
      * element in the array of rows is power 2, and the last is power 8.
      */
     private void loadMatlabTables() {
-        Tu_Tg_ratio = loadAndInterpolate("math_tables/tu_tg_ratio", true); // x and y data points are swapped - no idea why
-        Tg_inverse = loadAndInterpolate("math_tables/tg_inverse", false);
-    }
-
-    private ArrayList<PolynomialSplineFunction> loadAndInterpolate(String fileName, boolean swapXY) {
-
-        // this is the return value - it holds a list of all spline functions
-        ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
-
-        // load the data points from disk
-        try {
-            //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
-            // TODO get classpath working
-            Path path = Paths.get("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid/" + fileName);
-            Stream<String> lines = Files.lines(path);
-            lines.forEach(s -> {
-
-                // load the data points into two double arrays for x and y coordinates
-                String[] yValuesStr = s.split("\t");
-                double[] xValues = new double[yValuesStr.length];
-                double[] yValues = new double[yValuesStr.length];
-                for(int i = 0; i < yValuesStr.length; i++) {
-                    xValues[i] = (double)i / (double)(yValuesStr.length - 1);
-                    yValues[i] = Double.parseDouble(yValuesStr[i]);
-                }
-
-                // apply cubic interpolation to the data points and store curve into return value
-                // for Tu_Tg the x and y data points are swapped - no idea why
-                LinearInterpolator interpolator = new LinearInterpolator();
-                if(swapXY)
-                    listOfSplines.add(interpolator.interpolate(yValues, xValues));
-                else
-                    listOfSplines.add(interpolator.interpolate(xValues, yValues));
-            });
-        } catch(IOException e) {
-            System.out.println("Failed to load matlab table: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return listOfSplines;
+        Tu_Tg_ratio = Assets.loadSaniCurves("math_tables/tu_tg_ratio", true); // x and y data points are swapped
+        Tg_inverse = Assets.loadSaniCurves("math_tables/tg_inverse", false);
     }
 
     public int lookupPower(double TuTgRatio) {
