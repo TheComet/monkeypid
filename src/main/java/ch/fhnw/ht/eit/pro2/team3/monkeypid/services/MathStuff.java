@@ -3,10 +3,13 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
 
 public class MathStuff {
 
-    public static final double[] linspace(double startValue, double endValue, int nValues){
+    public static double[] linspace(double startValue, double endValue, int nValues){
         double step = (endValue - startValue)/(nValues-1);
 
         double[] res = new double[nValues];
@@ -17,7 +20,7 @@ public class MathStuff {
         return res;
     }
 
-    public static final Complex[] freqs(TransferFunction g, double[] omega) {
+    public static Complex[] freqs(TransferFunction g, double[] omega) {
         Complex[] res = new Complex[omega.length];
 
         for (int i = 0; i < res.length; i++) {
@@ -29,17 +32,26 @@ public class MathStuff {
         return res;
     }
 
-    public static final Complex polyVal(double[] poly, Complex x) {
+    public static Complex polyVal(double[] poly, Complex s) {
+        // If s is zero, the result will be 0. Apparently, apache commons
+        // cannot raise the complex number 0+0j to any power without
+        // resulting in NaN. For these reasons, there's no point in
+        // continuing - return directly now.
+        if(s.equals(new Complex(0)))
+            return new Complex(0);
 
-        Complex res = new Complex(0, 0);
+        Complex res = new Complex(0);
 
         for (int i = 0; i < poly.length; i++) {
-            res=res.add(x.pow(poly.length - i - 1).multiply(poly[i]));
+            Complex raised = s.pow(poly.length - i - 1);
+            raised = raised.multiply(poly[i]);
+            res=res.add(raised);
         }
+
         return res;
     }
 
-    public static final double[] conv(double[] a, double[] b){
+    public static double[] conv(double[] a, double[] b){
         double[] res = new double[a.length +b.length - 1];
         for (int n = 0; n < res.length; n++) {
             for (int i=Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
@@ -49,13 +61,16 @@ public class MathStuff {
         return res;
     }
 
-    public static final Complex[] ifft(Complex[] f){
+    public static Complex[] ifft(Complex[] f){
         double log2f = Math.log(f.length)/Math.log(2);
         int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
-        int difLength = minLength - f.length;
+        Complex[] powerOfEight = new Complex[minLength];
+        System.arraycopy(f, 0, powerOfEight, 0, f.length);
+        for(int i = f.length; i < minLength; i++) {
+            powerOfEight[i] = new Complex(0);
+        }
 
-        //Complex[] res = transformer.transform(f, TransformType.INVERSE);
-        //return res;
-        return null;
+        FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+        return transformer.transform(powerOfEight, TransformType.INVERSE);
     }
 }

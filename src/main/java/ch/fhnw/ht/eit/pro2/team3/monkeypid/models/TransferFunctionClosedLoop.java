@@ -5,6 +5,8 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 
+import java.util.Comparator;
+
 public class TransferFunctionClosedLoop {
 
 	private double[] B;
@@ -86,15 +88,13 @@ public class TransferFunctionClosedLoop {
 		//Complex[] Hall = ObjectA (H, H0, HmirrCon);
 		
 		
-		Complex[] HConcat = new Complex[H.length];
-		
-		for (int i = 0; i < H.length/2; i++) {
-			HConcat[i]=H[i];
-		}
-		HConcat[H.length/2]=new Complex(0, 0);
-		for (int j = HConcat.length/2+1; j < HConcat.length; j++) {
-			HConcat[j] = HmirrorConjugate[j-(HConcat.length/2+1)];
-		}
+		Complex[] HConcat = new Complex[H.length * 2];
+
+        System.arraycopy(H, 0, HConcat, 0, H.length);
+        System.arraycopy(HmirrorConjugate, 0, HConcat, H.length + 1, HmirrorConjugate.length - 1);
+		HConcat[H.length]=new Complex(0, 0);
+
+		Complex[] h = MathStuff.ifft(HConcat);
 
 		/*System.out.println("H");
 		for (int i = 0; i < H.length; i++) {

@@ -12,7 +12,10 @@ public class TransferFunctionClosedLoopTest {
 	
 	@Test
 	public void testTransferFunctionClosedLoop() {
-		TransferFunctionClosedLoop tFCL= new TransferFunctionClosedLoop(new TransferFunction(As, Bs), new TransferFunction(Ar , Br));
+		TransferFunctionClosedLoop tFCL= new TransferFunctionClosedLoop(
+				new TransferFunction(As, Bs),
+				new TransferFunction(Ar, Br)
+		);
 		//assertArrayEquals(, actuals);
 	}
 
