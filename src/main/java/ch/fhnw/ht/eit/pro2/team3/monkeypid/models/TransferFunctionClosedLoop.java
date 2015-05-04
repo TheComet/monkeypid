@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import java.io.Serializable;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
@@ -17,8 +18,8 @@ public class TransferFunctionClosedLoop {
 	
 	
 	public TransferFunctionClosedLoop(TransferFunction hS, TransferFunction hR) {
-		B = conv(hS.getB(), hR.getB());
-		A = conv(hS.getA(), hR.getA());
+		B = MathStuff.conv(hS.getB(), hR.getB());
+		A = MathStuff.conv(hS.getA(), hR.getA());
 		
 		/*System.out.println("As"+hS.getA()[0]);
 		System.out.println("Bs"+hS.getB()[0]);
@@ -53,23 +54,13 @@ public class TransferFunctionClosedLoop {
 	public double[] getB(){
 		return B;
 	}
-
-	public static final double[] conv(double[] a, double[] b){
-		double[] res = new double[a.length +b.length - 1];
-		for (int n = 0; n < res.length; n++) {
-			for (int i=Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
-				res[n] += b[i] * a[n - i];
-			}
-		}
-		return res;
-	}
 	
 	public double[][] schrittIfft(TransferFunction g, double fs, int N){
 		double t = 1/fs;
 		
-		double [] omega = linspace(0, fs*Math.PI, N/2);
+		double [] omega = MathStuff.linspace(0, fs * Math.PI, N / 2);
 		
-		Complex[] H = freqs(g, omega);
+		Complex[] H = MathStuff.freqs(g, omega);
 		
 		Complex[] HmirrorConjugate = new Complex[H.length];
 		
@@ -151,47 +142,5 @@ public class TransferFunctionClosedLoop {
 		return null;
 	}
 	
-	public static final double[] linspace(double startValue, double endValue, int nValues){
-		double step = (endValue - startValue)/(nValues-1);
-		
-		double[] res = new double[nValues];
-		
-		for (int i = 0; i < nValues; i++) {
-			res[i] = step * i;
-		}
-		return res;
-	}
-	/**
-	 * Berechnet den Frequenzgang aufgrund von Zähler- und Nennerpolynom b resp.
-	 * a sowie der Frequenzachse f.
-	 * 
-	 * @param b
-	 *            Zählerpolynom
-	 * @param a
-	 *            Nennerpolynom
-	 * @param f
-	 *            Frequenzachse
-	 * @return Komplexwertiger Frequenzgang.
-	 */
-	public static final Complex[] freqs(TransferFunction g, double[] omega) {
-		Complex[] res = new Complex[omega.length];
 
-		for (int i = 0; i < res.length; i++) {
-			Complex jw = new Complex(0.0, omega[i]);
-			Complex zaehler = polyVal(g.getB(), jw);
-			Complex nenner = polyVal(g.getA(), jw);
-			res[i] = zaehler.divide(nenner);
-		}
-		return res;
-	}
-
-	public static final Complex polyVal(double[] poly, Complex x) {
-
-		Complex res = new Complex(0, 0);
-
-		for (int i = 0; i < poly.length; i++) {
-			res=res.add(x.pow(poly.length - i - 1).multiply(poly[i]));
-		}
-		return res;
-	}
 }
