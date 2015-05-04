@@ -13,7 +13,6 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
     protected double phiDamping;
     protected double angleOfInflection;
     protected double startFreq, endFreq;
-    protected int numSamplePoints = 1000;
 
     // 18 iterations is enough for a precision of 4 decimal digits (1.0000)
     protected double maxIterations = 18;
@@ -32,11 +31,6 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
     public void setPlant(Plant plant) {
         this.plant = plant;
         updateFrequencyRange();
-    }
-
-    @Override
-    public void setNumSamplePoints(int samples) {
-        numSamplePoints = samples;
     }
 
     @Override
@@ -86,19 +80,17 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
     /**
      * Calculates the amplitude of the plant (without the regulator)
      * @param omega Omega
-     * @param ks Multiplicator of the control path
-     * @param timeConstants Array of time constants to use
      * @return Ks/(sqrt(1+(w*T1)^2)*sqrt(1+(w*T2)^2)*sqrt(1+(w*Tc)^2))
      */
-    protected double calculatePlantAmplitude(double omega, double ks, double[] timeConstants) {
+    protected double calculatePlantAmplitude(double omega) {
         double denominator = 1.0;
-        for(double timeConstant : timeConstants) {
+        for(double timeConstant : plant.getTimeConstants()) {
             denominator *= Math.sqrt(1.0 + Math.pow(omega * timeConstant, 2));
         }
-        return ks / denominator;
+        return plant.getKs() / denominator;
     }
 
-    protected double findPhaseOnControlPath() {
+    protected double findAngleOnPlantPhase() {
 
         // find angleOfInflection on the phase of the control path
         double topFreq = endFreq;

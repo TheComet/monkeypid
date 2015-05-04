@@ -96,10 +96,10 @@ public class LeftPanel extends JPanel
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValueTuple(-103.7, "0%");
-		overswingTable[1] = new OverswingValueTuple(-114.6, "4.6%");
-		overswingTable[2] = new OverswingValueTuple(-118.5, "16.3%");
-		overswingTable[3] = new OverswingValueTuple(-135, "23.3%");
+		overswingTable[0] = new OverswingValueTuple(76.3, "0%");
+		overswingTable[1] = new OverswingValueTuple(65.5, "4.6%");
+		overswingTable[2] = new OverswingValueTuple(51.5, "16.3%");
+		overswingTable[3] = new OverswingValueTuple(45, "23.3%");
 
 		// add overswing table strings to combo box
 		for (int i = 0; i < overswingTable.length; i++) {

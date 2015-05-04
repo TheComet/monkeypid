@@ -33,14 +33,17 @@ public abstract class AbstractControllerCalculator
         return controller;
     }
 
+    @Override
     public void registerListener(IControllerCalculatorListener listener) {
         listeners.add(listener);
     }
 
+    @Override
     public void unregisterListener(IControllerCalculatorListener listener) {
         listeners.remove(listener);
     }
 
+    @Override
     public void notifyNewController() {
         for(IControllerCalculatorListener listener : listeners) {
             listener.notifyNewController(controller);

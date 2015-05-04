@@ -24,24 +24,21 @@ public class ZellwegerPID extends AbstractZellweger {
     private IController calculatePID() {
 
         // find angleOfInflection on the phase of the control path
-        double wPID = findPhaseOnControlPath();
+        double omegaInflection = findAngleOnPlantPhase();
 
-        beta = calculateBeta(wPID, plant.getTimeConstants());
+        beta = calculateBeta(omegaInflection);
 
-        double tnk = 1.0 / (wPID * beta);
-        double tvk = beta / wPID;
+        double tnk = 1.0 / (omegaInflection * beta);
+        double tvk = beta / omegaInflection;
         double tp = tvk / 10.0; // Tp is one decade higher than Tvk
 
         // find phiDamping on the phase of the open loop
-        double wDamping = findPhaseOpenLoop(tnk, tvk, tp);
+        double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);
 
-        // amplitude of the open loop at the wDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(
-                wDamping,
-                plant.getKs(),
-                plant.getTimeConstants()) * amplitudeControllerPID(wDamping, tnk, tvk, tp);
+        // amplitude of the open loop at the omegaDamping frequency
+        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tnk, tvk, tp);
 
-        // Kr is the reciprocal of the amplitude at wDamping
+        // Kr is the reciprocal of the amplitude at omegaDamping
         double krk = 1.0 / ampOpenLoopKr;
 
         double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
@@ -49,7 +46,7 @@ public class ZellwegerPID extends AbstractZellweger {
         return new PIDController(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
     }
 
-    private double findPhaseOpenLoop(double tnk, double tvk, double tp) {
+    private double findAngleOnOpenLoopPhase(double tnk, double tvk, double tp) {
 
         // find phiDamping on the phase of the open loop
         double topFreq = endFreq;
@@ -57,7 +54,7 @@ public class ZellwegerPID extends AbstractZellweger {
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
             double phiOpenLoopBuffer = calculatePlantPhase(actualFreq, plant.getTimeConstants()) +
-                    phaseControllerPID(actualFreq, tnk, tvk, tp);
+                    calculateControllerPhase(actualFreq, tnk, tvk, tp);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;
                 actualFreq = (topFreq + bottomFreq) / 2.0;
@@ -78,7 +75,7 @@ public class ZellwegerPID extends AbstractZellweger {
      * @param tp Bode parameter Tp
      * @return Returns the phase in degrees. atan(w*Tnk)+atan(w*Tvk)-atan(w*Tp)-pi/2.
      */
-    private double phaseControllerPID(double omega, double tnk, double tvk, double tp) {
+    private double calculateControllerPhase(double omega, double tnk, double tvk, double tp) {
         double phi = Math.atan(omega * tnk);
         phi += Math.atan(omega * tvk);
         phi -= Math.atan(omega * tp);
@@ -94,7 +91,7 @@ public class ZellwegerPID extends AbstractZellweger {
      * @param tp Bode parameter Tp
      * @return (sqrt(1+(w*Tnk)^2)*sqrt(1+(w*Tvk)^2))/((w*Tnk)*sqrt(1+(w*Tp)^2))
      */
-    private double amplitudeControllerPID(double omega, double tnk, double tvk, double tp) {
+    private double calculateControllerAmplitude(double omega, double tnk, double tvk, double tp) {
         double numerator = Math.sqrt(1.0 + Math.pow(omega * tnk, 2.0));
         numerator *= Math.sqrt(1.0 + Math.pow(omega * tvk, 2.0));
 
@@ -107,22 +104,21 @@ public class ZellwegerPID extends AbstractZellweger {
      * Calculates calculateBeta for Tnk and Twk
      *
      * Calculation is:
-     * Z = -wPID * (-(atan(w*T1)+atan(w*T2)+atan(w*Tc)));
+     * Z = -omegaInflection * (-(atan(w*T1)+atan(w*T2)+atan(w*Tc)));
      * Beta = 1/Z - (+) sqrt(1/Z^2 - 1);
      * eventually use positive or negative solution of sqrt()
      *   ATTENTION: Beta has to be in the interval ]0,1]
      *   For Z > 1 -> set Z to 1 -> Beta is 1
-     * @param wPID Omega of the found angle phiPID
-     * @param timeConstants Array of time constants to use
+     * @param omegaInflection Omega of the found angle phiPID
      * @return Returns calculateBeta.
      */
-    private double calculateBeta(double wPID, double[] timeConstants) {
+    private double calculateBeta(double omegaInflection) {
         double phiBuffer = 0;
-        for(double timeConstant : timeConstants) {
-            phiBuffer -= Math.atan(wPID * timeConstant);
+        for(double timeConstant : plant.getTimeConstants()) {
+            phiBuffer -= timeConstant / (1.0 + Math.pow(omegaInflection * timeConstant, 2.0));
         }
 
-        double z = -wPID * phiBuffer - 0.5;
+        double z = -omegaInflection * phiBuffer - 0.5;
         z = Math.min(z, 1.0); // clamp z to 1.0 so no complex betas are calculated
 
         return 1.0 / z - Math.sqrt(1.0 / Math.pow(z, 2.0) - 1.0);
