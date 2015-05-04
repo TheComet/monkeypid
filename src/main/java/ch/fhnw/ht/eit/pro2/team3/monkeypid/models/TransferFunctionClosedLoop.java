@@ -1,6 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
@@ -9,6 +12,9 @@ public class TransferFunctionClosedLoop {
 
 	private double[] B;
 	private double[] A;
+	
+	static final FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+	
 	
 	public TransferFunctionClosedLoop(TransferFunction hS, TransferFunction hR) {
 		B = conv(hS.getB(), hR.getB());
@@ -34,6 +40,13 @@ public class TransferFunctionClosedLoop {
 		
 				
 	}
+	
+	
+	public double[][] calculate(){
+		return null;
+		
+	}
+	
 	public double[] getA(){
 		return A;
 	}
@@ -54,65 +67,91 @@ public class TransferFunctionClosedLoop {
 	public double[][] schrittIfft(TransferFunction g, double fs, int N){
 		double t = 1/fs;
 		
-		double [] w = linspace(0, fs*Math.PI, N/2);
+		double [] omega = linspace(0, fs*Math.PI, N/2);
 		
-		Complex[] H = freqs(g, w);
+		Complex[] H = freqs(g, omega);
 		
-		Complex[] HmirrCon = new Complex[H.length];
+		Complex[] HmirrorConjugate = new Complex[H.length];
 		
-		for (int i = 0; i < HmirrCon.length; i++) {
-			HmirrCon[i] = new Complex(H[i].re, H[i].im);
+		//copy H in HmirrCon 
+		for (int i = 0; i < HmirrorConjugate.length; i++) {
+			HmirrorConjugate[i] = new Complex(H[i].getReal(), H[i].getImaginary());
 		}
 				
 		//mirror
-		for (int i = 0; i < HmirrCon.length/2; i++) {
-			Complex temp = HmirrCon[i];
-			HmirrCon[i] = HmirrCon[HmirrCon.length - i -1];
-			HmirrCon[HmirrCon.length - i -1] = temp;
+		for (int i = 0; i < HmirrorConjugate.length/2; i++) {
+			Complex temp = HmirrorConjugate[i];
+			HmirrorConjugate[i] = HmirrorConjugate[HmirrorConjugate.length - i -1];
+			HmirrorConjugate[HmirrorConjugate.length - i -1] = temp;
 		}
 		
 		//conj
-		for (int i = 0; i < HmirrCon.length; i++) {
-			HmirrCon[i].im = -HmirrCon[i].im;
+		for (int i = 0; i < HmirrorConjugate.length; i++) {
+			HmirrorConjugate[i] = new Complex(HmirrorConjugate[i].getReal(),-HmirrorConjugate[i].getImaginary());
 		}
 				
 		//H2 = ArrayUtils.remove(H2, H2.length-1);
 		//H2 = ArrayUtils.remove(H2, H2.length-1);
 		
 		//Complex[] H0 = new Complex[1];
-		//H0[0] = new Complex();
+		//H0[0] = new Complex(0);
 		
-		//H=(Complex[]) ArrayUtils.addAll(H, H0, H2);
+		//Complex[] Hall = ArrayUtils.<Complex>addAll(H, H0, HmirrCon);
+		//Complex[] Hall = ObjectA (H, H0, HmirrCon);
 		
-		Complex[] HCon = new Complex[H.length];
+		
+		Complex[] HConcat = new Complex[H.length];
 		
 		for (int i = 0; i < H.length/2; i++) {
-			HCon[i]=H[i];
+			HConcat[i]=H[i];
 		}
-		HCon[H.length/2]=new Complex();
-		for (int j = HCon.length/2+1; j < HCon.length; j++) {
-			HCon[j] = HmirrCon[j-(HCon.length/2+1)];
+		HConcat[H.length/2]=new Complex(0, 0);
+		for (int j = HConcat.length/2+1; j < HConcat.length; j++) {
+			HConcat[j] = HmirrorConjugate[j-(HConcat.length/2+1)];
 		}
 		
+		
 
-		System.out.println("H");
+		/*System.out.println("H");
 		for (int i = 0; i < H.length; i++) {
 			System.out.println("Real " + H[i].re + " Imag " + H[i].im);
 		}
 		System.out.println("HmirrCon");
 		for (int i = 0; i < HmirrCon.length; i++) {
 			System.out.println("Real " + HmirrCon[i].re + " Imag " + HmirrCon[i].im);
+		}*/
+		
+		//Complex[] transferDomain = ifft(HConcat);
+		
+		/*
+		Complex[] y = new Complex[transferDomain.length];
+		Complex temp = new Complex(0,0);
+		for (int i = 0; i < transferDomain.length; i++) {
+			temp = transferDomain[i].add(temp);
+			y[i] = temp;
 		}
-		
-		FastFourierTransformer myIFFT = new FastFourierTransformer(DftNormalization.STANDARD);
-		
+
+		for (int i = 0; i < y.length; i++) {
+			System.out.println("conv " + y);
+		}		
+		*/
 		
 		return null;
 	}
 	
 	
 	
-	private double[] linspace(double startValue, double endValue, int nValues){
+	public static final Complex[] ifft(Complex[] f){
+		double log2f = Math.log(f.length)/Math.log(2);
+		int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
+		int difLength = minLength - f.length;
+		
+		//Complex[] res = transformer.transform(f, TransformType.INVERSE);
+		//return res;
+		return null;
+	}
+	
+	public static final double[] linspace(double startValue, double endValue, int nValues){
 		double step = (endValue - startValue)/(nValues-1);
 		
 		double[] res = new double[nValues];
@@ -134,24 +173,24 @@ public class TransferFunctionClosedLoop {
 	 *            Frequenzachse
 	 * @return Komplexwertiger Frequenzgang.
 	 */
-	public static final Complex[] freqs(TransferFunction g, double[] w) {
-		Complex[] res = new Complex[w.length];
+	public static final Complex[] freqs(TransferFunction g, double[] omega) {
+		Complex[] res = new Complex[omega.length];
 
 		for (int i = 0; i < res.length; i++) {
-			Complex jw = new Complex(0.0, w[i]);
+			Complex jw = new Complex(0.0, omega[i]);
 			Complex zaehler = polyVal(g.getB(), jw);
 			Complex nenner = polyVal(g.getA(), jw);
-			res[i] = zaehler.div(nenner);
+			res[i] = zaehler.divide(nenner);
 		}
 		return res;
 	}
 
 	public static final Complex polyVal(double[] poly, Complex x) {
 
-		Complex res = new Complex();
+		Complex res = new Complex(0, 0);
 
 		for (int i = 0; i < poly.length; i++) {
-			res=res.add(Complex.pow(x, poly.length - i - 1).mul(poly[i]));
+			res=res.add(x.pow(poly.length - i - 1).multiply(poly[i]));
 		}
 		return res;
 	}
