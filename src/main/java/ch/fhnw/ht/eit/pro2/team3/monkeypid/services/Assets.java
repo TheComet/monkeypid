@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import javax.swing.ImageIcon;
+
 /**
  * @author Alex Murray
  */
@@ -21,6 +23,11 @@ public class Assets {
 
     public static String pathToPlatform(String path) {
         return String.join(File.separator, path.split("/")) + File.separator;
+    }
+    
+    public static ImageIcon loadImageIcon(){
+      	ImageIcon icon = new ImageIcon( RESOURCE_PREFIX + "pictures/about.png");
+    	return icon;
     }
 
     public static ArrayList<PolynomialSplineFunction> loadSaniCurves(String fileName, boolean swapXY) {
