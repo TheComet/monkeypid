@@ -169,8 +169,11 @@ public class MathStuff {
 		
 		for (int m = 0; m < M; m++) {
 			//Calculate Denominator polynominal wighout m-th root
+			
 			//copy P in smallP
-			Complex[] smallP = new Complex[P.length];
+			Complex[] smallP = new Complex[P.length-1];
+			
+			/*
 			for (int i = 0; i < smallP.length; i++) {
 				smallP[i] = P[i];
 			}
@@ -179,8 +182,26 @@ public class MathStuff {
 				smallP[j] = smallP[j+1];
 			}
 			//remove last array cell
-			smallP = ArrayUtils.remove(smallP, smallP.length-1);
+			smallP = ArrayUtils.remove(smallP, smallP.length-1); //works?
+			*/
+			
+			//copy every element from second of P in smallP
+			for (int i = 0; i < smallP.length; i++) {
+				smallP[i] = P[i+1];
+			}
+			
 			Complex[] pa = poly(smallP);
+			double[] paReal = new double[pa.length];
+			//pa is real (no imaginary part) -> get only real from pa
+			for (int i = 0; i < paReal.length; i++) {
+				paReal[i] = pa[i].getReal();
+			}
+			
+			//calculate Residues
+			Complex pvB = polyVal(Numerator, P[m]);
+			Complex pvA = polyVal(paReal, P[m]);
+			Complex pvD = pvB.divide(pvA);
+			R[m] = pvD.divide(Denominator[0]);
 		}
 		
 		
