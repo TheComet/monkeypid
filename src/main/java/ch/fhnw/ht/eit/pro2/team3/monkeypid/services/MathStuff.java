@@ -134,7 +134,7 @@ public class MathStuff {
         return symmetric;
     }
     
-    //m
+    //residue help function
     public static Object[] residueSimple(TransferFunction g){
 		Complex R = new Complex(0);
 		Complex P = new Complex(0);
@@ -181,19 +181,39 @@ public class MathStuff {
         return coefficients;
     }
     
+    //remove leading zeros
+    public static final double[] removeLeadingZeros(double[] polynom){
+    	int startIndex = 0;
+		//remove leading Zeros
+		for (int i = 0; i < polynom.length; i++) {
+			if(polynom[i] != 0){
+				startIndex = i;
+				break;
+			}
+		}
+		
+		double[] polynomLeadingZerosRemoved = new double[polynom.length-startIndex];
+		for (int i = 0; i < polynomLeadingZerosRemoved.length; i++) {
+			polynomLeadingZerosRemoved[i] = polynom[startIndex + i];
+		}
+		return polynomLeadingZerosRemoved;
+    }
+    
     //taken from pdf Fachinput_Schrittantwort.pdf
     public static final Complex[] roots(double[] p) {
-        final LaguerreSolver solver = new LaguerreSolver();
-        double[] flip = new double[p.length];
-        // To be conform with Matlab ...
-        for (int i = 0; i < flip.length; i++) {
-            flip[p.length - i - 1] = p[i];
-        }
-        Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
-        Complex[] complexRoots = new Complex[complexRootsReverse.length];
-        for (int i = 0; i < complexRoots.length; i++) {
-            complexRoots[i] = complexRootsReverse[complexRoots.length - i - 1];
-        }
-        return complexRootsReverse;
+    	final LaguerreSolver solver = new LaguerreSolver();
+    	double[] flip = new double[p.length];
+    	// To be conform with Matlab ...
+    	for (int i = 0; i < flip.length; i++) {
+    	flip[p.length - i - 1] = p[i];
+    	}
+    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
+    	Complex[] complexRoots = new Complex[complexRootsReverse.length];
+    	for (int i = 0; i < complexRoots.length; i++) {
+			complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
+		}
+    	return complexRoots;
     }
+    
+    
 }
