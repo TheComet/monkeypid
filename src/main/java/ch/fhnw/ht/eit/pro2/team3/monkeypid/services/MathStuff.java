@@ -80,4 +80,14 @@ public class MathStuff {
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
         return transformer.transform(powerOfTwo, TransformType.INVERSE);
     }
+    
+    public static Object[] residueSimple(TransferFunction g){
+		Complex R = new Complex(0);
+		Complex P = new Complex(0);
+		Complex K = new Complex(0);
+    	return new Object[]{R,P,K};    	
+    }
+    
+    
+    
 }
