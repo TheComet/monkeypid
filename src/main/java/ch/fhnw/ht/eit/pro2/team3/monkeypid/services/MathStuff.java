@@ -7,6 +7,8 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+import java.util.ArrayList;
+
 public class MathStuff {
 
     public static double[] linspace(double startValue, double endValue, int nValues){
@@ -29,8 +31,8 @@ public class MathStuff {
 
         for (int i = 0; i < res.length; i++) {
             Complex s = omegaToS(omega[i]);
-            Complex zaehler = polyVal(g.getB(), s);
-            Complex nenner = polyVal(g.getA(), s);
+            Complex zaehler = polyVal(g.getNumeratorCoefficients(), s);
+            Complex nenner = polyVal(g.getDenominatorCoefficients(), s);
             res[i] = zaehler.divide(nenner);
         }
         return res;
@@ -121,8 +123,8 @@ public class MathStuff {
 		Complex P = new Complex(0);
 		Complex K = new Complex(0);
 		
-		double[] B = g.getB();
-		double[] A = g.getA();
+		double[] B = g.getNumeratorCoefficients();
+		double[] A = g.getDenominatorCoefficients();
 		
 		int startIndex = 0;
 		//remove leading Zeros
@@ -139,5 +141,21 @@ public class MathStuff {
 		}
 		
     	return new Object[]{R,P,K};    	
+    }
+
+    public static double[] poly(double[] coefficients) {
+        double[] c = new double[coefficients.length + 1];
+        c[0] = 1.0;
+        double[] temp = new double[coefficients.length + 1];
+        for(int j = 0; j < coefficients.length; j++) {
+            for(int i = 0; i < c.length; i++) {
+                temp[i] = coefficients[j] * c[i];
+            }
+            for(int i = 1; i < c.length; i++) { // from 1 to j+1
+                c[i] -= temp[i-1];
+            }
+        }
+
+        return c;
     }
 }
