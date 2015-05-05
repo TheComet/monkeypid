@@ -2,12 +2,30 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
+
+import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+import java.util.ArrayList;
+
 public class MathStuff {
+
+    /**
+     * Returns a copy of the array with every element multiplied by the constant.
+     * @param arr Array to multiply.
+     * @param constant Constant to multiply.
+     * @return New array.
+     */
+    public static double[] mul(double[] arr, double constant) {
+        double[] ret = new double[arr.length];
+        for(int i = 0; i < ret.length; i++) {
+            ret[i] = arr[i] * constant;
+        }
+        return ret;
+    }
 
     public static double[] linspace(double startValue, double endValue, int nValues){
         double step = (endValue - startValue)/(nValues-1);
@@ -29,8 +47,8 @@ public class MathStuff {
 
         for (int i = 0; i < res.length; i++) {
             Complex s = omegaToS(omega[i]);
-            Complex zaehler = polyVal(g.getB(), s);
-            Complex nenner = polyVal(g.getA(), s);
+            Complex zaehler = polyVal(g.getNumeratorCoefficients(), s);
+            Complex nenner = polyVal(g.getDenominatorCoefficients(), s);
             res[i] = zaehler.divide(nenner);
         }
         return res;
@@ -116,13 +134,14 @@ public class MathStuff {
         return symmetric;
     }
     
+    //residue help function
     public static Object[] residueSimple(TransferFunction g){
 		Complex R = new Complex(0);
 		Complex P = new Complex(0);
 		Complex K = new Complex(0);
 		
-		double[] B = g.getB();
-		double[] A = g.getA();
+		double[] B = g.getNumeratorCoefficients();
+		double[] A = g.getDenominatorCoefficients();
 		
 		int startIndex = 0;
 		//remove leading Zeros
@@ -140,4 +159,61 @@ public class MathStuff {
 		
     	return new Object[]{R,P,K};    	
     }
+
+    public static double[] poly(double[] roots) {
+        // this was ported from matlab's poly() function
+        // type ">> edit poly" and scroll to line 35.
+        double[] coefficients = new double[roots.length + 1];
+        coefficients[0] = 1.0;
+        double[] temp = new double[roots.length + 1];
+
+        for (double root : roots) {
+            // multiply coefficients with current root and store in temp buffer
+            for (int i = 0; i < coefficients.length; i++) {
+                temp[i] = root * coefficients[i];
+            }
+            // subtract temp buffer from coefficients
+            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+                coefficients[i] -= temp[i - 1];
+            }
+        }
+
+        return coefficients;
+    }
+    
+    //remove leading zeros
+    public static final double[] removeLeadingZeros(double[] polynom){
+    	int startIndex = 0;
+		//remove leading Zeros
+		for (int i = 0; i < polynom.length; i++) {
+			if(polynom[i] != 0){
+				startIndex = i;
+				break;
+			}
+		}
+		
+		double[] polynomLeadingZerosRemoved = new double[polynom.length-startIndex];
+		for (int i = 0; i < polynomLeadingZerosRemoved.length; i++) {
+			polynomLeadingZerosRemoved[i] = polynom[startIndex + i];
+		}
+		return polynomLeadingZerosRemoved;
+    }
+    
+    //taken from pdf Fachinput_Schrittantwort.pdf
+    public static final Complex[] roots(double[] p) {
+    	final LaguerreSolver solver = new LaguerreSolver();
+    	double[] flip = new double[p.length];
+    	// To be conform with Matlab ...
+    	for (int i = 0; i < flip.length; i++) {
+    	flip[p.length - i - 1] = p[i];
+    	}
+    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
+    	Complex[] complexRoots = new Complex[complexRootsReverse.length];
+    	for (int i = 0; i < complexRoots.length; i++) {
+			complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
+		}
+    	return complexRoots;
+    }
+    
+    
 }

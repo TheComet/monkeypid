@@ -155,4 +155,13 @@ public class MathStuffTest {
         assertEquals(4,  result[7].getReal(), delta);
         assertEquals(-2, result[7].getImaginary(), delta);
     }
+
+    @Test
+    public void testPoly() throws Exception {
+        double[] res = MathStuff.poly(new double[]{1, 2, 4});
+        assertEquals(1.0,  res[0], delta);
+        assertEquals(-7.0, res[1], delta);
+        assertEquals(14.0, res[2], delta);
+        assertEquals(-8.0, res[3], delta);
+    }
 }
