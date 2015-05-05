@@ -1,6 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ZellwegerPI;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -33,9 +38,15 @@ public class GraphPanel extends JPanel implements ActionListener {
 		// super(new GridBagLayout());
 		super(new BorderLayout());
 
+        SaniCurves sani = new SaniCurves();
+		Plant plant = new Plant(2, 6, 1, sani);
+        IControllerCalculator cc = new ZellwegerPI(plant, 45);
+        cc.calculate();
+        IController c = cc.getController();
+
 		// create a test series of data
-		ClosedLoop system = new ClosedLoop(null, null);
-		XYSeries series = system.exampleCalculate();
+		ClosedLoop system = new ClosedLoop(plant, c);
+		XYSeries series = system.calculateStepResponse();
 
 		// add series to collection (collection derives from XYDataset)
 		XYSeriesCollection data = new XYSeriesCollection();
