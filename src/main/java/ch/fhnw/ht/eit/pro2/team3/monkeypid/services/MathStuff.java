@@ -80,6 +80,25 @@ public class MathStuff {
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
         return transformer.transform(powerOfTwo, TransformType.INVERSE);
     }
+
+    public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
+        Complex[] symmetric = new Complex[capitalH.length * 2];
+
+        // fill first half with original array
+        System.arraycopy(capitalH, 0, symmetric, 0, capitalH.length);
+
+        // middle is 0
+        symmetric[capitalH.length] = new Complex(0);
+
+        // second half is the original array conjugated and mirrored
+        int sourceIndex = capitalH.length - 1;
+        for(int targetIndex = capitalH.length + 1; targetIndex < symmetric.length; targetIndex++) {
+            symmetric[targetIndex] = capitalH[sourceIndex].conjugate();
+            sourceIndex--;
+        }
+
+        return symmetric;
+    }
     
     public static Object[] residueSimple(TransferFunction g){
 		Complex R = new Complex(0);
@@ -105,7 +124,4 @@ public class MathStuff {
 		
     	return new Object[]{R,P,K};    	
     }
-    
-    
-    
 }

@@ -103,4 +103,34 @@ public class MathStuffTest {
         assertEquals(52, result[5], delta);
         assertEquals(32, result[6], delta);
     }
+
+    @Test
+    public void testSymmetricMirrorConjugate() throws Exception {
+        Complex[] values = new Complex[4];
+        values[0] = new Complex(1, 5);
+        values[1] = new Complex(4, 2);
+        values[2] = new Complex(8, 3);
+        values[3] = new Complex(-5, 8);
+
+        Complex[] result = MathStuff.symmetricMirrorConjugate(values);
+        assertEquals(8, result.length);
+        assertEquals(1,  result[0].getReal(), delta);
+        assertEquals(5,  result[0].getImaginary(), delta);
+        assertEquals(4,  result[1].getReal(), delta);
+        assertEquals(2,  result[1].getImaginary(), delta);
+        assertEquals(8,  result[2].getReal(), delta);
+        assertEquals(3,  result[2].getImaginary(), delta);
+        assertEquals(-5, result[3].getReal(), delta);
+        assertEquals(8,  result[3].getImaginary(), delta);
+
+        assertEquals(0,  result[4].getReal(), delta);
+        assertEquals(0,  result[4].getImaginary(), delta);
+
+        assertEquals(-5, result[5].getReal(), delta);
+        assertEquals(-8, result[5].getImaginary(), delta);
+        assertEquals(8,  result[6].getReal(), delta);
+        assertEquals(-3, result[6].getImaginary(), delta);
+        assertEquals(4,  result[7].getReal(), delta);
+        assertEquals(-2, result[7].getImaginary(), delta);
+    }
 }
