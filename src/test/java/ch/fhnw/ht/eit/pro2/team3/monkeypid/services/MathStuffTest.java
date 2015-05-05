@@ -39,8 +39,8 @@ public class MathStuffTest {
     @Test
     public void testFreqs() throws Exception {
         TransferFunction g = new TransferFunction(
-                new double[] {4.0, 5.0, 6.0},
-                new double[] {1.0, 2.0, 3.0}
+                new double[] {1.0, 2.0, 3.0},
+                new double[] {4.0, 5.0, 6.0}
         );
         Complex[] results = MathStuff.freqs(g, MathStuff.linspace(0, 10, 11));
 

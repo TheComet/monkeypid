@@ -1,10 +1,15 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
+import java.awt.BorderLayout;
+
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
+
+import de.javasoft.plaf.synthetica.*;
 
 import javax.swing.*;
 
@@ -15,55 +20,65 @@ import javax.swing.*;
  */
 public class MonkeyPID {
 
-    public void setLookAndFeel() {
-        try {
-            UIManager
-                    .setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+	public void setLookAndFeel() {
+		try {
+            // TODO @Stierli - Kommentier s züg ih und us, jenachdem welles theme du willsch.
+            // UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSimple2DLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSkyMetallicLookAndFeel.class.getName());
+            UIManager.setLookAndFeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+	}
 
-    public JFrame createFrame() {
-        JFrame frame = new JFrame();
-        frame.setUndecorated(true);
-        frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Easy-PID Smart Controller Design");
+	public JFrame createFrame() {
+		JFrame frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Easy-PID Smart Controller Design");
+		frame.setIconImage(Assets.loadImageIconLogo().getImage());
 
-        return frame;
-    }
+		return frame;
+	}
 
-    public void createMVC(JFrame frame) {
+	public void createMVC(JFrame frame) {
 
-        // typical MVC pattern
-        Model model = new Model();
-        Controller controller = new Controller(model);
-        View view = new View(controller);
-        model.registerControllerCalculatorListener(view.leftPanel);
+		// typical MVC pattern
+		Model model = new Model();
+		Controller controller = new Controller(model);
+		View view = new View(controller);
+		model.registerControllerCalculatorListener(view.leftPanel);
 
-        // add the view to the root pane
-        frame.getContentPane().add(view);
+		// add the view to the root pane
+		frame.getContentPane().add(view);
 
-        // add a menu bar to the frame
-        MenuBar menuBar = new MenuBar(controller, view);
-        frame.setJMenuBar(menuBar);
+		// add a menu bar to the frame
+		MenuBar menuBar = new MenuBar(controller, view);
+		frame.setJMenuBar(menuBar);
 
-    }
+		// add statusBar to window
+		StatusBar statusBar = new StatusBar();
+		frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
+
+	}
 
 	public void go() {
-        SwingUtilities.invokeLater(() -> {
-            setLookAndFeel();
-            JFrame frame = createFrame();
-            createMVC(frame);
+		SwingUtilities.invokeLater(() -> {
+			setLookAndFeel();
+			JFrame frame = createFrame();
+			createMVC(frame);
 
-            frame.pack();
-            frame.setVisible(true);
-        });
-    }
+			frame.pack();
+			frame.setVisible(true);
+		});
+	}
 
 	public static void main(String args[]) {
-        MonkeyPID app = new MonkeyPID();
-        app.go();
+		MonkeyPID app = new MonkeyPID();
+		app.go();
 	}
 }

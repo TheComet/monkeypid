@@ -2,39 +2,38 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.jfree.data.xy.XYSeries;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ClosedLoop {
 
     private Plant plant;
-    private IController IController;
+    private IController controller;
 
-    public ClosedLoop(Plant plant, IController IController) {
+    public ClosedLoop(Plant plant, IController controller) {
         this.plant = plant;
-        this.IController = IController;
+        this.controller = controller;
     }
 
     public XYSeries calculateStepResponse() {
-        /*
-        B = MathStuff.conv(hS.getNumeratorCoefficients(), hR.getNumeratorCoefficients());
-        A = MathStuff.conv(hS.getDenominatorCoefficients(), hR.getDenominatorCoefficients());
 
-        for (int i = 0; i < B.length ; i++) {
-            A[A.length - B.length + i] += B[i];
-        }
+        TransferFunction tfClosedLoop = calculateCloseLoopTransferFunction();
 
-        schrittIfft(new TransferFunction(A, B), 100, 10);
-
-        double fs = 100;
-        int N = 1024;
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
+        double tcMin = (double) Collections.min(timeConstantsList);
+        double tcMax = (double) Collections.max(timeConstantsList);
+        double fs = 1.0/(tcMax/400.0);
+        int N = 2048;
 
         double [] omega = MathStuff.linspace(0, fs * Math.PI, N / 2);
 
         // calculate frequency response
-        Complex[] H = MathStuff.freqs(g, omega);
+        Complex[] H = MathStuff.freqs(tfClosedLoop, omega);
 
         // calculate impulse response
         H = MathStuff.symmetricMirrorConjugate(H);
@@ -56,9 +55,25 @@ public class ClosedLoop {
             series.add(t[i], y[i]);
         }
 
-        return series;*/
+        return series;
+    }
 
-        return null;
+    private TransferFunction calculateCloseLoopTransferFunction() {
+        double[] numeratorCoefficients = MathStuff.conv(
+                plant.getTransferFunction().getNumeratorCoefficients(),
+                controller.getTransferFunction().getNumeratorCoefficients()
+        );
+        double[] denominatorCoefficients = MathStuff.conv(
+                plant.getTransferFunction().getDenominatorCoefficients(),
+                controller.getTransferFunction().getDenominatorCoefficients()
+        );
+
+        for (int i = 0; i < numeratorCoefficients.length ; i++) {
+            denominatorCoefficients[denominatorCoefficients.length - numeratorCoefficients.length + i] +=
+                    numeratorCoefficients[i];
+        }
+
+        return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
     }
 
     public XYSeries exampleCalculate() {

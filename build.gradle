@@ -9,12 +9,22 @@ mainClassName = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID'
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
     compile group: 'org.jfree', name: 'jfreechart', version: '1.0.18'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.5'
+    compile name: 'synthetica'
+    compile name: 'syntheticaAluOxide'
+    compile name: 'syntheticaBlueSteel'
+    compile name: 'syntheticaSilverMoon'
+    compile name: 'syntheticaSimple2D'
+    compile name: 'syntheticaSkyMetallic'
+    compile name: 'syntheticaWhiteVision'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

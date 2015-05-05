@@ -15,6 +15,20 @@ import java.util.ArrayList;
 
 public class MathStuff {
 
+    /**
+     * Returns a copy of the array with every element multiplied by the constant.
+     * @param arr Array to multiply.
+     * @param constant Constant to multiply.
+     * @return New array.
+     */
+    public static double[] mul(double[] arr, double constant) {
+        double[] ret = new double[arr.length];
+        for(int i = 0; i < ret.length; i++) {
+            ret[i] = arr[i] * constant;
+        }
+        return ret;
+    }
+
     public static double[] linspace(double startValue, double endValue, int nValues){
         double step = (endValue - startValue)/(nValues-1);
 

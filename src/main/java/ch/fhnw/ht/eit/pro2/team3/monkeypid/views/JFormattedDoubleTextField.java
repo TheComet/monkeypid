@@ -167,7 +167,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 		return String.format(stFormatter, engVal, engExp);
 	}
 
-	//TODO auskommentiert weil wir keine Errormeldungen m�chten
+	//TODO auskommentiert weil wir keine Errormeldungen möchten
 	/*private void errorMsg() {
 		if (errorDisplayed)
 			return;

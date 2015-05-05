@@ -17,7 +17,7 @@ public class PIController extends AbstractController {
         // Kr (1 + 1/(s*Tn)) = Kr * (s*Tn + 1)/(s*Tn)
         //   Br = Kr*[Tn 1];
         //   Ar = [Tn 0];
-        double[] numeratorCoefficients = new double[] {tn, 1};
+        double[] numeratorCoefficients = new double[] {tn * kr, kr};
         double[] denominatorCoefficients = new double[] {tn, 0};
         setTransferFunction(
                 new TransferFunction(numeratorCoefficients, denominatorCoefficients)

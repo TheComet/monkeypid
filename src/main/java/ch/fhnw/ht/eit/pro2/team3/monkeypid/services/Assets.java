@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
+import java.awt.MediaTracker;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
+
+import javafx.scene.image.Image;
 
 import javax.swing.ImageIcon;
 
@@ -25,9 +28,14 @@ public class Assets {
         return String.join(File.separator, path.split("/")) + File.separator;
     }
     
-    public static ImageIcon loadImageIcon(){
+    public static ImageIcon loadImageIconInfo(){
       	ImageIcon icon = new ImageIcon( RESOURCE_PREFIX + "pictures/about.png");
     	return icon;
+    }
+    
+   public static ImageIcon loadImageIconLogo(){
+	   ImageIcon icon = new ImageIcon(RESOURCE_PREFIX + "pictures/logo.png");
+	   return icon;
     }
 
     public static ArrayList<PolynomialSplineFunction> loadSaniCurves(String fileName, boolean swapXY) {
