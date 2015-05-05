@@ -120,6 +120,24 @@ public class MathStuff {
 		Complex R = new Complex(0);
 		Complex P = new Complex(0);
 		Complex K = new Complex(0);
+		
+		double[] B = g.getB();
+		double[] A = g.getA();
+		
+		int startIndex = 0;
+		//remove leading Zeros
+		for (int i = 0; i < B.length; i++) {
+			if(B[i] != 0){
+				startIndex = i;
+				break;
+			}
+		}
+		
+		double[] BzerosRemoved = new double[B.length-startIndex];
+		for (int i = 0; i < BzerosRemoved.length; i++) {
+			BzerosRemoved[i] = B[startIndex + i];
+		}
+		
     	return new Object[]{R,P,K};    	
     }
 }
