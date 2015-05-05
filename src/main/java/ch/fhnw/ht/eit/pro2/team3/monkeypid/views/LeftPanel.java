@@ -20,8 +20,8 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel
-        implements ActionListener, IControllerCalculatorListener {
+public class LeftPanel extends JPanel implements ActionListener,
+		IControllerCalculatorListener {
 
 	Controller controller;
 
@@ -63,7 +63,7 @@ public class LeftPanel extends JPanel
 	private JButton btSimulate = new JButton("Simulieren");
 
 	// simulation title
-	private JLabel lbSimulationTitle = new JLabel("Simulation");
+	private JLabel lbSimulationTitle = new JLabel("Simulationen");
 
 	// test table
 	private JTable tbTest = new JTable(10, 4);
@@ -83,9 +83,9 @@ public class LeftPanel extends JPanel
 	private JButton btDelete = new JButton("Loeschen");
 	private JButton btAdopt = new JButton("Uebernehmen");
 
-    // table and table model
-    DefaultTableModel tableModel = new DefaultTableModel();
-    JTable table = new JTable(tableModel);
+	// table and table model
+	DefaultTableModel tableModel = new DefaultTableModel();
+	JTable table = new JTable(tableModel);
 
 	/**
 	 * 
@@ -194,14 +194,19 @@ public class LeftPanel extends JPanel
 		 * model.addRow(new Object[] { "v1", "v2", "v3" });
 		 */
 
+		// table
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Kr");
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
 
+		// set prefererred size of table
 		table.setPreferredSize(new Dimension(300, 300));
-		
+
+		// disable user column dragging
+		table.getTableHeader().setReorderingAllowed(false);
+
 		// add header of table to GridBagLaout
 		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
@@ -276,15 +281,9 @@ public class LeftPanel extends JPanel
 	 * 
 	 */
 	public void actionPerformed(ActionEvent e) {
+
 		// if button simulate is pressed
 		if (e.getSource() == btSimulate) {
-			// Stringwerte werden zu Double konvertiert
-			/*
-			 * double tfKsValue = Double.parseDouble(tfKs.getText()); double
-			 * tfTuValue = Double.parseDouble(tfTu.getText()); double tfTgValue
-			 * = Double.parseDouble(tfTg.getText()); double tfTpValue =
-			 * Double.parseDouble(tfTp.getText());
-			 */
 
 			// convert string values to double
 			double tfKsValue = tfKs.doubleValue();
@@ -314,13 +313,13 @@ public class LeftPanel extends JPanel
 			int slKpValue = slKp.getValue();
 			int slTnValue = slTn.getValue();
 			int slTvValue = slTv.getValue();
-			//give over values to controller
+			// give over values to controller
 			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
 		}
 	}
 
-    @Override
-    public void notifyNewController(IController controller) {
-        controller.addToTable(tableModel);
-    }
+	@Override
+	public void notifyNewController(IController controller) {
+		controller.addToTable(tableModel);
+	}
 }
