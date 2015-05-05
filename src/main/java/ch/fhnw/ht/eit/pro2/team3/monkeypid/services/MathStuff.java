@@ -64,13 +64,13 @@ public class MathStuff {
     public static Complex[] ifft(Complex[] f){
         double log2f = Math.log(f.length)/Math.log(2);
         int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
-        Complex[] powerOfEight = new Complex[minLength];
-        System.arraycopy(f, 0, powerOfEight, 0, f.length);
+        Complex[] powerOfTwo = new Complex[minLength];
+        System.arraycopy(f, 0, powerOfTwo, 0, f.length);
         for(int i = f.length; i < minLength; i++) {
-            powerOfEight[i] = new Complex(0);
+            powerOfTwo[i] = new Complex(0);
         }
 
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
-        return transformer.transform(powerOfEight, TransformType.INVERSE);
+        return transformer.transform(powerOfTwo, TransformType.INVERSE);
     }
 }
