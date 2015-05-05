@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.math3.complex.Complex;
 import org.junit.Test;
 
 public class MathStuffResiduenTest {
@@ -63,4 +64,32 @@ public class MathStuffResiduenTest {
 		
 	}
 
+	@Test
+	public void testResidueSimpleRoots() {
+		Complex[] myRoots =  MathStuff.roots(A);
+		
+		double delta = 0.0001;
+
+		/*
+		System.out.println("myRoots");
+		for (int i = 0; i < myRoots.length; i++) {
+			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
+		}
+		*/
+		
+		
+		assertEquals( -2.3190, myRoots[0].getReal(), delta);
+		assertEquals(-1.5915, myRoots[1].getReal(), delta);
+		assertEquals(-0.1529, myRoots[2].getReal(), delta);
+		assertEquals(-0.1529, myRoots[3].getReal(), delta);
+		assertEquals(-0.2777, myRoots[4].getReal(), delta);
+		
+		assertEquals(+ 0.0000, myRoots[0].getImaginary(), delta);
+		assertEquals(+ 0.0000, myRoots[1].getImaginary(), delta);
+		assertEquals( + 0.3537, myRoots[2].getImaginary(), delta);
+		assertEquals(- 0.3537, myRoots[3].getImaginary(), delta);
+		assertEquals(+ 0.0000, myRoots[4].getImaginary(), delta);
+		
+	}
+	
 }
