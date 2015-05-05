@@ -1,8 +1,10 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 
+import static org.junit.Assert.assertEquals;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
@@ -122,26 +124,50 @@ public class MathStuff {
     
     //residue help function
     public static Object[] residueSimple(TransferFunction g){
-		Complex R = new Complex(0);
-		Complex P = new Complex(0);
-		Complex K = new Complex(0);
+		double K = 0.0;
 		
-		double[] B = g.getNumeratorCoefficients();
-		double[] A = g.getDenominatorCoefficients();
+		double[] Numerator = g.getNumeratorCoefficients();
+		double[] Denominator = g.getDenominatorCoefficients();
 		
-		int startIndex = 0;
-		//remove leading Zeros
-		for (int i = 0; i < B.length; i++) {
-			if(B[i] != 0){
-				startIndex = i;
-				break;
+		Numerator = removeLeadingZeros(Numerator);
+		Denominator = removeLeadingZeros(Denominator);
+		
+		int N = Numerator.length -1;
+		int M = Denominator.length -1;
+		
+		//Have Numerator and Denominator the same Order? -> calculate K
+		if(N==M){
+			K = Numerator[0]/Denominator[0];
+			for (int i = 0; i < Numerator.length; i++) {
+				Numerator[i]  = Numerator[i] - K*Denominator[i];
 			}
 		}
-		
-		double[] BzerosRemoved = new double[B.length-startIndex];
-		for (int i = 0; i < BzerosRemoved.length; i++) {
-			BzerosRemoved[i] = B[startIndex + i];
+		else{ //todo
+			K = 0.0;
 		}
+		
+		Complex[] P = roots(Denominator);
+		Complex[] R = new Complex[M];
+		for (int i = 0; i < R.length; i++) {
+			R[i] = new Complex(0);
+		}
+		
+		for (int m = 0; m < M; m++) {
+			//Calculate Denominator polynominal wighout m-th root
+			//copy P in smallP
+			Complex[] smallP = new Complex[P.length];
+			for (int i = 0; i < smallP.length; i++) {
+				smallP[i] = P[i];
+			}
+			//shift smallP left one cell
+			for (int j = m; j < M; j++) {
+				smallP[j] = smallP[j+1];
+			}
+			//remove last array cell
+			smallP = ArrayUtils.remove(smallP, smallP.length-1);
+			
+		}
+		
 		
     	return new Object[]{R,P,K};    	
     }
@@ -200,6 +226,8 @@ public class MathStuff {
 		}
     	return complexRoots;
     }
+    
+    
     
     
 }
