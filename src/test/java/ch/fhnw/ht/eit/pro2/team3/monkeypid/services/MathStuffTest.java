@@ -90,7 +90,7 @@ public class MathStuffTest {
     }
 
     @Test
-    public void testConv() throws Exception {
+    public void testConvDoubles() throws Exception {
         double[] result = MathStuff.conv(
                 new double[] {1, 2, 3, 4},
                 new double[] {5, 6, 7, 8}
@@ -102,6 +102,28 @@ public class MathStuffTest {
         assertEquals(61, result[4], delta);
         assertEquals(52, result[5], delta);
         assertEquals(32, result[6], delta);
+    }
+
+    @Test
+    public void testOnes() throws Exception {
+        double[] result = MathStuff.ones(10);
+        assertEquals(10, result.length);
+        for(double value : result) {
+            assertEquals(1.0, value, delta);
+        }
+    }
+
+    @Test
+    public void testReal() throws Exception {
+        Complex[] cs = new Complex[5];
+        for(int i = 0; i < 5; i++) {
+            cs[i] = new Complex(3*i - 5, 7*i - 20);
+        }
+
+        double[] result = MathStuff.real(cs);
+        for(int i = 0; i < 5; i++) {
+            assertEquals(3*i - 5, result[i], delta);
+        }
     }
 
     @Test
