@@ -15,18 +15,22 @@ public class MathStuff {
         double[] res = new double[nValues];
 
         for (int i = 0; i < nValues; i++) {
-            res[i] = step * i;
+            res[i] = step * i + startValue;
         }
         return res;
+    }
+
+    public static Complex omegaToS(double omega) {
+        return new Complex(0.0, omega);
     }
 
     public static Complex[] freqs(TransferFunction g, double[] omega) {
         Complex[] res = new Complex[omega.length];
 
         for (int i = 0; i < res.length; i++) {
-            Complex jw = new Complex(0.0, omega[i]);
-            Complex zaehler = polyVal(g.getB(), jw);
-            Complex nenner = polyVal(g.getA(), jw);
+            Complex s = omegaToS(omega[i]);
+            Complex zaehler = polyVal(g.getB(), s);
+            Complex nenner = polyVal(g.getA(), s);
             res[i] = zaehler.divide(nenner);
         }
         return res;
@@ -35,10 +39,13 @@ public class MathStuff {
     public static Complex polyVal(double[] poly, Complex s) {
         // If s is zero, the result will be 0. Apparently, apache commons
         // cannot raise the complex number 0+0j to any power without
-        // resulting in NaN. For these reasons, there's no point in
-        // continuing - return directly now.
-        if(s.equals(new Complex(0)))
-            return new Complex(0);
+        // resulting in NaN. For these reasons, we cannot rely on the
+        // algorithm below to return the correct result.
+        if(s.equals(new Complex(0))) {
+            // since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
+            // and we know that s = 0, the result will be b*s^0 = b
+            return new Complex(poly[poly.length - 1]);
+        }
 
         Complex res = new Complex(0);
 
@@ -52,9 +59,9 @@ public class MathStuff {
     }
 
     public static double[] conv(double[] a, double[] b){
-        double[] res = new double[a.length +b.length - 1];
+        double[] res = new double[a.length + b.length - 1];
         for (int n = 0; n < res.length; n++) {
-            for (int i=Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
+            for (int i = Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
                 res[n] += b[i] * a[n - i];
             }
         }
