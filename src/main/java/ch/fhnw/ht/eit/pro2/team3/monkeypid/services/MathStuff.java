@@ -149,18 +149,19 @@ public class MathStuff {
 		int N = Numerator.length -1;
 		int M = Denominator.length -1;
 		
-		//Have Numerator and Denominator the same Order? -> calculate K
+		//Have Numerator and Denominator the same Order? if yes -> calculate K
 		if(N==M){
 			K = Numerator[0]/Denominator[0];
 			for (int i = 0; i < Numerator.length; i++) {
 				Numerator[i]  = Numerator[i] - K*Denominator[i];
 			}
 		}
-		else{ //todo
+		else{
 			K = 0.0;
 		}
 		
 		Complex[] P = roots(Denominator);
+		//zeros(M,1)
 		Complex[] R = new Complex[M];
 		for (int i = 0; i < R.length; i++) {
 			R[i] = new Complex(0);
@@ -179,7 +180,7 @@ public class MathStuff {
 			}
 			//remove last array cell
 			smallP = ArrayUtils.remove(smallP, smallP.length-1);
-			
+			Complex[] pa = poly(smallP);
 		}
 		
 		
@@ -201,6 +202,35 @@ public class MathStuff {
             // subtract temp buffer from coefficients
             for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
                 coefficients[i] -= temp[i - 1];
+            }
+        }
+
+        return coefficients;
+    }
+    
+    //complex version
+    public static Complex[] poly(Complex[] roots) {
+        // this was ported from matlab's poly() function
+        // type ">> edit poly" and scroll to line 35.
+        Complex[] coefficients = new Complex[roots.length + 1];
+        for (int i = 0; i < coefficients.length; i++) {
+			coefficients[i] = new Complex(0.0);
+		}
+        coefficients[0] = new Complex(1.0);
+        
+        Complex[] temp = new Complex[roots.length + 1];
+        for (int i = 0; i < temp.length; i++) {
+			temp[i] = new Complex(0.0);
+		}
+
+        for (Complex root : roots) {
+            // multiply coefficients with current root and store in temp buffer
+            for (int i = 0; i < coefficients.length; i++) {
+                temp[i] = root.multiply(coefficients[i]);
+            }
+            // subtract temp buffer from coefficients
+            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+                coefficients[i] = coefficients[i].subtract(temp[i - 1]);
             }
         }
 
