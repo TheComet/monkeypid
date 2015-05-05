@@ -1,12 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-
 
 import javax.swing.*;
 
@@ -31,10 +31,10 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	// menu item of menu data
 	private JMenuItem menuItemMiniVersion = new JMenuItem(
 			"Zur Mini-Version wechseln");
-	private JMenuItem menuItemExit = new JMenuItem("Exit");
+	private JMenuItem menuItemExit = new JMenuItem("Schliessen");
 
 	// menu help
-	private JMenu menuHelp = new JMenu("Help");
+	private JMenu menuHelp = new JMenu("Hilfe");
 
 	// menu item about
 	private JMenuItem menuItemInfo = new JMenuItem("Info");
@@ -164,34 +164,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// menu item info is pressed
 		if (e.getSource() == menuItemInfo) {
-			
-			
-			
-			
-			/*double[] result = tFCL.getA();
-			for (int i = 0; i < result.length; i++) {
-				System.out.println(result[i]);
-			}
-			double[] resultB = tFCL.getB();
-			for (int i = 0; i < resultB.length; i++) {
-				System.out.println(resultB[i]);
-			}
-			*/
-			
-			
-			//end of test
-			
-			
-			
-			
-			// ImageIcon icon = new ImageIcon(path);
-			
-			//shows dialogBox with informations about the project and the authors
-			JOptionPane
-					.showMessageDialog(
-							this,
-							"Easy-PID\nSmart Controller Design\nVersion: 1.0\n\nFHNW Brugg Windisch\nProjekt 2 Team 3\nYanick Frei\nSimon Wyss\nSimonSturm\nJosua Stierli\nAlex Murray",
-							"Info", JOptionPane.INFORMATION_MESSAGE);
+
+			// shows dialogBox with informations about the project		
+			// used JLabel because icon is not center
+			JLabel label = new JLabel("");
+			label.setIcon(Assets.loadImageIcon());
+			JOptionPane.showMessageDialog(null, label, "Info", JOptionPane.PLAIN_MESSAGE);
 		}
 
 		// switch between normal- and mini-version
