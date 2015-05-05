@@ -11,6 +11,9 @@ import java.net.URL;
 import javax.swing.*;
 
 /**
+ * MenuBar creates a menuBar with two menuItems: data and help. The menuItem
+ * data includes two items. The first one is for selecting the mini- or normal
+ * version. The second item is for closing the whole java application.
  * 
  * @author Josua
  *
@@ -56,6 +59,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			"Buergi_Solenicki-V3.pdf", 'P');
 
 	/**
+	 * The constructor of MenuBar adds all the items to the menuBar.
 	 * 
 	 * @param controller
 	 */
@@ -146,6 +150,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		add(menuHelp);
 	}
 
+	/**
+	 * Opens an URL in the standard browser.
+	 * 
+	 * @param stringURL
+	 */
 	private void openURLInBrowser(String stringURL) {
 		try {
 			Desktop.getDesktop().browse(new URL(stringURL).toURI());
@@ -154,6 +163,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 
+	/**
+	 * Handles the events of the menuBar. - If menuItem exit is pressed, it
+	 * closes the application - If menuItem info is selected, a dialog windows
+	 * is appears with informations about the tool - if menuItem
+	 * miniVersionSelected is pressed, it switch between mini- and normal-version
+	 * 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -165,11 +181,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		// menu item info is pressed
 		if (e.getSource() == menuItemInfo) {
 
-			// shows dialogBox with informations about the project		
+			// shows dialogBox with informations about the project
 			// used JLabel because icon is not center
 			JLabel label = new JLabel("");
-			label.setIcon(Assets.loadImageIcon());
-			JOptionPane.showMessageDialog(null, label, "Info", JOptionPane.PLAIN_MESSAGE);
+			label.setIcon(Assets.loadImageIconInfo());
+			JOptionPane.showMessageDialog(null, label, "Info",
+					JOptionPane.PLAIN_MESSAGE);
 		}
 
 		// switch between normal- and mini-version

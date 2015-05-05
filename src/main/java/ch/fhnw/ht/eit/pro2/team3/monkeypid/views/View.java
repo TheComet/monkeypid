@@ -26,6 +26,9 @@ public class View extends JPanel implements Observer {
 	public GraphPanel graphPanel;
 
 	/**
+	 * The constructor from view adds the panel leftPanel, graphPanel and
+	 * graphDisplayPanel with a GridBagLayout to the view panel.
+	 * For each panel a border with a title will be added.
 	 * 
 	 * @param controller
 	 */
@@ -34,31 +37,32 @@ public class View extends JPanel implements Observer {
 
 		this.controller = controller;
 
-		//create the panels
+		// create the panels
 		leftPanel = new LeftPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
 
-		//add leftPanel to GridBagLayout
+		// add leftPanel to GridBagLayout
 		add(leftPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
-		//set border and title of leftPanel
+		// set border and title of leftPanel
 		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
-		//add graphPanel to GridBagLayout
+		// add graphPanel to GridBagLayout
 		add(graphPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
 						10, 0, 10, 10), 0, 0));
-		//set border and title of graphPanel
+		// set border and title of graphPanel
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 
-		//add graphDisplayPanel to GridBagLayout
+		// add graphDisplayPanel to GridBagLayout
 		add(graphDisplayPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 10, 10), 0, 0));
-		//set border and title of graphDisplayPanel
-		graphDisplayPanel.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
+		// set border and title of graphDisplayPanel
+		graphDisplayPanel
+				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 	}
 
 	/**

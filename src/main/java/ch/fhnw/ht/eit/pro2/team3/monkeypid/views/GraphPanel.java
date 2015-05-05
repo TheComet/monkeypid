@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
+ * GraphPanel is a JPanel which includes the plot of the simulations. For the
+ * plot JFreeChart is used.
  * 
  * @author Josua
  *
@@ -56,7 +58,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 		// need a panel to add the chart to
 		ChartPanel panel = new ChartPanel(chart);
 
-		//TODO beste variante?
+		// TODO beste variante?
 		// set prefered size to 600x400
 		panel.setPreferredSize(new java.awt.Dimension(600, 400));
 
