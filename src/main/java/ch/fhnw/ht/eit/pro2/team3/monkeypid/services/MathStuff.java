@@ -58,7 +58,7 @@ public class MathStuff {
         return res;
     }
 
-    public static double[] conv(double[] a, double[] b){
+    public static double[] conv(double[] a, double[] b) {
         double[] res = new double[a.length + b.length - 1];
         for (int n = 0; n < res.length; n++) {
             for (int i = Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
@@ -66,6 +66,14 @@ public class MathStuff {
             }
         }
         return res;
+    }
+
+    public static double[] ones(int length) {
+        double[] array = new double[length];
+        for(int i = 0; i < length; i++) {
+            array[i] = 1;
+        }
+        return array;
     }
 
     public static Complex[] ifft(Complex[] f){
@@ -79,5 +87,57 @@ public class MathStuff {
 
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
         return transformer.transform(powerOfTwo, TransformType.INVERSE);
+    }
+
+    public static double[] real(Complex[] c) {
+        double[] ret = new double[c.length];
+        for(int i = 0; i < c.length; i++) {
+            ret[i] = c[i].getReal();
+        }
+        return ret;
+    }
+
+    public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
+        Complex[] symmetric = new Complex[capitalH.length * 2];
+
+        // fill first half with original array
+        System.arraycopy(capitalH, 0, symmetric, 0, capitalH.length);
+
+        // middle is 0
+        symmetric[capitalH.length] = new Complex(0);
+
+        // second half is the original array conjugated and mirrored
+        int sourceIndex = capitalH.length - 1;
+        for(int targetIndex = capitalH.length + 1; targetIndex < symmetric.length; targetIndex++) {
+            symmetric[targetIndex] = capitalH[sourceIndex].conjugate();
+            sourceIndex--;
+        }
+
+        return symmetric;
+    }
+    
+    public static Object[] residueSimple(TransferFunction g){
+		Complex R = new Complex(0);
+		Complex P = new Complex(0);
+		Complex K = new Complex(0);
+		
+		double[] B = g.getB();
+		double[] A = g.getA();
+		
+		int startIndex = 0;
+		//remove leading Zeros
+		for (int i = 0; i < B.length; i++) {
+			if(B[i] != 0){
+				startIndex = i;
+				break;
+			}
+		}
+		
+		double[] BzerosRemoved = new double[B.length-startIndex];
+		for (int i = 0; i < BzerosRemoved.length; i++) {
+			BzerosRemoved[i] = B[startIndex + i];
+		}
+		
+    	return new Object[]{R,P,K};    	
     }
 }

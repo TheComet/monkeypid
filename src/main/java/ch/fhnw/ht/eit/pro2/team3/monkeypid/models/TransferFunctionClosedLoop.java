@@ -5,8 +5,6 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 
-import java.util.Comparator;
-
 public class TransferFunctionClosedLoop {
 
 	private double[] B;
@@ -19,21 +17,9 @@ public class TransferFunctionClosedLoop {
 		B = MathStuff.conv(hS.getB(), hR.getB());
 		A = MathStuff.conv(hS.getA(), hR.getA());
 		
-		/*System.out.println("As"+hS.getA()[0]);
-		System.out.println("Bs"+hS.getB()[0]);
-		System.out.println("Br"+hR.getB()[0]);
-		System.out.println("Ar"+hR.getA()[0]);*/
-		
-		System.out.println("laenge von A " + A.length + " laenge von B " + B.length);
-		
 		for (int i = 0; i < B.length ; i++) {
 			A[A.length - B.length + i] += B[i];
 		}
-		
-		//Test 
-		/*for (int i = 0; i < 10; i++) {
-			System.out.println(linspace(0,11, 10)[i]);
-		}*/
 		
 		schrittIfft(new TransferFunction(A, B), 100, 10);
 
@@ -92,7 +78,7 @@ public class TransferFunctionClosedLoop {
 
         System.arraycopy(H, 0, HConcat, 0, H.length);
         System.arraycopy(HmirrorConjugate, 0, HConcat, H.length + 1, HmirrorConjugate.length - 1);
-		HConcat[H.length]=new Complex(0, 0);
+		HConcat[H.length] = new Complex(0, 0);
 
 		Complex[] h = MathStuff.ifft(HConcat);
 

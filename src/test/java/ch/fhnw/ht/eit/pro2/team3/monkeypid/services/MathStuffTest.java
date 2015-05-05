@@ -90,7 +90,7 @@ public class MathStuffTest {
     }
 
     @Test
-    public void testConv() throws Exception {
+    public void testConvDoubles() throws Exception {
         double[] result = MathStuff.conv(
                 new double[] {1, 2, 3, 4},
                 new double[] {5, 6, 7, 8}
@@ -102,5 +102,57 @@ public class MathStuffTest {
         assertEquals(61, result[4], delta);
         assertEquals(52, result[5], delta);
         assertEquals(32, result[6], delta);
+    }
+
+    @Test
+    public void testOnes() throws Exception {
+        double[] result = MathStuff.ones(10);
+        assertEquals(10, result.length);
+        for(double value : result) {
+            assertEquals(1.0, value, delta);
+        }
+    }
+
+    @Test
+    public void testReal() throws Exception {
+        Complex[] cs = new Complex[5];
+        for(int i = 0; i < 5; i++) {
+            cs[i] = new Complex(3*i - 5, 7*i - 20);
+        }
+
+        double[] result = MathStuff.real(cs);
+        for(int i = 0; i < 5; i++) {
+            assertEquals(3*i - 5, result[i], delta);
+        }
+    }
+
+    @Test
+    public void testSymmetricMirrorConjugate() throws Exception {
+        Complex[] values = new Complex[4];
+        values[0] = new Complex(1, 5);
+        values[1] = new Complex(4, 2);
+        values[2] = new Complex(8, 3);
+        values[3] = new Complex(-5, 8);
+
+        Complex[] result = MathStuff.symmetricMirrorConjugate(values);
+        assertEquals(8, result.length);
+        assertEquals(1,  result[0].getReal(), delta);
+        assertEquals(5,  result[0].getImaginary(), delta);
+        assertEquals(4,  result[1].getReal(), delta);
+        assertEquals(2,  result[1].getImaginary(), delta);
+        assertEquals(8,  result[2].getReal(), delta);
+        assertEquals(3,  result[2].getImaginary(), delta);
+        assertEquals(-5, result[3].getReal(), delta);
+        assertEquals(8,  result[3].getImaginary(), delta);
+
+        assertEquals(0,  result[4].getReal(), delta);
+        assertEquals(0,  result[4].getImaginary(), delta);
+
+        assertEquals(-5, result[5].getReal(), delta);
+        assertEquals(-8, result[5].getImaginary(), delta);
+        assertEquals(8,  result[6].getReal(), delta);
+        assertEquals(-3, result[6].getImaginary(), delta);
+        assertEquals(4,  result[7].getReal(), delta);
+        assertEquals(-2, result[7].getImaginary(), delta);
     }
 }
