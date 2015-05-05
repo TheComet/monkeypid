@@ -1,19 +1,32 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 public class TransferFunction {
-	private double[] A;
-	private double[] B;
-	
-	
-	public TransferFunction(double[] A, double[] B){
-		this.A = A;
-		this.B = B;
+	private double[] denominatorCoefficients;
+	private double[] numeratorCoefficients;
+
+	public TransferFunction(double[] numeratorCoefficients, double[] denominatorCoefficients){
+		this.denominatorCoefficients = denominatorCoefficients;
+		this.numeratorCoefficients = numeratorCoefficients;
 	}
-	public double[] getA(){
-		return A;
+
+    /**
+     * @brief Gets the array of denominator coefficients.
+     * @return The coefficients are returned in descending order, i.e. the last
+     * coefficient is the constant value, the first coefficient is the product
+     * of the greatest power.
+     */
+	public double[] getDenominatorCoefficients(){
+		return denominatorCoefficients;
 	}
-	public double[] getB(){
-		return B;
+
+    /**
+     * @brief Gets the array of numerator coefficients.
+     * @return The coefficients are returned in descending order, i.e. the last
+     * coefficient is the constant value, the first coefficient is the product
+     * of the greatest power.
+     */
+	public double[] getNumeratorCoefficients(){
+		return numeratorCoefficients;
 	}
 
 }

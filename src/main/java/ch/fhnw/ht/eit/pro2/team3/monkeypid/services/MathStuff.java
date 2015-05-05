@@ -9,6 +9,8 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+import java.util.ArrayList;
+
 public class MathStuff {
 
     public static double[] linspace(double startValue, double endValue, int nValues){
@@ -31,8 +33,8 @@ public class MathStuff {
 
         for (int i = 0; i < res.length; i++) {
             Complex s = omegaToS(omega[i]);
-            Complex zaehler = polyVal(g.getB(), s);
-            Complex nenner = polyVal(g.getA(), s);
+            Complex zaehler = polyVal(g.getNumeratorCoefficients(), s);
+            Complex nenner = polyVal(g.getDenominatorCoefficients(), s);
             res[i] = zaehler.divide(nenner);
         }
         return res;
@@ -124,8 +126,8 @@ public class MathStuff {
 		Complex P = new Complex(0);
 		Complex K = new Complex(0);
 		
-		double[] B = g.getB();
-		double[] A = g.getA();
+		double[] B = g.getNumeratorCoefficients();
+		double[] A = g.getDenominatorCoefficients();
 		
 		int startIndex = 0;
 		//remove leading Zeros
@@ -142,6 +144,27 @@ public class MathStuff {
 		}
 		
     	return new Object[]{R,P,K};    	
+    }
+
+    public static double[] poly(double[] roots) {
+        // this was ported from matlab's poly() function
+        // type ">> edit poly" and scroll to line 35.
+        double[] coefficients = new double[roots.length + 1];
+        coefficients[0] = 1.0;
+        double[] temp = new double[roots.length + 1];
+
+        for (double root : roots) {
+            // multiply coefficients with current root and store in temp buffer
+            for (int i = 0; i < coefficients.length; i++) {
+                temp[i] = root * coefficients[i];
+            }
+            // subtract temp buffer from coefficients
+            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+                coefficients[i] -= temp[i - 1];
+            }
+        }
+
+        return coefficients;
     }
     
     //remove leading zeros

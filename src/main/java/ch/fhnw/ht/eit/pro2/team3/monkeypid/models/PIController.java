@@ -9,8 +9,19 @@ public class PIController extends AbstractController {
 
     public PIController(String name, double kr, double tn) {
         super(name);
-        setKr(kr);
-        setTn(tn);
+        setParameters(kr, tn);
+    }
+
+    private void calculateTransferFunction() {
+        // Nominator and Denominator Poly of the pi-controller:
+        // Kr (1 + 1/(s*Tn)) = Kr * (s*Tn + 1)/(s*Tn)
+        //   Br = Kr*[Tn 1];
+        //   Ar = [Tn 0];
+        double[] numeratorCoefficients = new double[] {tn, 1};
+        double[] denominatorCoefficients = new double[] {tn, 0};
+        setTransferFunction(
+                new TransferFunction(numeratorCoefficients, denominatorCoefficients)
+        );
     }
 
     @Override
@@ -22,19 +33,17 @@ public class PIController extends AbstractController {
         });
     }
 
+    public void setParameters(double kr, double tn) {
+        this.kr = kr;
+        this.tn = tn;
+        calculateTransferFunction();
+    }
+
     public double getKr() {
         return kr;
     }
 
-    public void setKr(double kr) {
-        this.kr = kr;
-    }
-
     public double getTn() {
         return tn;
-    }
-
-    public void setTn(double tn) {
-        this.tn = tn;
     }
 }
