@@ -58,7 +58,7 @@ public class View extends JPanel implements Observer {
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(0, 0, 10, 10), 0, 0));
 		//set border and title of graphDisplayPanel
-		graphDisplayPanel.setBorder(new TitledBorder((null), "Graph"));
+		graphDisplayPanel.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 	}
 
 	/**

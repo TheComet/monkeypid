@@ -5,6 +5,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import com.sun.org.apache.bcel.internal.generic.IFNULL;
 
 /**
  * 
@@ -41,6 +44,9 @@ public class LeftPanel extends JPanel implements ActionListener,
 	// private JTextField tfTg = new JTextField(5);
 	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(1);
 
+	// info label for wrong value textfields
+	private JLabel lbValueErrorInfo = new JLabel();
+	
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Parasitaere Zeitkonstante:");
@@ -112,61 +118,73 @@ public class LeftPanel extends JPanel implements ActionListener,
 				new Insets(10, 10, 0, 10), 0, 0));
 		add(lbTu, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 0, 0));
+				new Insets(10, 10, 0, 0), 0, 0));
 		add(lbTg, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 0, 0));
+				new Insets(10, 10, 0, 0), 0, 0));
 		add(lbKs, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 0, 0));
+				new Insets(10, 10, 0, 0), 0, 0));
 		add(tfTu, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 5, 10, 10), 50, 0));
+				new Insets(10, 5, 0, 10), 50, 0));
 		add(tfTg, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 5, 10, 10), 50, 0));
+				new Insets(10, 5, 0, 10), 50, 0));
 		add(tfKs, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 5, 10, 10), 50, 0));
+				new Insets(10, 5, 0, 10), 50, 0));
 
+		
+		//set color of error info label to red
+		lbValueErrorInfo.setForeground(Color.RED);
+		
+		//set dummy text to error info label
+		lbValueErrorInfo.setText(" ");
+		
+		//add error info label to GridBagLayout
+		add(lbValueErrorInfo, new GridBagConstraints(0, 2, 17, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(0, 10, 0, 10), 0, 0));
+		
 		// add items for Tp to GridBagLayout
-		add(lbTimeConstantTitle, new GridBagConstraints(0, 2, 6, 1, 0.0, 0.0,
+		add(lbTimeConstantTitle, new GridBagConstraints(0, 3, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
-		add(lbTp, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+		add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 0), 0, 0));
-		add(lbTuInfo, new GridBagConstraints(2, 3, 4, 1, 0.0, 0.0,
+		add(lbTuInfo, new GridBagConstraints(2, 4, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 0, 10, 10), 0, 0));
 		tfTp.setText("10"); // set default value of Tp
-		add(tfTp, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+		add(tfTp, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 10, 0), 50, 0));
 
 		// add label and comboBox for for regulator selection to GridBagLayout
-		add(lbSelectRegulatorTitle, new GridBagConstraints(0, 4, 6, 1, 0.0,
+		add(lbSelectRegulatorTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(10, 10, 0, 10), 0, 0));
-		add(cbSelectRegulator, new GridBagConstraints(0, 5, 2, 1, 0.0, 0.0,
+		add(cbSelectRegulator, new GridBagConstraints(0, 6, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add title and comboBox for overshoot selection to GridBagLayout
-		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 6, 6, 1, 0.0,
+		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 7, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(10, 10, 0, 10), 0, 0));
-		add(cbSelectOvershoot, new GridBagConstraints(0, 7, 6, 1, 0.0, 0.0,
+		add(cbSelectOvershoot, new GridBagConstraints(0, 8, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add button simulate to GridBagLayout
-		add(btSimulate, new GridBagConstraints(0, 8, 6, 1, 0.0, 0.0,
+		add(btSimulate, new GridBagConstraints(0, 9, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add title simulate to GridBagLayout
-		add(lbSimulationTitle, new GridBagConstraints(0, 9, 5, 1, 0.0, 0.0,
+		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
 
@@ -201,18 +219,18 @@ public class LeftPanel extends JPanel implements ActionListener,
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
 
-		// set prefererred size of table
+		// set preferred size of table
 		table.setPreferredSize(new Dimension(300, 300));
 
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
 
 		// add header of table to GridBagLaout
-		add(table.getTableHeader(), new GridBagConstraints(0, 10, 7, 1, 0.0,
+		add(table.getTableHeader(), new GridBagConstraints(0, 11, 7, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(10, 10, 0, 10), 0, 0));
+				GridBagConstraints.NONE, new Insets(10, 11, 0, 10), 0, 0));
 		// add table to GridBagLayout
-		add(table, new GridBagConstraints(0, 11, 7, 1, 0.0, 0.0,
+		add(table, new GridBagConstraints(0, 12, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
 
@@ -237,17 +255,17 @@ public class LeftPanel extends JPanel implements ActionListener,
 		 */
 
 		// add button delete to GridBagLayout
-		add(btDelete, new GridBagConstraints(4, 15, 2, 1, 0.0, 0.0,
+		add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add button adopt to GridBagLayout
-		add(btAdopt, new GridBagConstraints(0, 15, 4, 1, 0.0, 0.0,
+		add(btAdopt, new GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add vertical dummy to GridbagLayout
-		add(new JPanel(), new GridBagConstraints(0, 16, 1, 1, 0.0, 1.0,
+		add(new JPanel(), new GridBagConstraints(0, 17, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
 				new Insets(10, 10, 10, 10), 0, 0));
 
@@ -298,10 +316,31 @@ public class LeftPanel extends JPanel implements ActionListener,
 			// get index of selected overshoot in comboBox
 			int overswingIndex = cbSelectOvershoot.getSelectedIndex();
 
-			// give over the values to controller
-			controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
-					tfTpValue, selectedRegulatorName,
-					overswingTable[overswingIndex]);
+			//handling of wrong entries
+			lbValueErrorInfo.setText(" ");
+			if (tfTuValue == 0){
+				//error message if value is zero
+				lbValueErrorInfo.setText("Wert von Tu darf nicht 0 sein");
+			}else if (tfTgValue == 0) {
+				//error message if value is zero
+				lbValueErrorInfo.setText("Wert von Tg darf nicht 0 sein");
+			}else if(tfKsValue == 0){
+				//error message if value is zero
+				lbValueErrorInfo.setText("Wert von Ks darf nicht 0 sein");
+			}else if ((tfTuValue/tfTgValue)>0.64173) {
+				//error message if tu/tg is bigger than 0.64173 (value from matlab sani example)
+				lbValueErrorInfo.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
+			}else if ((tfTuValue/tfTgValue)<0.001) {
+				//error message if tu/tg is smaller than 0.001 (value from matlab sani example)
+				lbValueErrorInfo.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
+			}else{
+				lbValueErrorInfo.setText(" ");
+				// give over the values to controller
+				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
+						tfTpValue, selectedRegulatorName,
+						overswingTable[overswingIndex]);
+			}
+
 		}
 		// if button delete is pressed
 		if (e.getSource() == btDelete) {
