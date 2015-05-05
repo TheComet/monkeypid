@@ -99,4 +99,11 @@ public class MathStuff {
 
         return symmetric;
     }
+    
+    public static Object[] residueSimple(TransferFunction g){
+		Complex R = new Complex(0);
+		Complex P = new Complex(0);
+		Complex K = new Complex(0);
+    	return new Object[]{R,P,K};    	
+    }
 }
