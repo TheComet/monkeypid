@@ -9,6 +9,8 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
+import de.javasoft.plaf.synthetica.*;
+
 import javax.swing.*;
 
 /**
@@ -20,7 +22,13 @@ public class MonkeyPID {
 
 	public void setLookAndFeel() {
 		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            // TODO @Stierli - Kommentier s züg ih und us, jenachdem welles theme du willsch.
+            // UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSimple2DLookAndFeel.class.getName());
+            // UIManager.setLookAndFeel(SyntheticaSkyMetallicLookAndFeel.class.getName());
+            UIManager.setLookAndFeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}

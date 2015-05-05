@@ -57,4 +57,8 @@ public class Plant {
     public double[] getTimeConstants() {
         return this.timeConstants;
     }
+
+    public TransferFunction getTransferFunction() {
+        return transferFunction;
+    }
 }
