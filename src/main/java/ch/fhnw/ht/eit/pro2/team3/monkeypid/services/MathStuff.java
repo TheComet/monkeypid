@@ -143,19 +143,24 @@ public class MathStuff {
     	return new Object[]{R,P,K};    	
     }
 
-    public static double[] poly(double[] coefficients) {
-        double[] c = new double[coefficients.length + 1];
-        c[0] = 1.0;
-        double[] temp = new double[coefficients.length + 1];
-        for(int j = 0; j < coefficients.length; j++) {
-            for(int i = 0; i < c.length; i++) {
-                temp[i] = coefficients[j] * c[i];
+    public static double[] poly(double[] roots) {
+        // this was ported from matlab's poly() function
+        // type ">> edit poly" and scroll to line 35.
+        double[] coefficients = new double[roots.length + 1];
+        coefficients[0] = 1.0;
+        double[] temp = new double[roots.length + 1];
+
+        for (double root : roots) {
+            // multiply coefficients with current root and store in temp buffer
+            for (int i = 0; i < coefficients.length; i++) {
+                temp[i] = root * coefficients[i];
             }
-            for(int i = 1; i < c.length; i++) { // from 1 to j+1
-                c[i] -= temp[i-1];
+            // subtract temp buffer from coefficients
+            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+                coefficients[i] -= temp[i - 1];
             }
         }
 
-        return c;
+        return coefficients;
     }
 }
