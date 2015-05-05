@@ -19,6 +19,9 @@ import javax.swing.table.DefaultTableModel;
 import com.sun.org.apache.bcel.internal.generic.IFNULL;
 
 /**
+ * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
+ * comboBox to select the regulator, a comboBox to select the overshoot, the
+ * buttons and the table with the results of the simulation.
  * 
  * @author Josua
  *
@@ -46,7 +49,7 @@ public class LeftPanel extends JPanel implements ActionListener,
 
 	// info label for wrong value textfields
 	private JLabel lbValueErrorInfo = new JLabel();
-	
+
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Parasitaere Zeitkonstante:");
@@ -94,6 +97,9 @@ public class LeftPanel extends JPanel implements ActionListener,
 	JTable table = new JTable(tableModel);
 
 	/**
+	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
+	 * the components to the panel. Furthermore it creates the table for the
+	 * results and the buttons listen to the ActionListener
 	 * 
 	 * @param controller
 	 */
@@ -135,18 +141,17 @@ public class LeftPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
 
-		
-		//set color of error info label to red
+		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.RED);
-		
-		//set dummy text to error info label
+
+		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");
-		
-		//add error info label to GridBagLayout
+
+		// add error info label to GridBagLayout
 		add(lbValueErrorInfo, new GridBagConstraints(0, 2, 17, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 0, 10), 0, 0));
-		
+
 		// add items for Tp to GridBagLayout
 		add(lbTimeConstantTitle, new GridBagConstraints(0, 3, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -197,7 +202,6 @@ public class LeftPanel extends JPanel implements ActionListener,
 		 * DefaultTableModel model = new DefaultTableModel(); JTable table = new
 		 * JTable(model);
 		 * 
-		 * model.addColumn("Col1"); model.addColumn("Col2");
 		 * model.addColumn("Col3");
 		 * 
 		 * String testheader[] = new String[] { "Prority", "Task Title",
@@ -206,10 +210,6 @@ public class LeftPanel extends JPanel implements ActionListener,
 		 * model.setColumnIdentifiers(testheader); table.setModel(model);
 		 * 
 		 * model.addRow(new Object[] { "v1", "v2" });
-		 * 
-		 * model.addRow(new Object[] { "v1" });
-		 * 
-		 * model.addRow(new Object[] { "v1", "v2", "v3" });
 		 */
 
 		// table
@@ -276,13 +276,13 @@ public class LeftPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Setzt die Elemente auf sichtbar/unsichtbar welche sich in der Normal- und
-	 * der Mini-Version unterscheiden
+	 * Sets the elements to visible or invisible. It depends on which version
+	 * (mini or normal) is selected in the menu.
 	 * 
 	 * @param MiniVersionOn
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
-		// set all changing components to un- or visible
+		// set all changing components to in- or visible
 		lbSimulationTitle.setVisible(miniVersionSelected);
 		tbTest.setVisible(miniVersionSelected);
 		slKp.setVisible(miniVersionSelected);
@@ -316,24 +316,28 @@ public class LeftPanel extends JPanel implements ActionListener,
 			// get index of selected overshoot in comboBox
 			int overswingIndex = cbSelectOvershoot.getSelectedIndex();
 
-			//handling of wrong entries
+			// handling of wrong entries
 			lbValueErrorInfo.setText(" ");
-			if (tfTuValue == 0){
-				//error message if value is zero
+			if (tfTuValue == 0) {
+				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tu darf nicht 0 sein");
-			}else if (tfTgValue == 0) {
-				//error message if value is zero
+			} else if (tfTgValue == 0) {
+				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tg darf nicht 0 sein");
-			}else if(tfKsValue == 0){
-				//error message if value is zero
+			} else if (tfKsValue == 0) {
+				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Ks darf nicht 0 sein");
-			}else if ((tfTuValue/tfTgValue)>0.64173) {
-				//error message if tu/tg is bigger than 0.64173 (value from matlab sani example)
-				lbValueErrorInfo.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
-			}else if ((tfTuValue/tfTgValue)<0.001) {
-				//error message if tu/tg is smaller than 0.001 (value from matlab sani example)
-				lbValueErrorInfo.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
-			}else{
+			} else if ((tfTuValue / tfTgValue) > 0.64173) {
+				// error message if tu/tg is bigger than 0.64173 (value from
+				// matlab sani example)
+				lbValueErrorInfo
+						.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
+			} else if ((tfTuValue / tfTgValue) < 0.001) {
+				// error message if tu/tg is smaller than 0.001 (value from
+				// matlab sani example)
+				lbValueErrorInfo
+						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
+			} else {
 				lbValueErrorInfo.setText(" ");
 				// give over the values to controller
 				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
