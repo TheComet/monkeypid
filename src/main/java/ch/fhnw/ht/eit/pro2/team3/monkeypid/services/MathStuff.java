@@ -112,6 +112,14 @@ public class MathStuff {
         return ret;
     }
 
+    public static double[] imag(Complex[] c) {
+        double[] ret = new double[c.length];
+        for(int i = 0; i < c.length; i++) {
+            ret[i] = c[i].getImaginary();
+        }
+        return ret;
+    }
+
     public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
         Complex[] symmetric = new Complex[capitalH.length * 2];
 
