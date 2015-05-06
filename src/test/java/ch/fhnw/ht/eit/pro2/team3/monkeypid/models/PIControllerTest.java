@@ -10,7 +10,7 @@ public class PIControllerTest {
 	
 	@Test
     public void testPIControllerConstructor()  throws Exception {
-			//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
+		//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
 		//Tn = 3.3122, Kr =    0.9840
 		double Kr = 0.9840;
 		double Tn = 3.3122;

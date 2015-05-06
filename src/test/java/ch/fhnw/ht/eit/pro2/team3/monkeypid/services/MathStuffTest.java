@@ -127,6 +127,19 @@ public class MathStuffTest {
     }
 
     @Test
+    public void testImag() throws Exception {
+        Complex[] cs = new Complex[5];
+        for(int i = 0; i < 5; i++) {
+            cs[i] = new Complex(3*i - 5, 7*i - 20);
+        }
+
+        double[] result = MathStuff.imag(cs);
+        for(int i = 0; i < 5; i++) {
+            assertEquals(7*i - 20, result[i], delta);
+        }
+    }
+
+    @Test
     public void testSymmetricMirrorConjugate() throws Exception {
         Complex[] values = new Complex[4];
         values[0] = new Complex(1, 5);

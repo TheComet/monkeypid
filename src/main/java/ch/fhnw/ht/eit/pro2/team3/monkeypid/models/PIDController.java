@@ -11,10 +11,12 @@ public class PIDController extends AbstractController {
 
     public PIDController(String name, double tn, double tv, double kr, double tp) {
         super(name);
-        setKr(kr);
-        setTn(tn);
-        setTv(tv);
-        setTp(tp);
+        setParameters(tn, tv, kr, tp);
+    }
+
+    @Override
+    protected void calculateTransferFunction() {
+        
     }
 
     @Override
@@ -28,35 +30,27 @@ public class PIDController extends AbstractController {
         });
     }
 
-    public double getTn() {
-        return tn;
+    public void setParameters(double tn, double tv, double kr, double tp) {
+        this.tn = tn;
+        this.tv = tv;
+        this.kr = kr;
+        this.tp = tp;
+        calculateTransferFunction();
     }
 
-    public void setTn(double tn) {
-        this.tn = tn;
+    public double getTn() {
+        return tn;
     }
 
     public double getTv() {
         return tv;
     }
 
-    public void setTv(double tv) {
-        this.tv = tv;
-    }
-
     public double getKr() {
         return kr;
     }
 
-    public void setKr(double kr) {
-        this.kr = kr;
-    }
-
     public double getTp() {
         return tp;
-    }
-
-    public void setTp(double tp) {
-        this.tp = tp;
     }
 }

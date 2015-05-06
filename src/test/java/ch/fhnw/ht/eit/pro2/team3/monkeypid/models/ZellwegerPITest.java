@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import org.junit.Test;
 
@@ -7,7 +8,6 @@ import static org.junit.Assert.*;
 
 public class ZellwegerPITest {
 
-    double delta = 0.001; // seems to be the closest accuracy we can get
     SaniCurves sani = new SaniCurves();
 
     @Test
@@ -16,8 +16,8 @@ public class ZellwegerPITest {
         cc.calculate();
         PIController c = (PIController) cc.getController();
 
-        assertEquals(3.3122, c.getTn(), delta);
-        assertEquals(0.984, c.getKr(), delta);
+        assertEquals(3.3122, c.getTn(), TestGlobals.zellwegerDelta);
+        assertEquals(0.984, c.getKr(), TestGlobals.zellwegerDelta);
     }
 
     @Test
@@ -26,8 +26,8 @@ public class ZellwegerPITest {
         cc.calculate();
         PIController c = (PIController) cc.getController();
 
-        assertEquals(6.541, c.getTn(), delta);
-        assertEquals(0.5453, c.getKr(), delta);
+        assertEquals(6.541, c.getTn(), TestGlobals.zellwegerDelta);
+        assertEquals(0.5453, c.getKr(), TestGlobals.zellwegerDelta);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ZellwegerPITest {
         cc.calculate();
         PIController c = (PIController)cc.getController();
 
-        assertEquals(6.541, c.getTn(), delta);
-        assertEquals(0.0624, c.getKr(), delta);
+        assertEquals(6.541, c.getTn(), TestGlobals.zellwegerDelta);
+        assertEquals(0.0624, c.getKr(), TestGlobals.zellwegerDelta);
     }
 }
