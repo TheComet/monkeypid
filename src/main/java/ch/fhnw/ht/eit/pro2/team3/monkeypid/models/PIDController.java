@@ -21,7 +21,7 @@ public class PIDController extends AbstractController {
         //    = Kr * (s^2(Tn*Tv + Tn*Tp) + s*(Tn+Tv) + 1)/(s^2*(Tn*Tp)+ s*Tn)
         // Br = Kr*[Tn*Tv+Tn*Tp Tn+Tv 1];
         // Ar = [Tn*Tp Tn 0];
-        double[] numeratorCoefficients = new double[] {kr*tn*tv + kr*tn*tp, kr*tn + kr*tv, kr};
+        double[] numeratorCoefficients = new double[] {kr * (tn*tv + tn*tp), kr * (tn + tv), kr};
         double[] denominatorCoefficients = new double[] {tn*tp, tn, 0};
         setTransferFunction(
                 new TransferFunction(numeratorCoefficients, denominatorCoefficients)
