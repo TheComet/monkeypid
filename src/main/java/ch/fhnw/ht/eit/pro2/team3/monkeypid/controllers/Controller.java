@@ -37,9 +37,7 @@ public class Controller {
                                  OverswingValueTuple overswing){
         model.updatePlant(ksValue, tuValue, tgValue);
 		model.updatePhaseMargin(overswing.angle());
-		model.clearSimulations();
         model.simulateAll();
-		System.out.println(ksValue+"\n"+tuValue+"\n"+tgValue+"\n"+tpValue+"\n"+selectedRegulatorName+"\n"+overswing.angle());
 	}
 
 	/**

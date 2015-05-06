@@ -104,7 +104,7 @@ public class ClosedLoop {
     }
 
     private void notifyCalculationComplete() {
-        for(IClosedLoopListener listener : listeners) {
+        for (IClosedLoopListener listener : listeners) {
             listener.onStepResponseCalculationComplete(this);
         }
     }

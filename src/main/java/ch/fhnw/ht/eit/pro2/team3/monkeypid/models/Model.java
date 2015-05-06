@@ -5,8 +5,13 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListen
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Model implements IControllerCalculatorListener {
+
+    private boolean isCalculating = false;
+    private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     // have the model own the sani curves, so they don't have to be reloaded from
     // disk every time a new calculation is performed.
@@ -31,7 +36,8 @@ public class Model implements IControllerCalculatorListener {
         this.phaseMargin = phaseMargin;
     }
 
-    public void clearSimulations() {
+    private void clearSimulations() {
+
         // notify all listeners that we're removing all closed loops
         for(ClosedLoop loop : closedLoops) {
             for (IModelListener listener : listeners) {
@@ -42,10 +48,24 @@ public class Model implements IControllerCalculatorListener {
     }
 
     public void simulateAll() {
-        dispatchControllerCalculators();
+
+        // It's not thread safe to call this method while calculators are still active
+        if(isSimulationActive()) {
+            return;
+        }
+
+        clearSimulations();
+        threadPool.submit(this::dispatchControllerCalculators);
     }
 
-    public void dispatchControllerCalculators() {
+    public boolean isSimulationActive() {
+        int queued = threadPool.getQueue().size();
+        int active = threadPool.getActiveCount();
+        return (queued + active > 0);
+    }
+
+    private void dispatchControllerCalculators() {
+
         ArrayList<IControllerCalculator> calculators = new ArrayList<>();
 
         calculators.add(new FistFormulaOppeltPI(plant));
@@ -65,7 +85,7 @@ public class Model implements IControllerCalculatorListener {
 
         for(IControllerCalculator calculator : calculators) {
             calculator.registerListener(this);
-            calculator.run();
+            calculator.run(); // for some reason, this can't be threaded
         }
     }
 
@@ -88,6 +108,6 @@ public class Model implements IControllerCalculatorListener {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
         closedLoops.add(closedLoop);
         notifyAddClosedLoop(closedLoop);
-        closedLoop.calculateStepResponse(4 * 1024);
+        threadPool.submit(() -> closedLoop.calculateStepResponse(4 * 1024));
     }
 }

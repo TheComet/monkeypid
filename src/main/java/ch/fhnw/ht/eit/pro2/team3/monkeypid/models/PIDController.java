@@ -29,7 +29,7 @@ public class PIDController extends AbstractController {
     }
 
     @Override
-    public void addToTable(DefaultTableModel table) {
+    public synchronized void addToTable(DefaultTableModel table) {
         table.addRow(new String[] {
                 getName(),
                 Double.toString(getKr()),

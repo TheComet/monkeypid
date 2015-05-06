@@ -1,27 +1,18 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ZellwegerPI;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * GraphPanel is a JPanel which includes the plot of the simulations. For the
@@ -75,7 +66,9 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
     @Override
     public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        dataCollection.removeSeries(closedLoop.getStepResponse());
+        if(closedLoop.getStepResponse() != null) {
+            dataCollection.removeSeries(closedLoop.getStepResponse());
+        }
     }
 
     @Override
