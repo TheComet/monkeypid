@@ -14,6 +14,7 @@ public class FistFormulaOppeltPITest {
 		c.calculate();
 		// TODO: calc.getController();
 		// TODO: assertEquals("OppeltPI Test failed",calc.getController(),); //Insert MathStuff Value
+		fail("Not yet implemented");
 	}
 
 	@Test

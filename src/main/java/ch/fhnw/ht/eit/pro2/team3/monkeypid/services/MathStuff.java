@@ -1,17 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
-
-import static org.junit.Assert.assertEquals;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
-
-import java.util.ArrayList;
 
 public class MathStuff {
 
