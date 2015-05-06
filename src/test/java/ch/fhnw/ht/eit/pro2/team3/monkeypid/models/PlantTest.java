@@ -12,20 +12,20 @@ public class PlantTest {
     @Test
     public void testTimeConstantsTu2Tg6Ks1() throws Exception {
         Plant plant = new Plant(2, 6, 1, sani);
-        assertEquals(0.3981, plant.getTimeConstants()[0], TestGlobals.saniDelta);
-        assertEquals(0.6101, plant.getTimeConstants()[1], TestGlobals.saniDelta);
-        assertEquals(0.9350, plant.getTimeConstants()[2], TestGlobals.saniDelta);
-        assertEquals(1.4328, plant.getTimeConstants()[3], TestGlobals.saniDelta);
-        assertEquals(2.1957, plant.getTimeConstants()[4], TestGlobals.saniDelta);
+        assertEquals(0.398122038260471, plant.getTimeConstants()[0], TestGlobals.saniDelta);
+        assertEquals(0.610104818935287, plant.getTimeConstants()[1], TestGlobals.saniDelta);
+        assertEquals(0.934959269560781, plant.getTimeConstants()[2], TestGlobals.saniDelta);
+        assertEquals(1.43278467667758, plant.getTimeConstants()[3], TestGlobals.saniDelta);
+        assertEquals(2.19568059974042, plant.getTimeConstants()[4], TestGlobals.saniDelta);
     }
 
     @Test
     public void testTimeConstantsTu2Tg9Ks3() throws Exception {
         Plant plant = new Plant(2, 9, 3, sani);
-        assertEquals(0.4664, plant.getTimeConstants()[0], TestGlobals.saniDelta);
-        assertEquals(0.9721, plant.getTimeConstants()[1], TestGlobals.saniDelta);
-        assertEquals(2.0254, plant.getTimeConstants()[2], TestGlobals.saniDelta);
-        assertEquals(4.2207, plant.getTimeConstants()[3], TestGlobals.saniDelta);
+        assertEquals(0.466382178287074, plant.getTimeConstants()[0], TestGlobals.saniDelta);
+        assertEquals(0.971902999577522, plant.getTimeConstants()[1], TestGlobals.saniDelta);
+        assertEquals(2.02536778754516, plant.getTimeConstants()[2], TestGlobals.saniDelta);
+        assertEquals(4.22070379102517, plant.getTimeConstants()[3], TestGlobals.saniDelta);
     }
 
     @Test
@@ -38,12 +38,12 @@ public class PlantTest {
 
         // compare denominator with results from matlab
         assertEquals(6, plant.getTransferFunction().getDenominatorCoefficients().length);
-        assertEquals(0.7144, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
-        assertEquals(4.5537, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
-        assertEquals(10.642, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
-        assertEquals(11.382, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
-        assertEquals(5.5717, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
-        assertEquals(1.0000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
+        assertEquals(0.714436211262539, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
+        assertEquals(4.55367479337852, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
+        assertEquals(10.6419570918724, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
+        assertEquals(11.3822681247620, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
+        assertEquals(5.57165140317454, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
+        assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
     }
 
     @Test
@@ -56,11 +56,11 @@ public class PlantTest {
 
         // compare denominator with results from matlab
         assertEquals(5, plant.getTransferFunction().getDenominatorCoefficients().length);
-        assertEquals(3.8748, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
-        assertEquals(15.126, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
-        assertEquals(17.985, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
-        assertEquals(7.6843, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
-        assertEquals(1.0000, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
+        assertEquals(3.87483881860849, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
+        assertEquals(15.1263568000050, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
+        assertEquals(17.9853879084779, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
+        assertEquals(7.68435675643493, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
+        assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
     }
 
     @Test
@@ -76,12 +76,12 @@ public class PlantTest {
 
         // compare denominator with results from matlab
         assertEquals(6, plant.getTransferFunction().getDenominatorCoefficients().length);
-        assertEquals(0.7144, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
-        assertEquals(4.5537, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
-        assertEquals(10.641, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
-        assertEquals(11.382, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
-        assertEquals(5.5717, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
-        assertEquals(1.0000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
+        assertEquals(0.714436211262539, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
+        assertEquals(4.55367479337852, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
+        assertEquals(10.6419570918724, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
+        assertEquals(11.3822681247620, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
+        assertEquals(5.57165140317454, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
+        assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
     }
 
     @Test
@@ -97,10 +97,10 @@ public class PlantTest {
 
         // compare denominator with results from matlab
         assertEquals(5, plant.getTransferFunction().getDenominatorCoefficients().length);
-        assertEquals(3.8748, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
-        assertEquals(15.126, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
-        assertEquals(17.985, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
-        assertEquals(7.6844, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
-        assertEquals(1.0000, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
+        assertEquals(3.87483881860849, plant.getTransferFunction().getDenominatorCoefficients()[0], TestGlobals.plantTransferDelta);
+        assertEquals(15.1263568000050, plant.getTransferFunction().getDenominatorCoefficients()[1], TestGlobals.plantTransferDelta);
+        assertEquals(17.9853879084779, plant.getTransferFunction().getDenominatorCoefficients()[2], TestGlobals.plantTransferDelta);
+        assertEquals(7.68435675643493, plant.getTransferFunction().getDenominatorCoefficients()[3], TestGlobals.plantTransferDelta);
+        assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
     }
 }
