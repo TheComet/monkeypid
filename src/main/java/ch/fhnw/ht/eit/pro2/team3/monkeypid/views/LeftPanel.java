@@ -95,7 +95,11 @@ public class LeftPanel extends JPanel implements ActionListener,
 	// table and table model
 	DefaultTableModel tableModel = new DefaultTableModel();
 	JTable table = new JTable(tableModel);
-
+	
+	// adjustment slider
+	private JLabel lbTrimmSlider = new JLabel("Trimm fÃ¼r Zellwegermethode");
+	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, 45, 150, 100);
+	
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
 	 * the components to the panel. Furthermore it creates the table for the
@@ -263,11 +267,23 @@ public class LeftPanel extends JPanel implements ActionListener,
 		add(btAdopt, new GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
+		
+		// add title for trimm slider to GridbagLayout
+		add(lbTrimmSlider, new GridBagConstraints(0, 17, 2, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(10, 10, 0, 10), 0, 0));	
+		
+		// add the trimm slider to GridbagLayout
+		add(slTrimmSlider, new GridBagConstraints(0, 18, 7, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL,
+				new Insets(0, 10, 10, 10), 0, 0));
 
+		
 		// add vertical dummy to GridbagLayout
-		add(new JPanel(), new GridBagConstraints(0, 17, 1, 1, 0.0, 1.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
-				new Insets(10, 10, 10, 10), 0, 0));
+		add(new JPanel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
+				new Insets(10, 0, 10, 10), 0, 0));
+
 
 		// add ActionListener to buttons
 		btSimulate.addActionListener(this);
@@ -331,14 +347,16 @@ public class LeftPanel extends JPanel implements ActionListener,
 				// error message if tu/tg is bigger than 0.64173 (value from
 				// matlab sani example)
 				lbValueErrorInfo
-						.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
+						.setText("Tu/Tg zu gross N > 8  => Verhï¿½ltnis kleiner wï¿½hlen");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
 				lbValueErrorInfo
-						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
+						.setText("Tu/Tg zu klein N = 1  => Verhï¿½ltnis grï¿½sser wï¿½hlen");
 			} else {
+				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
+				
 				// give over the values to controller
 				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
 						tfTpValue, selectedRegulatorName,

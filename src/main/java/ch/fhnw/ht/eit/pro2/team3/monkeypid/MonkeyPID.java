@@ -23,12 +23,12 @@ public class MonkeyPID {
 	public void setLookAndFeel() {
 		try {
             // TODO @Stierli - Kommentier s züg ih und us, jenachdem welles theme du willsch.
-            // UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
+             UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
             // UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
             // UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
             // UIManager.setLookAndFeel(SyntheticaSimple2DLookAndFeel.class.getName());
             // UIManager.setLookAndFeel(SyntheticaSkyMetallicLookAndFeel.class.getName());
-            UIManager.setLookAndFeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
+            //UIManager.setLookAndFeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -62,7 +62,7 @@ public class MonkeyPID {
 
 		// add statusBar to window
 		StatusBar statusBar = new StatusBar();
-		frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
+		//frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 
 	}
 
