@@ -89,6 +89,7 @@ public class MathStuffTest {
         assertEquals(0.0, result.getImaginary(), delta);
     }
 
+    /*
     @Test
     public void testConvDoubles() throws Exception {
         double[] result = MathStuff.conv(
@@ -103,6 +104,16 @@ public class MathStuffTest {
         assertEquals(52, result[5], delta);
         assertEquals(32, result[6], delta);
     }
+
+    @Test
+    public void testConvDifferentArrayLengths() throws Exception {
+        double[] result = MathStuff.conv(
+                new double[] {1, 2, 3, 4},
+                new double[] {26, 6}
+        );
+        double[] expected = new double[] {2, 30, 58, 86, 104};
+        assertArrayEquals(expected, result, delta);
+    }*/
 
     @Test
     public void testOnes() throws Exception {

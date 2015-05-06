@@ -4,6 +4,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
 import java.util.Arrays;
@@ -12,17 +13,19 @@ import java.util.List;
 
 public class ClosedLoop {
 
+    private TransferFunction transferFunction;
     private Plant plant;
-    private IController controller;
 
     public ClosedLoop(Plant plant, IController controller) {
+        setPlantAndController(plant, controller);
+    }
+
+    public void setPlantAndController(Plant plant, IController controller) {
         this.plant = plant;
-        this.controller = controller;
+        this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
     }
 
     public XYSeries calculateStepResponse() {
-
-        TransferFunction tfClosedLoop = calculateCloseLoopTransferFunction();
 
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
         double tcMin = (double) Collections.min(timeConstantsList);
@@ -33,7 +36,7 @@ public class ClosedLoop {
         double [] omega = MathStuff.linspace(0, fs * Math.PI, N / 2);
 
         // calculate frequency response
-        Complex[] H = MathStuff.freqs(tfClosedLoop, omega);
+        Complex[] H = MathStuff.freqs(transferFunction, omega);
 
         // calculate impulse response
         H = MathStuff.symmetricMirrorConjugate(H);
@@ -41,7 +44,7 @@ public class ClosedLoop {
 
         // calculate step response - note that h doesn't have an
         // imaginary part, so we can use conv as if it were a double
-        double[] y = MathStuff.conv(MathStuff.real(h), MathStuff.ones(N+1));
+        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(N + 1));
 
         // cut away mirrored part
         y = Arrays.copyOfRange(y, 0, y.length / 2);
@@ -58,22 +61,31 @@ public class ClosedLoop {
         return series;
     }
 
-    private TransferFunction calculateCloseLoopTransferFunction() {
-        double[] numeratorCoefficients = MathStuff.conv(
+    private static TransferFunction calculateCloseLoopTransferFunction(Plant plant, IController controller) {
+        double[] numeratorCoefficients = MathArrays.convolve(
                 plant.getTransferFunction().getNumeratorCoefficients(),
                 controller.getTransferFunction().getNumeratorCoefficients()
         );
-        double[] denominatorCoefficients = MathStuff.conv(
+        double[] denominatorCoefficients = MathArrays.convolve(
                 plant.getTransferFunction().getDenominatorCoefficients(),
                 controller.getTransferFunction().getDenominatorCoefficients()
         );
 
-        for (int i = 0; i < numeratorCoefficients.length ; i++) {
-            denominatorCoefficients[denominatorCoefficients.length - numeratorCoefficients.length + i] +=
-                    numeratorCoefficients[i];
+        // add denominator coefficients to the end of the numerator coefficients.
+        // E.g. numerator = 1 2 3 4 5 6 7
+        //    denominator =         1 2 3
+        //         result = 1 2 3 4 6 8 10
+        int index = denominatorCoefficients.length - numeratorCoefficients.length;
+        for(double numeratorCoefficient : numeratorCoefficients) {
+            denominatorCoefficients[index] += numeratorCoefficient;
+            index++;
         }
 
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
+    }
+
+    public TransferFunction getTransferFunction() {
+        return transferFunction;
     }
 
     public XYSeries exampleCalculate() {

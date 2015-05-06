@@ -73,6 +73,8 @@ public class MathStuff {
         return res;
     }
 
+    /* WARNING This appears to be broken when used with two arrays with different sizes.
+     * Use MathArrays.convolve from apache commons.
     public static double[] conv(double[] a, double[] b) {
         double[] res = new double[a.length + b.length - 1];
         for (int n = 0; n < res.length; n++) {
@@ -81,7 +83,7 @@ public class MathStuff {
             }
         }
         return res;
-    }
+    }*/
 
     public static double[] ones(int length) {
         double[] array = new double[length];
@@ -279,7 +281,7 @@ public class MathStuff {
 		return polynomLeadingZerosRemoved;
     }
     
-    //taken from pdf Fachinput_Schrittantwort.pdf
+    // taken from pdf Fachinput_Schrittantwort.pdf
     public static final Complex[] roots(double[] p) {
     	final LaguerreSolver solver = new LaguerreSolver();
     	double[] flip = new double[p.length];
@@ -294,8 +296,5 @@ public class MathStuff {
 		}
     	return complexRoots;
     }
-    
-    
-    
     
 }
