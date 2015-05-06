@@ -39,14 +39,14 @@ public class GraphPanel extends JPanel implements ActionListener {
 		super(new BorderLayout());
 
         SaniCurves sani = new SaniCurves();
-		Plant plant = new Plant(2, 6, 1, sani);
+		Plant plant = new Plant(1.71, 7.6, 1, sani);
         IControllerCalculator cc = new ZellwegerPI(plant, 45);
         cc.calculate();
         IController c = cc.getController();
 
 		// create a test series of data
 		ClosedLoop system = new ClosedLoop(plant, c);
-		XYSeries series = system.calculateStepResponse(2 * 1024);
+		XYSeries series = system.calculateStepResponse(8 * 1024);
 
 		// add series to collection (collection derives from XYDataset)
 		XYSeriesCollection data = new XYSeriesCollection();
