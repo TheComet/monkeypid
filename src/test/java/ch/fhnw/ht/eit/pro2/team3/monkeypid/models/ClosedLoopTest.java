@@ -55,7 +55,8 @@ public class ClosedLoopTest {
         Plant plant = new Plant(1.71, 7.6, 1, sani);
         IController controller = new PIController("test", 1.14, 3.58);
         ClosedLoop loop = new ClosedLoop(plant, controller);
-        XYSeries series = loop.calculateStepResponse(8 * 1024);
+        loop.calculateStepResponse(8 * 1024);
+        XYSeries series = loop.getStepResponse();
 
         // make sure start and end times line up
         assertEquals(72.3178515406732, series.getMaxX(), TestGlobals.floatDelta);

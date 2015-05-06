@@ -1,12 +1,14 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +17,9 @@ public class ClosedLoop {
 
     private TransferFunction transferFunction;
     private Plant plant;
+    private IController controller;
+    private XYSeries stepResponse = null;
+    private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
 
     public ClosedLoop(Plant plant, IController controller) {
         setPlantAndController(plant, controller);
@@ -22,10 +27,11 @@ public class ClosedLoop {
 
     public void setPlantAndController(Plant plant, IController controller) {
         this.plant = plant;
+        this.controller = controller;
         this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
     }
 
-    public XYSeries calculateStepResponse(int samplePoints) {
+    public void calculateStepResponse(int samplePoints) {
 
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
         double tcMax = (double) Collections.max(timeConstantsList);
@@ -57,12 +63,13 @@ public class ClosedLoop {
         double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
         // create XY data series for jfreechart
-        XYSeries series = new XYSeries(""); // TODO name?
+        stepResponse = new XYSeries(controller.getName());
         for(int i = 0; i < t.length; i++) {
-            series.add(t[i], y[i]);
+            stepResponse.add(t[i], y[i]);
         }
 
-        return series;
+        // done, notify
+        notifyCalculationComplete();
     }
 
     private static TransferFunction calculateCloseLoopTransferFunction(Plant plant, IController controller) {
@@ -88,8 +95,34 @@ public class ClosedLoop {
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
     }
 
+    public final void registerListener(IClosedLoopListener listener) {
+        listeners.add(listener);
+    }
+
+    public final void unregisterListener(IClosedLoopListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyCalculationComplete() {
+        for(IClosedLoopListener listener : listeners) {
+            listener.notifyStepResponseCalculationComplete(this);
+        }
+    }
+
+    public XYSeries getStepResponse() {
+        return stepResponse;
+    }
+
     public TransferFunction getTransferFunction() {
         return transferFunction;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public IController getController() {
+        return controller;
     }
 
     public XYSeries exampleCalculate() {

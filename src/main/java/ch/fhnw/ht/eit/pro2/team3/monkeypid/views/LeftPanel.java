@@ -2,7 +2,8 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
 import java.awt.Color;
@@ -16,8 +17,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.org.apache.bcel.internal.generic.IFNULL;
-
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
  * comboBox to select the regulator, a comboBox to select the overshoot, the
@@ -26,8 +25,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener {
+public class LeftPanel extends JPanel implements ActionListener {
 
 	Controller controller;
 
@@ -379,8 +377,19 @@ public class LeftPanel extends JPanel implements ActionListener,
 		}
 	}
 
+    /*
 	@Override
-	public void notifyNewController(IController controller) {
-		controller.addToTable(tableModel);
+	public void notifyNewClosedLoop(ClosedLoop closedLoop) {
+		closedLoop.getController().addToTable(tableModel);
 	}
+
+	@Override
+	public void notifyDisposedClosedLoop(ClosedLoop closedLoop) {
+
+	}
+
+    @Override
+    public void notifyStepResponseCalculationComplete(ClosedLoop closedLoop) {
+
+    }*/
 }

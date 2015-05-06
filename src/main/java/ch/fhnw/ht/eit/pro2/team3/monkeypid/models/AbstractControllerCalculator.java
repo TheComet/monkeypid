@@ -20,7 +20,7 @@ public abstract class AbstractControllerCalculator
     @Override
     public final void run() {
         calculate();
-        notifyNewController();
+        notifyCalculationComplete();
     }
 
     @Override
@@ -43,10 +43,9 @@ public abstract class AbstractControllerCalculator
         listeners.remove(listener);
     }
 
-    @Override
-    public final void notifyNewController() {
+    private void notifyCalculationComplete() {
         for(IControllerCalculatorListener listener : listeners) {
-            listener.notifyNewController(controller);
+            listener.notifyControllerCalculationComplete(this);
         }
     }
 }
