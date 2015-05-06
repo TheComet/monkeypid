@@ -12,8 +12,9 @@ public class PIController extends AbstractController {
         setParameters(kr, tn);
     }
 
-    private void calculateTransferFunction() {
-        // Nominator and Denominator Poly of the pi-controller:
+    @Override
+    protected void calculateTransferFunction() {
+        // Numerator and Denominator Poly of the pi-controller:
         // Kr (1 + 1/(s*Tn)) = Kr * (s*Tn + 1)/(s*Tn)
         //   Br = Kr*[Tn 1];
         //   Ar = [Tn 0];

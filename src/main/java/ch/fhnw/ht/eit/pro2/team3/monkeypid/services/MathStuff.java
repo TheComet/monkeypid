@@ -1,17 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
-
-import static org.junit.Assert.assertEquals;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
-
-import java.util.ArrayList;
 
 public class MathStuff {
 
@@ -117,6 +112,14 @@ public class MathStuff {
         return ret;
     }
 
+    public static double[] imag(Complex[] c) {
+        double[] ret = new double[c.length];
+        for(int i = 0; i < c.length; i++) {
+            ret[i] = c[i].getImaginary();
+        }
+        return ret;
+    }
+
     public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
         Complex[] symmetric = new Complex[capitalH.length * 2];
 
@@ -149,18 +152,19 @@ public class MathStuff {
 		int N = Numerator.length -1;
 		int M = Denominator.length -1;
 		
-		//Have Numerator and Denominator the same Order? -> calculate K
+		//Have Numerator and Denominator the same Order? if yes -> calculate K
 		if(N==M){
 			K = Numerator[0]/Denominator[0];
 			for (int i = 0; i < Numerator.length; i++) {
 				Numerator[i]  = Numerator[i] - K*Denominator[i];
 			}
 		}
-		else{ //todo
+		else{
 			K = 0.0;
 		}
 		
 		Complex[] P = roots(Denominator);
+		//zeros(M,1)
 		Complex[] R = new Complex[M];
 		for (int i = 0; i < R.length; i++) {
 			R[i] = new Complex(0);
@@ -168,8 +172,11 @@ public class MathStuff {
 		
 		for (int m = 0; m < M; m++) {
 			//Calculate Denominator polynominal wighout m-th root
+			
 			//copy P in smallP
-			Complex[] smallP = new Complex[P.length];
+			Complex[] smallP = new Complex[P.length-1];
+			
+			/*
 			for (int i = 0; i < smallP.length; i++) {
 				smallP[i] = P[i];
 			}
@@ -178,8 +185,26 @@ public class MathStuff {
 				smallP[j] = smallP[j+1];
 			}
 			//remove last array cell
-			smallP = ArrayUtils.remove(smallP, smallP.length-1);
+			smallP = ArrayUtils.remove(smallP, smallP.length-1); //works?
+			*/
 			
+			//copy every element from second of P in smallP
+			for (int i = 0; i < smallP.length; i++) {
+				smallP[i] = P[i+1];
+			}
+			
+			Complex[] pa = poly(smallP);
+			double[] paReal = new double[pa.length];
+			//pa is real (no imaginary part) -> get only real from pa
+			for (int i = 0; i < paReal.length; i++) {
+				paReal[i] = pa[i].getReal();
+			}
+			
+			//calculate Residues
+			Complex pvB = polyVal(Numerator, P[m]);
+			Complex pvA = polyVal(paReal, P[m]);
+			Complex pvD = pvB.divide(pvA);
+			R[m] = pvD.divide(Denominator[0]);
 		}
 		
 		
@@ -201,6 +226,35 @@ public class MathStuff {
             // subtract temp buffer from coefficients
             for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
                 coefficients[i] -= temp[i - 1];
+            }
+        }
+
+        return coefficients;
+    }
+    
+    //complex version
+    public static Complex[] poly(Complex[] roots) {
+        // this was ported from matlab's poly() function
+        // type ">> edit poly" and scroll to line 35.
+        Complex[] coefficients = new Complex[roots.length + 1];
+        for (int i = 0; i < coefficients.length; i++) {
+			coefficients[i] = new Complex(0.0);
+		}
+        coefficients[0] = new Complex(1.0);
+        
+        Complex[] temp = new Complex[roots.length + 1];
+        for (int i = 0; i < temp.length; i++) {
+			temp[i] = new Complex(0.0);
+		}
+
+        for (Complex root : roots) {
+            // multiply coefficients with current root and store in temp buffer
+            for (int i = 0; i < coefficients.length; i++) {
+                temp[i] = root.multiply(coefficients[i]);
+            }
+            // subtract temp buffer from coefficients
+            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+                coefficients[i] = coefficients[i].subtract(temp[i - 1]);
             }
         }
 

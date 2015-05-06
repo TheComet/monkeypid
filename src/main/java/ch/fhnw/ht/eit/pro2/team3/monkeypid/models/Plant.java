@@ -18,8 +18,8 @@ public class Plant {
 
     private void calculateTransferFunction() {
 
-        // produces the Nominator and Denominator Polynom of the control-path
-        //   Bs = Ks; %Nominator
+        // produces the Numerator and Denominator Polynomial of the plant
+        //   Bs = Ks; %Numerator
         //   As = %Denominator: poly([-1/T1 -1/T2 -1/T3 -1/T4])*(T1*T2*T3*T4)
         double[] numeratorCoefficients = new double[timeConstants.length];
         double multiplicator = 1;

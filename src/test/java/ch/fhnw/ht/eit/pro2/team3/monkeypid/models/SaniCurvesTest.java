@@ -1,12 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class SaniCurvesTest {
-
-    double delta = 0.00025; // seems to be the closest accuracy we can get
 
     @Test
     public void testLookupPower() throws Exception {
@@ -48,53 +47,53 @@ public class SaniCurvesTest {
 
         // test powers 2 to 8
         double[] tc = c.calculateTimeConstants(1, 10);
-        assertEquals(2.8188, tc[0], delta);
-        assertEquals(4.6119, tc[1], delta);
+        assertEquals(2.81875934051940, tc[0], TestGlobals.saniDelta);
+        assertEquals(4.61187459765845, tc[1], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 5);
-        assertEquals(0.7952, tc[0], delta);
-        assertEquals(1.2620, tc[1], delta);
-        assertEquals(2.0030, tc[2], delta);
+        assertEquals(0.795152009551174, tc[0], TestGlobals.saniDelta);
+        assertEquals(1.26200896793459, tc[1], TestGlobals.saniDelta);
+        assertEquals(2.00297127595304, tc[2], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 4);
-        assertEquals(0.2922, tc[0], delta);
-        assertEquals(0.5255, tc[1], delta);
-        assertEquals(0.9449, tc[2], delta);
-        assertEquals(1.6991, tc[3], delta);
+        assertEquals(0.292245372354657, tc[0], TestGlobals.saniDelta);
+        assertEquals(0.525498853982710, tc[1], TestGlobals.saniDelta);
+        assertEquals(0.944921876135024, tc[2], TestGlobals.saniDelta);
+        assertEquals(1.69910428011687, tc[3], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 3);
-        assertEquals(0.1991, tc[0], delta);
-        assertEquals(0.3051, tc[1], delta);
-        assertEquals(0.4675, tc[2], delta);
-        assertEquals(0.7164, tc[3], delta);
-        assertEquals(1.0978, tc[4], delta);
+        assertEquals(0.199061019130236, tc[0], TestGlobals.saniDelta);
+        assertEquals(0.305052409467644, tc[1], TestGlobals.saniDelta);
+        assertEquals(0.467479634780391, tc[2], TestGlobals.saniDelta);
+        assertEquals(0.716392338338791, tc[3], TestGlobals.saniDelta);
+        assertEquals(1.09784029987021, tc[4], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 2.3);
-        assertEquals(0.1773, tc[0], delta);
-        assertEquals(0.2324, tc[1], delta);
-        assertEquals(0.3047, tc[2], delta);
-        assertEquals(0.3995, tc[3], delta);
-        assertEquals(0.5237, tc[4], delta);
-        assertEquals(0.6866, tc[5], delta);
+        assertEquals(0.177305373375394, tc[0], TestGlobals.saniDelta);
+        assertEquals(0.232441548369716, tc[1], TestGlobals.saniDelta);
+        assertEquals(0.304723271381742, tc[2], TestGlobals.saniDelta);
+        assertEquals(0.399482247355776, tc[3], TestGlobals.saniDelta);
+        assertEquals(0.523708167179986, tc[4], TestGlobals.saniDelta);
+        assertEquals(0.686564287115260, tc[5], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 2);
-        assertEquals(0.1345, tc[0], delta);
-        assertEquals(0.1704, tc[1], delta);
-        assertEquals(0.2160, tc[2], delta);
-        assertEquals(0.2738, tc[3], delta);
-        assertEquals(0.3471, tc[4], delta);
-        assertEquals(0.4399, tc[5], delta);
-        assertEquals(0.5576, tc[6], delta);
+        assertEquals(0.134472180292776, tc[0], TestGlobals.saniDelta);
+        assertEquals(0.170444700913804, tc[1], TestGlobals.saniDelta);
+        assertEquals(0.216040195126938, tc[2], TestGlobals.saniDelta);
+        assertEquals(0.273832895128191, tc[3], TestGlobals.saniDelta);
+        assertEquals(0.347085663435123, tc[4], TestGlobals.saniDelta);
+        assertEquals(0.439934207706506, tc[5], TestGlobals.saniDelta);
+        assertEquals(0.557620574687113, tc[6], TestGlobals.saniDelta);
 
         tc = c.calculateTimeConstants(1, 1.6);
-        assertEquals(0.1686, tc[0], delta);
-        assertEquals(0.1844, tc[1], delta);
-        assertEquals(0.2017, tc[2], delta);
-        assertEquals(0.2206, tc[3], delta);
-        assertEquals(0.2414, tc[4], delta);
-        assertEquals(0.2640, tc[5], delta);
-        assertEquals(0.2888, tc[6], delta);
-        assertEquals(0.3159, tc[7], delta);
+        assertEquals(0.168569381240628, tc[0], TestGlobals.saniDelta);
+        assertEquals(0.184396961114740, tc[1], TestGlobals.saniDelta);
+        assertEquals(0.201710648862226, tc[2], TestGlobals.saniDelta);
+        assertEquals(0.220649980446818, tc[3], TestGlobals.saniDelta);
+        assertEquals(0.241367593361100, tc[4], TestGlobals.saniDelta);
+        assertEquals(0.264030456775730, tc[5], TestGlobals.saniDelta);
+        assertEquals(0.288821217191768, tc[6], TestGlobals.saniDelta);
+        assertEquals(0.315939670441090, tc[7], TestGlobals.saniDelta);
     }
 
     @Test(expected=RuntimeException.class)

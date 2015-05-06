@@ -23,4 +23,6 @@ public abstract class AbstractController implements IController{
     protected final void setTransferFunction(TransferFunction transferFunction) {
         this.transferFunction = transferFunction;
     }
+
+    protected abstract void calculateTransferFunction();
 }
