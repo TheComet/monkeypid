@@ -49,7 +49,8 @@ public class MonkeyPID {
 		Model model = new Model();
 		Controller controller = new Controller(model);
 		View view = new View(controller);
-		//model.registerListener(view.leftPanel);
+		model.registerListener(view.leftPanel);
+        model.registerListener(view.graphPanel);
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);

@@ -2,7 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener {
+public class LeftPanel extends JPanel implements ActionListener, IModelListener {
 
 	Controller controller;
 
@@ -377,19 +377,13 @@ public class LeftPanel extends JPanel implements ActionListener {
 		}
 	}
 
-    /*
 	@Override
-	public void notifyNewClosedLoop(ClosedLoop closedLoop) {
+    public void onAddClosedLoop(ClosedLoop closedLoop) {
 		closedLoop.getController().addToTable(tableModel);
 	}
 
 	@Override
-	public void notifyDisposedClosedLoop(ClosedLoop closedLoop) {
-
+	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+        closedLoop.getController().removeFromTable(tableModel);
 	}
-
-    @Override
-    public void notifyStepResponseCalculationComplete(ClosedLoop closedLoop) {
-
-    }*/
 }

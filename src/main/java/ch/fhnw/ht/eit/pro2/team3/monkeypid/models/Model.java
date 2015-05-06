@@ -1,13 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
 import java.util.ArrayList;
 
-public class Model implements IControllerCalculatorListener, IClosedLoopListener {
+public class Model implements IControllerCalculatorListener {
 
     // have the model own the sani curves, so they don't have to be reloaded from
     // disk every time a new calculation is performed.
@@ -33,6 +32,12 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     }
 
     public void clearSimulations() {
+        // notify all listeners that we're removing all closed loops
+        for(ClosedLoop loop : closedLoops) {
+            for (IModelListener listener : listeners) {
+                listener.onRemoveClosedLoop(loop);
+            }
+        }
         closedLoops = new ArrayList<>();
     }
 
@@ -72,15 +77,17 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         listeners.remove(listener);
     }
 
-    @Override
-    public final void notifyControllerCalculationComplete(IControllerCalculator calculator) {
-        ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
-        closedLoop.registerListener(this);
-        closedLoops.add(closedLoop);
+    private void notifyAddClosedLoop(ClosedLoop loop) {
+        for(IModelListener listener : listeners) {
+            listener.onAddClosedLoop(loop);
+        }
     }
 
     @Override
-    public void notifyStepResponseCalculationComplete(ClosedLoop closedLoop) {
-
+    public final void onControllerCalculationComplete(IControllerCalculator calculator) {
+        ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
+        closedLoops.add(closedLoop);
+        notifyAddClosedLoop(closedLoop);
+        closedLoop.calculateStepResponse(4 * 1024);
     }
 }

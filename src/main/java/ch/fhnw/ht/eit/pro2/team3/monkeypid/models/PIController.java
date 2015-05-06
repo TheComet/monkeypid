@@ -27,7 +27,7 @@ public class PIController extends AbstractController {
 
     @Override
     public void addToTable(DefaultTableModel table) {
-        table.addRow(new String[] {
+        table.addRow(new String[]{
                 getName(),
                 Double.toString(getKr()),
                 Double.toString(getTn())
