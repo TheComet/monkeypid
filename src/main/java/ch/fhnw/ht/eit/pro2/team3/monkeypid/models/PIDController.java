@@ -16,7 +16,16 @@ public class PIDController extends AbstractController {
 
     @Override
     protected void calculateTransferFunction() {
-        
+        // Numerator and Denominator Poly of the pid-controller:
+        // Gr = Kr*(1+ 1/(s*Tn) + s*Tv/(1+s*Tp))
+        //    = Kr * (s^2(Tn*Tv + Tn*Tp) + s*(Tn+Tv) + 1)/(s^2*(Tn*Tp)+ s*Tn)
+        // Br = Kr*[Tn*Tv+Tn*Tp Tn+Tv 1];
+        // Ar = [Tn*Tp Tn 0];
+        double[] numeratorCoefficients = new double[] {kr*tn*tv + kr*tn*tp, kr*tn + kr*tv, 1};
+        double[] denominatorCoefficients = new double[] {tn*tp, tn, 0};
+        setTransferFunction(
+                new TransferFunction(numeratorCoefficients, denominatorCoefficients)
+        );
     }
 
     @Override
