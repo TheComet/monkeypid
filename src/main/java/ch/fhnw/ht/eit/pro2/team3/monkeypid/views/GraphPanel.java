@@ -46,7 +46,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 
 		// create a test series of data
 		ClosedLoop system = new ClosedLoop(plant, c);
-		XYSeries series = system.calculateStepResponse();
+		XYSeries series = system.calculateStepResponse(2 * 1024);
 
 		// add series to collection (collection derives from XYDataset)
 		XYSeriesCollection data = new XYSeriesCollection();

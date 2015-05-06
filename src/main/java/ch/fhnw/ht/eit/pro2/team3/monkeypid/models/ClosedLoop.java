@@ -25,15 +25,14 @@ public class ClosedLoop {
         this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
     }
 
-    public XYSeries calculateStepResponse() {
+    public XYSeries calculateStepResponse(int samplePoints) {
 
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
         double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
         double fs = 1.0/(tcMax/400.0);
-        int N = 2048;
 
-        double [] omega = MathStuff.linspace(0, fs * Math.PI, N / 2);
+        double [] omega = MathStuff.linspace(0, fs * Math.PI, samplePoints / 2);
 
         // calculate frequency response
         Complex[] H = MathStuff.freqs(transferFunction, omega);
@@ -44,7 +43,7 @@ public class ClosedLoop {
 
         // calculate step response - note that h doesn't have an
         // imaginary part, so we can use conv as if it were a double
-        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(N + 1));
+        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(samplePoints + 1));
 
         // cut away mirrored part
         y = Arrays.copyOfRange(y, 0, y.length / 2);
