@@ -177,4 +177,26 @@ public class MathStuffTest {
         assertEquals(14.0, res[2], delta);
         assertEquals(-8.0, res[3], delta);
     }
+    
+    @Test
+    public void testIfft() throws Exception {
+    	Complex[] values = new Complex[4];
+        values[0] = new Complex(1, 5);
+        values[1] = new Complex(4, 2);
+        values[2] = new Complex(8, 3);
+        values[3] = new Complex(-5, 8);
+    	
+        Complex[] results =MathStuff.ifft(values);
+        assertEquals(2.0,  results[0].getReal(), delta);
+        assertEquals(4.5,   results[0].getImaginary(), delta);
+        assertEquals(-0.25,  results[1].getReal(), delta);
+        assertEquals(2.75,   results[1].getImaginary(), delta);
+        assertEquals(2.5,  results[2].getReal(), delta);
+        assertEquals(-0.5,   results[2].getImaginary(), delta);
+        assertEquals(-3.25,  results[3].getReal(), delta);
+        assertEquals(-1.75,   results[3].getImaginary(), delta);        
+    }
+    
+
+    
 }
