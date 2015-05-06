@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.math3.complex.Complex;
 import org.junit.Test;
 
 public class PIControllerTest {
@@ -37,6 +38,10 @@ public class PIControllerTest {
 		double[] DenominatorExpected = {3.3122, 0.0};
 		assertArrayEquals(NumeratorExpected, myPIController.getTransferFunction().getNumeratorCoefficients(),delta);
 		assertArrayEquals(DenominatorExpected, myPIController.getTransferFunction().getDenominatorCoefficients(),delta);
+		
+		Complex[] test = new Complex[2];
+		test[0] = new Complex(3.0000 ,  + 4.0000);
+		test[1] = new Complex(35.0000,  + 0.0000);
 	}
 
 }
