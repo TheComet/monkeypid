@@ -28,11 +28,16 @@ public class ClosedLoop {
     public XYSeries calculateStepResponse(int samplePoints) {
 
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
-        double tcMin = (double) Collections.min(timeConstantsList);
         double tcMax = (double) Collections.max(timeConstantsList);
         double fs = 1.0/(tcMax/400.0);
 
-        double [] omega = MathStuff.linspace(0, fs * Math.PI, samplePoints / 2);
+        // round sample points to the next power of two
+        int powerOfTwo = 4;
+        while(powerOfTwo < samplePoints) {
+            powerOfTwo <<= 1;
+        }
+
+        double [] omega = MathStuff.linspace(0, fs * Math.PI, powerOfTwo / 2);
 
         // calculate frequency response
         Complex[] H = MathStuff.freqs(transferFunction, omega);
@@ -43,7 +48,7 @@ public class ClosedLoop {
 
         // calculate step response - note that h doesn't have an
         // imaginary part, so we can use conv as if it were a double
-        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(samplePoints + 1));
+        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(powerOfTwo + 1));
 
         // cut away mirrored part
         y = Arrays.copyOfRange(y, 0, y.length / 2);

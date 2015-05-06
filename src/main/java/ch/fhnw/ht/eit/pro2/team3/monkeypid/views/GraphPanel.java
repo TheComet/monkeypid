@@ -6,6 +6,8 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ZellwegerPI;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -18,6 +20,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -46,7 +51,7 @@ public class GraphPanel extends JPanel implements ActionListener {
 
 		// create a test series of data
 		ClosedLoop system = new ClosedLoop(plant, c);
-		XYSeries series = system.calculateStepResponse(8 * 1024);
+		XYSeries series = system.calculateStepResponse(8192);
 
 		// add series to collection (collection derives from XYDataset)
 		XYSeriesCollection data = new XYSeriesCollection();

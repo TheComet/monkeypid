@@ -94,16 +94,8 @@ public class MathStuff {
     }
 
     public static Complex[] ifft(Complex[] f){
-        double log2f = Math.log(f.length)/Math.log(2);
-        int minLength =(int)(Math.pow(2, Math.ceil(log2f)));
-        Complex[] powerOfTwo = new Complex[minLength];
-        System.arraycopy(f, 0, powerOfTwo, 0, f.length);
-        for(int i = f.length; i < minLength; i++) {
-            powerOfTwo[i] = new Complex(0);
-        }
-
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
-        return transformer.transform(powerOfTwo, TransformType.INVERSE);
+        return transformer.transform(f, TransformType.INVERSE);
     }
 
     public static double[] real(Complex[] c) {
