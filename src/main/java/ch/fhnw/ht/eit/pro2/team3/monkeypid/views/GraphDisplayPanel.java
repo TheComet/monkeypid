@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * GraphDisplayPanel is a panel which includes checkBoxes with names of all
+ *GraphDisplayPanel is a panel which includes checkBoxes with names of all
  * simulated graphs. If a checkBox is set the appendant graph is displayed
  * else it isn't displayed anymore.
  * @author Josua
@@ -71,13 +71,13 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
         }
 	}
 
-	@Override
-	public void onSimulationStarted() {
+    @Override
+    public void onSimulationStarted() {
 
-	}
+    }
 
-	@Override
-	public void onSimulationComplete() {
+    @Override
+    public void onSimulationComplete() {
 
-	}
+    }
 }
