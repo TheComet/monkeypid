@@ -1,5 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- *GraphDisplayPanel is a panel which includes checkBoxes with names of all
+ * GraphDisplayPanel is a panel which includes checkBoxes with names of all
  * simulated graphs. If a checkBox is set the appendant graph is displayed
  * else it isn't displayed anymore.
  * @author Josua
@@ -18,6 +19,7 @@ import java.util.ArrayList;
  */
 public class GraphDisplayPanel extends JPanel implements ActionListener, IModelListener {
 
+    private Controller controller;
     private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 
     private class CheckBoxNotFoundException extends Exception {
@@ -28,12 +30,11 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 
 	/**
 	 * Constructor of GraphDisplayPanel adds 
-	 * 
-	 * @param controller
-	 */
-	public GraphDisplayPanel() {
+     */
+	public GraphDisplayPanel(Controller controller) {
 		//super(new FlowLayout(FlowLayout.LEADING));
 		super(new WrapLayout(WrapLayout.LEFT));
+        this.controller = controller;
 	}
 
     private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
@@ -49,7 +50,11 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
     public void actionPerformed(ActionEvent actionEvent) {
         for(JCheckBox c : checkBoxes) {
             if(actionEvent.getSource() == c) {
-                // TODO
+                if(c.isSelected()) {
+                    controller.cbCheckAction(c.getText());
+                } else {
+                    controller.cbUncheckAction(c.getText());
+                }
             }
         }
     }
@@ -57,6 +62,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
 		JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
+        cb.addActionListener(this);
         checkBoxes.add(cb);
 		add(cb);
 	}
@@ -73,12 +79,22 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
     @Override
-    public void onSimulationStarted() {
+    public void onSimulationBegin() {
 
     }
 
     @Override
     public void onSimulationComplete() {
+
+    }
+
+    @Override
+    public void onHideSimulation(ClosedLoop closedLoop) {
+
+    }
+
+    @Override
+    public void onShowSimulation(ClosedLoop closedLoop) {
 
     }
 }

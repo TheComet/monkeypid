@@ -1,17 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,10 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
-import com.sun.org.apache.bcel.internal.generic.IFNULL;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -33,8 +24,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener,
-		IModelListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener, IClosedLoopListener {
 
 	Controller controller;
 
@@ -115,31 +105,40 @@ public class OutputPanel extends JPanel implements ActionListener,
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
-		tableModel.addColumn("Überschwingen");
-
+		tableModel.addColumn("<html><left>Über-<br>schwingen");
+		
+		
+		
 		// set size of first column
-		table.getColumnModel().getColumn(0).setMinWidth(70);
-		table.getColumnModel().getColumn(0).setMaxWidth(70);
-		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+		table.getColumnModel().getColumn(0).setMinWidth(90);
+		table.getColumnModel().getColumn(0).setMaxWidth(90);
+		table.getColumnModel().getColumn(0).setPreferredWidth(90);
 
+		table.getColumnModel().getColumn(5).setMinWidth(90);
+		table.getColumnModel().getColumn(5).setMaxWidth(90);
+		table.getColumnModel().getColumn(5).setPreferredWidth(90);
+		
 		// set size of the rest columns
-		for (int i = 1; i < table.getColumnCount(); i++) {
+		for (int i = 1; i < table.getColumnCount()-1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth(50);
-			col.setMaxWidth(50);
-			col.setPreferredWidth(50);
+			col.setMinWidth(90);
+			col.setMaxWidth(90);
+			col.setPreferredWidth(90);
 		}
 
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(320, 200));
-		table.setMinimumSize(new Dimension(320, 200));
-
+		table.setPreferredSize(new Dimension(520, 200));
+		table.setMinimumSize(new Dimension(520, 200));
+		table.getTableHeader().setPreferredSize(new Dimension(520, 50));
+		
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		// disable mouse resize icon
 		table.getTableHeader().setResizingAllowed(false);
+		
+		
 
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
@@ -254,21 +253,34 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().addToTable(tableModel);
-
+		closedLoop.registerListener(this); // so we know when to add the closed loop to the table
 	}
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().removeFromTable(tableModel);
-
+        closedLoop.removeFromTable(tableModel);
 	}
 
 	@Override
-	public void onSimulationStarted() {
+	public void onSimulationBegin() {
 	}
 
 	@Override
 	public void onSimulationComplete() {
 	}
+
+	@Override
+	public void onHideSimulation(ClosedLoop closedLoop) {
+
+	}
+
+	@Override
+	public void onShowSimulation(ClosedLoop closedLoop) {
+
+	}
+
+    @Override
+    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
+        closedLoop.addToTable(tableModel);
+    }
 }

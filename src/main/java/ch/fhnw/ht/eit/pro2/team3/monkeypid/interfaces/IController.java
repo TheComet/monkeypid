@@ -9,7 +9,6 @@ public interface IController {
     String getName();
     Color getColor();
     void setColor(Color color);
-    void addToTable(DefaultTableModel table);
-    void removeFromTable(DefaultTableModel table);
+    String[] getTableRowString();
     TransferFunction getTransferFunction();
 }

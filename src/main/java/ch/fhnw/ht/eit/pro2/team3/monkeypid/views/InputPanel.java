@@ -1,7 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
@@ -31,8 +30,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener, KeyListener, IModelListener {
+public class InputPanel extends JPanel implements ActionListener, KeyListener {
 
 	Controller controller;
 
@@ -89,10 +87,6 @@ public class InputPanel extends JPanel implements ActionListener,
 			1);
 	private JFormattedDoubleTextField tfAdaptTv = new JFormattedDoubleTextField(
 			1);
-
-	// table and table model
-	DefaultTableModel tableModel = new DefaultTableModel();
-	JTable table = new JTable(tableModel);
 
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
@@ -269,7 +263,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
 				lbValueErrorInfo
-						.setText("Tu/Tg zu klein N = 1  => Verh�ltnis gr�sser w�hlen");
+						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
 			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
@@ -281,16 +275,6 @@ public class InputPanel extends JPanel implements ActionListener,
 			}
 
 		}
-	}
-
-	@Override
-    public void onAddClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().addToTable(tableModel);
-	}
-
-	@Override
-	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        closedLoop.getController().removeFromTable(tableModel);
 	}
 
 	@Override
@@ -311,21 +295,5 @@ public class InputPanel extends JPanel implements ActionListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// not needed
-	}
-
-    @Override
-    public void onSimulationStarted() {
-
-    }
-
-    @Override
-    public void onSimulationComplete() {
-
-    }
-
-	@Override
-	public void onControllerCalculationComplete(IControllerCalculator controller) {
-		// TODO Auto-generated method stub
-		
 	}
 }
