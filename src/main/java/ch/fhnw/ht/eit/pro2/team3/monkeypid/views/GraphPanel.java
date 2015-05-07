@@ -101,6 +101,6 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
     @Override
     public void onSimulationComplete() {
-
+        updateUI();
     }
 }
