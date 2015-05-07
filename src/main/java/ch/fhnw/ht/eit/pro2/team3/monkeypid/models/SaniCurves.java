@@ -1,7 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
+
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,9 @@ import java.util.ArrayList;
 public class SaniCurves {
     private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
     private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
+    
+    private  ArrayList<ArrayList<Double>> Tu_Tg_ratio_double = null;
+    private  ArrayList<ArrayList<Double>> Tg_inverse_double = null;
 
     /**
      * Loads
@@ -28,6 +33,11 @@ public class SaniCurves {
     private void loadMatlabTables() {
         Tu_Tg_ratio = Assets.loadSaniCurves("math_tables/tu_tg_ratio", true); // x and y data points are swapped
         Tg_inverse = Assets.loadSaniCurves("math_tables/tg_inverse", false);
+    }
+    
+    private void loadMatlabTablesDouble(){
+    	Tu_Tg_ratio_double = Assets.loadSaniCurvesDoubleValues("math_tables/tu_tg_ratio");
+    	Tg_inverse_double = Assets.loadSaniCurvesDoubleValues("math_tables/tg_inverse");
     }
 
     public int lookupPower(double TuTgRatio) {
