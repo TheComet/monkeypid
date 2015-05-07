@@ -30,10 +30,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 
 	/**
 	 * Constructor of GraphDisplayPanel adds 
-	 *
      */
 	public GraphDisplayPanel(Controller controller) {
-		super(new FlowLayout(FlowLayout.LEADING));
+		//super(new FlowLayout(FlowLayout.LEADING));
+		super(new WrapLayout(WrapLayout.LEFT));
         this.controller = controller;
 	}
 
