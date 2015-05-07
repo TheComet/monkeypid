@@ -4,6 +4,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public abstract class AbstractControllerCalculator
@@ -16,6 +17,11 @@ public abstract class AbstractControllerCalculator
 
     public AbstractControllerCalculator(Plant plant) {
         setPlant(plant);
+    }
+
+    protected double beautifyTpSoNiklausIsHappy(double value) {
+        DecimalFormat f = new DecimalFormat("###.##");
+        return Double.parseDouble(f.format(value));
     }
 
     @Override
