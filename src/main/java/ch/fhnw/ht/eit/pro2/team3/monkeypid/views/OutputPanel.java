@@ -59,8 +59,8 @@ public class OutputPanel extends JPanel implements ActionListener,
 	JTable table = new JTable(tableModel);
 
 	// spinnerIcon icon
-	ImageIcon spinnerIcon = Assets.loadImageSpinner();
-	JLabel spinnerLabel = new JLabel();
+	//ImageIcon spinnerIcon = Assets.loadImageSpinner();
+	//JLabel spinnerLabel = new JLabel();
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
@@ -158,8 +158,8 @@ public class OutputPanel extends JPanel implements ActionListener,
 				new Insets(0, 10, 10, 10), 0, 0));
 
 		// init spinnerIcon icon label
-		spinnerLabel.setIcon(spinnerIcon);
-		spinnerIcon.setImageObserver(spinnerLabel);
+		//spinnerLabel.setIcon(spinnerIcon);
+		//spinnerIcon.setImageObserver(spinnerLabel);
 
 		// TODO entscheiden ob fuer profimodus integriert wird
 		/*
