@@ -7,13 +7,9 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.general.DatasetChangeEvent;
-import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
@@ -70,7 +66,17 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 		this.add(panel);
 	}
 	
-	
+	private XYItemRenderer getDatasetRenderer() {
+        return chart.getXYPlot().getRendererForDataset(dataCollection);
+    }
+
+    private int getSeriesIndex(ClosedLoop loop) {
+        return dataCollection.getSeriesIndex(loop.getStepResponse().getKey());
+    }
+
+    private void setSimulationVisible(ClosedLoop loop, boolean flag) {
+        getDatasetRenderer().setSeriesVisible(getSeriesIndex(loop), flag);
+    }
 
     @Override
     public void onAddClosedLoop(ClosedLoop closedLoop) {
@@ -80,6 +86,7 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
     @Override
     public void onRemoveClosedLoop(ClosedLoop closedLoop) {
         if(closedLoop.getStepResponse() != null) {
+            setSimulationVisible(closedLoop, true); // See issue #21 - make visible again
             dataCollection.removeSeries(closedLoop.getStepResponse());
         }
     }
@@ -90,9 +97,7 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
             dataCollection.addSeries(closedLoop.getStepResponse());
 
             // The closedLoop object specifies what color it wants to be rendered in
-            int seriesIndex = dataCollection.getSeriesIndex(closedLoop.getStepResponse().getKey());
-            chart.getXYPlot().getRendererForDataset(dataCollection)
-                    .setSeriesPaint(seriesIndex, closedLoop.getColor());
+            getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
 
         } catch(IllegalArgumentException e) {
             System.out.println("Can't add step response to graph, it's already in the graph");
@@ -100,7 +105,8 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
     }
 
     @Override
-    public void onSimulationStarted() {
+    public void onSimulationBegin() {
+
     }
 
     @Override
@@ -109,13 +115,11 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
     @Override
     public void onHideSimulation(ClosedLoop closedLoop) {
-        int seriesIndex = dataCollection.getSeriesIndex(closedLoop.getStepResponse().getKey());
-        chart.getXYPlot().getRendererForDataset(dataCollection).setSeriesVisible(seriesIndex, false);
+        setSimulationVisible(closedLoop, false);
     }
 
     @Override
     public void onShowSimulation(ClosedLoop closedLoop) {
-        int seriesIndex = dataCollection.getSeriesIndex(closedLoop.getStepResponse().getKey());
-        chart.getXYPlot().getRendererForDataset(dataCollection).setSeriesVisible(seriesIndex, true);
+        setSimulationVisible(closedLoop, true);
     }
 }

@@ -79,7 +79,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
     @Override
-    public void onSimulationStarted() {
+    public void onSimulationBegin() {
 
     }
 

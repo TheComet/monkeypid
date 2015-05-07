@@ -274,7 +274,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void onSimulationStarted() {
+	public void onSimulationBegin() {
 	}
 
 	@Override

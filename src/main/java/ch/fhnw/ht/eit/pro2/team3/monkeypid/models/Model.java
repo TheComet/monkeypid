@@ -116,7 +116,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
 
         clearSimulations();
-        notifySimulationStarted();
+        notifySimulationBegin();
         threadPool.submit(this::dispatchControllerCalculators);
     }
 
@@ -206,8 +206,8 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
     }
 
-    private void notifySimulationStarted() {
-        listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationStarted);
+    private void notifySimulationBegin() {
+        listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationBegin);
     }
 
     private void notifySimulationComplete() {
