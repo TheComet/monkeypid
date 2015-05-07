@@ -163,14 +163,14 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		 */
 
 		// add button delete to GridBagLayout
-		add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
+		/*add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add button adopt to GridBagLayout
 		add(btAdopt, new GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(10, 10, 10, 10), 0, 0));*/
 
 		// add title for trimm slider to GridbagLayout
 		add(lbTrimmSlider, new GridBagConstraints(0, 17, 2, 1, 0.0, 0.0,
@@ -183,7 +183,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 10, 10), 0, 0));
 
 		// add vertical dummy to GridbagLayout
-		add(new JPanel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
+		add(new JLabel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
 

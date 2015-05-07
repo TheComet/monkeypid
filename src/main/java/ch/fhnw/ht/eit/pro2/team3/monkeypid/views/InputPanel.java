@@ -57,9 +57,9 @@ public class InputPanel extends JPanel implements ActionListener,
 
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
-			"Parasitaere Zeitkonstante:");
-	private JLabel lbTp = new JLabel("Tp");
-	private JLabel lbTuInfo = new JLabel("%   (standardmässig 10% von Tg)");
+			"Faktor für Parasitäre Zeitkonstante:");
+	//private JLabel lbTp = new JLabel("Tp");
+	private JLabel lbTuInfo = new JLabel("%");
 	// private JTextField tfTp = new JTextField("10", 5);
 	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
 
@@ -154,16 +154,17 @@ public class InputPanel extends JPanel implements ActionListener,
 		add(lbTimeConstantTitle, new GridBagConstraints(0, 3, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
-		add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+		/*add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 0, 0));
+				new Insets(10, 10, 10, 0), 0, 0));*/
 		add(lbTuInfo, new GridBagConstraints(2, 4, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 0, 10, 10), 0, 0));
+
 		tfTp.setValue(10); // set default value of Tp
-		add(tfTp, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
+		add(tfTp, new GridBagConstraints(1, 4, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 5, 10, 0), 50, 0));
+				new Insets(10, 10, 10, 0), 50, 0));
 
 		// add label and comboBox for for regulator selection to GridBagLayout
 		add(lbSelectRegulatorTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
@@ -254,7 +255,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				// error message if tu/tg is bigger than 0.64173 (value from
 				// matlab sani example)
 				lbValueErrorInfo
-						.setText("Tu/Tg zu gross N > 8  => Verh�ltnis kleiner w�hlen");
+						.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
