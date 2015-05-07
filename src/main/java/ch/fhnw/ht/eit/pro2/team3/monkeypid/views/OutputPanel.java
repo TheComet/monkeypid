@@ -33,8 +33,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener, IController, IModelListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener {
 
 	Controller controller;
 
@@ -241,31 +240,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		}
 	}
 
-
-	@Override
-	public void onControllerCalculationComplete(IControllerCalculator controller) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addToTable(DefaultTableModel table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeFromTable(DefaultTableModel table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public TransferFunction getTransferFunction() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
 		closedLoop.getController().addToTable(tableModel);
@@ -274,19 +248,15 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().removeFromTable(tableModel);;
+		closedLoop.getController().removeFromTable(tableModel);
 		
 	}
 
 	@Override
 	public void onSimulationStarted() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onSimulationComplete() {
-		// TODO Auto-generated method stub
-		
 	}
 }
