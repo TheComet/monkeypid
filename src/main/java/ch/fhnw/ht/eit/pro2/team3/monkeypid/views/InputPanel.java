@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
 import java.awt.Color;
@@ -12,6 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,8 +29,8 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class LeftPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener {
+public class InputPanel extends JPanel implements ActionListener,
+		IControllerCalculatorListener, KeyListener {
 
 	Controller controller;
 
@@ -54,7 +57,7 @@ public class LeftPanel extends JPanel implements ActionListener,
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Parasitaere Zeitkonstante:");
 	private JLabel lbTp = new JLabel("Tp");
-	private JLabel lbTuInfo = new JLabel("%   (standardmaessig 10% von Tg)");
+	private JLabel lbTuInfo = new JLabel("%   (standardmässig 10% von Tg)");
 	// private JTextField tfTp = new JTextField("10", 5);
 	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
 
@@ -74,9 +77,6 @@ public class LeftPanel extends JPanel implements ActionListener,
 	// simulation title
 	private JLabel lbSimulationTitle = new JLabel("Simulationen");
 
-	// test table
-	private JTable tbTest = new JTable(10, 4);
-
 	// manual adjustment
 	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
 	private JSlider slTn = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
@@ -88,18 +88,10 @@ public class LeftPanel extends JPanel implements ActionListener,
 	private JFormattedDoubleTextField tfAdaptTv = new JFormattedDoubleTextField(
 			1);
 
-	// buttons delete and adopt
-	private JButton btDelete = new JButton("Loeschen");
-	private JButton btAdopt = new JButton("Uebernehmen");
-
 	// table and table model
 	DefaultTableModel tableModel = new DefaultTableModel();
 	JTable table = new JTable(tableModel);
-	
-	// adjustment slider
-	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
-	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, 45, 150, 100);
-	
+
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
 	 * the components to the panel. Furthermore it creates the table for the
@@ -107,7 +99,7 @@ public class LeftPanel extends JPanel implements ActionListener,
 	 * 
 	 * @param controller
 	 */
-	public LeftPanel(Controller controller) {
+	public InputPanel(Controller controller) {
 		super(new GridBagLayout());
 		this.controller = controller;
 
@@ -190,105 +182,21 @@ public class LeftPanel extends JPanel implements ActionListener,
 		// add button simulate to GridBagLayout
 		add(btSimulate, new GridBagConstraints(0, 9, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
-
-		// add title simulate to GridBagLayout
-		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 10), 0, 0));
-
-		// TODO remove
-		// tbTest.setEnabled(false);
-		// JTableHeader header = tbTest.getTableHeader();
-		// tbTest.setValueAt(aValue, row, column);
-
-		/*
-		 * DefaultTableModel model = new DefaultTableModel(); JTable table = new
-		 * JTable(model);
-		 * 
-		 * model.addColumn("Col3");
-		 * 
-		 * String testheader[] = new String[] { "Prority", "Task Title",
-		 * "Start", "Pause", "Stop", "Statulses" };
-		 * 
-		 * model.setColumnIdentifiers(testheader); table.setModel(model);
-		 * 
-		 * model.addRow(new Object[] { "v1", "v2" });
-		 */
-
-		// table
-		tableModel.addColumn("Name");
-		tableModel.addColumn("Kr");
-		tableModel.addColumn("Tn");
-		tableModel.addColumn("Tv");
-		tableModel.addColumn("Tp");
-
-		// set preferred size of table
-		table.setPreferredSize(new Dimension(300, 300));
-
-		// disable user column dragging
-		table.getTableHeader().setReorderingAllowed(false);
-
-		// add header of table to GridBagLaout
-		add(table.getTableHeader(), new GridBagConstraints(0, 11, 7, 1, 0.0,
-				0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(10, 11, 0, 10), 0, 0));
-		// add table to GridBagLayout
-		add(table, new GridBagConstraints(0, 12, 7, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 10, 10, 10), 0, 0));
-
-		// TODO entscheiden ob fuer profimodus integriert wird
-		/*
-		 * //add sliders for manual adjustment add(slKp, new
-		 * GridBagConstraints(0, 12, 4, 1, 0.0, 0.0, GridBagConstraints.CENTER,
-		 * GridBagConstraints.NONE, new Insets( 10, 10, 10, 10), 0, 0));
-		 * add(slTn, new GridBagConstraints(0, 13, 4, 1, 0.0, 0.0,
-		 * GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets( 10,
-		 * 10, 10, 10), 0, 0)); add(slTv, new GridBagConstraints(0, 14, 4, 1,
-		 * 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new
-		 * Insets( 10, 10, 10, 10), 0, 0)); //add textfields for manual
-		 * adjustment add(tfAdaptKp, new GridBagConstraints(5, 12, 1, 1, 0.0,
-		 * 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new
-		 * Insets( 10, 10, 10, 10), 0, 0)); add(tfAdaptTn, new
-		 * GridBagConstraints(5, 13, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
-		 * GridBagConstraints.HORIZONTAL, new Insets( 10, 10, 10, 10), 0, 0));
-		 * add(tfAdaptTv, new GridBagConstraints(5, 14, 1, 1, 0.0, 0.0,
-		 * GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
-		 * 10, 10, 10, 10), 0, 0));
-		 */
-
-		// add button delete to GridBagLayout
-		add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
-
-		// add button adopt to GridBagLayout
-		add(btAdopt, new GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
-		
-		// add title for trimm slider to GridbagLayout
-		add(lbTrimmSlider, new GridBagConstraints(0, 17, 2, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 10), 0, 0));	
-		
-		// add the trimm slider to GridbagLayout
-		add(slTrimmSlider, new GridBagConstraints(0, 18, 7, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 10, 10, 10), 0, 0));
-
-		
-		// add vertical dummy to GridbagLayout
-		add(new JPanel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
-				new Insets(10, 0, 10, 10), 0, 0));
-
+				new Insets(0, 10, 20, 10), 0, 0));
 
 		// add ActionListener to buttons
 		btSimulate.addActionListener(this);
-		btAdopt.addActionListener(this);
-		btDelete.addActionListener(this);
+
+		// set leftpanel focusable
+		this.setFocusable(true);
+
+		// add KeyListener to panel
+		this.addKeyListener(this);
+
+		// pack frame
+		//JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
+		
+		//myParent.getRootPane().setDefaultButton(btSimulate);
 	}
 
 	/**
@@ -300,15 +208,12 @@ public class LeftPanel extends JPanel implements ActionListener,
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
 		lbSimulationTitle.setVisible(miniVersionSelected);
-		tbTest.setVisible(miniVersionSelected);
 		slKp.setVisible(miniVersionSelected);
 		slTn.setVisible(miniVersionSelected);
 		slTv.setVisible(miniVersionSelected);
 		tfAdaptKp.setVisible(miniVersionSelected);
 		tfAdaptTn.setVisible(miniVersionSelected);
 		tfAdaptTv.setVisible(miniVersionSelected);
-		btDelete.setVisible(miniVersionSelected);
-		btAdopt.setVisible(miniVersionSelected);
 	}
 
 	/**
@@ -356,7 +261,7 @@ public class LeftPanel extends JPanel implements ActionListener,
 			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
-				
+
 				// give over the values to controller
 				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
 						tfTpValue, selectedRegulatorName,
@@ -364,23 +269,30 @@ public class LeftPanel extends JPanel implements ActionListener,
 			}
 
 		}
-		// if button delete is pressed
-		if (e.getSource() == btDelete) {
-			// call method of controller
-			controller.btDeleteAction();
-		}
-		// if button adopt is pressed
-		if (e.getSource() == btAdopt) {
-			int slKpValue = slKp.getValue();
-			int slTnValue = slTn.getValue();
-			int slTvValue = slTv.getValue();
-			// give over values to controller
-			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
-		}
 	}
 
 	@Override
 	public void notifyNewController(IController controller) {
 		controller.addToTable(tableModel);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// not needed
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// if enter on keyboard is pressed simulation starts, same as btSimulate
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			// press button simulate
+			btSimulate.doClick();
+			e.setKeyCode(0);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// not needed
 	}
 }

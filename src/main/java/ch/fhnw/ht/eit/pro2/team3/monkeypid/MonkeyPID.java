@@ -51,7 +51,7 @@ public class MonkeyPID {
 		Model model = new Model();
 		Controller controller = new Controller(model);
 		View view = new View(controller);
-		model.registerControllerCalculatorListener(view.leftPanel);
+		model.registerControllerCalculatorListener(view.inputPanel);
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);
@@ -63,7 +63,8 @@ public class MonkeyPID {
 		// add statusBar to window
 		StatusBar statusBar = new StatusBar();
 		//frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
-
+		
+		
 	}
 
 	public void go() {

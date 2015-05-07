@@ -85,6 +85,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 		 * Insets(10, 10, 10, 10), 0, 0));
 		 */
 	}
+	
 
 	/**
 	 * 

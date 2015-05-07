@@ -2,10 +2,12 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
-
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,14 +23,15 @@ public class View extends JPanel implements Observer {
 
 	private Controller controller;
 
-	public LeftPanel leftPanel;
+	public InputPanel inputPanel;
+	public OutputPanel outputPanel;
 	public GraphDisplayPanel graphDisplayPanel;
 	public GraphPanel graphPanel;
 
 	/**
 	 * The constructor from view adds the panel leftPanel, graphPanel and
-	 * graphDisplayPanel with a GridBagLayout to the view panel.
-	 * For each panel a border with a title will be added.
+	 * graphDisplayPanel with a GridBagLayout to the view panel. For each panel
+	 * a border with a title will be added.
 	 * 
 	 * @param controller
 	 */
@@ -38,28 +41,45 @@ public class View extends JPanel implements Observer {
 		this.controller = controller;
 
 		// create the panels
-		leftPanel = new LeftPanel(controller);
+		inputPanel = new InputPanel(controller);
+		outputPanel = new OutputPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel();
 		graphPanel = new GraphPanel();
 
-		// add leftPanel to GridBagLayout
-		add(leftPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 1.0,
-				GridBagConstraints.FIRST_LINE_START,
+		// set border for input and output panel
+		inputPanel.setBorder(new TitledBorder(null, "Eingabe"));
+		outputPanel.setBorder(new TitledBorder(null, "Ausgabe"));
+		
+		inputPanel.setMinimumSize(new Dimension(350, 370));
+		inputPanel.setPreferredSize(new Dimension(350, 370));
+		outputPanel.setMinimumSize(new Dimension(350, 450));
+		
+		// add input and output panel into a new panel
+		JPanel inputOutputPanel = new JPanel();
+		inputOutputPanel.setLayout(new GridBagLayout());
+		inputOutputPanel.add(inputPanel, new GridBagConstraints(0, 0, 1, 1,
+				0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.NONE, new Insets(0, 0, 5, 0), 0, 0));
+		inputOutputPanel.add(outputPanel, new GridBagConstraints(0, 1, 1, 1,
+				0.0, 1.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		
+		// add inputOutputPanel to GridBagLayout
+		add(inputOutputPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 0.0,
+				GridBagConstraints.WEST,
 				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
-		// set border and title of leftPanel
-		leftPanel.setBorder(new TitledBorder(null, "Einstellungen"));
 
 		// add graphPanel to GridBagLayout
 		add(graphPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						10, 0, 10, 10), 0, 0));
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
+				new Insets(10, 0, 5, 10), 0, 0));
 		// set border and title of graphPanel
 		graphPanel.setBorder(new TitledBorder((null), "Graph"));
 
 		// add graphDisplayPanel to GridBagLayout
 		add(graphDisplayPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 10, 10), 0, 0));
+				GridBagConstraints.LAST_LINE_START,
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 10), 0, 0));
 		// set border and title of graphDisplayPanel
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
