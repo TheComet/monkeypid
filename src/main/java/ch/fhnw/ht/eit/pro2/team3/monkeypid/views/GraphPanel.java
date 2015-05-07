@@ -3,9 +3,11 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
+
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -15,6 +17,7 @@ import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
+
 import java.awt.*;
 
 /**
@@ -41,7 +44,7 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
 		// renderer
 		XYItemRenderer renderer = new StandardXYItemRenderer();
-
+		
 		// axes
 		NumberAxis xAxis = new NumberAxis("Zeit");
 		NumberAxis yAxis = new NumberAxis("y(t)");
@@ -66,6 +69,8 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
 	}
+	
+	
 
     @Override
     public void onAddClosedLoop(ClosedLoop closedLoop) {
@@ -101,6 +106,6 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
     @Override
     public void onSimulationComplete() {
-        updateUI();
+
     }
 }
