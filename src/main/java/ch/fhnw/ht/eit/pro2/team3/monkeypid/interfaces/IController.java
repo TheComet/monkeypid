@@ -3,10 +3,13 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public interface IController {
-    public String getName();
-    public void addToTable(DefaultTableModel table);
-    public void removeFromTable(DefaultTableModel table);
-    public TransferFunction getTransferFunction();
+    String getName();
+    Color getColor();
+    void setColor(Color color);
+    void addToTable(DefaultTableModel table);
+    void removeFromTable(DefaultTableModel table);
+    TransferFunction getTransferFunction();
 }

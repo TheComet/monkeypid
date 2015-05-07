@@ -2,6 +2,8 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
+import java.awt.*;
+
 public class ZellwegerPI extends AbstractZellweger {
 
     public ZellwegerPI(Plant plant, double phaseMargin) {
@@ -9,14 +11,19 @@ public class ZellwegerPI extends AbstractZellweger {
     }
 
     @Override
-    public void calculate() {
+    protected final IController calculate() {
         setAngleOfInflection(-90.0);
-        this.controller = calculatePI();
+        return calculatePI();
     }
 
     @Override
     public String getName() {
-        return "Zellweger PI";
+        return CalculatorNames.ZELLWEGER_PI;
+    }
+
+    @Override
+    public Color getColor() {
+        return RenderColors.ZELLWEGER_PI;
     }
 
     private IController calculatePI() {

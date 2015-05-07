@@ -8,6 +8,7 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class ClosedLoop {
     private IController controller;
     private XYSeries stepResponse = null;
     private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
+    private Color color = null;
 
     public ClosedLoop(Plant plant, IController controller) {
         setPlantAndController(plant, controller);
@@ -123,6 +125,14 @@ public class ClosedLoop {
 
     public IController getController() {
         return controller;
+    }
+
+    public Color getColor() {
+        return controller.getColor();
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public XYSeries exampleCalculate() {
