@@ -268,13 +268,13 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-		// TODO Auto-generated method stub
+		closedLoop.getController().addToTable(tableModel);
 		
 	}
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-		// TODO Auto-generated method stub
+		closedLoop.getController().removeFromTable(tableModel);;
 		
 	}
 
