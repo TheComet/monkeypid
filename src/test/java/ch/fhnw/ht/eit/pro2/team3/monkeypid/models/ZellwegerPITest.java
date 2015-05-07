@@ -13,7 +13,7 @@ public class ZellwegerPITest {
     @Test
     public void testCalculateTu2Tg6Ks1phi45() throws Exception {
         IControllerCalculator cc = new ZellwegerPI(new Plant(2, 6, 1, sani), 45);
-        cc.calculate();
+        cc.run();
         PIController c = (PIController) cc.getController();
 
         assertEquals(3.3122, c.getTn(), TestGlobals.zellwegerDelta);
@@ -23,7 +23,7 @@ public class ZellwegerPITest {
     @Test
     public void testCalculateTu2Tg19Ks3phi45() throws Exception {
         IControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 45);
-        cc.calculate();
+        cc.run();
         PIController c = (PIController) cc.getController();
 
         assertEquals(6.541, c.getTn(), TestGlobals.zellwegerDelta);
@@ -33,7 +33,7 @@ public class ZellwegerPITest {
     @Test
     public void testCalculateTu2Tg19Ks3phi76_3() throws Exception {
         IControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 76.3);
-        cc.calculate();
+        cc.run();
         PIController c = (PIController)cc.getController();
 
         assertEquals(6.541, c.getTn(), TestGlobals.zellwegerDelta);

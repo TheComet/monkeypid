@@ -33,14 +33,14 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener, IModelListener {
+public class OutputPanel extends JPanel implements ActionListener,
+		IModelListener {
 
 	Controller controller;
 
 	// create test table
 	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
 
-	
 	// simulation title
 	private JLabel lbSimulationTitle = new JLabel("Simulationen");
 
@@ -60,7 +60,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	private JButton btAdopt = new JButton("Uebernehmen");
 
 	// table and table model
-	DefaultTableModel tableModel = new DefaultTableModel();
+	CustomTableModel tableModel = new CustomTableModel();
 	JTable table = new JTable(tableModel);
 
 	// adjustment slider
@@ -88,7 +88,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		// add title simulate to GridBagLayout
 		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(5, 10, 0, 10), 0, 0));
+				new Insets(10, 10, 0, 10), 0, 0));
 
 		// TODO remove
 		// tbTest.setEnabled(false);
@@ -109,27 +109,38 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		 * model.addRow(new Object[] { "v1", "v2" });
 		 */
 
-		// table
+		// add columns to the table
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Kr");
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
+		tableModel.addColumn("Überschwingen");
 
-		for (int i = 0; i < table.getColumnCount(); i++) {
+		// set size of first column
+		table.getColumnModel().getColumn(0).setMinWidth(70);
+		table.getColumnModel().getColumn(0).setMaxWidth(70);
+		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+
+		// set size of the rest columns
+		for (int i = 1; i < table.getColumnCount(); i++) {
 			TableColumn col;
-			col=table.getColumnModel().getColumn(i);
-			col.setMinWidth(60);
-			col.setMaxWidth(60);
-			col.setPreferredWidth(60);
+			col = table.getColumnModel().getColumn(i);
+			col.setMinWidth(50);
+			col.setMaxWidth(50);
+			col.setPreferredWidth(50);
 		}
-		
+
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(300, 150));
-		//table.setMinimumSize(new Dimension(100,200));
+		table.setPreferredSize(new Dimension(320, 200));
+		table.setMinimumSize(new Dimension(320, 200));
+
+		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		//table.setEnabled(false);
-		
+
+		// disable mouse resize icon
+		table.getTableHeader().setResizingAllowed(false);
+
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
 
@@ -163,14 +174,16 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		 */
 
 		// add button delete to GridBagLayout
-		add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
-
-		// add button adopt to GridBagLayout
-		add(btAdopt, new GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
+		/*
+		 * add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
+		 * GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE, new
+		 * Insets(10, 10, 10, 10), 0, 0));
+		 * 
+		 * // add button adopt to GridBagLayout add(btAdopt, new
+		 * GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
+		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
+		 * Insets(10, 10, 10, 10), 0, 0));
+		 */
 
 		// add title for trimm slider to GridbagLayout
 		add(lbTrimmSlider, new GridBagConstraints(0, 17, 2, 1, 0.0, 0.0,
@@ -183,19 +196,18 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 10, 10), 0, 0));
 
 		// add vertical dummy to GridbagLayout
-		add(new JPanel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
+		add(new JLabel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
+				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 
 		// add ActionListener to buttons
 		btAdopt.addActionListener(this);
 		btDelete.addActionListener(this);
 
-
 		// pack frame
-		//JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
-		
-		//myParent.getRootPane().setDefaultButton(btSimulate);
+		// JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
+
+		// myParent.getRootPane().setDefaultButton(btSimulate);
 	}
 
 	/**
@@ -215,7 +227,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tfAdaptTv.setVisible(miniVersionSelected);
 		table.setVisible(miniVersionSelected);
 		table.getTableHeader().setVisible(miniVersionSelected);
-		
+
 		btDelete.setVisible(miniVersionSelected);
 		btAdopt.setVisible(miniVersionSelected);
 	}
@@ -243,13 +255,13 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
 		closedLoop.getController().addToTable(tableModel);
-		
+
 	}
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
 		closedLoop.getController().removeFromTable(tableModel);
-		
+
 	}
 
 	@Override

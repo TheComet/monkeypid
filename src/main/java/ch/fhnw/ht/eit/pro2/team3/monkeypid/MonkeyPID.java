@@ -1,12 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
+import java.awt.Dimension;
+
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
-
 import de.javasoft.plaf.synthetica.*;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class MonkeyPID {
 
 		model.registerListener(view.outputPanel);
         model.registerListener(view.graphPanel);
-
+        model.registerListener(view.graphDisplayPanel);
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);
@@ -65,6 +66,7 @@ public class MonkeyPID {
 		StatusBar statusBar = new StatusBar();
 		//frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
+		//frame.setMinimumSize(new Dimension(1200, 900));
 		
 	}
 

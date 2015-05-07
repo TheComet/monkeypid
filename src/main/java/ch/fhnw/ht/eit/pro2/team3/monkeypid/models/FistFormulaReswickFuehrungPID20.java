@@ -1,5 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+
+import java.awt.*;
+
 public class FistFormulaReswickFuehrungPID20 extends AbstractControllerCalculator {
 
     public FistFormulaReswickFuehrungPID20(Plant plant) {
@@ -7,17 +11,22 @@ public class FistFormulaReswickFuehrungPID20 extends AbstractControllerCalculato
     }
 
     @Override
-    public void calculate() {
+    protected final IController calculate() {
         double tn = 1.35 * plant.getTg();
         double tv = 0.47 * plant.getTu();
         double kr = 0.95 * plant.getTg() / (plant.getKs() * plant.getTu());
-        double tp = tv * parasiticTimeConstantFactor;
+        double tp = beautifyTpSoNiklausIsHappy(tv * parasiticTimeConstantFactor);
         
-        this.controller = new PIDController(getName(), tn, tv, kr, tp);
+        return new PIDController(getName(), tn, tv, kr, tp);
     }
 
     @Override
     public String getName() {
-        return "Faustformel Reswick PID, 20%, Gute Führung";
+        return CalculatorNames.RESWICK_FUEHRUNG_PID_20;
+    }
+
+    @Override
+    public Color getColor() {
+        return RenderColors.RESWICK_FUEHRUNG_PID_20;
     }
 }

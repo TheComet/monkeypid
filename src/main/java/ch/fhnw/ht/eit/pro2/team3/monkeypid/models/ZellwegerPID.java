@@ -2,6 +2,8 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 
+import java.awt.*;
+
 public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
@@ -11,14 +13,19 @@ public class ZellwegerPID extends AbstractZellweger {
     }
 
     @Override
-    public void calculate() {
+    protected final IController calculate() {
         setAngleOfInflection(-135.0);
-        this.controller = calculatePID();
+        return calculatePID();
     }
 
     @Override
     public String getName() {
-        return "Zellweger PID";
+        return CalculatorNames.ZELLWEGER_PID;
+    }
+
+    @Override
+    public Color getColor() {
+        return RenderColors.ZELLWEGER_PID;
     }
 
     private IController calculatePID() {
@@ -31,6 +38,7 @@ public class ZellwegerPID extends AbstractZellweger {
         double tnk = 1.0 / (omegaInflection * beta);
         double tvk = beta / omegaInflection;
         double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
+        tp = beautifyTpSoNiklausIsHappy(tp);
 
         // find phiDamping on the phase of the open loop
         double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);

@@ -1,10 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  *GraphDisplayPanel is a panel which includes checkBoxes with names of all
@@ -13,25 +16,15 @@ import javax.swing.*;
  * @author Josua
  *
  */
-public class GraphDisplayPanel extends JPanel implements ActionListener {
+public class GraphDisplayPanel extends JPanel implements ActionListener, IModelListener {
 
-	private JCheckBox cbPhasengangmethode = new JCheckBox("Phasengangmethode",
-			true);
-	private JCheckBox cbFaustformel1a = new JCheckBox("Faustformel 1(XX%)",
-			true);
-	private JCheckBox cbFaustformel1b = new JCheckBox("Faustformel 1(X%)", true);
-	private JCheckBox cbFaustformel2a = new JCheckBox("Faustformel 2(XX%)",
-			true);
-	private JCheckBox cbFaustformel2b = new JCheckBox("Faustformel 2(X%)", true);
-	private JCheckBox cbFaustformel3a = new JCheckBox("Faustformel 3(XX%)",
-			true);
-	private JCheckBox cbFaustformel3b = new JCheckBox("Faustformel 3(X%)", true);
-	private JCheckBox cbFaustformel4a = new JCheckBox("Faustformel 4(XX%)",
-			true);
-	private JCheckBox cbFaustformel4b = new JCheckBox("Faustformel 4(X%)", true);
-	private JCheckBox cbFaustformel5a = new JCheckBox("Faustformel 5(XX%)",
-			true);
-	private JCheckBox cbFaustformel5b = new JCheckBox("Faustformel 5(X%)", true);
+    private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+
+    private class CheckBoxNotFoundException extends Exception {
+        public CheckBoxNotFoundException(String message) {
+            super(message);
+        }
+    }
 
 	/**
 	 * Constructor of GraphDisplayPanel adds 
@@ -39,59 +32,53 @@ public class GraphDisplayPanel extends JPanel implements ActionListener {
 	 * @param controller
 	 */
 	public GraphDisplayPanel() {
-		super(new FlowLayout(FlowLayout.LEADING));
-
-		add(cbPhasengangmethode);
-		add(cbFaustformel1a);
-		/*
-		 * add(cbFaustformel1b); add(cbFaustformel2a); add(cbFaustformel2b);
-		 * add(cbFaustformel3a); add(cbFaustformel3b); add(cbFaustformel4a);
-		 * add(cbFaustformel4b); add(cbFaustformel5a); add(cbFaustformel5b);
-		 */
-
-		/*
-		 * add(cbPhasengangmethode, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel1a, new
-		 * GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel1b, new
-		 * GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel2a, new
-		 * GridBagConstraints(2, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel2b, new
-		 * GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel3a, new
-		 * GridBagConstraints(3, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel3b, new
-		 * GridBagConstraints(3, 1, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel4a, new
-		 * GridBagConstraints(4, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel4b, new
-		 * GridBagConstraints(4, 1, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel5a, new
-		 * GridBagConstraints(5, 0, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0)); add(cbFaustformel5b, new
-		 * GridBagConstraints(5, 1, 1, 1, 1.0, 1.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0));
-		 */
+		//super(new FlowLayout(FlowLayout.LEADING));
+		super(new WrapLayout(WrapLayout.LEFT));
 	}
-	
 
-	/**
-	 * 
-	 */
+    private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
+        for(JCheckBox c : checkBoxes) {
+            if(c.getText().compareTo(name) == 0) {
+                return c;
+            }
+        }
+        throw new CheckBoxNotFoundException("Checkbox with name \"" + name + "\" not found");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        for(JCheckBox c : checkBoxes) {
+            if(actionEvent.getSource() == c) {
+                // TODO
+            }
+        }
+    }
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+	public void onAddClosedLoop(ClosedLoop closedLoop) {
+		JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
+        checkBoxes.add(cb);
+		add(cb);
 	}
+
+	@Override
+	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+        try {
+            JCheckBox c = findCheckBox(closedLoop.getName());
+            remove(c);
+            checkBoxes.remove(c);
+        } catch(CheckBoxNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+	}
+
+    @Override
+    public void onSimulationStarted() {
+
+    }
+
+    @Override
+    public void onSimulationComplete() {
+
+    }
 }

@@ -50,9 +50,10 @@ public class View extends JPanel implements Observer {
 		inputPanel.setBorder(new TitledBorder(null, "Eingabe"));
 		outputPanel.setBorder(new TitledBorder(null, "Ausgabe"));
 		
-		inputPanel.setMinimumSize(new Dimension(350, 370));
-		inputPanel.setPreferredSize(new Dimension(350, 370));
-		outputPanel.setMinimumSize(new Dimension(350, 450));
+		//TODO remove
+		//inputPanel.setMinimumSize(new Dimension(350, 370));
+		//inputPanel.setPreferredSize(new Dimension(350, 370));
+		//outputPanel.setMinimumSize(new Dimension(350, 450));
 		
 		// add input and output panel into a new panel
 		JPanel inputOutputPanel = new JPanel();
@@ -62,7 +63,7 @@ public class View extends JPanel implements Observer {
 				GridBagConstraints.NONE, new Insets(0, 0, 5, 0), 0, 0));
 		inputOutputPanel.add(outputPanel, new GridBagConstraints(0, 1, 1, 1,
 				0.0, 1.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 		
 		// add inputOutputPanel to GridBagLayout
 		add(inputOutputPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 0.0,
