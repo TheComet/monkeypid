@@ -127,6 +127,10 @@ public class ClosedLoop {
         return controller;
     }
 
+    public String getName() {
+        return controller.getName();
+    }
+
     public Color getColor() {
         return controller.getColor();
     }
