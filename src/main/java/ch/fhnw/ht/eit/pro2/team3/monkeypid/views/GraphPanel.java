@@ -39,14 +39,17 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 		XYItemRenderer renderer = new StandardXYItemRenderer();
 
 		// axes
-		NumberAxis xAxis = new NumberAxis("Y Data");
-		NumberAxis yAxis = new NumberAxis("X Data");
+		NumberAxis xAxis = new NumberAxis("Zeit");
+		NumberAxis yAxis = new NumberAxis("y(t)");
 
 		// create plot
 		XYPlot plot = new XYPlot(dataCollection, xAxis, yAxis, renderer);
 
 		// add plot into a new chart
-		JFreeChart chart = new JFreeChart("Test Plot", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+		JFreeChart chart = new JFreeChart("Sprungantwort Geschlossener Regelkreis", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+
+        // don't need the chart
+        chart.getLegend().setVisible(false);
 
 		// need a panel to add the chart to
 		ChartPanel panel = new ChartPanel(chart);
