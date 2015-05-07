@@ -386,4 +386,14 @@ public class LeftPanel extends JPanel implements ActionListener, IModelListener 
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
         closedLoop.getController().removeFromTable(tableModel);
 	}
+
+    @Override
+    public void onSimulationStarted() {
+
+    }
+
+    @Override
+    public void onSimulationComplete() {
+
+    }
 }

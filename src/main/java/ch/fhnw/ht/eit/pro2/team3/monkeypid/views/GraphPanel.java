@@ -79,4 +79,14 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
             System.out.println("Can't add step response to graph, it's already in the graph");
         }
     }
+
+    @Override
+    public void onSimulationStarted() {
+
+    }
+
+    @Override
+    public void onSimulationComplete() {
+
+    }
 }

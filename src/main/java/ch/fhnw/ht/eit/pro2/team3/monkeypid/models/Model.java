@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
@@ -8,9 +9,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Model implements IControllerCalculatorListener {
+public class Model implements IControllerCalculatorListener, IClosedLoopListener {
 
-    private boolean isCalculating = false;
     private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     // have the model own the sani curves, so they don't have to be reloaded from
@@ -55,6 +55,7 @@ public class Model implements IControllerCalculatorListener {
         }
 
         clearSimulations();
+        notifySimulationStarted();
         threadPool.submit(this::dispatchControllerCalculators);
     }
 
@@ -103,11 +104,27 @@ public class Model implements IControllerCalculatorListener {
         }
     }
 
+    private void notifySimulationStarted() {
+        listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationStarted);
+    }
+
+    private void notifySimulationComplete() {
+        if(!isSimulationActive()) {
+            listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationComplete);
+        }
+    }
+
     @Override
     public final void onControllerCalculationComplete(IControllerCalculator calculator) {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
         closedLoops.add(closedLoop);
+        closedLoop.registerListener(this);
         notifyAddClosedLoop(closedLoop);
         threadPool.submit(() -> closedLoop.calculateStepResponse(4 * 1024));
+    }
+
+    @Override
+    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
+        notifySimulationComplete();
     }
 }
