@@ -1,7 +1,10 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import java.util.ArrayList;
@@ -13,14 +16,23 @@ public class SaniCurves {
     private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
     private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
     
-    private  ArrayList<ArrayList<Double>> Tu_Tg_ratio_double = null;
-    private  ArrayList<ArrayList<Double>> Tg_inverse_double = null;
+    //interpolation tests
+    private  ArrayList<ArrayList<Double>> Tu_Tg_ratio_double = new ArrayList<>();
+    private  ArrayList<ArrayList<Double>> Tg_inverse_double = new ArrayList<>();
 
+    static final SplineInterpolator interpolatorSpline = new SplineInterpolator();
+    
+    private ArrayList<PolynomialSplineFunction> Tu_Tg_ratioSpline = new ArrayList<>();
+    private ArrayList<PolynomialSplineFunction> Tg_inverseSpline = new ArrayList<>();
+    
     /**
      * Loads
      */
     public SaniCurves() {
         loadMatlabTables();
+        //interpolation test
+        loadMatlabTablesDouble();
+        calculateSplineFunctions();
     }
 
     /**
@@ -38,6 +50,32 @@ public class SaniCurves {
     private void loadMatlabTablesDouble(){
     	Tu_Tg_ratio_double = Assets.loadSaniCurvesDoubleValues("math_tables/tu_tg_ratio");
     	Tg_inverse_double = Assets.loadSaniCurvesDoubleValues("math_tables/tg_inverse");
+    }
+    
+    //calculate all Spline Functions with 
+    private void calculateSplineFunctions(){
+    	//inverse
+    	for(ArrayList<Double> i : Tu_Tg_ratio_double ) {
+    		double[] row = new  double[i.size()];
+    		for (int j = 0; j < row.length; j++) {
+				row[j] = (double) i.get(j);
+			}
+	    	Tu_Tg_ratioSpline.add(interpolatorSpline.interpolate(
+	    			row,
+	    			MathStuff.linspace(0, 1, Tu_Tg_ratio_double.get(0).size())	
+	    			));
+    	}
+    	//not inverse
+    	for(ArrayList<Double> i : Tg_inverse_double ) {
+    		double[] row = new  double[i.size()];
+    		for (int j = 0; j < row.length; j++) {
+				row[j] = i.get(j);
+			}
+    		Tg_inverseSpline.add(interpolatorSpline.interpolate(
+    				MathStuff.linspace(0, 1, Tg_inverse_double.get(0).size()),
+    				row
+	    	));
+    	}
     }
 
     public int lookupPower(double TuTgRatio) {
@@ -71,6 +109,7 @@ public class SaniCurves {
         return power;
     }
 
+    //Linear Interpolation (used until now)
     public double[] calculateTimeConstants(double tu, double tg) {
 
         double TuTgRatio = tu / tg;
@@ -95,12 +134,45 @@ public class SaniCurves {
 
         return timeConstants;
     }
+    
+    //from Richard Gut MicroMatlab.java
+    public static double spline(double[] x, double[] y, double v) {
+		PolynomialSplineFunction f = interpolatorSpline.interpolate(x, y);
+		return f.value(v);
+	}
+    
+    //spline Interpolation
+    public double[] calculateTimeConstantsSpline(double tu, double tg) {
 
-    public PolynomialSplineFunction getTuTgRatioCurve(int power) {
+        double TuTgRatio = tu / tg;
+
+        // get power level
+        int power = lookupPower(TuTgRatio);
+
+        // prepare return array (it has as many indices as the power, starting at ^2)
+        double[] timeConstants = new double[power];
+
+        // look up intersection points in interpolated matlab tables
+        double r = Tu_Tg_ratioSpline.get(power-2).value(TuTgRatio);
+        double w = Tg_inverseSpline.get(power-2).value(r);
+        
+        
+        // last time constant can now be calculated
+        timeConstants[power - 1] = w * tg;
+
+        // calculate the other time constants
+        for(int i = power - 2; i >= 0; i--) {
+            timeConstants[i] = timeConstants[power - 1] * Math.pow(r, power - i - 1);
+        }
+		
+        return timeConstants;
+    }
+
+    private PolynomialSplineFunction getTuTgRatioCurve(int power) {
         return Tu_Tg_ratio.get(power - 2);
     }
 
-    public PolynomialSplineFunction getTgInverseCurve(int power) {
+    private PolynomialSplineFunction getTgInverseCurve(int power) {
         return Tg_inverse.get(power - 2);
     }
 }

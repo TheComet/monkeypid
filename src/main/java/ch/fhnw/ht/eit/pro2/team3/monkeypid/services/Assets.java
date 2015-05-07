@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import java.awt.MediaTracker;
@@ -63,6 +64,7 @@ public class Assets {
                 // apply cubic interpolation to the data points and store curve into return value
                 // for Tu_Tg the x and y data points are swapped
                 LinearInterpolator interpolator = new LinearInterpolator();
+                //SplineInterpolator interpolator = new SplineInterpolator();
                 if(swapXY)
                     listOfSplines.add(interpolator.interpolate(yValues, xValues));
                 else
@@ -94,24 +96,9 @@ public class Assets {
                 // load the data points into an XYSeries object and add that to the
                 // list of XYSeries objects
                 String[] yValuesStr = s.split("\t");
-                //double[] xValues = new double[yValuesStr.length];
-                //double[] yValues = new double[yValuesStr.length];
                 for(int i = 0; i < yValuesStr.length; i++) {
-                    //xValues[i] = (double)i / (double)(yValuesStr.length - 1);
-                    //yValues[i] = Double.parseDouble(yValuesStr[i]);
                 	saniRow.add(Double.parseDouble(yValuesStr[i]));
                 }
-                
-                /*
-                // apply cubic interpolation to the data points and store curve into return value
-                // for Tu_Tg the x and y data points are swapped
-                LinearInterpolator interpolator = new LinearInterpolator();
-                if(swapXY)
-                    listOfSplines.add(interpolator.interpolate(yValues, xValues));
-                else
-                    listOfSplines.add(interpolator.interpolate(xValues, yValues));
-                    */
-              
                 listOfDoubleArrays.add(saniRow);
                 
             });
