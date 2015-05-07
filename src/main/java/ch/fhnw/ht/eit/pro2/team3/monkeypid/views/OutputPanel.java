@@ -60,7 +60,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	private JButton btAdopt = new JButton("Uebernehmen");
 
 	// table and table model
-	DefaultTableModel tableModel = new DefaultTableModel();
+	CustomTableModel tableModel = new CustomTableModel();
 	JTable table = new JTable(tableModel);
 
 	// adjustment slider
@@ -109,7 +109,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		 * model.addRow(new Object[] { "v1", "v2" });
 		 */
 
-		// table
+		// add columns to the table
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Kr");
 		tableModel.addColumn("Tn");
@@ -117,10 +117,12 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("Überschwingen");
 
+		//set size of first column
 		table.getColumnModel().getColumn(0).setMinWidth(70);
 		table.getColumnModel().getColumn(0).setMaxWidth(70);
 		table.getColumnModel().getColumn(0).setPreferredWidth(70);
 		
+		//set size of the rest columns
 		for (int i = 1; i < table.getColumnCount(); i++) {
 			TableColumn col;
 			col=table.getColumnModel().getColumn(i);
@@ -136,7 +138,6 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		//disable mouse resize icon
 		table.getTableHeader().setResizingAllowed(false);
-		//table.setEnabled(false);
 		
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
