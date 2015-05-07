@@ -22,7 +22,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 	private JFormattedDoubleTextField txtField = this;
 	private double minValue = -Double.MAX_VALUE, maxValue = Double.MAX_VALUE,
 			value;
-	private DecimalFormat formatter = null;
+	private DecimalFormat formatter = new DecimalFormat("###.##");
 	private int digits = 0;
 	private boolean edited = false;
 	private boolean errorDisplayed = false;

@@ -8,13 +8,12 @@ public class FistFormulaReswickStoerPID0 extends AbstractControllerCalculator {
 
     @Override
     public void calculate() {
-        this.controller = new PIDController(
-                getName(),
-                2.4 * plant.getTu(),
-                0.42 * plant.getTu(),
-                0.95 * plant.getTg() / (plant.getKs() * plant.getTu()),
-                0.0
-        );
+        double tn = 2.4 * plant.getTu();
+        double tv = 0.42 * plant.getTu();
+        double kr = 0.95 * plant.getTg() / (plant.getKs() * plant.getTu());
+        double tp = tv * parasiticTimeConstantFactor;
+
+        this.controller = new PIDController(getName(), tn, tv, kr, tp);
     }
 
     @Override
