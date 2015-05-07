@@ -24,6 +24,21 @@ public class MathStuff {
         return ret;
     }
 
+    /**
+     * Returns the largest value in an array of doubles
+     * @param arr The array to find the largest value of.
+     * @return The largest value.
+     */
+    public static double max(double[] arr) {
+        double largest = Double.MIN_VALUE;
+        for(double value : arr) {
+            if(value > largest) {
+                largest = value;
+            }
+        }
+        return largest;
+    }
+
     public static double[] linspace(double startValue, double endValue, int nValues){
         double step = (endValue - startValue)/(nValues-1);
 

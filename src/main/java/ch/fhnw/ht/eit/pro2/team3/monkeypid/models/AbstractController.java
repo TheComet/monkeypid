@@ -34,16 +34,6 @@ public abstract class AbstractController implements IController {
         return transferFunction;
     }
 
-    @Override
-    public final synchronized void removeFromTable(DefaultTableModel table) {
-        for(int row = 0; row < table.getRowCount(); row++) {
-            if(getName().compareTo((String) table.getValueAt(row, 0)) == 0) { // name is stored in column 0
-                table.removeRow(row);
-                return;
-            }
-        }
-    }
-
     protected final void setTransferFunction(TransferFunction transferFunction) {
         this.transferFunction = transferFunction;
     }

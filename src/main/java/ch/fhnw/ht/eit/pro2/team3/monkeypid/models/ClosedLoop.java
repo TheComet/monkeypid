@@ -8,7 +8,9 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +24,7 @@ public class ClosedLoop {
     private XYSeries stepResponse = null;
     private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
     private Color color = null;
+    private double maxOverSwing;
 
     public ClosedLoop(Plant plant, IController controller) {
         setPlantAndController(plant, controller);
@@ -61,6 +64,10 @@ public class ClosedLoop {
         // cut away mirrored part
         y = Arrays.copyOfRange(y, 0, y.length / 2);
 
+        // compute maximum overswing in percent - see issue #23
+        maxOverSwing = MathStuff.max(y);
+        maxOverSwing = (maxOverSwing - 1.0) * 100;
+
         // generate time axis
         double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
@@ -95,6 +102,31 @@ public class ClosedLoop {
         }
 
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
+    }
+
+    public synchronized void addToTable(DefaultTableModel table) {
+        // get the strings the controller wants to insert into the table,
+        // and expand the array by 1 to make space for the overswing value
+        String[] controllerRow = getController().getTableRowString();
+        String[] tableRow = new String[controllerRow.length + 1];
+        System.arraycopy(controllerRow, 0, tableRow, 0, controllerRow.length);
+
+        // insert overswing value
+        String str = new DecimalFormat("00.0").format(maxOverSwing).replaceAll("\\G0", " ") + "%";
+        str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
+        tableRow[controllerRow.length] = str;
+
+        // add the row
+        table.addRow(tableRow);
+    }
+
+    public synchronized void removeFromTable(DefaultTableModel table) {
+        for(int row = 0; row < table.getRowCount(); row++) {
+            if(getName().compareTo((String) table.getValueAt(row, 0)) == 0) { // name is stored in column 0
+                table.removeRow(row);
+                return;
+            }
+        }
     }
 
     public final void registerListener(IClosedLoopListener listener) {
