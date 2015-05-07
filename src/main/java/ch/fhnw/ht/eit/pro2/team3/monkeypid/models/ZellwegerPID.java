@@ -31,6 +31,7 @@ public class ZellwegerPID extends AbstractZellweger {
         double tnk = 1.0 / (omegaInflection * beta);
         double tvk = beta / omegaInflection;
         double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
+        tp = beautifyTpSoNiklausIsHappy(tp);
 
         // find phiDamping on the phase of the open loop
         double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);

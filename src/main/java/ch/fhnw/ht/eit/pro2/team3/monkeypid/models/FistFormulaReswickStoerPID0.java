@@ -11,7 +11,7 @@ public class FistFormulaReswickStoerPID0 extends AbstractControllerCalculator {
         double tn = 2.4 * plant.getTu();
         double tv = 0.42 * plant.getTu();
         double kr = 0.95 * plant.getTg() / (plant.getKs() * plant.getTu());
-        double tp = tv * parasiticTimeConstantFactor;
+        double tp = beautifyTpSoNiklausIsHappy(tv * parasiticTimeConstantFactor);
 
         this.controller = new PIDController(getName(), tn, tv, kr, tp);
     }
