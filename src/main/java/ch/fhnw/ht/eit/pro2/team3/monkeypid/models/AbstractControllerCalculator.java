@@ -11,6 +11,7 @@ public abstract class AbstractControllerCalculator
 
     private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
+    protected double parasiticTimeConstantFactor = 0.1;
     protected IController controller;
 
     public AbstractControllerCalculator(Plant plant) {
@@ -26,6 +27,11 @@ public abstract class AbstractControllerCalculator
     @Override
     public void setPlant(Plant plant) {
         this.plant = plant;
+    }
+
+    @Override
+    public void setParasiticTimeConstantFactor(double parasiticTimeConstantFactor) {
+        this.parasiticTimeConstantFactor = parasiticTimeConstantFactor;
     }
 
     @Override

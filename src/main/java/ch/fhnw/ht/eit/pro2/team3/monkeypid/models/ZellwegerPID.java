@@ -5,7 +5,6 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
-    private double parasiticTimeConstantFactor = 0.1;
 
     public ZellwegerPID(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
