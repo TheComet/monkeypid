@@ -58,7 +58,7 @@ public abstract class AbstractControllerCalculator
         listeners.remove(listener);
     }
 
-    private void notifyCalculationComplete() {
+    private synchronized void notifyCalculationComplete() {
         for (IControllerCalculatorListener listener : listeners) {
             listener.onControllerCalculationComplete(this);
         }

@@ -200,17 +200,17 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         listeners.remove(listener);
     }
 
-    private void notifyAddClosedLoop(ClosedLoop loop) {
+    private synchronized void notifyAddClosedLoop(ClosedLoop loop) {
         for(IModelListener listener : listeners) {
             listener.onAddClosedLoop(loop);
         }
     }
 
-    private void notifySimulationBegin() {
+    private synchronized void notifySimulationBegin() {
         listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationBegin);
     }
 
-    private void notifySimulationComplete() {
+    private synchronized void notifySimulationComplete() {
         if(!isSimulationActive()) {
             listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationComplete);
         }
@@ -235,8 +235,8 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     @Override
     public final void onControllerCalculationComplete(IControllerCalculator calculator) {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
-        closedLoops.add(closedLoop);
         closedLoop.registerListener(this);
+        closedLoops.add(closedLoop);
         notifyAddClosedLoop(closedLoop);
         threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024));
     }
