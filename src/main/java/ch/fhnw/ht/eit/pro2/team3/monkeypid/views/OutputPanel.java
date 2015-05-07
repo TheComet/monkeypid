@@ -115,31 +115,40 @@ public class OutputPanel extends JPanel implements ActionListener,
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
-		tableModel.addColumn("Überschwingen");
-
+		tableModel.addColumn("<html><left>Über-<br>schwingen");
+		
+		
+		
 		// set size of first column
-		table.getColumnModel().getColumn(0).setMinWidth(70);
-		table.getColumnModel().getColumn(0).setMaxWidth(70);
-		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+		table.getColumnModel().getColumn(0).setMinWidth(90);
+		table.getColumnModel().getColumn(0).setMaxWidth(90);
+		table.getColumnModel().getColumn(0).setPreferredWidth(90);
 
+		table.getColumnModel().getColumn(5).setMinWidth(90);
+		table.getColumnModel().getColumn(5).setMaxWidth(90);
+		table.getColumnModel().getColumn(5).setPreferredWidth(90);
+		
 		// set size of the rest columns
-		for (int i = 1; i < table.getColumnCount(); i++) {
+		for (int i = 1; i < table.getColumnCount()-1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth(50);
-			col.setMaxWidth(50);
-			col.setPreferredWidth(50);
+			col.setMinWidth(70);
+			col.setMaxWidth(70);
+			col.setPreferredWidth(70);
 		}
 
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(320, 200));
-		table.setMinimumSize(new Dimension(320, 200));
-
+		table.setPreferredSize(new Dimension(460, 200));
+		table.setMinimumSize(new Dimension(460, 200));
+		table.getTableHeader().setPreferredSize(new Dimension(460, 50));
+		
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		// disable mouse resize icon
 		table.getTableHeader().setResizingAllowed(false);
+		
+		
 
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
