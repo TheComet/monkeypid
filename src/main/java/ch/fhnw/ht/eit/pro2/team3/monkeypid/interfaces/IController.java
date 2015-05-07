@@ -7,5 +7,6 @@ import javax.swing.table.DefaultTableModel;
 public interface IController {
     public String getName();
     public void addToTable(DefaultTableModel table);
+    public void removeFromTable(DefaultTableModel table);
     public TransferFunction getTransferFunction();
 }

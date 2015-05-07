@@ -2,9 +2,14 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,7 +34,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  *
  */
 public class OutputPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener {
+		IControllerCalculatorListener, IController, IModelListener {
 
 	Controller controller;
 
@@ -236,8 +241,52 @@ public class OutputPanel extends JPanel implements ActionListener,
 		}
 	}
 
+
 	@Override
-	public void notifyNewController(IController controller) {
-		controller.addToTable(tableModel);
+	public void onControllerCalculationComplete(IControllerCalculator controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addToTable(DefaultTableModel table) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeFromTable(DefaultTableModel table) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public TransferFunction getTransferFunction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onAddClosedLoop(ClosedLoop closedLoop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSimulationStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSimulationComplete() {
+		// TODO Auto-generated method stub
+		
 	}
 }

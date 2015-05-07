@@ -2,8 +2,12 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+
+
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
 import java.awt.Color;
@@ -19,8 +23,6 @@ import java.awt.event.KeyListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.org.apache.bcel.internal.generic.IFNULL;
-
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
  * comboBox to select the regulator, a comboBox to select the overshoot, the
@@ -30,7 +32,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  *
  */
 public class InputPanel extends JPanel implements ActionListener,
-		IControllerCalculatorListener, KeyListener {
+		IControllerCalculatorListener, KeyListener, IModelListener {
 
 	Controller controller;
 
@@ -272,8 +274,13 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void notifyNewController(IController controller) {
-		controller.addToTable(tableModel);
+    public void onAddClosedLoop(ClosedLoop closedLoop) {
+		closedLoop.getController().addToTable(tableModel);
+	}
+
+	@Override
+	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+        closedLoop.getController().removeFromTable(tableModel);
 	}
 
 	@Override
@@ -294,5 +301,21 @@ public class InputPanel extends JPanel implements ActionListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// not needed
+	}
+
+    @Override
+    public void onSimulationStarted() {
+
+    }
+
+    @Override
+    public void onSimulationComplete() {
+
+    }
+
+	@Override
+	public void onControllerCalculationComplete(IControllerCalculator controller) {
+		// TODO Auto-generated method stub
+		
 	}
 }

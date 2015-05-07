@@ -10,14 +10,24 @@ public class TransferFunction {
 	}
 
     /**
-     * @brief Gets the array of denominator coefficients.
-     * @return The coefficients are returned in descending order, i.e. the last
+     * @brief Sets the numerator coefficients.
+     * The coefficients should be in descending order, i.e. the last
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.
      */
-	public double[] getDenominatorCoefficients(){
-		return denominatorCoefficients;
-	}
+    public void setNumeratortorCoefficients(double[] coeff) {
+        this.numeratorCoefficients = coeff;
+    }
+
+    /**
+     * @brief Sets the denominator coefficients.
+     * The coefficients should be in descending order, i.e. the last
+     * coefficient is the constant value, the first coefficient is the product
+     * of the greatest power.
+     */
+    public void setDenominatorCoefficients(double[] coeff) {
+        this.denominatorCoefficients = coeff;
+    }
 
     /**
      * @brief Gets the array of numerator coefficients.
@@ -25,8 +35,18 @@ public class TransferFunction {
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.
      */
-	public double[] getNumeratorCoefficients(){
-		return numeratorCoefficients;
+    public double[] getNumeratorCoefficients(){
+        return numeratorCoefficients;
+    }
+
+    /**
+     * @brief Gets the array of denominator coefficients.
+     * @return The coefficients are returned in descending order, i.e. the last
+     * coefficient is the constant value, the first coefficient is the product
+     * of the greatest power.
+     */
+	public double[] getDenominatorCoefficients(){
+		return denominatorCoefficients;
 	}
 
 }

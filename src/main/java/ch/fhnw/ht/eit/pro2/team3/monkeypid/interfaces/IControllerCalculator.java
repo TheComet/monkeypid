@@ -7,8 +7,7 @@ public interface IControllerCalculator extends Runnable {
     public void calculate();
     public void setPlant(Plant plant);
     public IController getController();
+    public String getName();
     public void registerListener(IControllerCalculatorListener listener);
     public void unregisterListener(IControllerCalculatorListener listener);
-    public void notifyNewController();
-    public String getName();
 }

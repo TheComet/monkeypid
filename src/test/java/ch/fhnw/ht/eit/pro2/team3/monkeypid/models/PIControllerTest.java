@@ -16,6 +16,9 @@ public class PIControllerTest {
 		double Tn = 3.3122;
 		PIController myPIController = new PIController("myPI", Kr, Tn);
 		
+		//expected values
+		//Br = Kr*[Tn 1];
+		//Ar = [Tn 0];
 		double[] NumeratorExpected = {3.2591, 0.9840};
 		double[] DenominatorExpected = {3.3122, 0.0};
 		assertArrayEquals(NumeratorExpected, myPIController.getTransferFunction().getNumeratorCoefficients(),delta);
@@ -26,14 +29,17 @@ public class PIControllerTest {
 	
 	@Test
     public void testPIControllerSetParameters()  throws Exception {
-			//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
+	    //[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
 		//Tn = 3.3122, Kr =    0.9840
 		double Kr = 0.9840;
 		double Tn = 3.3122;
 		
-		PIController myPIController = new PIController("myPI", 1.2, 5.5);
+		PIController myPIController = new PIController("myPI", 1.2, 5.5); //set some random values
 		myPIController.setParameters(Kr, Tn);
 		
+		//expected values
+		//Br = Kr*[Tn 1];
+		//Ar = [Tn 0];
 		double[] NumeratorExpected = {3.2591, 0.9840};
 		double[] DenominatorExpected = {3.3122, 0.0};
 		assertArrayEquals(NumeratorExpected, myPIController.getTransferFunction().getNumeratorCoefficients(),delta);

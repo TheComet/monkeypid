@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import java.awt.BorderLayout;
-
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
@@ -51,7 +49,10 @@ public class MonkeyPID {
 		Model model = new Model();
 		Controller controller = new Controller(model);
 		View view = new View(controller);
-		model.registerControllerCalculatorListener(view.inputPanel);
+
+		model.registerListener(view.outputPanel);
+        model.registerListener(view.graphPanel);
+
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);
