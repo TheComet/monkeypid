@@ -115,19 +115,27 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tn");
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
+		tableModel.addColumn("Überschwingen");
 
-		for (int i = 0; i < table.getColumnCount(); i++) {
+		table.getColumnModel().getColumn(0).setMinWidth(70);
+		table.getColumnModel().getColumn(0).setMaxWidth(70);
+		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+		
+		for (int i = 1; i < table.getColumnCount(); i++) {
 			TableColumn col;
 			col=table.getColumnModel().getColumn(i);
-			col.setMinWidth(60);
-			col.setMaxWidth(60);
-			col.setPreferredWidth(60);
+			col.setMinWidth(50);
+			col.setMaxWidth(50);
+			col.setPreferredWidth(50);
 		}
 		
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(300, 150));
-		//table.setMinimumSize(new Dimension(100,200));
+		table.setPreferredSize(new Dimension(320, 200));
+		table.setMinimumSize(new Dimension(320,200));
+		
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		//disable mouse resize icon
+		table.getTableHeader().setResizingAllowed(false);
 		//table.setEnabled(false);
 		
 		// disable user column dragging

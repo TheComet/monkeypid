@@ -57,6 +57,7 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 		// TODO beste variante?
 		// set prefered size to 600x400
 		panel.setPreferredSize(new java.awt.Dimension(600, 400));
+		panel.setMinimumSize(new Dimension(600, 400));
 
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
