@@ -1,5 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
+
+import java.awt.*;
+
 public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
 
     public FistFormulaRosenbergPI(Plant plant) {
@@ -7,8 +11,8 @@ public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
     }
 
     @Override
-    public void calculate() {
-        this.controller = new PIController(
+    protected final IController calculate() {
+        return new PIController(
                 getName(),
                 0.91 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 3.3 * plant.getTu()
@@ -17,6 +21,11 @@ public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
 
     @Override
     public String getName() {
-        return "Faustformel Rosenberg PI";
+        return CalculatorNames.ROSENBERG_PI;
+    }
+
+    @Override
+    public Color getColor() {
+        return RenderColors.ROSENBERG_PI;
     }
 }

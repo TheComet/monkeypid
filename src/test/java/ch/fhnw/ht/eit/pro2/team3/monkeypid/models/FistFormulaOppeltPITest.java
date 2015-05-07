@@ -11,7 +11,7 @@ public class FistFormulaOppeltPITest {
 	@Test
 	public void testCalculate() {
 		IControllerCalculator c = new FistFormulaOppeltPI(new Plant(1, 1, 1, new SaniCurves()));
-		c.calculate();
+		c.run();
 		// TODO: calc.getController();
 		// TODO: assertEquals("OppeltPI Test failed",calc.getController(),); //Insert MathStuff Value
 		fail("Not yet implemented");

@@ -13,7 +13,7 @@ public abstract class AbstractControllerCalculator
     private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
     protected double parasiticTimeConstantFactor = 0.1;
-    protected IController controller;
+    private IController controller;
 
     public AbstractControllerCalculator(Plant plant) {
         setPlant(plant);
@@ -24,9 +24,12 @@ public abstract class AbstractControllerCalculator
         return Double.parseDouble(f.format(value));
     }
 
+    protected abstract IController calculate();
+
     @Override
     public final void run() {
-        calculate();
+        controller = calculate();
+        controller.setColor(getColor());
         notifyCalculationComplete();
     }
 
