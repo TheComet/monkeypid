@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.SplineNAK;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
@@ -25,6 +26,9 @@ public class SaniCurves {
     private ArrayList<PolynomialSplineFunction> Tu_Tg_ratioSpline = new ArrayList<>();
     private ArrayList<PolynomialSplineFunction> Tg_inverseSpline = new ArrayList<>();
     
+    private ArrayList<double[][]> Tu_Tg_ratioCubiCNAK = new ArrayList<>();
+    private ArrayList<double[][]> Tg_inverseCubiCNAK = new ArrayList<>();
+    
     /**
      * Loads
      */
@@ -33,6 +37,7 @@ public class SaniCurves {
         //interpolation test
         loadMatlabTablesDouble();
         calculateSplineFunctions();
+        calculateCubicNAKFunctions();
     }
 
     /**
@@ -52,7 +57,7 @@ public class SaniCurves {
     	Tg_inverse_double = Assets.loadSaniCurvesDoubleValues("math_tables/tg_inverse");
     }
     
-    //calculate all Spline Functions with 
+    //calculate all Spline Functions 
     private void calculateSplineFunctions(){
     	//inverse
     	for(ArrayList<Double> i : Tu_Tg_ratio_double ) {
@@ -76,6 +81,34 @@ public class SaniCurves {
     				row
 	    	));
     	}
+    }
+    
+    //calculate all CubicNAK Functions  
+    private void calculateCubicNAKFunctions(){
+		int n = Tu_Tg_ratio_double.get(0).size();	
+		
+		//SplineNAK.cubic_nak(n, MicroMatlab.x, MicroMatlab.y, b, c, d)
+		//inverse
+		for(ArrayList<Double> i : Tu_Tg_ratio_double ) {
+    		double[] row = new  double[i.size()];
+    		for (int j = 0; j < row.length; j++) {
+				row[j] = (double) i.get(j);
+			}
+    		double[][] bcdRow = new double[3][n]; //b, c, d
+    		SplineNAK.cubic_nak(n, row, MathStuff.linspace(0, 1, Tu_Tg_ratio_double.get(0).size()), bcdRow[0], bcdRow[1], bcdRow[2]);
+    	    Tu_Tg_ratioCubiCNAK.add(bcdRow);
+    	}
+		//inverse not inverse
+		for(ArrayList<Double> i : Tg_inverse_double ) {
+    		double[] row = new  double[i.size()];
+    		for (int j = 0; j < row.length; j++) {
+				row[j] = (double) i.get(j);
+			}
+    		double[][] bcdRow = new double[3][n];
+    		SplineNAK.cubic_nak(n, MathStuff.linspace(0, 1, Tg_inverse_double.get(0).size()), row, bcdRow[0], bcdRow[1], bcdRow[2]);
+    		Tg_inverseCubiCNAK.add(bcdRow);
+    	}
+		
     }
 
     public int lookupPower(double TuTgRatio) {
@@ -156,6 +189,56 @@ public class SaniCurves {
         double r = Tu_Tg_ratioSpline.get(power-2).value(TuTgRatio);
         double w = Tg_inverseSpline.get(power-2).value(r);
         
+        
+        // last time constant can now be calculated
+        timeConstants[power - 1] = w * tg;
+
+        // calculate the other time constants
+        for(int i = power - 2; i >= 0; i--) {
+            timeConstants[i] = timeConstants[power - 1] * Math.pow(r, power - i - 1);
+        }
+		
+        return timeConstants;
+    }
+    
+    //Cubic NAK
+    public double[] calculateTimeConstantsCubicNAK(double tu, double tg) {
+
+        double TuTgRatio = tu / tg;
+
+        // get power level
+        int power = lookupPower(TuTgRatio);
+
+        // prepare return array (it has as many indices as the power, starting at ^2)
+        double[] timeConstants = new double[power];
+
+        // look up intersection points in interpolated matlab tables
+        int n = Tu_Tg_ratioCubiCNAK.get(0)[0].length;
+        
+        //Tu_Tg
+        //get b, c, d
+        double[][] bcdRow = new double[3][n];
+        bcdRow = Tu_Tg_ratioCubiCNAK.get(power-2);
+        
+        //get x, y,
+        double[] rowTu_Tg_ratio = new  double[Tu_Tg_ratio_double.get(power-2).size()];
+		for (int j = 0; j < rowTu_Tg_ratio.length; j++) {
+			rowTu_Tg_ratio[j] = (double) Tu_Tg_ratio_double.get(power-2).get(j);
+		}
+		//spline_eval needs again the double arrays
+        double r = SplineNAK.spline_eval(n, rowTu_Tg_ratio, MathStuff.linspace(0, 1, Tu_Tg_ratio_double.get(0).size()), bcdRow[0], bcdRow[1], bcdRow[2], TuTgRatio);
+        
+        //Tg_T
+        //get b, c, d;
+        bcdRow = Tg_inverseCubiCNAK.get(power-2);
+        
+        //get x, y,
+        double[] rowTg_inverse = new  double[Tg_inverse_double.get(power-2).size()];
+		for (int j = 0; j < rowTu_Tg_ratio.length; j++) {
+			rowTu_Tg_ratio[j] = (double) Tg_inverse_double.get(power-2).get(j);
+		}
+		//spline_eval needs again the double arrays
+        double w = SplineNAK.spline_eval(n, MathStuff.linspace(0, 1, Tg_inverse_double.get(0).size()), rowTg_inverse, bcdRow[0], bcdRow[1], bcdRow[2], r);
         
         // last time constant can now be calculated
         timeConstants[power - 1] = w * tg;
