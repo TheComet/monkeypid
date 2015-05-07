@@ -30,6 +30,8 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     };
     private RegulatorType regulatorType;
 
+    private double parasiticTimeConstantFactor;
+
     // list of closed loops to be displayed on the graph
     private ArrayList<ClosedLoop> closedLoops = new ArrayList<>();
 
@@ -52,6 +54,10 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
 
     public void setPhaseMargin(double phaseMargin) {
         this.phaseMargin = phaseMargin;
+    }
+
+    public void setParasiticTimeConstantFactor(double parasiticTimeConstantFactor) {
+        this.parasiticTimeConstantFactor = parasiticTimeConstantFactor;
     }
 
     private void clearSimulations() {
@@ -107,6 +113,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
 
         for(IControllerCalculator calculator : calculators) {
             calculator.registerListener(this);
+            calculator.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
             calculator.run(); // for some reason, this can't be threaded
         }
     }

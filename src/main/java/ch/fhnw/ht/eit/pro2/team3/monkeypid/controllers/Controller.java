@@ -33,6 +33,7 @@ public class Controller {
                                  OverswingValueTuple overswing){
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(ksValue, tuValue, tgValue);
+        model.setParasiticTimeConstantFactor(tpValue);
 		model.setPhaseMargin(overswing.angle());
         model.simulateAll();
 	}

@@ -8,13 +8,12 @@ public class FistFormulaOppeltPID extends AbstractControllerCalculator {
 
     @Override
     public void calculate() {
-        this.controller = new PIDController(
-                getName(),
-                2.0 * plant.getTu(),
-                0.42 * plant.getTu(),
-                1.2 * plant.getTg() / (plant.getKs() * plant.getTu()),
-                0.0
-        );
+        double tn = 2.0 * plant.getTu();
+        double tv = 0.42 * plant.getTu();
+        double kr = 1.2 * plant.getTg() / (plant.getKs() * plant.getTu());
+        double tp = tv * parasiticTimeConstantFactor;
+
+        this.controller = new PIDController(getName(), tn, tv, kr, tp);
     }
 
     @Override

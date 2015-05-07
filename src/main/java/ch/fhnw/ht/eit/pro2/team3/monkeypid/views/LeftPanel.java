@@ -164,7 +164,7 @@ public class LeftPanel extends JPanel implements ActionListener, IModelListener 
 		add(lbTuInfo, new GridBagConstraints(2, 4, 4, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 0, 10, 10), 0, 0));
-		tfTp.setText("10"); // set default value of Tp
+		tfTp.setValue(10); // set default value of Tp
 		add(tfTp, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 10, 0), 50, 0));
@@ -321,7 +321,7 @@ public class LeftPanel extends JPanel implements ActionListener, IModelListener 
 			double tfKsValue = tfKs.doubleValue();
 			double tfTuValue = tfTu.doubleValue();
 			double tfTgValue = tfTg.doubleValue();
-			double tfTpValue = tfTp.doubleValue();
+			double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to absolute
 
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
