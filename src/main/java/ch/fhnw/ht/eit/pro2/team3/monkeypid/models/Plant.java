@@ -38,7 +38,8 @@ public class Plant {
         this.tu = tu;
         this.tg = tg;
         this.ks = ks;
-        timeConstants = sani.calculateTimeConstants(tu, tg);
+        //timeConstants = sani.calculateTimeConstants(tu, tg);
+        timeConstants = sani.calculateTimeConstantsCubicNAK(tu, tg);
         calculateTransferFunction();
     }
 
