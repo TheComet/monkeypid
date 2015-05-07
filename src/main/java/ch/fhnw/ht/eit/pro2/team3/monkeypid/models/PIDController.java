@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import javax.swing.table.DefaultTableModel;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class PIDController extends AbstractController {
@@ -31,7 +29,7 @@ public class PIDController extends AbstractController {
     }
 
     @Override
-    public String[] getTableRowString() {
+    public String[] getTableRowStrings() {
         return new String[]{
                 getName(),
                 new DecimalFormat("0.0000E0").format(getKr()),
