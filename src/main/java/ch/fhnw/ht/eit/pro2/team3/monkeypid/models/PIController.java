@@ -31,8 +31,8 @@ public class PIController extends AbstractController {
     public synchronized void addToTable(DefaultTableModel table) {
         table.addRow(new String[]{
                 getName(),
-                new DecimalFormat("0.####E0").format(getKr()),
-                new DecimalFormat("0.####E0").format(getTn())
+                new DecimalFormat("0.0000E0").format(getKr()),
+                new DecimalFormat("0.0000E0").format(getTn())
         });
     }
 

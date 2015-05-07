@@ -132,15 +132,15 @@ public class OutputPanel extends JPanel implements ActionListener,
 		for (int i = 1; i < table.getColumnCount()-1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth(70);
-			col.setMaxWidth(70);
-			col.setPreferredWidth(70);
+			col.setMinWidth(90);
+			col.setMaxWidth(90);
+			col.setPreferredWidth(90);
 		}
 
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(460, 200));
-		table.setMinimumSize(new Dimension(460, 200));
-		table.getTableHeader().setPreferredSize(new Dimension(460, 50));
+		table.setPreferredSize(new Dimension(520, 200));
+		table.setMinimumSize(new Dimension(520, 200));
+		table.getTableHeader().setPreferredSize(new Dimension(520, 50));
 		
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
