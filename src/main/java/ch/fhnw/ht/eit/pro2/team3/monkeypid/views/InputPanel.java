@@ -314,7 +314,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
     @Override
-    public void onSimulationStarted() {
+    public void onSimulationBegin() {
 
     }
 
