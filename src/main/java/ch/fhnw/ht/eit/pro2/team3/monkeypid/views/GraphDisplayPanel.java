@@ -32,7 +32,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	 * @param controller
 	 */
 	public GraphDisplayPanel() {
-		super(new FlowLayout(FlowLayout.LEADING));
+		//super(new FlowLayout(FlowLayout.LEADING));
+		super(new WrapLayout(WrapLayout.LEFT));
 	}
 
     private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
