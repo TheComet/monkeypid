@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import javax.swing.table.DefaultTableModel;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 public class PIController extends AbstractController {
 
@@ -29,8 +31,8 @@ public class PIController extends AbstractController {
     public synchronized void addToTable(DefaultTableModel table) {
         table.addRow(new String[]{
                 getName(),
-                Double.toString(getKr()),
-                Double.toString(getTn())
+                new DecimalFormat("0.####E0").format(getKr()),
+                new DecimalFormat("0.####E0").format(getTn())
         });
     }
 
