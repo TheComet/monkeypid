@@ -324,6 +324,16 @@ public class InputPanel extends JPanel implements ActionListener,
     }
 
 	@Override
+	public void onHideSimulation(ClosedLoop closedLoop) {
+
+	}
+
+	@Override
+	public void onShowSimulation(ClosedLoop closedLoop) {
+
+	}
+
+	@Override
 	public void onControllerCalculationComplete(IControllerCalculator controller) {
 		// TODO Auto-generated method stub
 		

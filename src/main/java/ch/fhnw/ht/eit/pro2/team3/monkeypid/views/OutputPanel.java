@@ -280,4 +280,14 @@ public class OutputPanel extends JPanel implements ActionListener,
 	@Override
 	public void onSimulationComplete() {
 	}
+
+	@Override
+	public void onHideSimulation(ClosedLoop closedLoop) {
+
+	}
+
+	@Override
+	public void onShowSimulation(ClosedLoop closedLoop) {
+
+	}
 }

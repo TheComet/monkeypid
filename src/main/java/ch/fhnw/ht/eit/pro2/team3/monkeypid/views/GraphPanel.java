@@ -101,11 +101,21 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
     @Override
     public void onSimulationStarted() {
-
     }
 
     @Override
     public void onSimulationComplete() {
+    }
 
+    @Override
+    public void onHideSimulation(ClosedLoop closedLoop) {
+        int seriesIndex = dataCollection.getSeriesIndex(closedLoop.getStepResponse().getKey());
+        chart.getXYPlot().getRendererForDataset(dataCollection).setSeriesVisible(seriesIndex, false);
+    }
+
+    @Override
+    public void onShowSimulation(ClosedLoop closedLoop) {
+        int seriesIndex = dataCollection.getSeriesIndex(closedLoop.getStepResponse().getKey());
+        chart.getXYPlot().getRendererForDataset(dataCollection).setSeriesVisible(seriesIndex, true);
     }
 }

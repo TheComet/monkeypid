@@ -43,7 +43,7 @@ public class View extends JPanel implements Observer {
 		// create the panels
 		inputPanel = new InputPanel(controller);
 		outputPanel = new OutputPanel(controller);
-		graphDisplayPanel = new GraphDisplayPanel();
+		graphDisplayPanel = new GraphDisplayPanel(controller);
 		graphPanel = new GraphPanel();
 
 		// set border for input and output panel

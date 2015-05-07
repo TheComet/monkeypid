@@ -32,7 +32,7 @@ public class Controller {
                                  String selectedRegulatorName,
                                  OverswingValueTuple overswing){
 		model.setRegulatorType(selectedRegulatorName);
-        model.setPlant(ksValue, tuValue, tgValue);
+        model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);
 		model.setPhaseMargin(overswing.angle());
         model.simulateAll();
@@ -44,6 +44,7 @@ public class Controller {
 	public void btDeleteAction(){
 		
 	}
+
 	/**
 	 * 
 	 * @param slKpValue
@@ -53,4 +54,14 @@ public class Controller {
 	public void btAdoptAction(int slKpValue, int slTnValue, int slTvValue){
 
 	}
+
+    public void cbCheckAction(String closedLoopName) {
+        model.selectSimulation(closedLoopName);
+        model.showSelectedSimulation();
+    }
+
+    public void cbUncheckAction(String closedLoopName) {
+        model.selectSimulation(closedLoopName);
+        model.hideSelectedSimulation();
+    }
 }
