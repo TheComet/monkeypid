@@ -44,7 +44,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         } else if(regulatorTypeName.compareTo("PID") == 0) {
             regulatorType = RegulatorType.PID;
         } else {
-            System.out.println("Unknown regulator type: " + regulatorTypeName);
+            System.out.println("Unknown controller type: " + regulatorTypeName);
         }
     }
 
