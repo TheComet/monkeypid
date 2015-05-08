@@ -1,5 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+import java.text.DecimalFormat;
+
 public class ControllerI extends AbstractController {
 
     private double tn;
@@ -24,7 +26,13 @@ public class ControllerI extends AbstractController {
 
     @Override
     public String[] getTableRowStrings() {
-        return new String[0];
+        return new String[]{
+                getName(),
+                "", // Kr  (PI/PID only)
+                new DecimalFormat("0.000E0").format(getTn()),
+                "", // Tv  (PID only)     -- need to pad so overswing value has the correct offset in the table
+                ""  // Tp  (PID only)
+        };
     }
 
     public void setParameters(double tn) {
