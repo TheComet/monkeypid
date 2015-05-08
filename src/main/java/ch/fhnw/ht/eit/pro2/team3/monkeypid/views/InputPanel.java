@@ -116,6 +116,12 @@ public class InputPanel extends JPanel implements ActionListener,
 			cbSelectOvershoot.addItem(overswingTable[i].percent());
 		}
 
+		//TODO remove
+		tfTu.setValue(2);
+		tfTg.setValue(6);
+		tfKs.setValue(1);
+		
+		
 		// add items for input fields to GridBagLayout
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
