@@ -34,10 +34,10 @@ public class PIDController extends AbstractController {
     public String[] getTableRowString() {
         return new String[]{
                 getName(),
-                new DecimalFormat("0.0000E0").format(getKr()),
-                new DecimalFormat("0.0000E0").format(getTn()),
-                new DecimalFormat("0.0000E0").format(getTv()),
-                new DecimalFormat("0.0000E0").format(getTp())
+                new DecimalFormat("0.000E0").format(getKr()),
+                new DecimalFormat("0.000E0").format(getTn()),
+                new DecimalFormat("0.000E0").format(getTv()),
+                new DecimalFormat("0.000E0").format(getTp())
         };
     }
 

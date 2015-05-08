@@ -211,7 +211,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			view.graphDisplayPanel.setVisible(miniVersionSelected);
 			// set visibility of components on the inputPanel
 			view.inputPanel.setMiniVersion(miniVersionSelected);
-			// set visibility of components ont the outputPanel
+			// set visibility of components on the outputPanel
 			view.outputPanel.setMiniVersion(miniVersionSelected);
 
 			// change text of menuItem

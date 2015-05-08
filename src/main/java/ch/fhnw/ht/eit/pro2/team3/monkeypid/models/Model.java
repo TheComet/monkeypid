@@ -238,7 +238,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         closedLoops.add(closedLoop);
         closedLoop.registerListener(this);
         notifyAddClosedLoop(closedLoop);
-        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024));
+        threadPool.submit(() -> closedLoop.calculateStepResponse(16 * 1024));
     }
 
     /**

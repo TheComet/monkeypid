@@ -6,6 +6,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
@@ -114,23 +116,27 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		table.getColumnModel().getColumn(0).setMaxWidth(90);
 		table.getColumnModel().getColumn(0).setPreferredWidth(90);
 
-		table.getColumnModel().getColumn(5).setMinWidth(90);
-		table.getColumnModel().getColumn(5).setMaxWidth(90);
-		table.getColumnModel().getColumn(5).setPreferredWidth(90);
+		table.getColumnModel().getColumn(5).setMinWidth(100);
+		table.getColumnModel().getColumn(5).setMaxWidth(100);
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);
+		
+		//table.getColumnModel().getColumn(5).setCellRenderer()) {
+			
+
 		
 		// set size of the rest columns
 		for (int i = 1; i < table.getColumnCount()-1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth(90);
-			col.setMaxWidth(90);
-			col.setPreferredWidth(90);
+			col.setMinWidth(80);
+			col.setMaxWidth(80);
+			col.setPreferredWidth(80);
 		}
 
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(520, 200));
-		table.setMinimumSize(new Dimension(520, 200));
-		table.getTableHeader().setPreferredSize(new Dimension(520, 50));
+		table.setPreferredSize(new Dimension(500, 200));
+		table.setMinimumSize(new Dimension(500, 200));
+		table.getTableHeader().setPreferredSize(new Dimension(500, 50));
 		
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

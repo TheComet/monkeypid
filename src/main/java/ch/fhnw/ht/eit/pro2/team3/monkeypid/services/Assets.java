@@ -34,8 +34,8 @@ public class Assets {
     	return icon;
     }
     
-   public static ImageIcon loadImageIconLogo(){
-	   ImageIcon icon = new ImageIcon(RESOURCE_PREFIX + "pictures/logo.png");
+   public static ImageIcon loadImageIcon(String name){
+	   ImageIcon icon = new ImageIcon(RESOURCE_PREFIX + "pictures/"+name);
 	   return icon;
     }
 

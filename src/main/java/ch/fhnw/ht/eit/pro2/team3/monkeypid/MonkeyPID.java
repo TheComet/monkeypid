@@ -39,7 +39,7 @@ public class MonkeyPID {
 		frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Easy-PID Smart Controller Design");
-		frame.setIconImage(Assets.loadImageIconLogo().getImage());
+		frame.setIconImage(Assets.loadImageIcon("logo.png").getImage());
 
 		return frame;
 	}
@@ -77,6 +77,7 @@ public class MonkeyPID {
 			createMVC(frame);
 
 			frame.pack();
+			frame.setMinimumSize(frame.getPreferredSize());
 			frame.setVisible(true);
 		});
 	}

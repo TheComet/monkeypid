@@ -138,6 +138,11 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 		add(tfKs, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
+
+		add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 	1.0, 0.0,
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(10, 5, 0, 10), 50, 0));
+
 		
 		//add tool tip for input fields
 		tfTu.setToolTipText("Test ToolTip");

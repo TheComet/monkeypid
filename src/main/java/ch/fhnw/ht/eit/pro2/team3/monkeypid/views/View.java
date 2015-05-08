@@ -1,25 +1,34 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
+import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
 
 /**
  * 
  * @author Josua
  *
  */
-public class View extends JPanel implements Observer {
+public class View extends JPanel implements Observer, ActionListener {
 
 	private Controller controller;
 
@@ -27,6 +36,9 @@ public class View extends JPanel implements Observer {
 	public OutputPanel outputPanel;
 	public GraphDisplayPanel graphDisplayPanel;
 	public GraphPanel graphPanel;
+
+	public JButton btAutoAdjust = new JButton(
+			Assets.loadImageIcon("autoSizeIcon.png"));
 
 	/**
 	 * The constructor from view adds the panel leftPanel, graphPanel and
@@ -49,29 +61,24 @@ public class View extends JPanel implements Observer {
 		// set border for input and output panel
 		inputPanel.setBorder(new TitledBorder(null, "Eingabe"));
 		outputPanel.setBorder(new TitledBorder(null, "Ausgabe"));
-		
-		//TODO remove
-		//inputPanel.setMinimumSize(new Dimension(350, 370));
-		//inputPanel.setPreferredSize(new Dimension(350, 370));
-		//outputPanel.setMinimumSize(new Dimension(350, 450));
-		
+
 		// add input and output panel into a new panel
 		JPanel inputOutputPanel = new JPanel();
 		inputOutputPanel.setLayout(new GridBagLayout());
 		inputOutputPanel.add(inputPanel, new GridBagConstraints(0, 0, 1, 1,
-				0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(0, 0, 5, 0), 0, 0));
+				1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0), 0, 0));
 		inputOutputPanel.add(outputPanel, new GridBagConstraints(0, 1, 1, 1,
 				0.0, 1.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		// add inputOutputPanel to GridBagLayout
 		add(inputOutputPanel, new GridBagConstraints(0, 0, 1, 2, 0.0, 0.0,
-				GridBagConstraints.WEST,
-				GridBagConstraints.VERTICAL, new Insets(10, 10, 10, 10), 0, 0));
+				GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+				new Insets(10, 10, 10, 10), 0, 0));
 
 		// add graphPanel to GridBagLayout
-		add(graphPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0,
+		add(graphPanel, new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
 				new Insets(10, 0, 5, 10), 0, 0));
 		// set border and title of graphPanel
@@ -79,16 +86,39 @@ public class View extends JPanel implements Observer {
 
 		// add graphDisplayPanel to GridBagLayout
 		add(graphDisplayPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
-				GridBagConstraints.LAST_LINE_START,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 10), 0, 0));
+				GridBagConstraints.LAST_LINE_START, GridBagConstraints.BOTH,
+				new Insets(0, 0, 10, 0), 0, 0));
 		// set border and title of graphDisplayPanel
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
+
+		//
+		JPanel graphSettingPanel = new JPanel();
+
+		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
+		graphSettingPanel.add(btAutoAdjust);
+
+		btAutoAdjust.addActionListener(this);
+		
+		//
+		add(graphSettingPanel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
+				new Insets(0, 10, 10, 10), 0, 0));
+		// set border
+		graphSettingPanel.setBorder(new TitledBorder((null), "Einstellungen"));
+
 	}
 
 	/**
 	 * 
 	 */
 	public void update(Observable observable, Object o) {
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == btAutoAdjust){
+			graphPanel.autoScaleAxis();
+		}
 	}
 }

@@ -12,6 +12,8 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -38,15 +40,17 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
         // collection holds XY data series
 		dataCollection = new XYSeriesCollection();
 
+		// axes
+	    NumberAxis xAxis = new NumberAxis("Zeit");
+	    NumberAxis yAxis = new NumberAxis("y(t)");
+	    
 		// renderer
 		XYItemRenderer renderer = new StandardXYItemRenderer();
-		
-		// axes
-		NumberAxis xAxis = new NumberAxis("Zeit");
-		NumberAxis yAxis = new NumberAxis("y(t)");
+	    
+	    // create plot
+	 	 XYPlot plot = new XYPlot(dataCollection, xAxis, yAxis, renderer);
 
-		// create plot
-		XYPlot plot = new XYPlot(dataCollection, xAxis, yAxis, renderer);
+		
 
 		// add plot into a new chart
 		chart = new JFreeChart("Sprungantwort Geschlossener Regelkreis", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
@@ -59,11 +63,19 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
 
 		// TODO beste variante?
 		// set prefered size 
-		panel.setPreferredSize(new java.awt.Dimension (800, 600));
-		panel.setMinimumSize(new Dimension(800, 600));
+		//panel.setPreferredSize(new java.awt.Dimension (800, 600));
+		//panel.setMinimumSize(new Dimension(800, 600));
 
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
+	}
+	
+	public void autoScaleAxis(){
+		chart.getPlot().zoom(100);
+		//getRangeAxis().setAutoRange(true);
+		//chart.getXYPlot().getDomainAxis().setAutoRange(true);
+
+		System.out.println("autoscale");
 	}
 	
 	private XYItemRenderer getDatasetRenderer() {
