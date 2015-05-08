@@ -17,6 +17,12 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
     }
 
+    public class InvalidPlantForPIDSimulationException extends RuntimeException {
+        InvalidPlantForPIDSimulationException(String message) {
+            super(message);
+        }
+    }
+
     private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     // have the model own the sani curves, so they don't have to be reloaded from
@@ -115,9 +121,28 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             return;
         }
 
+        // see issue #31 - disallow orders n=2 for PID simulations
+        validatePlantIsPIDCompliant();
+
+        // clean up from last simulation
         clearSimulations();
-        notifySimulationBegin();
-        threadPool.submit(this::dispatchControllerCalculators);
+
+        // get all calculators and notify simulation begin
+        ArrayList<IControllerCalculator> calculators = getControllerCalculators();
+        notifySimulationBegin(calculators.size());
+
+        // dispatch all calculators
+        threadPool.submit(() -> dispatchControllerCalculators(calculators));
+    }
+
+    private void validatePlantIsPIDCompliant() {
+        // see issue #31 - disallow orders n=2 for PID simulations
+        if(regulatorType == RegulatorType.PID) {
+            double ratio = plant.getTu() / plant.getTg();
+            if(sani.lookupPower(ratio) == 2) {
+                throw new InvalidPlantForPIDSimulationException("Current plant has order n=2. These aren't allowed for PID simulations");
+            }
+        }
     }
 
     /**
@@ -155,10 +180,10 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         notifyShowSimulation(selectedSimulation);
     }
 
-    private void dispatchControllerCalculators() {
-
+    private ArrayList<IControllerCalculator> getControllerCalculators() {
         ArrayList<IControllerCalculator> calculators = new ArrayList<>();
 
+        // generate a list of all calculators
         if(regulatorType == RegulatorType.PID) {
             calculators.add(new FistFormulaOppeltPID(plant));
             calculators.add(new FistFormulaReswickStoerPID0(plant));
@@ -177,6 +202,15 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             calculators.add(new ZellwegerPI(plant, phaseMargin));
         }
 
+        // set row indices of calculator - see issue #29
+        for(int i = 0; i < calculators.size(); i++) {
+            calculators.get(i).setTableRowIndex(i);
+        }
+
+        return calculators;
+    }
+
+    private void dispatchControllerCalculators(ArrayList<IControllerCalculator> calculators) {
         for(IControllerCalculator calculator : calculators) {
             calculator.registerListener(this);
             calculator.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
@@ -200,31 +234,33 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         listeners.remove(listener);
     }
 
-    private void notifyAddClosedLoop(ClosedLoop loop) {
+    private synchronized void notifyAddClosedLoop(ClosedLoop loop) {
         for(IModelListener listener : listeners) {
             listener.onAddClosedLoop(loop);
         }
     }
 
-    private void notifySimulationBegin() {
-        listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationBegin);
+    private synchronized void notifySimulationBegin(int numberOfCalculators) {
+        for(IModelListener listener : listeners) {
+            listener.onSimulationBegin(numberOfCalculators);
+        }
     }
 
-    private void notifySimulationComplete() {
+    private synchronized void tryNotifySimulationComplete() {
         if(!isSimulationActive()) {
             listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationComplete);
         }
     }
 
-    private void notifyHideSimulation(ClosedLoop closedLoop) {
+    private synchronized void notifyHideSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
-            listener.onHideSimulation(closedLoop);
+            listener.onHideStepResponse(closedLoop);
         }
     }
 
-    private void notifyShowSimulation(ClosedLoop closedLoop) {
+    private synchronized void notifyShowSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
-            listener.onShowSimulation(closedLoop);
+            listener.onShowStepResponse(closedLoop);
         }
     }
 
@@ -233,12 +269,17 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      * @param calculator The calculator that finished.
      */
     @Override
-    public final void onControllerCalculationComplete(IControllerCalculator calculator) {
+    public final synchronized void onControllerCalculationComplete(IControllerCalculator calculator) {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
-        closedLoops.add(closedLoop);
+
+        // register as listener so we know when the step response calculation completes
         closedLoop.registerListener(this);
-        notifyAddClosedLoop(closedLoop);
-        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024));
+
+        // Add to list of closed loops and let the closed loop know its index in the table - see issue #29
+        closedLoop.setTableRowIndex(calculator.getTableRowIndex());
+        closedLoops.add(closedLoop);
+
+        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024)); // number of sample points
     }
 
     /**
@@ -247,6 +288,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      */
     @Override
     public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
-        notifySimulationComplete();
+        notifyAddClosedLoop(closedLoop);
+        tryNotifySimulationComplete();
     }
 }
