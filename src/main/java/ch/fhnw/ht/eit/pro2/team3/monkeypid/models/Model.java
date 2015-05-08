@@ -106,7 +106,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
         // notify all listeners that we're removing all closed loops
         for(ClosedLoop loop : closedLoops) {
             for (IModelListener listener : listeners) {
-                listener.onRemoveClosedLoop(loop);
+                listener.onRemoveCalculation(loop);
             }
         }
         closedLoops = new ArrayList<>();
@@ -247,7 +247,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
     private synchronized void notifyAddClosedLoop(ClosedLoop loop) {
         for(IModelListener listener : listeners) {
-            listener.onAddClosedLoop(loop);
+            listener.onAddCalculation(loop);
         }
     }
 
@@ -265,13 +265,13 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
     private synchronized void notifyHideSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
-            listener.onHideStepResponse(closedLoop);
+            listener.onHideCalculation(closedLoop);
         }
     }
 
     private synchronized void notifyShowSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
-            listener.onShowStepResponse(closedLoop);
+            listener.onShowCalculation(closedLoop);
         }
     }
 

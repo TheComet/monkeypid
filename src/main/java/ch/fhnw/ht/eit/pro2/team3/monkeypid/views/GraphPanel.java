@@ -90,7 +90,7 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onAddClosedLoop(ClosedLoop closedLoop) {
+    public void onAddCalculation(ClosedLoop closedLoop) {
         try {
             dataCollection.addSeries(closedLoop.getStepResponse());
 
@@ -106,7 +106,7 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+    public void onRemoveCalculation(ClosedLoop closedLoop) {
         if(closedLoop.getStepResponse() != null) {
             dataCollection.removeSeries(closedLoop.getStepResponse());
         }
@@ -121,12 +121,12 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onHideStepResponse(ClosedLoop closedLoop) {
+    public void onHideCalculation(ClosedLoop closedLoop) {
         setSeriesVisible(closedLoop, false);
     }
 
     @Override
-    public void onShowStepResponse(ClosedLoop closedLoop) {
+    public void onShowCalculation(ClosedLoop closedLoop) {
         setSeriesVisible(closedLoop, true);
     }
 }

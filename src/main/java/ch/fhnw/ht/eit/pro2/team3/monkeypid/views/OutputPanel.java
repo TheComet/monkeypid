@@ -261,7 +261,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	}
 
 	@Override
-	public void onAddClosedLoop(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop) {
 
         // do we have a row allocated for this closed loop?
         if(closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
@@ -277,7 +277,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	}
 
 	@Override
-	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
 
         // remove from table
         for(int row = 0; row < tableModel.getRowCount(); row++) {
@@ -306,8 +306,8 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideStepResponse(ClosedLoop closedLoop) {}
+	public void onHideCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowStepResponse(ClosedLoop closedLoop) {}
+	public void onShowCalculation(ClosedLoop closedLoop) {}
 }

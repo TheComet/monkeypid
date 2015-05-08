@@ -59,7 +59,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
     }
 
 	@Override
-	public void onAddClosedLoop(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop) {
 		JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
         cb.addActionListener(this);
         checkBoxes.add(cb);
@@ -67,7 +67,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
 	@Override
-	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
         try {
             JCheckBox c = findCheckBox(closedLoop.getName());
             remove(c);
@@ -84,8 +84,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
     public void onSimulationComplete() {}
 
     @Override
-    public void onHideStepResponse(ClosedLoop closedLoop) {}
+    public void onHideCalculation(ClosedLoop closedLoop) {}
 
     @Override
-    public void onShowStepResponse(ClosedLoop closedLoop) {}
+    public void onShowCalculation(ClosedLoop closedLoop) {}
 }

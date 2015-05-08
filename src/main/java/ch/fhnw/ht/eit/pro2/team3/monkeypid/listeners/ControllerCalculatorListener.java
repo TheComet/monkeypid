@@ -4,6 +4,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.AbstractControllerCalculator;
 
 /**
  * Allows classes to register as listeners to the ControllerCalculator class.
+ * @author Alex Murray
  */
 public interface ControllerCalculatorListener {
 
