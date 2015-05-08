@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
 import org.jfree.chart.ChartPanel;
@@ -10,8 +10,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
-
-import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
 
 import javax.swing.*;
 
@@ -24,7 +22,7 @@ import java.awt.*;
  * @author Josua
  *
  */
-public class GraphPanel extends JPanel implements IModelListener {
+public class GraphPanel extends JPanel implements ModelListener {
     private XYSeriesCollection dataCollection = null;
     private JFreeChart chart = null;
 

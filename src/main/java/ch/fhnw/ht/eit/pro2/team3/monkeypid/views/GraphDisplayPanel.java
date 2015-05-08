@@ -1,7 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Josua
  *
  */
-public class GraphDisplayPanel extends JPanel implements ActionListener, IModelListener {
+public class GraphDisplayPanel extends JPanel implements ActionListener, ModelListener {
 
     private Controller controller;
     private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();

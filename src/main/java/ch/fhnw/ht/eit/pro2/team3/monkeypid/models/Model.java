@@ -2,7 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -49,7 +49,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     private ArrayList<ClosedLoop> closedLoops = new ArrayList<>();
 
     // list of Model listeners
-    private ArrayList<IModelListener> listeners = new ArrayList<>();
+    private ArrayList<ModelListener> listeners = new ArrayList<>();
 
     /**
      * Select the regulator types to be simulated (I/PI/PID)
@@ -105,7 +105,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
         // notify all listeners that we're removing all closed loops
         for(ClosedLoop loop : closedLoops) {
-            for (IModelListener listener : listeners) {
+            for (ModelListener listener : listeners) {
                 listener.onRemoveCalculation(loop);
             }
         }
@@ -233,7 +233,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * Registers a model listener.
      * @param listener An object implementing IModelListener.
      */
-    public final void registerListener(IModelListener listener) {
+    public final void registerListener(ModelListener listener) {
         listeners.add(listener);
     }
 
@@ -241,36 +241,36 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * Unregisters a model listener.
      * @param listener An object that previously called registerListener.
      */
-    public final void unregisterListener(IModelListener listener) {
+    public final void unregisterListener(ModelListener listener) {
         listeners.remove(listener);
     }
 
     private synchronized void notifyAddClosedLoop(ClosedLoop loop) {
-        for(IModelListener listener : listeners) {
+        for(ModelListener listener : listeners) {
             listener.onAddCalculation(loop);
         }
     }
 
     private synchronized void notifySimulationBegin(int numberOfCalculators) {
-        for(IModelListener listener : listeners) {
+        for(ModelListener listener : listeners) {
             listener.onSimulationBegin(numberOfCalculators);
         }
     }
 
     private synchronized void tryNotifySimulationComplete() {
         if(!isSimulationActive()) {
-            listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationComplete);
+            listeners.forEach(ModelListener::onSimulationComplete);
         }
     }
 
     private synchronized void notifyHideSimulation(ClosedLoop closedLoop) {
-        for(IModelListener listener : listeners) {
+        for(ModelListener listener : listeners) {
             listener.onHideCalculation(closedLoop);
         }
     }
 
     private synchronized void notifyShowSimulation(ClosedLoop closedLoop) {
-        for(IModelListener listener : listeners) {
+        for(ModelListener listener : listeners) {
             listener.onShowCalculation(closedLoop);
         }
     }
