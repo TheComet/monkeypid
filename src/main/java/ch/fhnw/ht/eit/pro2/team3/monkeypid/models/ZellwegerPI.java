@@ -38,7 +38,7 @@ public class ZellwegerPI extends AbstractZellweger {
         // Kr is the reciprocal of the amplitude at omegaDamping
         double kr = 1.0 / ampOpenLoopKr;
 
-        return new PIController(getName(), kr, tn);
+        return new ControllerPI(getName(), kr, tn);
     }
 
     protected double findAngleOnOpenLoopPhase(double tn) {

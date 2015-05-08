@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.math3.complex.Complex;
 import org.junit.Test;
 
-public class PIControllerTest {
+public class ControllerPITest {
 	double delta = 1.5e-4;
 	
 	@Test
@@ -14,15 +14,15 @@ public class PIControllerTest {
 		//Tn = 3.3122, Kr =    0.9840
 		double Kr = 0.9840;
 		double Tn = 3.3122;
-		PIController myPIController = new PIController("myPI", Kr, Tn);
+		ControllerPI myControllerPI = new ControllerPI("myPI", Kr, Tn);
 		
 		//expected values
 		//Br = Kr*[Tn 1];
 		//Ar = [Tn 0];
 		double[] NumeratorExpected = {3.2591, 0.9840};
 		double[] DenominatorExpected = {3.3122, 0.0};
-		assertArrayEquals(NumeratorExpected, myPIController.getTransferFunction().getNumeratorCoefficients(),delta);
-		assertArrayEquals(DenominatorExpected, myPIController.getTransferFunction().getDenominatorCoefficients(),delta);
+		assertArrayEquals(NumeratorExpected, myControllerPI.getTransferFunction().getNumeratorCoefficients(),delta);
+		assertArrayEquals(DenominatorExpected, myControllerPI.getTransferFunction().getDenominatorCoefficients(),delta);
 		
 		
 	}
@@ -34,16 +34,16 @@ public class PIControllerTest {
 		double Kr = 0.9840;
 		double Tn = 3.3122;
 		
-		PIController myPIController = new PIController("myPI", 1.2, 5.5); //set some random values
-		myPIController.setParameters(Kr, Tn);
+		ControllerPI myControllerPI = new ControllerPI("myPI", 1.2, 5.5); //set some random values
+		myControllerPI.setParameters(Kr, Tn);
 		
 		//expected values
 		//Br = Kr*[Tn 1];
 		//Ar = [Tn 0];
 		double[] NumeratorExpected = {3.2591, 0.9840};
 		double[] DenominatorExpected = {3.3122, 0.0};
-		assertArrayEquals(NumeratorExpected, myPIController.getTransferFunction().getNumeratorCoefficients(),delta);
-		assertArrayEquals(DenominatorExpected, myPIController.getTransferFunction().getDenominatorCoefficients(),delta);
+		assertArrayEquals(NumeratorExpected, myControllerPI.getTransferFunction().getNumeratorCoefficients(),delta);
+		assertArrayEquals(DenominatorExpected, myControllerPI.getTransferFunction().getDenominatorCoefficients(),delta);
 		
 		Complex[] test = new Complex[2];
 		test[0] = new Complex(3.0000 ,  + 4.0000);

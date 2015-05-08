@@ -15,7 +15,7 @@ public class FistFormulaReswickFuehrungPID20 extends AbstractControllerCalculato
         double kr = 0.95 * plant.getTg() / (plant.getKs() * plant.getTu());
         double tp = beautifyTpSoNiklausIsHappy(tv * parasiticTimeConstantFactor);
         
-        return new PIDController(getName(), tn, tv, kr, tp);
+        return new ControllerPID(getName(), tn, tv, kr, tp);
     }
 
     @Override

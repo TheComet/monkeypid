@@ -49,7 +49,7 @@ public class ZellwegerPID extends AbstractZellweger {
 
         double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
 
-        return new PIDController(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
+        return new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
     }
 
     private double findAngleOnOpenLoopPhase(double tnk, double tvk, double tp) {

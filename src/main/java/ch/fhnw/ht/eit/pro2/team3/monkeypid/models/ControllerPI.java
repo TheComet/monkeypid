@@ -2,12 +2,12 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import java.text.DecimalFormat;
 
-public class PIController extends AbstractController {
+public class ControllerPI extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
 
-    public PIController(String name, double kr, double tn) {
+    public ControllerPI(String name, double kr, double tn) {
         super(name);
         setParameters(kr, tn);
     }

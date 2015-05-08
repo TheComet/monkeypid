@@ -10,7 +10,7 @@ public class FistFormulaReswickStoerPI20 extends AbstractControllerCalculator {
 
     @Override
     protected final AbstractController calculate() {
-        return new PIController(
+        return new ControllerPI(
                 getName(),
                 0.7 * plant.getTg() / (plant.getKs() * plant.getTu()),
                 2.3 * plant.getTu()

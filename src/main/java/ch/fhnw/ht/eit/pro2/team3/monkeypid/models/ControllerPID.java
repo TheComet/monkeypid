@@ -2,14 +2,14 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import java.text.DecimalFormat;
 
-public class PIDController extends AbstractController {
+public class ControllerPID extends AbstractController {
 
     private double kr = 0.0;
     private double tn = 0.0;
     private double tv = 0.0;
     private double tp = 0.0;
 
-    public PIDController(String name, double tn, double tv, double kr, double tp) {
+    public ControllerPID(String name, double tn, double tv, double kr, double tp) {
         super(name);
         setParameters(tn, tv, kr, tp);
     }
