@@ -9,6 +9,6 @@ public interface IController {
     String getName();
     Color getColor();
     void setColor(Color color);
-    String[] getTableRowString();
+    String[] getTableRowStrings();
     TransferFunction getTransferFunction();
 }

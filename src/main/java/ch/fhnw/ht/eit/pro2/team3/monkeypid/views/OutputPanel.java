@@ -1,10 +1,13 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 /**
@@ -24,9 +28,10 @@ import javax.swing.table.TableColumn;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener, IModelListener, IClosedLoopListener {
+public class OutputPanel extends JPanel implements ActionListener,
+        IModelListener, IControllerCalculatorListener, IClosedLoopListener {
 
-	Controller controller;
+	private Controller controller;
 
 	// create test table
 	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
@@ -52,6 +57,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	// table and table model
 	CustomTableModel tableModel = new CustomTableModel();
 	JTable table = new JTable(tableModel);
+
+	// spinnerIcon icon
+	//ImageIcon spinnerIcon = Assets.loadImageSpinner();
+	//JLabel spinnerLabel = new JLabel();
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
@@ -107,8 +116,6 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 		
-		
-		
 		// set size of first column
 		table.getColumnModel().getColumn(0).setMinWidth(90);
 		table.getColumnModel().getColumn(0).setMaxWidth(90);
@@ -137,8 +144,6 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 		// disable mouse resize icon
 		table.getTableHeader().setResizingAllowed(false);
-		
-		
 
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
@@ -151,6 +156,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		add(table, new GridBagConstraints(0, 12, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
+
+		// init spinnerIcon icon label
+		//spinnerLabel.setIcon(spinnerIcon);
+		//spinnerIcon.setImageObserver(spinnerLabel);
 
 		// TODO entscheiden ob fuer profimodus integriert wird
 		/*
@@ -251,6 +260,11 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		}
 	}
 
+    @Override
+    public void onControllerCalculationComplete(IControllerCalculator calculator) {
+
+    }
+
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
 		closedLoop.registerListener(this); // so we know when to add the closed loop to the table
@@ -258,29 +272,29 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        closedLoop.removeFromTable(tableModel);
+
+        // remove from table
+        for(int row = 0; row < tableModel.getRowCount(); row++) {
+            // name is stored in column 0
+            if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
+                tableModel.removeRow(row);
+                return;
+            }
+        }
 	}
 
 	@Override
-	public void onSimulationBegin() {
-	}
+	public void onSimulationBegin() {}
 
 	@Override
-	public void onSimulationComplete() {
-	}
+	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideSimulation(ClosedLoop closedLoop) {
-
-	}
+	public void onHideSimulation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowSimulation(ClosedLoop closedLoop) {
-
-	}
+	public void onShowSimulation(ClosedLoop closedLoop) {}
 
     @Override
-    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
-        closedLoop.addToTable(tableModel);
-    }
+    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {}
 }

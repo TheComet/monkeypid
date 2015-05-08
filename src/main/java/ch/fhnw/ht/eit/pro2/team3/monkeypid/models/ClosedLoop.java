@@ -104,10 +104,10 @@ public class ClosedLoop {
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
     }
 
-    public synchronized void addToTable(DefaultTableModel table) {
+    public void addToTable(DefaultTableModel table) {
         // get the strings the controller wants to insert into the table,
         // and expand the array by 1 to make space for the overswing value
-        String[] controllerRow = getController().getTableRowString();
+        String[] controllerRow = getController().getTableRowStrings();
         String[] tableRow = new String[controllerRow.length + 1];
         System.arraycopy(controllerRow, 0, tableRow, 0, controllerRow.length);
 
@@ -116,17 +116,7 @@ public class ClosedLoop {
         str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
         tableRow[controllerRow.length] = str;
 
-        // add the row
         table.addRow(tableRow);
-    }
-
-    public synchronized void removeFromTable(DefaultTableModel table) {
-        for(int row = 0; row < table.getRowCount(); row++) {
-            if(getName().compareTo((String) table.getValueAt(row, 0)) == 0) { // name is stored in column 0
-                table.removeRow(row);
-                return;
-            }
-        }
     }
 
     public final void registerListener(IClosedLoopListener listener) {
@@ -137,7 +127,7 @@ public class ClosedLoop {
         listeners.remove(listener);
     }
 
-    private void notifyCalculationComplete() {
+    private synchronized void notifyCalculationComplete() {
         for (IClosedLoopListener listener : listeners) {
             listener.onStepResponseCalculationComplete(this);
         }
