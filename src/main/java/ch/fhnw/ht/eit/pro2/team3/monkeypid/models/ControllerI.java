@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 
 public class ControllerI extends AbstractController {
 
-    private double tn;
+    private double ti;
 
-    public ControllerI(String name, double tn) {
+    public ControllerI(String name, double ti) {
         super(name);
-        setParameters(tn);
+        setParameters(ti);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class ControllerI extends AbstractController {
         //   Br = [1];
         //   Ar = [Tn 0];
         double[] numeratorCoefficients = new double[] {1};
-        double[] denominatorCoefficients = new double[] {tn, 0};
+        double[] denominatorCoefficients = new double[] {ti, 0};
         setTransferFunction(
                 new TransferFunction(numeratorCoefficients, denominatorCoefficients)
         );
@@ -29,18 +29,18 @@ public class ControllerI extends AbstractController {
         return new String[]{
                 getName(),
                 "", // Kr  (PI/PID only)
-                new DecimalFormat("0.000E0").format(getTn()),
+                new DecimalFormat("0.000E0").format(getTi()),
                 "", // Tv  (PID only)     -- need to pad so overswing value has the correct offset in the table
                 ""  // Tp  (PID only)
         };
     }
 
-    public void setParameters(double tn) {
-        this.tn = tn;
+    public void setParameters(double ti) {
+        this.ti = ti;
         calculateTransferFunction();
     }
 
-    public double getTn() {
-        return tn;
+    public double getTi() {
+        return ti;
     }
 }
