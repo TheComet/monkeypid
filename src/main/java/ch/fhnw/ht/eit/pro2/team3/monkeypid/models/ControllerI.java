@@ -4,8 +4,9 @@ public class ControllerI extends AbstractController {
 
     private double tn;
 
-    public ControllerI(String name) {
+    public ControllerI(String name, double tn) {
         super(name);
+        setParameters(tn);
     }
 
     @Override

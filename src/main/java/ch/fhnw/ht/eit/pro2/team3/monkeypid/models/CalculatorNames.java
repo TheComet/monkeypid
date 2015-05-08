@@ -13,6 +13,7 @@ public class CalculatorNames {
     public static final String RESWICK_STOER_PID_20    = "Reswick (20%, gutes Störverhalten)";
     public static final String ROSENBERG_PI            = "Rosenberg";
     public static final String ROSENBERG_PID           = "Rosenberg";
+    public static final String ZELLWEGER_I             = "Zellweger";
     public static final String ZELLWEGER_PI            = "Zellweger";
     public static final String ZELLWEGER_PID           = "Zellweger";
 }

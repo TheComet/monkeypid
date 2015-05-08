@@ -15,6 +15,7 @@ public class RenderColors {
     public static final Color RESWICK_STOER_PID_20    = new Color(128, 0, 255);
     public static final Color ROSENBERG_PI            = new Color(0, 255, 0);
     public static final Color ROSENBERG_PID           = new Color(0, 255, 0);
+    public static final Color ZELLWEGER_I             = new Color(0, 0, 255);
     public static final Color ZELLWEGER_PI            = new Color(0, 0, 255);
     public static final Color ZELLWEGER_PID           = new Color(0, 0, 255);
 }

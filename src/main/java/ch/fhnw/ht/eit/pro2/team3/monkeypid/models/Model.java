@@ -36,6 +36,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
     // regulator types to calculate when user simulates
     private enum RegulatorType {
+        I,
         PI,
         PID
     }
@@ -55,9 +56,11 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param regulatorTypeName A string containing either "I", "IP", or "PID"
      */
     public void setRegulatorType(String regulatorTypeName) throws UnknownRegulatorTypeException {
-        if(regulatorTypeName.compareTo("PI") == 0) {
+        if(regulatorTypeName.equals("I")) {
+            regulatorType = RegulatorType.I;
+        } else if(regulatorTypeName.equals("PI")) {
             regulatorType = RegulatorType.PI;
-        } else if(regulatorTypeName.compareTo("PID") == 0) {
+        } else if(regulatorTypeName.equals("PID")) {
             regulatorType = RegulatorType.PID;
         } else {
             throw new UnknownRegulatorTypeException("Unknown regulator \"" + regulatorTypeName + "\"");
@@ -183,22 +186,31 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
         ArrayList<AbstractControllerCalculator> calculators = new ArrayList<>();
 
         // generate a list of all calculators
-        if(regulatorType == RegulatorType.PID) {
-            calculators.add(new FistFormulaOppeltPID(plant));
-            calculators.add(new FistFormulaReswickStoerPID0(plant));
-            calculators.add(new FistFormulaReswickStoerPID20(plant));
-            calculators.add(new FistFormulaReswickFuehrungPID0(plant));
-            calculators.add(new FistFormulaReswickFuehrungPID20(plant));
-            calculators.add(new FistFormulaRosenbergPID(plant));
-            calculators.add(new ZellwegerPID(plant, phaseMargin));
-        } else {
-            calculators.add(new FistFormulaOppeltPI(plant));
-            calculators.add(new FistFormulaReswickStoerPI0(plant));
-            calculators.add(new FistFormulaReswickStoerPI20(plant));
-            calculators.add(new FistFormulaReswickFuehrungPI0(plant));
-            calculators.add(new FistFormulaReswickFuehrungPI20(plant));
-            calculators.add(new FistFormulaRosenbergPI(plant));
-            calculators.add(new ZellwegerPI(plant, phaseMargin));
+        switch(regulatorType) {
+            case PID:
+                calculators.add(new FistFormulaOppeltPID(plant));
+                calculators.add(new FistFormulaReswickStoerPID0(plant));
+                calculators.add(new FistFormulaReswickStoerPID20(plant));
+                calculators.add(new FistFormulaReswickFuehrungPID0(plant));
+                calculators.add(new FistFormulaReswickFuehrungPID20(plant));
+                calculators.add(new FistFormulaRosenbergPID(plant));
+                calculators.add(new ZellwegerPID(plant, phaseMargin));
+                break;
+
+            case PI:
+                calculators.add(new FistFormulaOppeltPI(plant));
+                calculators.add(new FistFormulaReswickStoerPI0(plant));
+                calculators.add(new FistFormulaReswickStoerPI20(plant));
+                calculators.add(new FistFormulaReswickFuehrungPI0(plant));
+                calculators.add(new FistFormulaReswickFuehrungPI20(plant));
+                calculators.add(new FistFormulaRosenbergPI(plant));
+                calculators.add(new ZellwegerPI(plant, phaseMargin));
+                break;
+
+            case I:
+                calculators.add(new ZellwegerI(plant, phaseMargin));
+            default:
+                break;
         }
 
         // set row indices of calculator - see issue #29
