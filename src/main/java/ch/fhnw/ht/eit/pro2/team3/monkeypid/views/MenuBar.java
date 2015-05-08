@@ -3,7 +3,10 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -183,8 +186,19 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 			// shows dialogBox with informations about the project
 			// used JLabel because icon is not center
+			//JLabel label = new JLabel("");
+			//label.setIcon(Assets.loadImageIconInfo());
+			Image img;
+			img = Assets.loadImageIconInfo().getImage();
+			img = img.getScaledInstance(700, 420,Image.SCALE_SMOOTH);
+
+			//Image img = new Image(Assets.loadImageIconInfo());
+			
+			ImageIcon test = new ImageIcon(img);
+			
 			JLabel label = new JLabel("");
-			label.setIcon(Assets.loadImageIconInfo());
+			label.setIcon(test);
+			
 			JOptionPane.showMessageDialog(null, label, "Info",
 					JOptionPane.PLAIN_MESSAGE);
 		}
