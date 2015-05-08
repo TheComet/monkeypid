@@ -60,28 +60,35 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, ModelLi
 
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop) {
-		JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
-        cb.addActionListener(this);
-        checkBoxes.add(cb);
-		add(cb);
+        SwingUtilities.invokeLater(() -> {
+            JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
+            cb.addActionListener(this);
+            checkBoxes.add(cb);
+            add(cb);
+        });
 	}
 
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
-        try {
-            JCheckBox c = findCheckBox(closedLoop.getName());
-            remove(c);
-            checkBoxes.remove(c);
-        } catch(CheckBoxNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JCheckBox c = findCheckBox(closedLoop.getName());
+                remove(c);
+                checkBoxes.remove(c);
+            } catch (CheckBoxNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
 	}
 
     @Override
     public void onSimulationBegin(int numberOfStepResponses) {}
 
     @Override
-    public void onSimulationComplete() {}
+    public void onSimulationComplete() {
+        SwingUtilities.invokeLater(this::updateUI);
+    }
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {}

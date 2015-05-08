@@ -260,44 +260,50 @@ public class OutputPanel extends JPanel implements ActionListener, ModelListener
 
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop) {
+		SwingUtilities.invokeLater(() -> {
 
-        // do we have a row allocated for this closed loop?
-        if(closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
-            String[] tableRowStrings = closedLoop.getTableRowStrings();
-            for(int i = 0; i < tableRowStrings.length; i++) {
-                tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
-            }
-        } else {
+			// do we have a row allocated for this closed loop?
+			if (closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+				String[] tableRowStrings = closedLoop.getTableRowStrings();
+				for (int i = 0; i < tableRowStrings.length; i++) {
+					tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
+				}
+			} else {
 
-            // we don't have space allocated, so just append it to the end
-            tableModel.addRow(closedLoop.getTableRowStrings());
-        }
+				// we don't have space allocated, so just append it to the end
+				tableModel.addRow(closedLoop.getTableRowStrings());
+			}
+		});
 	}
 
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
+		SwingUtilities.invokeLater(() -> {
 
-        // remove from table
-        for(int row = 0; row < tableModel.getRowCount(); row++) {
-            // name is stored in column 0
-            if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
-                tableModel.removeRow(row);
-                return;
-            }
-        }
+			// remove from table
+			for (int row = 0; row < tableModel.getRowCount(); row++) {
+				// name is stored in column 0
+				if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
+					tableModel.removeRow(row);
+					return;
+				}
+			}
+		});
 	}
 
     @Override
     public void onSimulationBegin(int numberOfStepResponses) {
-        // clear the table
-        while(tableModel.getRowCount() > 0) {
-            tableModel.removeRow(0);
-        }
+		SwingUtilities.invokeLater(() -> {
+			// clear the table
+			while (tableModel.getRowCount() > 0) {
+				tableModel.removeRow(0);
+			}
 
-        // allocate all rows with empty strings
-        for(int i = 0; i < numberOfStepResponses; i++) {
-            tableModel.addRow(new String[] {"calculating...", "", "", "", "", ""});
-        }
+			// allocate all rows with empty strings
+			for (int i = 0; i < numberOfStepResponses; i++) {
+				tableModel.addRow(new String[]{"calculating...", "", "", "", "", ""});
+			}
+		});
     }
 
 	@Override

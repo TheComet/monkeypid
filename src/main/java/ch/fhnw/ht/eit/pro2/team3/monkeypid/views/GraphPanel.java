@@ -90,24 +90,33 @@ public class GraphPanel extends JPanel implements ModelListener {
     @Override
     public void onAddCalculation(ClosedLoop closedLoop) {
         try {
-            dataCollection.addSeries(closedLoop.getStepResponse());
+            synchronized (this) {
 
-            // The closedLoop object specifies what color it wants to be rendered in
-            getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
+            }
 
-            // See issue #21 - make visible again
-            setSeriesVisible(closedLoop, true);
+            SwingUtilities.invokeLater(() -> {
 
-        } catch(IllegalArgumentException e) {
-            System.out.println("Can't add step response to graph, it's already in the graph");
+                dataCollection.addSeries(closedLoop.getStepResponse());
+
+                // The closedLoop object specifies what color it wants to be rendered in
+                getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
+
+                // See issue #21 - make visible again
+                setSeriesVisible(closedLoop, true);
+            });
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void onRemoveCalculation(ClosedLoop closedLoop) {
-        if(closedLoop.getStepResponse() != null) {
-            dataCollection.removeSeries(closedLoop.getStepResponse());
-        }
+        SwingUtilities.invokeLater(() -> {
+            if (closedLoop.getStepResponse() != null) {
+                dataCollection.removeSeries(closedLoop.getStepResponse());
+            }
+        });
     }
 
     @Override

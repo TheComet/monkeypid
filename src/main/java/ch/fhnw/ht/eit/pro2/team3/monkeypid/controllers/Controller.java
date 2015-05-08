@@ -45,8 +45,8 @@ public class Controller {
      * @param closedLoopName The name of the curve to show.
      */
     public void cbCheckAction(String closedLoopName) {
-        model.selectSimulation(closedLoopName);
-        model.showSelectedSimulation();
+        model.selectCalculation(closedLoopName);
+        model.showSelectedCalculation();
     }
 
     /**
@@ -55,7 +55,7 @@ public class Controller {
      * @param closedLoopName
      */
     public void cbUncheckAction(String closedLoopName) {
-        model.selectSimulation(closedLoopName);
-        model.hideSelectedSimulation();
+        model.selectCalculation(closedLoopName);
+        model.hideSelectedCalculation();
     }
 }

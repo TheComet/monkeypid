@@ -32,6 +32,7 @@ public interface ModelListener {
 
     /**
      * This is called when all calculations have completed.
+     * thread.
      */
     void onSimulationComplete();
 
