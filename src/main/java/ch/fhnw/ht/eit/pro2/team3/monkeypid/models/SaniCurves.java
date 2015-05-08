@@ -14,6 +14,13 @@ import java.util.ArrayList;
  * @author Alex Murray
  */
 public class SaniCurves {
+
+    public class TuTgRatioTooLargeException extends RuntimeException {
+        public TuTgRatioTooLargeException(String message) {
+            super(message);
+        }
+    }
+
     private ArrayList<PolynomialSplineFunction> Tu_Tg_ratio = null;
     private ArrayList<PolynomialSplineFunction> Tg_inverse = null;
     
@@ -136,7 +143,7 @@ public class SaniCurves {
 
             // ratio is larger than all thresholds
             if(power - 2 >= orderThresholds.length) {
-                throw new RuntimeException("Order is larger than 8, don't have a lookup table for that");
+                throw new TuTgRatioTooLargeException("Tu/Tg zu gross n > 8  => Verhältnis kleiner wählen");
             }
         }
 

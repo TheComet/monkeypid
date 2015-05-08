@@ -59,7 +59,7 @@ public class ZellwegerPID extends AbstractZellweger {
         double bottomFreq = startFreq;
         double actualFreq = (topFreq + bottomFreq) / 2.0;
         for(int i = 0; i != maxIterations; i++) {
-            double phiOpenLoopBuffer = calculatePlantPhase(actualFreq, plant.getTimeConstants()) +
+            double phiOpenLoopBuffer = calculatePlantPhase(actualFreq) +
                     calculateControllerPhase(actualFreq, tnk, tvk, tp);
             if(phiOpenLoopBuffer < phiDamping) {
                 topFreq = actualFreq;

@@ -1,7 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 
 import javax.swing.*;
 import java.awt.*;
@@ -253,11 +255,6 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 			} else if (tfKsValue == 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Ks darf nicht 0 sein");
-			} else if ((tfTuValue / tfTgValue) > 0.64173) {
-				// error message if tu/tg is bigger than 0.64173 (value from
-				// matlab sani example)
-				lbValueErrorInfo
-						.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
@@ -268,9 +265,15 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 				lbValueErrorInfo.setText(" ");
 
 				// give over the values to controller
-				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
-						tfTpValue, selectedRegulatorName,
-						overswingTable[overswingIndex]);
+				try {
+					controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
+							tfTpValue, selectedRegulatorName,
+							overswingTable[overswingIndex]);
+				} catch (Model.InvalidPlantForPIDSimulationException ex) {
+					lbValueErrorInfo.setText(ex.getMessage());
+				} catch (SaniCurves.TuTgRatioTooLargeException ex) {
+					lbValueErrorInfo.setText(ex.getMessage());
+				}
 			}
 
 		}
