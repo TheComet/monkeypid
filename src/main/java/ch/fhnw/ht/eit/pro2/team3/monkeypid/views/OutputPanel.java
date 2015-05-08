@@ -273,7 +273,17 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	}
 
     @Override
-    public void onSimulationBegin(int numberOfStepResponses) {}
+    public void onSimulationBegin(int numberOfStepResponses) {
+        // clear the table
+        while(tableModel.getRowCount() > 0) {
+            tableModel.removeRow(0);
+        }
+
+        // allocate all rows with empty strings
+        for(int i = 0; i < numberOfStepResponses; i++) {
+            tableModel.addRow(new String[] {"calculating...", "", "", "", "", ""});
+        }
+    }
 
 	@Override
 	public void onSimulationComplete() {}
