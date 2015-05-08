@@ -11,6 +11,8 @@ public interface IControllerCalculator extends Runnable {
     IController getController();
     String getName();
     Color getColor();
+    void setTableRowIndex(int row);
+    int getTableRowIndex();
     void registerListener(IControllerCalculatorListener listener);
     void unregisterListener(IControllerCalculatorListener listener);
 }

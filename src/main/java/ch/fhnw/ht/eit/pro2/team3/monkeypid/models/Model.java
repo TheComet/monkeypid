@@ -183,6 +183,11 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             calculators.add(new ZellwegerPI(plant, phaseMargin));
         }
 
+        // set row indices of calculator - see issue #29
+        for(int i = 0; i < calculators.size(); i++) {
+            calculators.get(i).setTableRowIndex(i);
+        }
+
         return calculators;
     }
 
@@ -222,19 +227,19 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
     }
 
-    private synchronized void notifySimulationComplete() {
+    private synchronized void tryNotifySimulationComplete() {
         if(!isSimulationActive()) {
             listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationComplete);
         }
     }
 
-    private void notifyHideSimulation(ClosedLoop closedLoop) {
+    private synchronized void notifyHideSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
             listener.onHideStepResponse(closedLoop);
         }
     }
 
-    private void notifyShowSimulation(ClosedLoop closedLoop) {
+    private synchronized void notifyShowSimulation(ClosedLoop closedLoop) {
         for(IModelListener listener : listeners) {
             listener.onShowStepResponse(closedLoop);
         }
@@ -245,11 +250,17 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      * @param calculator The calculator that finished.
      */
     @Override
-    public final void onControllerCalculationComplete(IControllerCalculator calculator) {
+    public final synchronized void onControllerCalculationComplete(IControllerCalculator calculator) {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
+
+        // register as listener so we know when the step response calculation completes
         closedLoop.registerListener(this);
+
+        // Add to list of closed loops and let the closed loop know its index in the table - see issue #29
+        closedLoop.setTableRowIndex(calculator.getTableRowIndex());
         closedLoops.add(closedLoop);
-        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024));
+
+        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024)); // number of sample points
     }
 
     /**
@@ -259,6 +270,6 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     @Override
     public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
         notifyAddClosedLoop(closedLoop);
-        notifySimulationComplete();
+        tryNotifySimulationComplete();
     }
 }

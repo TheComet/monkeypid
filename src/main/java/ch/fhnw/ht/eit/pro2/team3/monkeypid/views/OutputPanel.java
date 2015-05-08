@@ -256,7 +256,18 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-        tableModel.addRow(closedLoop.getTableRowStrings());
+
+        // do we have a row allocated for this closed loop?
+        if(closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+            String[] tableRowStrings = closedLoop.getTableRowStrings();
+            for(int i = 0; i < tableRowStrings.length; i++) {
+                tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
+            }
+        } else {
+
+            // we don't have space allocated, so just append it to the end
+            tableModel.addRow(closedLoop.getTableRowStrings());
+        }
 	}
 
 	@Override

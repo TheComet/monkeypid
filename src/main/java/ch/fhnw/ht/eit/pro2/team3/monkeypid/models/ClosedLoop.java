@@ -26,6 +26,9 @@ public class ClosedLoop {
     private Color color = null;
     private double maxOverSwing;
 
+    // stores where the calculated controller will be inserted into the table
+    private int tableRowIndex = -1; // see issue #29
+
     public ClosedLoop(Plant plant, IController controller) {
         setPlantAndController(plant, controller);
     }
@@ -172,5 +175,13 @@ public class ClosedLoop {
         }
 
         return series;
+    }
+
+    public void setTableRowIndex(int index) {
+        tableRowIndex = index;
+    }
+
+    public int getTableRowIndex() {
+        return tableRowIndex;
     }
 }
