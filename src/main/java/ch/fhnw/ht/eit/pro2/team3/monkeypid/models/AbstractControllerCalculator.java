@@ -60,7 +60,7 @@ public abstract class AbstractControllerCalculator implements Runnable {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Constructor. A plant is required in order to be able to calculate a controller.
+     * A plant is required in order to be able to calculate a controller.
      * @param plant The plant to calculate a controller for.
      */
     public AbstractControllerCalculator(Plant plant) {
