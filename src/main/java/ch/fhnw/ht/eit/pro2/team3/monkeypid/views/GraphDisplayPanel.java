@@ -5,7 +5,6 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -79,22 +78,14 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
     @Override
-    public void onSimulationBegin() {
-
-    }
+    public void onSimulationBegin(int numberOfStepResponses) {}
 
     @Override
-    public void onSimulationComplete() {
-
-    }
+    public void onSimulationComplete() {}
 
     @Override
-    public void onHideSimulation(ClosedLoop closedLoop) {
-
-    }
+    public void onHideStepResponse(ClosedLoop closedLoop) {}
 
     @Override
-    public void onShowSimulation(ClosedLoop closedLoop) {
-
-    }
+    public void onShowStepResponse(ClosedLoop closedLoop) {}
 }

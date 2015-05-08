@@ -15,3 +15,6 @@
 
 # ignore Windows Thumbs.db file
 Thumbs.db
+
+# misc
+*.pdf

@@ -5,13 +5,28 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Graphics;
+import java.awt.FileDialog;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URL;
 
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import javax.swing.*;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+
 
 /**
  * MenuBar creates a menuBar with two menuItems: data and help. The menuItem
@@ -38,6 +53,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private JMenuItem menuItemMiniVersion = new JMenuItem(
 			"Zur Mini-Version wechseln");
 	private JMenuItem menuItemExit = new JMenuItem("Schliessen");
+	
+	private JMenuItem menuItemPDF = new JMenuItem("Export als PDF");
 
 	// menu help
 	private JMenu menuHelp = new JMenu("Hilfe");
@@ -128,9 +145,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		menuItemExit.addActionListener(this);
 		menuItemInfo.addActionListener(this);
 		menuItemMiniVersion.addActionListener(this);
+		menuItemPDF.addActionListener(this);
 
 		// add menu item to the menu data
 		menuData.add(menuItemMiniVersion);
+		menuData.add(menuItemPDF);
 		menuData.add(menuItemExit);
 
 		// submenu for useful links
@@ -179,6 +198,27 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		// menu item exit is pressed
 		if (e.getSource() == menuItemExit) {
 			System.exit(1); // close pogramm
+		}
+		
+		// menu item PDF is pressed
+		if (e.getSource() == menuItemPDF) {
+			//print PDF
+			final String RESULT = "hello.pdf";
+			FileDialog getNameBox = new FileDialog((JFrame) view.getTopLevelAncestor(), "Namen lesen", FileDialog.LOAD);
+			getNameBox.show();
+			String fileName = getNameBox.getFile();
+			PrintFrameToPDF(fileName);
+			/*
+			try {
+				//pdfPrinter.createPdf(fileName);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (DocumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			*/
 		}
 
 		// menu item info is pressed
@@ -231,4 +271,68 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			miniVersionSelected = !miniVersionSelected;
 		}
 	}
+	
+	
+	public static class pdfPrinter {
+	    	//new HelloWorld().createPdf(RESULT);
+		public static void createPdf(String filename)throws IOException, DocumentException  {
+	    	        // step 1
+	    	        Document document = new Document();
+	    	        // step 2
+	    	        PdfWriter.getInstance(document, new FileOutputStream(filename));
+	    	        // step 3
+	    	        document.open();
+	    	        // step 4
+	    	        document.add(new Paragraph("Hello World!"));
+	    	        // step 5
+	    	        document.close();
+	   }
+	}
+	
+	public void PrintFrameToPDF(String file) {
+	    try {
+	        Document d = new Document();
+	        PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
+	        d.open();
+	        
+	       // JFrame myFrame = (JFrame) view.getTopLevelAncestor();
+	        JPanel inputPn = view.inputPanel;
+
+	        PdfContentByte cb = writer.getDirectContent( );
+	        PdfTemplate template = cb.createTemplate(inputPn.getWidth(), inputPn.getHeight());
+	        Graphics2D g2d = template.createGraphics(inputPn.getWidth(), inputPn.getHeight());
+	        inputPn.print(g2d);
+	        inputPn.addNotify();
+	        inputPn.validate();
+	        
+	        /*
+	        PdfContentByte cb = writer.getDirectContent();
+	        PdfTemplate template = cb.createTemplate(PageSize.A4.getWidth(),PageSize.A4.getHeight());
+	        cb.addTemplate(template, 0, 0);
+
+	        Graphics2D g2d = template.createGraphics(PageSize.A4.getWidth(),PageSize.A4.getHeight());
+	        g2d.scale(0.4, 0.4);
+
+	        for(int i=0; i< view.getTopLevelAncestor().getComponents().length; i++){
+	            Component c = view.getTopLevelAncestor().getComponent(i);
+	            System.out.println(c);
+	            if(c instanceof JLabel || c instanceof JScrollPane){
+	                g2d.translate(c.getBounds().x,c.getBounds().y);
+	                if(c instanceof JScrollPane){c.setBounds(0,0,(int)PageSize.A4.getWidth()*2,(int)PageSize.A4.getHeight()*2);}
+	                c.paintAll(g2d);
+	                c.addNotify();
+	            }
+	        }
+	        */
+
+
+	        g2d.dispose();
+
+	        d.close();
+	    } catch (Exception e) {
+	        System.out.println("ERROR: " + e.toString());
+	    }
+	}
+	
+	
 }

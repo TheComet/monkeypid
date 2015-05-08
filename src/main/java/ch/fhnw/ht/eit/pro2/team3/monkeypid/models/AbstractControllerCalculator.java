@@ -15,6 +15,9 @@ public abstract class AbstractControllerCalculator
     protected double parasiticTimeConstantFactor = 0.1;
     private IController controller;
 
+    // stores where the calculated controller will be inserted into the table
+    private int tableRowIndex = -1; // see issue #29
+
     public AbstractControllerCalculator(Plant plant) {
         setPlant(plant);
     }
@@ -49,6 +52,16 @@ public abstract class AbstractControllerCalculator
     }
 
     @Override
+    public final void setTableRowIndex(int index) {
+        tableRowIndex = index;
+    }
+
+    @Override
+    public final int getTableRowIndex() {
+        return tableRowIndex;
+    }
+
+    @Override
     public final void registerListener(IControllerCalculatorListener listener) {
         listeners.add(listener);
     }
@@ -58,7 +71,7 @@ public abstract class AbstractControllerCalculator
         listeners.remove(listener);
     }
 
-    private void notifyCalculationComplete() {
+    private synchronized void notifyCalculationComplete() {
         for (IControllerCalculatorListener listener : listeners) {
             listener.onControllerCalculationComplete(this);
         }

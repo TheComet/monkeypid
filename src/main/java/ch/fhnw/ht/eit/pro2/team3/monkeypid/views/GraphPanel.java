@@ -1,6 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
@@ -25,7 +24,7 @@ import java.awt.*;
  * @author Josua
  *
  */
-public class GraphPanel extends JPanel implements IModelListener, IClosedLoopListener {
+public class GraphPanel extends JPanel implements IModelListener {
     private XYSeriesCollection dataCollection = null;
     private JFreeChart chart = null;
 
@@ -86,30 +85,20 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
         return dataCollection.getSeriesIndex(loop.getStepResponse().getKey());
     }
 
-    private void setSimulationVisible(ClosedLoop loop, boolean flag) {
+    private void setSeriesVisible(ClosedLoop loop, boolean flag) {
         getDatasetRenderer().setSeriesVisible(getSeriesIndex(loop), flag);
     }
 
     @Override
     public void onAddClosedLoop(ClosedLoop closedLoop) {
-        closedLoop.registerListener(this);
-    }
-
-    @Override
-    public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        if(closedLoop.getStepResponse() != null) {
-            setSimulationVisible(closedLoop, true); // See issue #21 - make visible again
-            dataCollection.removeSeries(closedLoop.getStepResponse());
-        }
-    }
-
-    @Override
-    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
         try {
             dataCollection.addSeries(closedLoop.getStepResponse());
 
             // The closedLoop object specifies what color it wants to be rendered in
             getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
+
+            // See issue #21 - make visible again
+            setSeriesVisible(closedLoop, true);
 
         } catch(IllegalArgumentException e) {
             System.out.println("Can't add step response to graph, it's already in the graph");
@@ -117,8 +106,14 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
     }
 
     @Override
-    public void onSimulationBegin() {
+    public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+        if(closedLoop.getStepResponse() != null) {
+            dataCollection.removeSeries(closedLoop.getStepResponse());
+        }
+    }
 
+    @Override
+    public void onSimulationBegin(int numberOfStepResponses) {
     }
 
     @Override
@@ -126,12 +121,12 @@ public class GraphPanel extends JPanel implements IModelListener, IClosedLoopLis
     }
 
     @Override
-    public void onHideSimulation(ClosedLoop closedLoop) {
-        setSimulationVisible(closedLoop, false);
+    public void onHideStepResponse(ClosedLoop closedLoop) {
+        setSeriesVisible(closedLoop, false);
     }
 
     @Override
-    public void onShowSimulation(ClosedLoop closedLoop) {
-        setSimulationVisible(closedLoop, true);
+    public void onShowStepResponse(ClosedLoop closedLoop) {
+        setSeriesVisible(closedLoop, true);
     }
 }

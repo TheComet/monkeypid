@@ -1,7 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
@@ -26,9 +25,9 @@ import javax.swing.table.TableColumn;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener, IModelListener, IClosedLoopListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener {
 
-	Controller controller;
+	private Controller controller;
 
 	// create test table
 	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
@@ -54,6 +53,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	// table and table model
 	CustomTableModel tableModel = new CustomTableModel();
 	JTable table = new JTable(tableModel);
+
+	// spinnerIcon icon
+	//ImageIcon spinnerIcon = Assets.loadImageSpinner();
+	//JLabel spinnerLabel = new JLabel();
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
@@ -109,8 +112,6 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 		
-		
-		
 		// set size of first column
 		table.getColumnModel().getColumn(0).setMinWidth(90);
 		table.getColumnModel().getColumn(0).setMaxWidth(90);
@@ -143,8 +144,6 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 		// disable mouse resize icon
 		table.getTableHeader().setResizingAllowed(false);
-		
-		
 
 		// disable user column dragging
 		table.getTableHeader().setReorderingAllowed(false);
@@ -157,6 +156,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		add(table, new GridBagConstraints(0, 12, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
+
+		// init spinnerIcon icon label
+		//spinnerLabel.setIcon(spinnerIcon);
+		//spinnerIcon.setImageObserver(spinnerLabel);
 
 		// TODO entscheiden ob fuer profimodus integriert wird
 		/*
@@ -259,34 +262,52 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.registerListener(this); // so we know when to add the closed loop to the table
+
+        // do we have a row allocated for this closed loop?
+        if(closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+            String[] tableRowStrings = closedLoop.getTableRowStrings();
+            for(int i = 0; i < tableRowStrings.length; i++) {
+                tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
+            }
+        } else {
+
+            // we don't have space allocated, so just append it to the end
+            tableModel.addRow(closedLoop.getTableRowStrings());
+        }
 	}
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        closedLoop.removeFromTable(tableModel);
-	}
 
-	@Override
-	public void onSimulationBegin() {
-	}
-
-	@Override
-	public void onSimulationComplete() {
-	}
-
-	@Override
-	public void onHideSimulation(ClosedLoop closedLoop) {
-
-	}
-
-	@Override
-	public void onShowSimulation(ClosedLoop closedLoop) {
-
+        // remove from table
+        for(int row = 0; row < tableModel.getRowCount(); row++) {
+            // name is stored in column 0
+            if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
+                tableModel.removeRow(row);
+                return;
+            }
+        }
 	}
 
     @Override
-    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
-        closedLoop.addToTable(tableModel);
+    public void onSimulationBegin(int numberOfStepResponses) {
+        // clear the table
+        while(tableModel.getRowCount() > 0) {
+            tableModel.removeRow(0);
+        }
+
+        // allocate all rows with empty strings
+        for(int i = 0; i < numberOfStepResponses; i++) {
+            tableModel.addRow(new String[] {"calculating...", "", "", "", "", ""});
+        }
     }
+
+	@Override
+	public void onSimulationComplete() {}
+
+	@Override
+	public void onHideStepResponse(ClosedLoop closedLoop) {}
+
+	@Override
+	public void onShowStepResponse(ClosedLoop closedLoop) {}
 }
