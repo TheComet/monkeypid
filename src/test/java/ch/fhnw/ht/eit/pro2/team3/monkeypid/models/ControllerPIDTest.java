@@ -26,7 +26,6 @@ public class ControllerPIDTest {
 		double[] DenominatorExpected = {0.7832, 3.8576, 0};
 		assertArrayEquals(NumeratorExpected, myControllerPID.getTransferFunction().getNumeratorCoefficients(), delta);
 		assertArrayEquals(DenominatorExpected, myControllerPID.getTransferFunction().getDenominatorCoefficients(), delta);
-
 	}
 
 	@Test
