@@ -1,19 +1,17 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public abstract class AbstractControllerCalculator
-        implements IControllerCalculator {
+public abstract class AbstractControllerCalculator implements Runnable {
 
-    private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
+    private ArrayList<ControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
     protected double parasiticTimeConstantFactor = 0.1;
-    private IController controller;
+    private AbstractController controller;
 
     // stores where the calculated controller will be inserted into the table
     private int tableRowIndex = -1; // see issue #29
@@ -27,7 +25,7 @@ public abstract class AbstractControllerCalculator
         return Double.parseDouble(f.format(value));
     }
 
-    protected abstract IController calculate();
+    protected abstract AbstractController calculate();
 
     @Override
     public final void run() {
@@ -36,44 +34,41 @@ public abstract class AbstractControllerCalculator
         notifyCalculationComplete();
     }
 
-    @Override
     public void setPlant(Plant plant) {
         this.plant = plant;
     }
 
-    @Override
     public void setParasiticTimeConstantFactor(double parasiticTimeConstantFactor) {
         this.parasiticTimeConstantFactor = parasiticTimeConstantFactor;
     }
 
-    @Override
-    public final IController getController() {
+    public final AbstractController getController() {
         return controller;
     }
 
-    @Override
     public final void setTableRowIndex(int index) {
         tableRowIndex = index;
     }
 
-    @Override
     public final int getTableRowIndex() {
         return tableRowIndex;
     }
 
-    @Override
-    public final void registerListener(IControllerCalculatorListener listener) {
+    public final void registerListener(ControllerCalculatorListener listener) {
         listeners.add(listener);
     }
 
-    @Override
-    public final void unregisterListener(IControllerCalculatorListener listener) {
+    public final void unregisterListener(ControllerCalculatorListener listener) {
         listeners.remove(listener);
     }
 
     private synchronized void notifyCalculationComplete() {
-        for (IControllerCalculatorListener listener : listeners) {
+        for (ControllerCalculatorListener listener : listeners) {
             listener.onControllerCalculationComplete(this);
         }
     }
+
+    public abstract String getName();
+
+    public abstract Color getColor();
 }

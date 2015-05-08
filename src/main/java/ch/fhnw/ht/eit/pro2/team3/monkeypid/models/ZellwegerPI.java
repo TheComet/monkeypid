@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-
 import java.awt.*;
 
 public class ZellwegerPI extends AbstractZellweger {
@@ -11,7 +9,7 @@ public class ZellwegerPI extends AbstractZellweger {
     }
 
     @Override
-    protected final IController calculate() {
+    protected final AbstractController calculate() {
         setAngleOfInflection(-90.0);
         return calculatePI();
     }
@@ -26,7 +24,7 @@ public class ZellwegerPI extends AbstractZellweger {
         return RenderColors.ZELLWEGER_PI;
     }
 
-    private IController calculatePI() {
+    private AbstractController calculatePI() {
 
         // Tn parameter of controller
         double tn = 1.0 / findAngleOnPlantPhase();

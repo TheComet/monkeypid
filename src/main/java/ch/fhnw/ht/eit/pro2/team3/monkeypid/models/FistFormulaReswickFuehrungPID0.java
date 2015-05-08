@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-
 import java.awt.*;
 
 public class FistFormulaReswickFuehrungPID0 extends AbstractControllerCalculator {
@@ -11,7 +9,7 @@ public class FistFormulaReswickFuehrungPID0 extends AbstractControllerCalculator
     }
 
     @Override
-    protected final IController calculate() {
+    protected final AbstractController calculate() {
         double tn = 1.0 * plant.getTg();
         double tv = 0.5 * plant.getTu();
         double kr = 0.6 * plant.getTg() / (plant.getKs() * plant.getTu());

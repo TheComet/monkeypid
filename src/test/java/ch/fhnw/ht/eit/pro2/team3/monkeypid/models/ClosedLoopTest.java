@@ -1,11 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import static org.junit.Assert.*;
-
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
 import org.jfree.data.xy.XYSeries;
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ClosedLoopTest {
     private SaniCurves sani = new SaniCurves();
@@ -13,7 +13,7 @@ public class ClosedLoopTest {
     @Test
     public void testCalculateTransferFunctionWithConstructor() {
         Plant plant = new Plant(2, 6, 1, sani);
-        IController controller = new PIController("test", 1, 1);
+        AbstractController controller = new PIController("test", 1, 1);
 
         plant.getTransferFunction().setNumeratortorCoefficients(new double[]{11, 12, 13, 14});
         plant.getTransferFunction().setDenominatorCoefficients(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
@@ -34,7 +34,7 @@ public class ClosedLoopTest {
 
         // these are values taken from Simulation_Richard_Gut.m
         Plant plant = new Plant(1.71, 7.6, 1, sani);
-        IController controller = new PIController("test", 1.14, 3.58);
+        AbstractController controller = new PIController("test", 1.14, 3.58);
 
         // create close loop using dummy plant and controller
         ClosedLoop loop = new ClosedLoop(new Plant(1, 10, 1, sani), new PIController("", 1, 1));
@@ -53,7 +53,7 @@ public class ClosedLoopTest {
     @Test
     public void testStepResponse() {
         Plant plant = new Plant(1.71, 7.6, 1, sani);
-        IController controller = new PIController("test", 1.14, 3.58);
+        AbstractController controller = new PIController("test", 1.14, 3.58);
         ClosedLoop loop = new ClosedLoop(plant, controller);
         loop.calculateStepResponse(8 * 1024);
         XYSeries series = loop.getStepResponse();

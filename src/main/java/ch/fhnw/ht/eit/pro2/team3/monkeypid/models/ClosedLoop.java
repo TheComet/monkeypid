@@ -1,14 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,20 +18,20 @@ public class ClosedLoop {
 
     private TransferFunction transferFunction;
     private Plant plant;
-    private IController controller;
+    private AbstractController controller;
     private XYSeries stepResponse = null;
-    private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
+    private ArrayList<ClosedLoopListener> listeners = new ArrayList<>();
     private Color color = null;
     private double maxOverSwing;
 
     // stores where the calculated controller will be inserted into the table
     private int tableRowIndex = -1; // see issue #29
 
-    public ClosedLoop(Plant plant, IController controller) {
+    public ClosedLoop(Plant plant, AbstractController controller) {
         setPlantAndController(plant, controller);
     }
 
-    public void setPlantAndController(Plant plant, IController controller) {
+    public void setPlantAndController(Plant plant, AbstractController controller) {
         this.plant = plant;
         this.controller = controller;
         this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
@@ -84,7 +82,7 @@ public class ClosedLoop {
         notifyCalculationComplete();
     }
 
-    private static TransferFunction calculateCloseLoopTransferFunction(Plant plant, IController controller) {
+    private static TransferFunction calculateCloseLoopTransferFunction(Plant plant, AbstractController controller) {
         double[] numeratorCoefficients = MathArrays.convolve(
                 plant.getTransferFunction().getNumeratorCoefficients(),
                 controller.getTransferFunction().getNumeratorCoefficients()
@@ -122,16 +120,16 @@ public class ClosedLoop {
         return tableRow;
     }
 
-    public final void registerListener(IClosedLoopListener listener) {
+    public final void registerListener(ClosedLoopListener listener) {
         listeners.add(listener);
     }
 
-    public final void unregisterListener(IClosedLoopListener listener) {
+    public final void unregisterListener(ClosedLoopListener listener) {
         listeners.remove(listener);
     }
 
     private synchronized void notifyCalculationComplete() {
-        for (IClosedLoopListener listener : listeners) {
+        for (ClosedLoopListener listener : listeners) {
             listener.onStepResponseCalculationComplete(this);
         }
     }
@@ -148,7 +146,7 @@ public class ClosedLoop {
         return plant;
     }
 
-    public IController getController() {
+    public AbstractController getController() {
         return controller;
     }
 
