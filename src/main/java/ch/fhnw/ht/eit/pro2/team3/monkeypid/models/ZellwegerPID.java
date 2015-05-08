@@ -1,7 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-
 import java.awt.*;
 
 public class ZellwegerPID extends AbstractZellweger {
@@ -13,7 +11,7 @@ public class ZellwegerPID extends AbstractZellweger {
     }
 
     @Override
-    protected final IController calculate() {
+    protected final AbstractController calculate() {
         setAngleOfInflection(-135.0);
         return calculatePID();
     }
@@ -28,7 +26,7 @@ public class ZellwegerPID extends AbstractZellweger {
         return RenderColors.ZELLWEGER_PID;
     }
 
-    private IController calculatePID() {
+    private AbstractController calculatePID() {
 
         // find angleOfInflection on the phase of the control path
         double omegaInflection = findAngleOnPlantPhase();

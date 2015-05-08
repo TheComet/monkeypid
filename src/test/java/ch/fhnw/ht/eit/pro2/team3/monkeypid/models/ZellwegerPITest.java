@@ -1,10 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ZellwegerPITest {
 
@@ -12,7 +11,7 @@ public class ZellwegerPITest {
 
     @Test
     public void testCalculateTu2Tg6Ks1phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPI(new Plant(2, 6, 1, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPI(new Plant(2, 6, 1, sani), 45);
         cc.run();
         PIController c = (PIController) cc.getController();
 
@@ -22,7 +21,7 @@ public class ZellwegerPITest {
 
     @Test
     public void testCalculateTu2Tg19Ks3phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 45);
         cc.run();
         PIController c = (PIController) cc.getController();
 
@@ -32,7 +31,7 @@ public class ZellwegerPITest {
 
     @Test
     public void testCalculateTu2Tg19Ks3phi76_3() throws Exception {
-        IControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 76.3);
+        AbstractControllerCalculator cc = new ZellwegerPI(new Plant(2, 19, 3, sani), 76.3);
         cc.run();
         PIController c = (PIController)cc.getController();
 

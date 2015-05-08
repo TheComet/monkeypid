@@ -1,15 +1,14 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Model implements IControllerCalculatorListener, IClosedLoopListener {
+public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
     public class UnknownRegulatorTypeException extends RuntimeException {
         UnknownRegulatorTypeException(String message) {
@@ -128,7 +127,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         clearSimulations();
 
         // get all calculators and notify simulation begin
-        ArrayList<IControllerCalculator> calculators = getControllerCalculators();
+        ArrayList<AbstractControllerCalculator> calculators = getControllerCalculators();
         notifySimulationBegin(calculators.size());
 
         // dispatch all calculators
@@ -180,8 +179,8 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         notifyShowSimulation(selectedSimulation);
     }
 
-    private ArrayList<IControllerCalculator> getControllerCalculators() {
-        ArrayList<IControllerCalculator> calculators = new ArrayList<>();
+    private ArrayList<AbstractControllerCalculator> getControllerCalculators() {
+        ArrayList<AbstractControllerCalculator> calculators = new ArrayList<>();
 
         // generate a list of all calculators
         if(regulatorType == RegulatorType.PID) {
@@ -210,8 +209,8 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         return calculators;
     }
 
-    private void dispatchControllerCalculators(ArrayList<IControllerCalculator> calculators) {
-        for(IControllerCalculator calculator : calculators) {
+    private void dispatchControllerCalculators(ArrayList<AbstractControllerCalculator> calculators) {
+        for(AbstractControllerCalculator calculator : calculators) {
             calculator.registerListener(this);
             calculator.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
             calculator.run(); // for some reason, this can't be threaded
@@ -269,7 +268,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      * @param calculator The calculator that finished.
      */
     @Override
-    public final synchronized void onControllerCalculationComplete(IControllerCalculator calculator) {
+    public final synchronized void onControllerCalculationComplete(AbstractControllerCalculator calculator) {
         ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
 
         // register as listener so we know when the step response calculation completes

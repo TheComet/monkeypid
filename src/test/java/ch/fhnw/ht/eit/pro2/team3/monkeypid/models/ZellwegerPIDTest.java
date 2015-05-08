@@ -1,10 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ZellwegerPIDTest {
 
@@ -12,7 +11,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu0_1Tg0_3Ks1phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 45);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 
@@ -25,7 +24,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu0_1Tg0_3Ks1phi76_3() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 76.3);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 76.3);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 
@@ -38,7 +37,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu2Tg6Ks1phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 1, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 1, sani), 45);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 
@@ -51,7 +50,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu2Tg6Ks3phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 3, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 3, sani), 45);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 
@@ -64,7 +63,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu2Tg9Ks1phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(2, 9, 1, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 9, 1, sani), 45);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 
@@ -77,7 +76,7 @@ public class ZellwegerPIDTest {
 
     @Test
     public void testCalculateTu1_5Tg17Ks1phi45() throws Exception {
-        IControllerCalculator cc = new ZellwegerPID(new Plant(1.5, 17, 1, sani), 45);
+        AbstractControllerCalculator cc = new ZellwegerPID(new Plant(1.5, 17, 1, sani), 45);
         cc.run();
         PIDController c = (PIDController) cc.getController();
 

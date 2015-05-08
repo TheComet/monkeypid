@@ -38,7 +38,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 
     private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
         for(JCheckBox c : checkBoxes) {
-            if(c.getText().compareTo(name) == 0) {
+            if(c.getText().equals(name)) {
                 return c;
             }
         }

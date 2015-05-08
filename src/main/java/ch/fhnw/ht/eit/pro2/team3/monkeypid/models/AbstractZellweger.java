@@ -1,15 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IZellweger;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractZellweger extends AbstractControllerCalculator implements IZellweger
-{
+public abstract class AbstractZellweger extends AbstractControllerCalculator {
     protected double phiDamping;
     protected double angleOfInflection;
     protected double startFreq, endFreq;
@@ -33,17 +30,14 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator imp
         updateFrequencyRange();
     }
 
-    @Override
     public final void setPhaseMargin(double phi) {
         this.phiDamping = phi - 180;
     }
 
-    @Override
     public final void setAngleOfInflection(double angleOfInflection) {
         this.angleOfInflection = angleOfInflection;
     }
 
-    @Override
     public final void setMaxIterations(int iterations) {
         maxIterations = iterations;
     }
