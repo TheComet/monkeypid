@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class ZellwegerI extends AbstractZellweger {
 
-    public ZellwegerI(Plant plant, double phaseMargin) {
-        super(plant, phaseMargin);
+    public ZellwegerI(Plant plant) {
+        super(plant, 0.0); // phase margin is irrelevant in Zellweger I
     }
 
     @Override

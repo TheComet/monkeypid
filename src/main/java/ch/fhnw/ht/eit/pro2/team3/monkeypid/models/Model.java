@@ -208,7 +208,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
                 break;
 
             case I:
-                calculators.add(new ZellwegerI(plant, phaseMargin));
+                calculators.add(new ZellwegerI(plant));
             default:
                 break;
         }
