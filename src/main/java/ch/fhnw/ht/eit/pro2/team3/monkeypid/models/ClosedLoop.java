@@ -15,7 +15,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * Defines a system consisting of a plant and a controller. The closed loop will calculate its own transfer function
+ * based on these two components, and is capable of calculating a step response.
  * @author Alex Murray
  */
 public class ClosedLoop {
@@ -25,23 +26,45 @@ public class ClosedLoop {
     private AbstractController controller;
     private XYSeries stepResponse = null;
     private ArrayList<ClosedLoopListener> listeners = new ArrayList<>();
-    private Color color = null;
     private double maxOverSwing;
 
     // stores where the calculated controller will be inserted into the table
     private int tableRowIndex = -1; // see issue #29
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructor
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Constructs a new closed loop object. A closed loop consists of a Plant object and a controller object.
+     * @param plant The plant to use.
+     * @param controller The controller to use.
+     */
     public ClosedLoop(Plant plant, AbstractController controller) {
         setPlantAndController(plant, controller);
     }
 
-    public void setPlantAndController(Plant plant, AbstractController controller) {
+    // -----------------------------------------------------------------------------------------------------------------
+    // Public methods
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Sets the plant and controller object, and calculates the transfer function of the closed loop.
+     * @param plant The plant to set.
+     * @param controller The controller to set.
+     */
+    public final void setPlantAndController(Plant plant, AbstractController controller) {
         this.plant = plant;
         this.controller = controller;
         this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
     }
 
-    public void calculateStepResponse(int samplePoints) {
+    /**
+     * Calculates the step response of the closed loop. This method uses ifft to get the step response.
+     * @param samplePoints The number of sample points to use for the inverse fourier transform. Note that if the
+     *                     specified number isn't a power of 2, it will be rounded up to the next power of 2.
+     */
+    public final void calculateStepResponse(int samplePoints) {
 
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
         double tcMax = (double) Collections.max(timeConstantsList);
@@ -76,7 +99,7 @@ public class ClosedLoop {
         // generate time axis
         double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
-        // create XY data series for jfreechart
+        // create XY data series for JFreeChart
         stepResponse = new XYSeries(controller.getName());
         for(int i = 0; i < t.length; i++) {
             stepResponse.add(t[i], y[i]);
@@ -86,6 +109,119 @@ public class ClosedLoop {
         notifyCalculationComplete();
     }
 
+    /**
+     * Should return an array of strings to insert into the table of results. The table is designed to contain all
+     * result values of a PID controller in the following order:
+     *     new String[] {"Controller Name", "Kr", "Tn", "Tv", "Tp", "Overswing"};
+     * @return The length of the string array must be 6.
+     */
+    public final String[] getTableRowStrings() {
+        // get the strings the controller wants to insert into the table,
+        // and expand the array by 1 to make space for the overswing value
+        String[] controllerRow = getController().getTableRowStrings();
+        String[] tableRow = new String[controllerRow.length + 1];
+        System.arraycopy(controllerRow, 0, tableRow, 0, controllerRow.length);
+
+        // insert overswing value
+        String str = new DecimalFormat("00.0").format(maxOverSwing).replaceAll("\\G0", " ") + "%";
+        str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
+        tableRow[controllerRow.length] = str;
+
+        return tableRow;
+    }
+
+    /**
+     * Register as a listener to this class in order to receive notifications.
+     * @param listener The object to register.
+     */
+    public final void registerListener(ClosedLoopListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Unregister as a listener from this class.
+     * @param listener The object to unregister.
+     */
+    public final void unregisterListener(ClosedLoopListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * Returns a series of XY data points, representing the calculated step response.
+     * @return A series of XY data points.
+     */
+    public final XYSeries getStepResponse() {
+        return stepResponse;
+    }
+
+    /**
+     * Gets the calculated transfer function of the closed loop.
+     * @return A transfer function.
+     */
+    public final TransferFunction getTransferFunction() {
+        return transferFunction;
+    }
+
+    /**
+     * Gets the plant of the closed loop.
+     * @return A Plant object.
+     */
+    public final Plant getPlant() {
+        return plant;
+    }
+
+    /**
+     * Gets the controller of the closed loop.
+     * @return An AbstractController object.
+     */
+    public final AbstractController getController() {
+        return controller;
+    }
+
+    /**
+     * Gets the name of the closed loop. This is just a wrapper around the controller's getName() method, for
+     * convenience.
+     * @return Returns the name.
+     */
+    public final String getName() {
+        return controller.getName();
+    }
+
+    /**
+     * Gets the colour of the closed loop. This is just a wrapper around the controller's getColor() method, for
+     * convenience.
+     * @return The colour.
+     */
+    public final Color getColor() {
+        return controller.getColor();
+    }
+
+    /**
+     * Gets the row index in the table of where the resulting controller should be written to. See issue #29
+     * @return The row index of the table.
+     */
+    public final int getTableRowIndex() {
+        return tableRowIndex;
+    }
+
+    /**
+     * Stores where the calculated controller will be inserted into the table. See issue #29
+     * @param index The row index of the table.
+     */
+    public final void setTableRowIndex(int index) {
+        tableRowIndex = index;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Private methods
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Calculates the transfer function of the closed loop from a plant and a controller.
+     * @param plant The plant.
+     * @param controller The controller.
+     * @return The resulting transfer function.
+     */
     private static TransferFunction calculateCloseLoopTransferFunction(Plant plant, AbstractController controller) {
         double[] numeratorCoefficients = MathArrays.convolve(
                 plant.getTransferFunction().getNumeratorCoefficients(),
@@ -109,81 +245,12 @@ public class ClosedLoop {
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
     }
 
-    public String[] getTableRowStrings() {
-        // get the strings the controller wants to insert into the table,
-        // and expand the array by 1 to make space for the overswing value
-        String[] controllerRow = getController().getTableRowStrings();
-        String[] tableRow = new String[controllerRow.length + 1];
-        System.arraycopy(controllerRow, 0, tableRow, 0, controllerRow.length);
-
-        // insert overswing value
-        String str = new DecimalFormat("00.0").format(maxOverSwing).replaceAll("\\G0", " ") + "%";
-        str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
-        tableRow[controllerRow.length] = str;
-
-        return tableRow;
-    }
-
-    public final void registerListener(ClosedLoopListener listener) {
-        listeners.add(listener);
-    }
-
-    public final void unregisterListener(ClosedLoopListener listener) {
-        listeners.remove(listener);
-    }
-
+    /**
+     * Called when the step response calculation completes, so listeners can pick up the results.
+     */
     private synchronized void notifyCalculationComplete() {
         for (ClosedLoopListener listener : listeners) {
             listener.onStepResponseCalculationComplete(this);
         }
-    }
-
-    public XYSeries getStepResponse() {
-        return stepResponse;
-    }
-
-    public TransferFunction getTransferFunction() {
-        return transferFunction;
-    }
-
-    public Plant getPlant() {
-        return plant;
-    }
-
-    public AbstractController getController() {
-        return controller;
-    }
-
-    public String getName() {
-        return controller.getName();
-    }
-
-    public Color getColor() {
-        return controller.getColor();
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public XYSeries exampleCalculate() {
-
-        double[][] data = {{0, 1, 2, 3}, {3, 5, 4, 6}};
-
-        // construct XY dataset from the loaded data
-        XYSeries series = new XYSeries("Test");
-        for(int i = 0; i < data[0].length; i++) {
-            series.add(data[0][i], data[1][i]);
-        }
-
-        return series;
-    }
-
-    public void setTableRowIndex(int index) {
-        tableRowIndex = index;
-    }
-
-    public int getTableRowIndex() {
-        return tableRowIndex;
     }
 }

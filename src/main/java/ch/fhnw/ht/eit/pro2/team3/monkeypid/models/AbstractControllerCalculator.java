@@ -98,19 +98,19 @@ public abstract class AbstractControllerCalculator implements Runnable {
     }
 
     /**
-     * Stores where the calculated controller will be inserted into the table. See issue #29
-     * @param index The row index of the table.
-     */
-    public final void setTableRowIndex(int index) {
-        tableRowIndex = index;
-    }
-
-    /**
      * Gets the row index in the table of where the resulting controller should be written to. See issue #29
      * @return The row index of the table.
      */
     public final int getTableRowIndex() {
         return tableRowIndex;
+    }
+
+    /**
+     * Stores where the calculated controller will be inserted into the table. See issue #29
+     * @param index The row index of the table.
+     */
+    public final void setTableRowIndex(int index) {
+        tableRowIndex = index;
     }
 
     /**
