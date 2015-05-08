@@ -6,16 +6,39 @@ import java.awt.*;
  * Represents the controller component in a closed loop system. The controller can have multiple types, e.g. I, PI,
  * or PID. This is a base class defining the common interface.
  *
- * Each controller defines a name, a colour, and most importantly, a transfer function. The way the transfer function
- * is calculated depends on the controller type and is taken care of in the deriving classes.
+ * Each controller defines a unique name, a colour, and most importantly, a transfer function. The way the transfer
+ * function is calculated depends on the controller type and is taken care of in the derived classes.
  *
- * Once a controller is calculated, it can be connected to a Plant object using a ClosedLoop object.
+ * Once a controller is calculated, it can be connected to a Plant object by using a ClosedLoop object.
  * @author Alex Murray
  */
 public abstract class AbstractController {
     private String name;
     private Color color;
     private TransferFunction transferFunction;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Interface for derived classes
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * This should calculate the transfer function of the controller and then pass it to setTransferFunction(). There
+     * are multiple ways to do this, which is why it must be implemented by the derived classes.
+     */
+    protected abstract void calculateTransferFunction();
+
+    /**
+     * Should return an array of strings to insert into the table of results. The table is designed to contain all
+     * result values of a PID controller in the following order:
+     *     new String[] {"Controller Name", "Kr", "Tn", "Tv", "Tp"};
+     * If your controller is missing some of these parameters, then you should specify empty strings in their place.
+     * @return The length of the string array must be 5.
+     */
+    public abstract String[] getTableRowStrings();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Constructor
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Constructor. The name of the controller is required and should be unique among all calculations within a
@@ -25,6 +48,10 @@ public abstract class AbstractController {
     public AbstractController(String name) {
         this.name = name;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Public methods
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Gets the name of this controller.
@@ -37,7 +64,7 @@ public abstract class AbstractController {
     /**
      * Gets the colour of this controller. The colour is used for the colour of the curve in the chart, and for
      * colouring the checkboxes and rows in the table.
-     * @return A colour object.
+     * @return A Color object.
      */
     public final Color getColor() {
         return color;
@@ -61,6 +88,10 @@ public abstract class AbstractController {
         return transferFunction;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // Private methods
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Sets the transfer function of this controller. Only derived classes should be able to set the transfer function,
      * because it doesn't really make sense for anything else outside to know how to calculate it.
@@ -69,19 +100,4 @@ public abstract class AbstractController {
     protected final void setTransferFunction(TransferFunction transferFunction) {
         this.transferFunction = transferFunction;
     }
-
-    /**
-     * Must be implemented by derived classes. This should calculate the transfer function of the controller and then
-     * pass it to setTransferFunction().
-     */
-    protected abstract void calculateTransferFunction();
-
-    /**
-     * Should return an array of strings to insert into the table of results. The table is designed to contain all
-     * result values of a PID controller in the following order:
-     *     new String[] {"Controller Name", "Kr", "Tn", "Tv", "Tp"};
-     * If your controller is missing some of these parameters, then you should specify empty strings in their place.
-     * @return The length of the string array must be 5.
-     */
-    public abstract String[] getTableRowStrings();
 }
