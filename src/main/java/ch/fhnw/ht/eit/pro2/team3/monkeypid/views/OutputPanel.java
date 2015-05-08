@@ -1,17 +1,11 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IController;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,10 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
-import com.sun.org.apache.bcel.internal.generic.IFNULL;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -33,8 +24,7 @@ import com.sun.org.apache.bcel.internal.generic.IFNULL;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener,
-		IModelListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener, IClosedLoopListener {
 
 	Controller controller;
 
@@ -263,14 +253,12 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().addToTable(tableModel);
-
+		closedLoop.registerListener(this); // so we know when to add the closed loop to the table
 	}
 
 	@Override
 	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.getController().removeFromTable(tableModel);
-
+        closedLoop.removeFromTable(tableModel);
 	}
 
 	@Override
@@ -290,4 +278,9 @@ public class OutputPanel extends JPanel implements ActionListener,
 	public void onShowSimulation(ClosedLoop closedLoop) {
 
 	}
+
+    @Override
+    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
+        closedLoop.addToTable(tableModel);
+    }
 }
