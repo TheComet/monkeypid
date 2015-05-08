@@ -104,7 +104,7 @@ public class ClosedLoop {
         return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
     }
 
-    public void addToTable(DefaultTableModel table) {
+    public String[] getTableRowStrings() {
         // get the strings the controller wants to insert into the table,
         // and expand the array by 1 to make space for the overswing value
         String[] controllerRow = getController().getTableRowStrings();
@@ -116,7 +116,7 @@ public class ClosedLoop {
         str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
         tableRow[controllerRow.length] = str;
 
-        table.addRow(tableRow);
+        return tableRow;
     }
 
     public final void registerListener(IClosedLoopListener listener) {
