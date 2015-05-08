@@ -89,12 +89,8 @@ public class GraphPanel extends JPanel implements ModelListener {
 
     @Override
     public void onAddCalculation(ClosedLoop closedLoop) {
-        try {
-            synchronized (this) {
-
-            }
-
-            SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
+            try {
 
                 dataCollection.addSeries(closedLoop.getStepResponse());
 
@@ -103,11 +99,11 @@ public class GraphPanel extends JPanel implements ModelListener {
 
                 // See issue #21 - make visible again
                 setSeriesVisible(closedLoop, true);
-            });
 
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        });
     }
 
     @Override
