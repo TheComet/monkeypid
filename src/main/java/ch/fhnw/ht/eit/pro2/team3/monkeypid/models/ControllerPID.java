@@ -33,7 +33,7 @@ public class ControllerPID extends AbstractController {
      * @param kr The controller parameter Kr.
      * @param tp The controller parameter p.
      */
-    public void setParameters(double tn, double tv, double kr, double tp) {
+    public final void setParameters(double tn, double tv, double kr, double tp) {
         this.tn = tn;
         this.tv = tv;
         this.kr = kr;
@@ -45,7 +45,7 @@ public class ControllerPID extends AbstractController {
      * Gets the controller parameter Tn.
      * @return Tn.
      */
-    public double getTn() {
+    public final double getTn() {
         return tn;
     }
 
@@ -53,7 +53,7 @@ public class ControllerPID extends AbstractController {
      * Gets the controller parameter Tv.
      * @return Tv.
      */
-    public double getTv() {
+    public final double getTv() {
         return tv;
     }
 
@@ -61,7 +61,7 @@ public class ControllerPID extends AbstractController {
      * Gets the controller parameter Kr.
      * @return Kr.
      */
-    public double getKr() {
+    public final double getKr() {
         return kr;
     }
 
@@ -69,7 +69,7 @@ public class ControllerPID extends AbstractController {
      * Gets the controller parameter Tp.
      * @return Tp.
      */
-    public double getTp() {
+    public final double getTp() {
         return tp;
     }
 
@@ -77,7 +77,7 @@ public class ControllerPID extends AbstractController {
      * Calculates the transfer function for a PID controller.
      */
     @Override
-    protected void calculateTransferFunction() {
+    protected final void calculateTransferFunction() {
         // Numerator and Denominator Poly of the pid-controller:
         // Gr = Kr*(1+ 1/(s*Tn) + s*Tv/(1+s*Tp))
         //    = Kr * (s^2(Tn*Tv + Tn*Tp) + s*(Tn+Tv) + 1)/(s^2*(Tn*Tp)+ s*Tn)
@@ -95,7 +95,7 @@ public class ControllerPID extends AbstractController {
      * @return Array of strings of the length 5.
      */
     @Override
-    public String[] getTableRowStrings() {
+    public final String[] getTableRowStrings() {
         return new String[]{
                 getName(),
                 new DecimalFormat("0.000E0").format(getKr()),

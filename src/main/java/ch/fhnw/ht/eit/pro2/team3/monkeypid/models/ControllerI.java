@@ -41,7 +41,7 @@ public class ControllerI extends AbstractController {
      * Calculates the transfer function for a PI controller.
      */
     @Override
-    protected void calculateTransferFunction() {
+    protected final void calculateTransferFunction() {
         // Numerator and Denominator Poly of the pi-controller:
         // Kr (1 + 1/(s*Tn)) = Kr * (s*Tn + 1)/(s*Tn)
         //   Br = [1];
@@ -58,7 +58,7 @@ public class ControllerI extends AbstractController {
      * @return Array of strings of the length 5.
      */
     @Override
-    public String[] getTableRowStrings() {
+    public final String[] getTableRowStrings() {
         return new String[]{
                 getName(),
                 "", // Kr  (PI/PID only)

@@ -27,7 +27,7 @@ public class ControllerPI extends AbstractController {
      * @param kr The controller parameter Kr.
      * @param tn The controller parameter Tn.
      */
-    public void setParameters(double kr, double tn) {
+    public final void setParameters(double kr, double tn) {
         this.kr = kr;
         this.tn = tn;
         calculateTransferFunction();
@@ -37,7 +37,7 @@ public class ControllerPI extends AbstractController {
      * Gets the controller parameter Kr.
      * @return Kr.
      */
-    public double getKr() {
+    public final double getKr() {
         return kr;
     }
 
@@ -45,7 +45,7 @@ public class ControllerPI extends AbstractController {
      * Gets the controller parameter Tn.
      * @return Tn.
      */
-    public double getTn() {
+    public final double getTn() {
         return tn;
     }
 
@@ -53,7 +53,7 @@ public class ControllerPI extends AbstractController {
      * Calculates the transfer function for a PI controller.
      */
     @Override
-    protected void calculateTransferFunction() {
+    protected final void calculateTransferFunction() {
         // Numerator and Denominator Poly of the pi-controller:
         // Kr (1 + 1/(s*Tn)) = Kr * (s*Tn + 1)/(s*Tn)
         //   Br = Kr*[Tn 1];
@@ -70,7 +70,7 @@ public class ControllerPI extends AbstractController {
      * @return Array of strings of the length 5.
      */
     @Override
-    public String[] getTableRowStrings() {
+    public final String[] getTableRowStrings() {
         return new String[]{
                 getName(),
                 new DecimalFormat("0.000E0").format(getKr()),
