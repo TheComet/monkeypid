@@ -28,8 +28,7 @@ import javax.swing.table.TableColumn;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener,
-        IModelListener, IControllerCalculatorListener, IClosedLoopListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener {
 
 	private Controller controller;
 
@@ -260,14 +259,9 @@ public class OutputPanel extends JPanel implements ActionListener,
 		}
 	}
 
-    @Override
-    public void onControllerCalculationComplete(IControllerCalculator calculator) {
-
-    }
-
 	@Override
 	public void onAddClosedLoop(ClosedLoop closedLoop) {
-		closedLoop.registerListener(this); // so we know when to add the closed loop to the table
+        closedLoop.addToTable(tableModel);
 	}
 
 	@Override
@@ -290,11 +284,8 @@ public class OutputPanel extends JPanel implements ActionListener,
 	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideSimulation(ClosedLoop closedLoop) {}
+	public void onHideStepResponse(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowSimulation(ClosedLoop closedLoop) {}
-
-    @Override
-    public void onStepResponseCalculationComplete(ClosedLoop closedLoop) {}
+	public void onShowStepResponse(ClosedLoop closedLoop) {}
 }

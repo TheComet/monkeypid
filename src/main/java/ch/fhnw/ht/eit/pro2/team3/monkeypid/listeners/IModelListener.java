@@ -7,6 +7,6 @@ public interface IModelListener {
     void onRemoveClosedLoop(ClosedLoop closedLoop);
     void onSimulationBegin();
     void onSimulationComplete();
-    void onHideSimulation(ClosedLoop closedLoop);
-    void onShowSimulation(ClosedLoop closedLoop);
+    void onHideStepResponse(ClosedLoop closedLoop);
+    void onShowStepResponse(ClosedLoop closedLoop);
 }
