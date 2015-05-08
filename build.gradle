@@ -26,6 +26,9 @@ dependencies {
     compile name: 'syntheticaSimple2D'
     compile name: 'syntheticaSkyMetallic'
     compile name: 'syntheticaWhiteVision'
+		compile name: 'itextpdf-5.5.6'
+		compile name: 'itext-pdfa-5.5.6'
+		compile name: 'itext-xtra-5.5.6'
 }
 
 task wrapper(type: Wrapper) {
