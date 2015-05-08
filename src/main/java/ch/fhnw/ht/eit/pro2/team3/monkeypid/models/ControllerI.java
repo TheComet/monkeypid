@@ -13,7 +13,7 @@ public class ControllerI extends AbstractController {
     /**
      * Constructs a new I controller from the parameter Ti and calculates the transfer function.
      * @param name A unique name for this controller. Must be unique for all controllers in a simulation.
-     * @param ti The parameter Ti.
+     * @param ti The controller parameter Ti.
      */
     public ControllerI(String name, double ti) {
         super(name);
@@ -38,7 +38,7 @@ public class ControllerI extends AbstractController {
     }
 
     /**
-     * Calculates the transfer function for this controller.
+     * Calculates the transfer function for a PI controller.
      */
     @Override
     protected void calculateTransferFunction() {
