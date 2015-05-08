@@ -1,5 +1,10 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+/**
+ * A global list of the names of each calculator. This makes it easier to have an overview of the names, and manage the
+ * names. The calculators will return these in their getName() methods.
+ * @author Alex Murray
+ */
 public class CalculatorNames {
     public static final String OPPELT_PI               = "Oppelt";
     public static final String OPPELT_PID              = "Oppelt";

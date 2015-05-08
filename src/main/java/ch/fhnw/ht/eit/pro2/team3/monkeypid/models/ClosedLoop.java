@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *
+ * @author Alex Murray
+ */
 public class ClosedLoop {
 
     private TransferFunction transferFunction;
