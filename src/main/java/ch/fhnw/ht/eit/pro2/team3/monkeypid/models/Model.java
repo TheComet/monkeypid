@@ -115,9 +115,15 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             return;
         }
 
+        // clean up from last simulation
         clearSimulations();
-        notifySimulationBegin();
-        threadPool.submit(this::dispatchControllerCalculators);
+
+        // get all calculators and notify simulation begin
+        ArrayList<IControllerCalculator> calculators = getControllerCalculators();
+        notifySimulationBegin(calculators.size());
+
+        // dispatch all calculators
+        threadPool.submit(() -> dispatchControllerCalculators(calculators));
     }
 
     /**
@@ -155,10 +161,10 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         notifyShowSimulation(selectedSimulation);
     }
 
-    private void dispatchControllerCalculators() {
-
+    private ArrayList<IControllerCalculator> getControllerCalculators() {
         ArrayList<IControllerCalculator> calculators = new ArrayList<>();
 
+        // generate a list of all calculators
         if(regulatorType == RegulatorType.PID) {
             calculators.add(new FistFormulaOppeltPID(plant));
             calculators.add(new FistFormulaReswickStoerPID0(plant));
@@ -177,6 +183,10 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             calculators.add(new ZellwegerPI(plant, phaseMargin));
         }
 
+        return calculators;
+    }
+
+    private void dispatchControllerCalculators(ArrayList<IControllerCalculator> calculators) {
         for(IControllerCalculator calculator : calculators) {
             calculator.registerListener(this);
             calculator.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
@@ -206,8 +216,10 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
     }
 
-    private synchronized void notifySimulationBegin() {
-        listeners.forEach(ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener::onSimulationBegin);
+    private synchronized void notifySimulationBegin(int numberOfCalculators) {
+        for(IModelListener listener : listeners) {
+            listener.onSimulationBegin(numberOfCalculators);
+        }
     }
 
     private synchronized void notifySimulationComplete() {

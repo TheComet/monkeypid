@@ -78,22 +78,14 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
     @Override
-    public void onSimulationBegin() {
-
-    }
+    public void onSimulationBegin(int numberOfStepResponses) {}
 
     @Override
-    public void onSimulationComplete() {
-
-    }
+    public void onSimulationComplete() {}
 
     @Override
-    public void onHideStepResponse(ClosedLoop closedLoop) {
-
-    }
+    public void onHideStepResponse(ClosedLoop closedLoop) {}
 
     @Override
-    public void onShowStepResponse(ClosedLoop closedLoop) {
-
-    }
+    public void onShowStepResponse(ClosedLoop closedLoop) {}
 }

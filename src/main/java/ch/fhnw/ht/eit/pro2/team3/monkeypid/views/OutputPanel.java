@@ -277,8 +277,8 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
         }
 	}
 
-	@Override
-	public void onSimulationBegin() {}
+    @Override
+    public void onSimulationBegin(int numberOfStepResponses) {}
 
 	@Override
 	public void onSimulationComplete() {}
