@@ -248,7 +248,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		// if button delete is pressed
 		if (e.getSource() == btDelete) {
 			// call method of controller
-			controller.btDeleteAction();
+			// TODO controller.btDeleteAction();
 		}
 		// if button adopt is pressed
 		if (e.getSource() == btAdopt) {
@@ -256,7 +256,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 			int slTnValue = slTn.getValue();
 			int slTvValue = slTv.getValue();
 			// give over values to controller
-			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
+			// TODO controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
 		}
 	}
 
