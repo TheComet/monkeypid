@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * This is the heart of all data related operations. All simulations, calculations and events are orchestrated here.
+ * 
+ * @author Alex Murray
+ */
 public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
     public class UnknownRegulatorTypeException extends RuntimeException {
