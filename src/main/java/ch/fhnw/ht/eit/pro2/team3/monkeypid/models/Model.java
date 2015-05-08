@@ -17,6 +17,12 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         }
     }
 
+    public class InvalidPlantForPIDSimulationException extends RuntimeException {
+        InvalidPlantForPIDSimulationException(String message) {
+            super(message);
+        }
+    }
+
     private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     // have the model own the sani curves, so they don't have to be reloaded from
@@ -115,6 +121,9 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
             return;
         }
 
+        // see issue #31 - disallow orders n=2 for PID simulations
+        validatePlantIsPIDCompliant();
+
         // clean up from last simulation
         clearSimulations();
 
@@ -124,6 +133,16 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
 
         // dispatch all calculators
         threadPool.submit(() -> dispatchControllerCalculators(calculators));
+    }
+
+    private void validatePlantIsPIDCompliant() {
+        // see issue #31 - disallow orders n=2 for PID simulations
+        if(regulatorType == RegulatorType.PID) {
+            double ratio = plant.getTu() / plant.getTg();
+            if(sani.lookupPower(ratio) == 2) {
+                throw new InvalidPlantForPIDSimulationException("Current plant has order n=2. These aren't allowed for PID simulations");
+            }
+        }
     }
 
     /**

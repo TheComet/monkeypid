@@ -31,6 +31,8 @@ public class Controller {
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
                                  String selectedRegulatorName,
                                  OverswingValueTuple overswing){
+
+        // issue #31 - Don't allow
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);
