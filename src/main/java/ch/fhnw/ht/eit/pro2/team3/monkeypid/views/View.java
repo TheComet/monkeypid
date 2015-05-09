@@ -1,6 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.BorderLayout;
@@ -16,8 +18,7 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -28,7 +29,7 @@ import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
  * @author Josua
  *
  */
-public class View extends JPanel implements Observer, ActionListener {
+public class View extends JPanel implements ActionListener {
 
 	private Controller controller;
 
@@ -109,15 +110,9 @@ public class View extends JPanel implements Observer, ActionListener {
 
 	}
 
-	/**
-	 * 
-	 */
-	public void update(Observable observable, Object o) {
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == btAutoAdjust){
+		if (e.getSource() == btAutoAdjust) {
 			graphPanel.autoScaleAxis();
 		}
 	}

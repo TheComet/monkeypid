@@ -4,10 +4,10 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This is the heart of all data related operations. All simulations, calculations and events are orchestrated here.
@@ -138,10 +138,8 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      */
     public final void simulateAll() {
 
-        // It's not thread safe to call this method while calculators are still active
-        if(isSimulationActive()) {
+        if(threadPool.getActiveCount() > 0)
             return;
-        }
 
         // see issue #31 - disallow orders n=2 for PID simulations
         validatePlantIsPIDCompliant();
@@ -155,16 +153,14 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
         // dispatch all calculators
         calculators.forEach(threadPool::submit);
-    }
 
-    /**
-     * Returns true if a simulation is in progress.
-     * @return True if a simulation is in progress, false if otherwise.
-     */
-    public final boolean isSimulationActive() {
-        int queued = threadPool.getQueue().size();
-        int active = threadPool.getActiveCount();
-        return (queued + active > 0);
+        try {
+            threadPool.awaitTermination(0, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            notifySimulationComplete();
+        }
     }
 
     /**
@@ -311,15 +307,8 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
         }
     }
 
-    private void tryNotifySimulationComplete() {
-        // TODO this is broken, see issue #41
-        boolean active;
-        synchronized (this) {
-            active = isSimulationActive();
-        }
-        if(!active) {
-            listeners.forEach(ModelListener::onSimulationComplete);
-        }
+    private void notifySimulationComplete() {
+        listeners.forEach(ModelListener::onSimulationComplete);
     }
 
     private void notifyHideSimulation(ClosedLoop closedLoop) {
@@ -363,6 +352,5 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     @Override
     public final synchronized void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
         notifyAddCalculation(closedLoop);
-        tryNotifySimulationComplete();
     }
 }
