@@ -2,56 +2,36 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import java.awt.*;
 
+/**
+ * Implements the Zellweger method for calculating PID controllers.
+ * @author Alex Murray
+ */
 public class ZellwegerPID extends AbstractZellweger {
 
     private double beta = 0.0;
 
+    /**
+     * Constructs a new Zellweger calculator using the specified plant.
+     * @param plant The plant to calculate a controller for.
+     * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
+     */
     public ZellwegerPID(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
     }
 
-    @Override
-    protected final AbstractController calculate() {
-        setAngleOfInflection(-135.0);
-        return calculatePID();
+    /**
+     * Gets the calculated beta parameter.
+     * @return Beta.
+     */
+    public double getBeta() {
+        return beta;
     }
 
-    @Override
-    public String getName() {
-        return CalculatorNames.ZELLWEGER_PID;
-    }
-
-    @Override
-    public Color getColor() {
-        return RenderColors.ZELLWEGER_PID;
-    }
-
-    private AbstractController calculatePID() {
-
-        // find angleOfInflection on the phase of the control path
-        double omegaInflection = findAngleOnPlantPhase();
-
-        beta = calculateBeta(omegaInflection);
-
-        double tnk = 1.0 / (omegaInflection * beta);
-        double tvk = beta / omegaInflection;
-        double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
-        tp = beautifyTpSoNiklausIsHappy(tp);
-
-        // find phiDamping on the phase of the open loop
-        double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);
-
-        // amplitude of the open loop at the omegaDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tnk, tvk, tp);
-
-        // Kr is the reciprocal of the amplitude at omegaDamping
-        double krk = 1.0 / ampOpenLoopKr;
-
-        double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
-
-        return new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
-    }
-
+    /**
+     * Uses a binary search to approximate the angle on the phase of the open loop. Accuracy can be set by calling the
+     * method setMaxIterations().
+     * @return Returns the angle at the specified phase of the open loop.
+     */
     private double findAngleOnOpenLoopPhase(double tnk, double tvk, double tp) {
 
         // find phiDamping on the phase of the open loop
@@ -150,7 +130,53 @@ public class ZellwegerPID extends AbstractZellweger {
         return tntvkr;
     }
 
-    public double getBeta() {
-        return beta;
+    /**
+     * Calculates the appropriate controller for the specified plant.
+     * @return Returns a new PID controller.
+     */
+    @Override
+    protected final AbstractController calculate() {
+        setAngleOfInflection(-135.0);
+
+        // find angleOfInflection on the phase of the control path
+        double omegaInflection = findAngleOnPlantPhase();
+
+        beta = calculateBeta(omegaInflection);
+
+        double tnk = 1.0 / (omegaInflection * beta);
+        double tvk = beta / omegaInflection;
+        double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
+        tp = beautifyTpSoNiklausIsHappy(tp);
+
+        // find phiDamping on the phase of the open loop
+        double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);
+
+        // amplitude of the open loop at the omegaDamping frequency
+        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tnk, tvk, tp);
+
+        // Kr is the reciprocal of the amplitude at omegaDamping
+        double krk = 1.0 / ampOpenLoopKr;
+
+        double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
+
+        return new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
+    }
+
+    /**
+     * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
+     * @return The name of this controller.
+     */
+    @Override
+    public String getName() {
+        return CalculatorNames.ZELLWEGER_PID;
+    }
+
+    /**
+     * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
+     * @return The render color.
+     */
+    @Override
+    public Color getColor() {
+        return RenderColors.ZELLWEGER_PID;
     }
 }

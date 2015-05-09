@@ -2,46 +2,27 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import java.awt.*;
 
+/**
+ * Implements the Zellweger method for calculating PI controllers.
+ * @author Alex Murray
+ */
 public class ZellwegerPI extends AbstractZellweger {
 
+    /**
+     * Constructs a new Zellweger calculator using the specified plant.
+     * @param plant The plant to calculate a controller for.
+     * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
+     */
     public ZellwegerPI(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
     }
 
-    @Override
-    protected final AbstractController calculate() {
-        setAngleOfInflection(-90.0);
-        return calculatePI();
-    }
-
-    @Override
-    public String getName() {
-        return CalculatorNames.ZELLWEGER_PI;
-    }
-
-    @Override
-    public Color getColor() {
-        return RenderColors.ZELLWEGER_PI;
-    }
-
-    private AbstractController calculatePI() {
-
-        // Tn parameter of controller
-        double tn = 1.0 / findAngleOnPlantPhase();
-
-        // get omega damping
-        double omegaDamping = findAngleOnOpenLoopPhase(tn);
-
-        // amplitude of the open loop at the omegaDamping frequency
-        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tn);
-
-        // Kr is the reciprocal of the amplitude at omegaDamping
-        double kr = 1.0 / ampOpenLoopKr;
-
-        return new ControllerPI(getName(), kr, tn);
-    }
-
-    protected double findAngleOnOpenLoopPhase(double tn) {
+    /**
+     * Uses a binary search to approximate the angle on the phase of the open loop. Accuracy can be set by calling the
+     * method setMaxIterations().
+     * @return Returns the angle at the specified phase of the open loop.
+     */
+    private double findAngleOnOpenLoopPhase(double tn) {
 
         // find phiDamping on the phase of the open loop
         double topFreq = endFreq;
@@ -80,5 +61,46 @@ public class ZellwegerPI extends AbstractZellweger {
      */
     private double calculateControllerAmplitude(double omega, double tn) {
         return Math.sqrt(1.0 + Math.pow(omega * tn, 2)) / (omega * tn);
+    }
+
+    /**
+     * Calculates the appropriate controller for the specified plant.
+     * @return Returns a new PI controller.
+     */
+    @Override
+    protected final AbstractController calculate() {
+        setAngleOfInflection(-90.0);
+
+        // Tn parameter of controller
+        double tn = 1.0 / findAngleOnPlantPhase();
+
+        // get omega damping
+        double omegaDamping = findAngleOnOpenLoopPhase(tn);
+
+        // amplitude of the open loop at the omegaDamping frequency
+        double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tn);
+
+        // Kr is the reciprocal of the amplitude at omegaDamping
+        double kr = 1.0 / ampOpenLoopKr;
+
+        return new ControllerPI(getName(), kr, tn);
+    }
+
+    /**
+     * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
+     * @return The name of this controller.
+     */
+    @Override
+    public String getName() {
+        return CalculatorNames.ZELLWEGER_PI;
+    }
+
+    /**
+     * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
+     * @return The render color.
+     */
+    @Override
+    public Color getColor() {
+        return RenderColors.ZELLWEGER_PI;
     }
 }
