@@ -7,7 +7,6 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +14,7 @@ import java.util.Map;
  * GraphDisplayPanel is a panel which includes checkBoxes with names of all
  * simulated graphs. If a checkBox is set the appendant graph is displayed else
  * it isn't displayed anymore.
- * 
- * @author Josua
- *
+ * @author Josua Stierli
  */
 public class GraphDisplayPanel extends JPanel implements ActionListener,
 		IModelListener {
