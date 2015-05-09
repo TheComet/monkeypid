@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 
 import org.jfree.chart.ChartPanel;
@@ -22,7 +22,7 @@ import java.awt.*;
  * @author Josua
  *
  */
-public class GraphPanel extends JPanel implements ModelListener {
+public class GraphPanel extends JPanel implements IModelListener {
     private XYSeriesCollection dataCollection = null;
     private JFreeChart chart = null;
 

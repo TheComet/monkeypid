@@ -1,7 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 
@@ -23,7 +23,7 @@ import javax.swing.table.TableColumn;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener, ModelListener {
+public class OutputPanel extends JPanel implements ActionListener, IModelListener {
 
 	private Controller controller;
 

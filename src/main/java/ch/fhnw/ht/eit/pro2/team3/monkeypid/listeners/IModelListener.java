@@ -6,7 +6,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
  * Allows classes to register as listeners of the Model class. Model is part of the MVC pattern.
  * @author Alex Murray
  */
-public interface ModelListener {
+public interface IModelListener {
 
     /**
      * This is called when the model has finished calculating a closed system and its respective step response, and

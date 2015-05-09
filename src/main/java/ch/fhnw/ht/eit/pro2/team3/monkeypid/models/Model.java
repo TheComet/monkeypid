@@ -1,8 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Alex Murray
  */
-public class Model implements ControllerCalculatorListener, ClosedLoopListener {
+public class Model implements IControllerCalculatorListener, IClosedLoopListener {
 
     /**
      * Is thrown when an unknown regulator string is passed to setRegulatorType().
@@ -78,7 +78,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     private ArrayList<ClosedLoop> closedLoops = new ArrayList<>();
 
     // list of Model listeners
-    private ArrayList<ModelListener> listeners = new ArrayList<>();
+    private ArrayList<IModelListener> listeners = new ArrayList<>();
 
     // -----------------------------------------------------------------------------------------------------------------
     // Public methods
@@ -204,7 +204,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * Registers a model listener.
      * @param listener An object implementing IModelListener.
      */
-    public final void registerListener(ModelListener listener) {
+    public final void registerListener(IModelListener listener) {
         listeners.add(listener);
     }
 
@@ -212,7 +212,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * Unregisters a model listener.
      * @param listener An object that previously called registerListener.
      */
-    public final void unregisterListener(ModelListener listener) {
+    public final void unregisterListener(IModelListener listener) {
         listeners.remove(listener);
     }
 
@@ -305,7 +305,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param loop The closed loop that was added.
      */
     private void notifyAddCalculation(ClosedLoop loop) {
-        for(ModelListener listener : listeners) {
+        for(IModelListener listener : listeners) {
             listener.onAddCalculation(loop);
         }
     }
@@ -315,7 +315,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param loop The closed loop that was removed.
      */
     private void notifyRemoveCalculation(ClosedLoop loop) {
-        for (ModelListener listener : listeners) {
+        for (IModelListener listener : listeners) {
             listener.onRemoveCalculation(loop);
         }
     }
@@ -325,7 +325,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param numberOfCalculators The number of calculators that will be executed.
      */
     private void notifySimulationBegin(int numberOfCalculators) {
-        for(ModelListener listener : listeners) {
+        for(IModelListener listener : listeners) {
             listener.onSimulationBegin(numberOfCalculators);
         }
     }
@@ -334,7 +334,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * Call this to notify that a simulation has completed.
      */
     private void notifySimulationComplete() {
-        listeners.forEach(ModelListener::onSimulationComplete);
+        listeners.forEach(IModelListener::onSimulationComplete);
     }
 
     /**
@@ -342,7 +342,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param closedLoop The closed loop being hidden.
      */
     private void notifyHideCalculation(ClosedLoop closedLoop) {
-        for(ModelListener listener : listeners) {
+        for(IModelListener listener : listeners) {
             listener.onHideCalculation(closedLoop);
         }
     }
@@ -353,7 +353,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
      * @param closedLoop The closed loop to make visible.
      */
     private void notifyShowCalculation(ClosedLoop closedLoop) {
-        for(ModelListener listener : listeners) {
+        for(IModelListener listener : listeners) {
             listener.onShowCalculation(closedLoop);
         }
     }

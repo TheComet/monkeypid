@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
@@ -25,7 +25,7 @@ public class ClosedLoop {
     private Plant plant;
     private AbstractController controller;
     private XYSeries stepResponse = null;
-    private ArrayList<ClosedLoopListener> listeners = new ArrayList<>();
+    private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
     private double maxOverSwing;
 
     // stores where the calculated controller will be inserted into the table
@@ -134,7 +134,7 @@ public class ClosedLoop {
      * Register as a listener to this class in order to receive notifications.
      * @param listener The object to register.
      */
-    public final void registerListener(ClosedLoopListener listener) {
+    public final void registerListener(IClosedLoopListener listener) {
         listeners.add(listener);
     }
 
@@ -142,7 +142,7 @@ public class ClosedLoop {
      * Unregister as a listener from this class.
      * @param listener The object to unregister.
      */
-    public final void unregisterListener(ClosedLoopListener listener) {
+    public final void unregisterListener(IClosedLoopListener listener) {
         listeners.remove(listener);
     }
 
@@ -249,7 +249,7 @@ public class ClosedLoop {
      * Called when the step response calculation completes, so listeners can pick up the results.
      */
     private synchronized void notifyCalculationComplete() {
-        for (ClosedLoopListener listener : listeners) {
+        for (IClosedLoopListener listener : listeners) {
             listener.onStepResponseCalculationComplete(this);
         }
     }

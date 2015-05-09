@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ControllerCalculatorListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public abstract class AbstractControllerCalculator implements Runnable {
 
-    private ArrayList<ControllerCalculatorListener> listeners = new ArrayList<>();
+    private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
     protected double parasiticTimeConstantFactor = 0.1;
 
@@ -117,7 +117,7 @@ public abstract class AbstractControllerCalculator implements Runnable {
      * Register as a listener to this object in order to receive notifications of events.
      * @param listener The object to register.
      */
-    public final void registerListener(ControllerCalculatorListener listener) {
+    public final void registerListener(IControllerCalculatorListener listener) {
         listeners.add(listener);
     }
 
@@ -125,7 +125,7 @@ public abstract class AbstractControllerCalculator implements Runnable {
      * Unregister as a listener from this object.
      * @param listener The object to register.
      */
-    public final void unregisterListener(ControllerCalculatorListener listener) {
+    public final void unregisterListener(IControllerCalculatorListener listener) {
         listeners.remove(listener);
     }
 
@@ -147,7 +147,7 @@ public abstract class AbstractControllerCalculator implements Runnable {
      * This gets called once a calculation has completed, so listeners can pick up the resulting controller.
      */
     private synchronized void notifyCalculationComplete() {
-        for (ControllerCalculatorListener listener : listeners) {
+        for (IControllerCalculatorListener listener : listeners) {
             listener.onControllerCalculationComplete(this);
         }
     }
