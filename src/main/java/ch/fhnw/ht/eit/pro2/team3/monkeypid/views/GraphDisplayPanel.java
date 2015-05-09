@@ -73,8 +73,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, ModelLi
         SwingUtilities.invokeLater(() -> {
             try {
                 JCheckBox c = findCheckBox(closedLoop.getName());
-                remove(c);
                 checkBoxes.remove(c);
+                remove(c);
             } catch (CheckBoxNotFoundException e) {
                 System.out.println(e.getMessage());
             }
@@ -83,12 +83,15 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, ModelLi
 	}
 
     @Override
-    public void onSimulationBegin(int numberOfStepResponses) {}
+    public void onSimulationBegin(int numberOfStepResponses) {
+        SwingUtilities.invokeLater(() -> {
+            checkBoxes.forEach(this::remove);
+            checkBoxes.clear();
+        });
+    }
 
     @Override
-    public void onSimulationComplete() {
-        SwingUtilities.invokeLater(this::updateUI);
-    }
+    public void onSimulationComplete() {}
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {}

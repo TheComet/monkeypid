@@ -286,8 +286,8 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     }
 
     /**
-     *
-     * @param loop
+     * Call this to notify that a new completed calculation was added to the internal list.
+     * @param loop The closed loop that was added.
      */
     private void notifyAddCalculation(ClosedLoop loop) {
         for(ModelListener listener : listeners) {
@@ -295,28 +295,47 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
         }
     }
 
+    /**
+     * Call this to notify that a calculation was removed from the internal list.
+     * @param loop The closed loop that was removed.
+     */
     private void notifyRemoveCalculation(ClosedLoop loop) {
         for (ModelListener listener : listeners) {
             listener.onRemoveCalculation(loop);
         }
     }
 
+    /**
+     * Call this to notify that a new simulation is about to begin.
+     * @param numberOfCalculators The number of calculators that will be executed.
+     */
     private void notifySimulationBegin(int numberOfCalculators) {
         for(ModelListener listener : listeners) {
             listener.onSimulationBegin(numberOfCalculators);
         }
     }
 
+    /**
+     * Call this to notify that a simulation has completed.
+     */
     private void notifySimulationComplete() {
         listeners.forEach(ModelListener::onSimulationComplete);
     }
 
+    /**
+     * Call this to notify that a calculation
+     * @param closedLoop
+     */
     private void notifyHideSimulation(ClosedLoop closedLoop) {
         for(ModelListener listener : listeners) {
             listener.onHideCalculation(closedLoop);
         }
     }
 
+    /**
+     * 
+     * @param closedLoop
+     */
     private void notifyShowSimulation(ClosedLoop closedLoop) {
         for(ModelListener listener : listeners) {
             listener.onShowCalculation(closedLoop);
