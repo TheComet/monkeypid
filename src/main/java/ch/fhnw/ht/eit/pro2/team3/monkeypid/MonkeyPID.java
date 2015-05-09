@@ -1,24 +1,24 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid;
 
-import java.awt.Dimension;
-
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
-import de.javasoft.plaf.synthetica.*;
+import de.javasoft.plaf.synthetica.SyntheticaSimple2DLookAndFeel;
 
 import javax.swing.*;
 
 /**
- * 
- * @author Josua
- *
+ * The main class. Sets up the MVC pattern, registers listeners, sets the LookAndFeel... You get the idea.
+ * @author Alex Murray
  */
 public class MonkeyPID {
 
+	/**
+	 * Sets the LookAndFeel of the application.
+	 */
 	public void setLookAndFeel() {
 		try {
             // TODO @Stierli - Kommentier s züg ih und us, jenachdem welles theme du willsch.
@@ -33,6 +33,10 @@ public class MonkeyPID {
 		}
 	}
 
+	/**
+	 * Creates the root frame for the application window.
+	 * @return Returns the frame.
+	 */
 	public JFrame createFrame() {
 		JFrame frame = new JFrame();
 		frame.setUndecorated(true);
@@ -44,6 +48,10 @@ public class MonkeyPID {
 		return frame;
 	}
 
+	/**
+	 * Creates the model, view, and controller, and registers all listeners.
+	 * @param frame The frame to add the view to.
+	 */
 	public void createMVC(JFrame frame) {
 
 		// typical MVC pattern
@@ -70,6 +78,9 @@ public class MonkeyPID {
 		
 	}
 
+	/**
+	 * Swing application entry point.
+	 */
 	public void go() {
 		SwingUtilities.invokeLater(() -> {
 			setLookAndFeel();
@@ -82,6 +93,10 @@ public class MonkeyPID {
 		});
 	}
 
+	/**
+	 * Main method.
+	 * @param args Command line arguments.
+	 */
 	public static void main(String args[]) {
 		MonkeyPID app = new MonkeyPID();
 		app.go();
