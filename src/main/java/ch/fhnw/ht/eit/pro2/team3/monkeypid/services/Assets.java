@@ -1,10 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
-import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-
-import java.awt.MediaTracker;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,11 +9,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import javafx.scene.image.Image;
-
-import javax.swing.ImageIcon;
-
 /**
+ * Manages the loading of various assets used throughout the application. All methods are static, so the Assets class
+ * doesn't need to be instantiated.
  * @author Alex Murray
  */
 public class Assets {
@@ -25,20 +19,38 @@ public class Assets {
     private static final String RESOURCE_PREFIX =
             pathToPlatform("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid");
 
+    /**
+     * Converts a path containing forward slashes to a platform specific path.
+     * @param path The path to convert.
+     * @return The converted path.
+     */
     public static String pathToPlatform(String path) {
         return String.join(File.separator, path.split("/")) + File.separator;
     }
-    
+
+    /**
+     * Loads the "about" icon image.
+     * @return The about icon image.
+     */
     public static ImageIcon loadImageIconInfo(){
-      	ImageIcon icon = new ImageIcon( RESOURCE_PREFIX + "pictures/about.png");
-    	return icon;
-    }
-    
-   public static ImageIcon loadImageIcon(String name){
-	   ImageIcon icon = new ImageIcon(RESOURCE_PREFIX + "pictures/"+name);
-	   return icon;
+      	return loadImageIcon("about.png");
     }
 
+
+    /**
+     * Loads an image icon from the "pictures" resource folder.
+     * @param name The name of the image to load.
+     * @return Loaded image.
+     */
+   public static ImageIcon loadImageIcon(String name){
+       return new ImageIcon(RESOURCE_PREFIX + "pictures/" + name);
+   }
+
+    /**
+     * Loads an exported matlab table into a 2D array of doubles. Each value in each row should be separated by a tab.
+     * @param fileName The file to load.
+     * @return Returns an array list of double arrays containing the values from the table.
+     */
     public static ArrayList<double[]> loadMatlabTable(String fileName) {
 
         // the table is stored as rows of strings
