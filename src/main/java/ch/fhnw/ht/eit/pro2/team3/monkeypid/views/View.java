@@ -106,7 +106,6 @@ public class View extends JPanel implements Observer, ActionListener {
 				new Insets(0, 10, 10, 10), 0, 0));
 		// set border
 		graphSettingPanel.setBorder(new TitledBorder((null), "Einstellungen"));
-
 	}
 
 	/**
