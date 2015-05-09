@@ -2,6 +2,14 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
+/**
+ * Represents the plant component in a closed loop system. The plant is the thing to be controlled, and is described by
+ * the three parameters Tu, Tg, and Ks.
+ *
+ * A controller calculator can use the plant to calculate a suitable controller, which can then be used to form a
+ * closed loop system.
+ * @author Alex Murray
+ */
 public class Plant {
 
     private double ks = 0.0;
@@ -11,11 +19,78 @@ public class Plant {
     private double[] timeConstants;
     private TransferFunction transferFunction = null;
 
+    /**
+     * Constructs a plant using the parameters Tu, Tg, and Ks. Additionally, a SaniCurves object is required to
+     * calculate the time constants array, which is then used to calculate the plant's transfer function.
+     * @param tu Plant parameter Tu.
+     * @param tg Plant parameter Tg.
+     * @param ks Plant parameter ks.
+     * @param sani
+     */
     public Plant(double tu, double tg, double ks, SaniCurves sani) {
         this.sani = sani;
         setParameters(tu, tg, ks);
     }
 
+    /**
+     * Sets the parameters of the plant and causes the time constants array and the transfer function to be
+     * re-calculated.
+     * @param tu Plant parameter Tu.
+     * @param tg Plant parameter Tg.
+     * @param ks Plant parameter Ks.
+     */
+    public void setParameters(double tu, double tg, double ks) {
+        this.tu = tu;
+        this.tg = tg;
+        this.ks = ks;
+        //timeConstants = sani.calculateTimeConstants(tu, tg);
+        timeConstants = sani.calculateTimeConstantsCubicNAK(tu, tg);
+        calculateTransferFunction();
+    }
+
+    /**
+     * Gets the plant parameter Tu.
+     * @return Tu.
+     */
+    public double getTu() {
+        return this.tu;
+    }
+
+    /**
+     * Gets the plant parameter Tg.
+     * @return Tg.
+     */
+    public double getTg() {
+        return this.tg;
+    }
+
+    /**
+     * Gets the plant parameter Ks.
+     * @return Ks.
+     */
+    public double getKs() {
+        return this.ks;
+    }
+
+    /**
+     * Gets the time constants array calculated using SaniCurves.
+     * @return The time constants as a double array.
+     */
+    public double[] getTimeConstants() {
+        return this.timeConstants;
+    }
+
+    /**
+     * Gets the plant's transfer function.
+     * @return The transfer function of the plant.
+     */
+    public TransferFunction getTransferFunction() {
+        return transferFunction;
+    }
+
+    /**
+     * Calculates the plant's transfer function.
+     */
     private void calculateTransferFunction() {
 
         // produces the Numerator and Denominator Polynomial of the plant
@@ -32,34 +107,5 @@ public class Plant {
                 new double[] {ks},
                 MathStuff.mul(MathStuff.poly(numeratorCoefficients), multiplicator)
         );
-    }
-
-    public void setParameters(double tu, double tg, double ks) {
-        this.tu = tu;
-        this.tg = tg;
-        this.ks = ks;
-        //timeConstants = sani.calculateTimeConstants(tu, tg);
-        timeConstants = sani.calculateTimeConstantsCubicNAK(tu, tg);
-        calculateTransferFunction();
-    }
-
-    public double getKs() {
-        return this.ks;
-    }
-
-    public double getTu() {
-        return this.tu;
-    }
-
-    public double getTg() {
-        return this.tg;
-    }
-
-    public double[] getTimeConstants() {
-        return this.timeConstants;
-    }
-
-    public TransferFunction getTransferFunction() {
-        return transferFunction;
     }
 }
