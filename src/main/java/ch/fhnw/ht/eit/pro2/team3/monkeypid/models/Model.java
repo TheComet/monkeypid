@@ -18,18 +18,33 @@ import java.util.concurrent.TimeUnit;
  *   - A *simulation* is the process of executing all calculations.
  *
  * There are multiple settings which can be configured for simulations:
- *   -
- * When a simulation is initiated, a list of calculations is generated based on what has been configured.
+ *   - The plant can be set with Tu, Tg, and Ks.
+ *   - The controller type can be set to either I, PI, or PID.
+ *   - The parasitic time constant factor can be set. This influences how Tp is calculated.
+ *   - The phase margin for Zellweger calculations can be set.
+ *
+ * When a simulation is initiated, a list of controller calculators is generated based on what has been configured.
+ * These are executed in parallel, and each produce a controller to fit the configured plant. Once that is done, the
+ * list of resulting controllers are used to create a closed loop system with the plant, and a step response is
+ * calculated. When all step responses complete, the end of the simulation is notified.
+ *
  * @author Alex Murray
  */
 public class Model implements ControllerCalculatorListener, ClosedLoopListener {
 
+    /**
+     * Is thrown when an unknown regulator string is passed to setRegulatorType().
+     */
     public class UnknownRegulatorTypeException extends RuntimeException {
         UnknownRegulatorTypeException(String message) {
             super(message);
         }
     }
 
+    /**
+     * Is thrown when the user tries to simulate PID calculations with an order of n=2.
+     * See issue #31.
+     */
     public class InvalidPlantForPIDSimulationException extends RuntimeException {
         InvalidPlantForPIDSimulationException(String message) {
             super(message);
@@ -70,6 +85,16 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Updates the plant to be used for all calculations.
+     * @param tu Plant value Tu.
+     * @param tg Plant value Ks.
+     * @param ks Plant value Ks.
+     */
+    public final void setPlant(double tu, double tg, double ks) {
+        this.plant = new Plant(tu, tg, ks, sani);
+    }
+
+    /**
      * Select the regulator types to be simulated. We currently support I, PI, and PID type regulators. When the
      * simulation is initiated, only calculators matching the selected type will be calculated.
      * @param regulatorTypeName A string containing either "I", "IP", or "PID".
@@ -91,24 +116,6 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     }
 
     /**
-     * Updates the plant to be used for all calculations.
-     * @param tu Plant value Tu.
-     * @param tg Plant value Ks.
-     * @param ks Plant value Ks.
-     */
-    public final void setPlant(double tu, double tg, double ks) {
-        this.plant = new Plant(tu, tg, ks, sani);
-    }
-
-    /**
-     * Updates the phase margin used in Zellweger-based calculations.
-     * @param phaseMargin A positive angle in degrees, usually in the range of 45° and 76.3°
-     */
-    public final void setPhaseMargin(double phaseMargin) {
-        this.phaseMargin = phaseMargin;
-    }
-
-    /**
      * This is used to calculate Tp.
      * Updates the parasitic time constant factor to use in all simulations. Zellweger methods will multiply this
      * with Tvk to get Tp (Tp = factor * Tvk). Fist formulas will multiply it with Tv to get Tp (Tp = factor * Tv)
@@ -119,17 +126,11 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     }
 
     /**
-     * Clears all existing calculations. The graph, table, and checkboxes will be cleared along with all closed loops.
-     * NOTE: This should only be called if there isn't an active simulation, because the calculations are threaded.
+     * Updates the phase margin used in Zellweger-based calculations.
+     * @param phaseMargin A positive angle in degrees, usually in the range of 45° and 76.3°
      */
-    private void clearSimulation() {
-
-        // deselect calculation
-        selectedCalculation = null;
-
-        // notify all listeners that we're removing all closed loops
-        closedLoops.forEach(this::notifyRemoveCalculation);
-        closedLoops = new ArrayList<>();
+    public final void setPhaseMargin(double phaseMargin) {
+        this.phaseMargin = phaseMargin;
     }
 
     /**
@@ -185,7 +186,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
             return;
         }
 
-        notifyHideSimulation(selectedCalculation);
+        notifyHideCalculation(selectedCalculation);
     }
 
     /**
@@ -196,7 +197,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
             return;
         }
 
-        notifyShowSimulation(selectedCalculation);
+        notifyShowCalculation(selectedCalculation);
     }
 
     /**
@@ -218,6 +219,20 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     // -----------------------------------------------------------------------------------------------------------------
     // Private methods
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Clears all existing calculations. The graph, table, and checkboxes will be cleared along with all closed loops.
+     * NOTE: This should only be called if there isn't an active simulation, because the calculations are threaded.
+     */
+    private void clearSimulation() {
+
+        // deselect calculation
+        selectedCalculation = null;
+
+        // notify all listeners that we're removing all closed loops
+        closedLoops.forEach(this::notifyRemoveCalculation);
+        closedLoops = new ArrayList<>();
+    }
 
     /**
      * PID simulations with order n=2 don't make much sense, so throw an exception if that happens.
@@ -323,20 +338,21 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
     }
 
     /**
-     * Call this to notify that a calculation
-     * @param closedLoop
+     * Call this to notify that a calculation was hidden. This should cause the curve in the plot to be hidden.
+     * @param closedLoop The closed loop being hidden.
      */
-    private void notifyHideSimulation(ClosedLoop closedLoop) {
+    private void notifyHideCalculation(ClosedLoop closedLoop) {
         for(ModelListener listener : listeners) {
             listener.onHideCalculation(closedLoop);
         }
     }
 
     /**
-     * 
-     * @param closedLoop
+     * Call this to notify that a calculation was made visible. This should cause the curve in the plot to be made
+     * visible.
+     * @param closedLoop The closed loop to make visible.
      */
-    private void notifyShowSimulation(ClosedLoop closedLoop) {
+    private void notifyShowCalculation(ClosedLoop closedLoop) {
         for(ModelListener listener : listeners) {
             listener.onShowCalculation(closedLoop);
         }
