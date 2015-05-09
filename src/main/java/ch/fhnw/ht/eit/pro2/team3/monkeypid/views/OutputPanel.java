@@ -3,7 +3,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -28,7 +28,7 @@ public class OutputPanel extends JPanel implements ActionListener, ModelListener
 	private Controller controller;
 
 	// create test table
-	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
+	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// simulation title
 	private JLabel lbSimulationTitle = new JLabel("Simulationen");
@@ -73,10 +73,10 @@ public class OutputPanel extends JPanel implements ActionListener, ModelListener
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValueTuple(76.3, "0%");
-		overswingTable[1] = new OverswingValueTuple(65.5, "4.6%");
-		overswingTable[2] = new OverswingValueTuple(51.5, "16.3%");
-		overswingTable[3] = new OverswingValueTuple(45, "23.3%");
+		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
+		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
+		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
 
 		// add title simulate to GridBagLayout
 		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,

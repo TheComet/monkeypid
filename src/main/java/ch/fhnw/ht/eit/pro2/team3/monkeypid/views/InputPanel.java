@@ -2,7 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 	Controller controller;
 
 	// create test table
-	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
+	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -90,10 +90,10 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValueTuple(76.3, "0%");
-		overswingTable[1] = new OverswingValueTuple(65.5, "4.6%");
-		overswingTable[2] = new OverswingValueTuple(51.5, "16.3%");
-		overswingTable[3] = new OverswingValueTuple(45, "23.3%");
+		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
+		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
+		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
 
 		// add overswing table strings to combo box
 		for (int i = 0; i < overswingTable.length; i++) {

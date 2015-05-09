@@ -1,7 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 
 /**
  * Controller part of the MVC pattern
@@ -31,7 +31,7 @@ public class Controller {
 	 */
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
                                  String selectedRegulatorName,
-                                 OverswingValueTuple overswing){
+                                 PhaseAndOverSwingTuple overswing){
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);
