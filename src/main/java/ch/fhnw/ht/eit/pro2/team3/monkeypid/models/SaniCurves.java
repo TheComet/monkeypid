@@ -49,7 +49,7 @@ public class SaniCurves {
     private ArrayList<double[][]> tg_reciprocal_cubic_nak = new ArrayList<>();
     
     /**
-     * Loads
+     * Constructs a new sani curves object and loads and interpolates the matlab tables.
      */
     public SaniCurves() {
         loadAndInterpolate();
