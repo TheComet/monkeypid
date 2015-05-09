@@ -1,10 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
-import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-
-import java.awt.MediaTracker;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,37 +9,52 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import javafx.scene.image.Image;
-
-import javax.swing.ImageIcon;
-
 /**
+ * Manages the loading of various assets used throughout the application. All methods are static, so the Assets class
+ * doesn't need to be instantiated.
  * @author Alex Murray
  */
 public class Assets {
 
-    private static String RESOURCE_PREFIX =
+    private static final String RESOURCE_PREFIX =
             pathToPlatform("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid");
 
+    /**
+     * Converts a path containing forward slashes to a platform specific path.
+     * @param path The path to convert.
+     * @return The converted path.
+     */
     public static String pathToPlatform(String path) {
         return String.join(File.separator, path.split("/")) + File.separator;
     }
-    
+
+    /**
+     * Loads the "about" icon image.
+     * @return The about icon image.
+     */
     public static ImageIcon loadImageIconInfo(){
-      	ImageIcon icon = new ImageIcon( RESOURCE_PREFIX + "pictures/about.png");
-    	return icon;
+      	return loadImageIcon("about.png");
     }
-    
+
+
+    /**
+     * Loads an image icon from the "pictures" resource folder.
+     * @param name The name of the image to load.
+     * @return Loaded image.
+     */
    public static ImageIcon loadImageIcon(String name){
-	   ImageIcon icon = new ImageIcon(RESOURCE_PREFIX + "pictures/"+name);
-	   return icon;
-    }
+       return new ImageIcon(RESOURCE_PREFIX + "pictures/" + name);
+   }
 
-    public static ArrayList<PolynomialSplineFunction> loadSaniCurves(String fileName, boolean swapXY) {
+    /**
+     * Loads an exported matlab table into a 2D array of doubles. Each value in each row should be separated by a tab.
+     * @param fileName The file to load.
+     * @return Returns an array list of double arrays containing the values from the table.
+     */
+    public static ArrayList<double[]> loadMatlabTable(String fileName) {
 
-        ArrayList<PolynomialSplineFunction> listOfSplines = new ArrayList<>();
-
-        // load the data points from disk
+        // the table is stored as rows of strings
+        ArrayList<double[]> table = new ArrayList<>();
         try {
             //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
             // TODO get classpath working
@@ -51,62 +62,19 @@ public class Assets {
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
 
-                // load the data points into an XYSeries object and add that to the
-                // list of XYSeries objects
-                String[] yValuesStr = s.split("\t");
-                double[] xValues = new double[yValuesStr.length];
-                double[] yValues = new double[yValuesStr.length];
-                for(int i = 0; i < yValuesStr.length; i++) {
-                    xValues[i] = (double)i / (double)(yValuesStr.length - 1);
-                    yValues[i] = Double.parseDouble(yValuesStr[i]);
+                // each element in the row is stored as tab separated strings
+                String[] rowStrings = s.split("\t");
+                double[] rowValues = new double[rowStrings.length];
+                table.add(rowValues);
+                for(int i = 0; i < rowStrings.length; i++) {
+                    rowValues[i] = Double.parseDouble(rowStrings[i]);
                 }
-
-                // apply cubic interpolation to the data points and store curve into return value
-                // for Tu_Tg the x and y data points are swapped
-                LinearInterpolator interpolator = new LinearInterpolator();
-                //SplineInterpolator interpolator = new SplineInterpolator();
-                if(swapXY)
-                    listOfSplines.add(interpolator.interpolate(yValues, xValues));
-                else
-                    listOfSplines.add(interpolator.interpolate(xValues, yValues));
             });
         } catch(IOException e) {
             System.out.println("Failed to load matlab table: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return listOfSplines;
-    }
-    
-    public static ArrayList<ArrayList<Double>> loadSaniCurvesDoubleValues(String fileName) {
-
-    	ArrayList<ArrayList<Double>> listOfDoubleArrays = new ArrayList<>();
-
-        // load the data points from disk
-        try {
-            //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
-            // TODO get classpath working
-            Path path = Paths.get(RESOURCE_PREFIX + fileName);
-            Stream<String> lines = Files.lines(path);
-            lines.forEach(s -> {
-
-            	//one Row of the sani Table
-            	ArrayList<Double> saniRow = new ArrayList<>();
-            	 
-                // load the data points into an XYSeries object and add that to the
-                // list of XYSeries objects
-                String[] yValuesStr = s.split("\t");
-                for(int i = 0; i < yValuesStr.length; i++) {
-                	saniRow.add(Double.parseDouble(yValuesStr[i]));
-                }
-                listOfDoubleArrays.add(saniRow);
-                
-            });
-        } catch(IOException e) {
-            System.out.println("Failed to load matlab table: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return listOfDoubleArrays;
+        return table;
     }
 }

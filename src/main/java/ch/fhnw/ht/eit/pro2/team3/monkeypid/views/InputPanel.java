@@ -1,26 +1,16 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 
-
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.interfaces.IControllerCalculator;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -35,7 +25,7 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 	Controller controller;
 
 	// create test table
-	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
+	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -100,10 +90,10 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValueTuple(76.3, "0%");
-		overswingTable[1] = new OverswingValueTuple(65.5, "4.6%");
-		overswingTable[2] = new OverswingValueTuple(51.5, "16.3%");
-		overswingTable[3] = new OverswingValueTuple(45, "23.3%");
+		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
+		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
+		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
 
 		// add overswing table strings to combo box
 		for (int i = 0; i < overswingTable.length; i++) {
@@ -265,11 +255,6 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 			} else if (tfKsValue == 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Ks darf nicht 0 sein");
-			} else if ((tfTuValue / tfTgValue) > 0.64173) {
-				// error message if tu/tg is bigger than 0.64173 (value from
-				// matlab sani example)
-				lbValueErrorInfo
-						.setText("Tu/Tg zu gross N > 8  => Verhältnis kleiner wählen");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
@@ -280,9 +265,15 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 				lbValueErrorInfo.setText(" ");
 
 				// give over the values to controller
-				controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
-						tfTpValue, selectedRegulatorName,
-						overswingTable[overswingIndex]);
+				try {
+					controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
+							tfTpValue, selectedRegulatorName,
+							overswingTable[overswingIndex]);
+				} catch (Model.InvalidPlantForPIDSimulationException ex) {
+					lbValueErrorInfo.setText(ex.getMessage());
+				} catch (SaniCurves.TuTgRatioTooLargeException ex) {
+					lbValueErrorInfo.setText(ex.getMessage());
+				}
 			}
 
 		}

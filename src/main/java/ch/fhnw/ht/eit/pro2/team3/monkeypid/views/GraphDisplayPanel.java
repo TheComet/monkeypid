@@ -45,43 +45,34 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 	}
 
-	private JCheckBox findCheckBox(String name)
-			throws CheckBoxNotFoundException {
-		for (JCheckBox c : checkBoxes) {
-			if (c.getText().compareTo(name) == 0) {
-				return c;
-			}
-		}
-		throw new CheckBoxNotFoundException("Checkbox with name \"" + name
-				+ "\" not found");
-	}
 
-	private ImageIcon createColorIcon() {
-		ImageIcon imageIcon = new ImageIcon("test");
-		// imageIcon = Assets.loadImageIcon("logo.png");
-		String coloredBullet = "\u25C6";
-		Graphics2D test;
-		// test.drawString("test", 0, 0);
-		// imageIcon = test.dra
+    private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
+        for(JCheckBox c : checkBoxes) {
+            if(c.getText().equals(name)) {
+                return c;
+            }
+        }
+        throw new CheckBoxNotFoundException("Checkbox with name \"" + name + "\" not found");
+    }
 
-		return imageIcon;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent actionEvent) {
-		for (JCheckBox c : checkBoxes) {
-			if (actionEvent.getSource() == c) {
-				if (c.isSelected()) {
-					controller.cbCheckAction(c.getText());
-				} else {
-					controller.cbUncheckAction(c.getText());
-				}
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        for(JCheckBox c : checkBoxes) {
+            if(actionEvent.getSource() == c) {
+                if(c.isSelected()) {
+                    controller.cbCheckAction(c.getText());
+                } else {
+                    controller.cbUncheckAction(c.getText());
+                }
+            }
+        }
+    }
 
 	@Override
-	public void onAddClosedLoop(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop) {
+		/*
+		@Override
+		public void onAddClosedLoop(ClosedLoop closedLoop) {
 		//get rgbColor from closedLoop and convert it to string
 		String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
 				.getRed(), closedLoop.getColor().getGreen(), closedLoop
@@ -96,32 +87,44 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		
 		checkBoxes.add(cb);
 		add(cb);
-	}
-
-	@Override
-	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-		try {
-			JCheckBox c = findCheckBox(closedLoop.getName());
-			remove(c);
-			checkBoxes.remove(c);
-		} catch (CheckBoxNotFoundException e) {
-			System.out.println(e.getMessage());
 		}
+		 */
+        SwingUtilities.invokeLater(() -> {
+            JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
+            cb.addActionListener(this);
+            checkBoxes.add(cb);
+            add(cb);
+        });
 	}
 
 	@Override
-	public void onSimulationBegin(int numberOfStepResponses) {
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JCheckBox c = findCheckBox(closedLoop.getName());
+                checkBoxes.remove(c);
+                remove(c);
+            } catch (CheckBoxNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
 	}
+
+    @Override
+    public void onSimulationBegin(int numberOfStepResponses) {
+        SwingUtilities.invokeLater(() -> {
+            checkBoxes.forEach(this::remove);
+            checkBoxes.clear();
+        });
+    }
 
 	@Override
 	public void onSimulationComplete() {
 	}
 
-	@Override
-	public void onHideStepResponse(ClosedLoop closedLoop) {
-	}
+    @Override
+    public void onHideCalculation(ClosedLoop closedLoop) {}
 
-	@Override
-	public void onShowStepResponse(ClosedLoop closedLoop) {
-	}
+    @Override
+    public void onShowCalculation(ClosedLoop closedLoop) {}
 }

@@ -3,30 +3,31 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 import java.awt.*;
 
 /**
- * Implements the "Faustformal PI" controller calculator developed by Rosenberg.
+ * Implements the Zellweger method for calculating I controllers.
  * @author Alex Murray
  */
-public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
+public class ZellwegerI extends AbstractZellweger {
 
     /**
-     * Constructs the controller calculator and sets the plant to calculate a controller for.
+     * Constructs a new Zellweger calculator using the specified plant.
      * @param plant The plant to calculate a controller for.
      */
-    public FistFormulaRosenbergPI(Plant plant) {
-        super(plant);
+    public ZellwegerI(Plant plant) {
+        super(plant, 0.0); // phase margin is irrelevant in Zellweger I
     }
 
     /**
      * Calculates the appropriate controller for the specified plant.
-     * @return A new PI controller.
+     * @return Returns a new I controller.
      */
     @Override
     protected final AbstractController calculate() {
-        return new ControllerPI(
-                getName(),
-                0.91 * plant.getTg() / (plant.getKs() * plant.getTu()),
-                3.3 * plant.getTu()
-        );
+        setAngleOfInflection(-45.0);
+
+        // Ti parameter of controller
+        double ti = 1.0 / findAngleOnPlantPhase();
+
+        return new ControllerI(getName(), ti);
     }
 
     /**
@@ -34,8 +35,8 @@ public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
      * @return The name of this controller.
      */
     @Override
-    public String getName() {
-        return CalculatorNames.ROSENBERG_PI;
+    public final String getName() {
+        return CalculatorNames.ZELLWEGER_I;
     }
 
     /**
@@ -43,7 +44,7 @@ public class FistFormulaRosenbergPI extends AbstractControllerCalculator {
      * @return The render color.
      */
     @Override
-    public Color getColor() {
-        return RenderColors.ROSENBERG_PI;
+    public final Color getColor() {
+        return RenderColors.ZELLWEGER_I;
     }
 }

@@ -11,8 +11,6 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.XPath.Axis;
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -90,26 +88,31 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onAddClosedLoop(ClosedLoop closedLoop) {
-        try {
-            dataCollection.addSeries(closedLoop.getStepResponse());
+    public void onAddCalculation(ClosedLoop closedLoop) {
+        SwingUtilities.invokeLater(() -> {
+            try {
 
-            // The closedLoop object specifies what color it wants to be rendered in
-            getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
+                dataCollection.addSeries(closedLoop.getStepResponse());
 
-            // See issue #21 - make visible again
-            setSeriesVisible(closedLoop, true);
+                // The closedLoop object specifies what color it wants to be rendered in
+                getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
 
-        } catch(IllegalArgumentException e) {
-            System.out.println("Can't add step response to graph, it's already in the graph");
-        }
+                // See issue #21 - make visible again
+                setSeriesVisible(closedLoop, true);
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        });
     }
 
     @Override
-    public void onRemoveClosedLoop(ClosedLoop closedLoop) {
-        if(closedLoop.getStepResponse() != null) {
-            dataCollection.removeSeries(closedLoop.getStepResponse());
-        }
+    public void onRemoveCalculation(ClosedLoop closedLoop) {
+        SwingUtilities.invokeLater(() -> {
+            if (closedLoop.getStepResponse() != null) {
+                dataCollection.removeSeries(closedLoop.getStepResponse());
+            }
+        });
     }
 
     @Override
@@ -121,12 +124,12 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onHideStepResponse(ClosedLoop closedLoop) {
+    public void onHideCalculation(ClosedLoop closedLoop) {
         setSeriesVisible(closedLoop, false);
     }
 
     @Override
-    public void onShowStepResponse(ClosedLoop closedLoop) {
+    public void onShowCalculation(ClosedLoop closedLoop) {
         setSeriesVisible(closedLoop, true);
     }
 }

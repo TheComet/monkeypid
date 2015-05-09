@@ -3,9 +3,8 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.OverswingValueTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
@@ -30,7 +28,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	private Controller controller;
 
 	// create test table
-	private OverswingValueTuple[] overswingTable = new OverswingValueTuple[4];
+	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// simulation title
 	private JLabel lbSimulationTitle = new JLabel("Simulationen");
@@ -75,10 +73,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		this.controller = controller;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new OverswingValueTuple(76.3, "0%");
-		overswingTable[1] = new OverswingValueTuple(65.5, "4.6%");
-		overswingTable[2] = new OverswingValueTuple(51.5, "16.3%");
-		overswingTable[3] = new OverswingValueTuple(45, "23.3%");
+		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
+		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
+		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
 
 		// add title simulate to GridBagLayout
 		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,
@@ -248,7 +246,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		// if button delete is pressed
 		if (e.getSource() == btDelete) {
 			// call method of controller
-			controller.btDeleteAction();
+			// TODO controller.btDeleteAction();
 		}
 		// if button adopt is pressed
 		if (e.getSource() == btAdopt) {
@@ -256,58 +254,64 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 			int slTnValue = slTn.getValue();
 			int slTvValue = slTv.getValue();
 			// give over values to controller
-			controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
+			// TODO controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
 		}
 	}
 
 	@Override
-	public void onAddClosedLoop(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop) {
+		SwingUtilities.invokeLater(() -> {
 
-        // do we have a row allocated for this closed loop?
-        if(closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
-            String[] tableRowStrings = closedLoop.getTableRowStrings();
-            for(int i = 0; i < tableRowStrings.length; i++) {
-                tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
-            }
-        } else {
+			// do we have a row allocated for this closed loop?
+			if (closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+				String[] tableRowStrings = closedLoop.getTableRowStrings();
+				for (int i = 0; i < tableRowStrings.length; i++) {
+					tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
+				}
+			} else {
 
-            // we don't have space allocated, so just append it to the end
-            tableModel.addRow(closedLoop.getTableRowStrings());
-        }
+				// we don't have space allocated, so just append it to the end
+				tableModel.addRow(closedLoop.getTableRowStrings());
+			}
+		});
 	}
 
 	@Override
-	public void onRemoveClosedLoop(ClosedLoop closedLoop) {
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
+		SwingUtilities.invokeLater(() -> {
 
-        // remove from table
-        for(int row = 0; row < tableModel.getRowCount(); row++) {
-            // name is stored in column 0
-            if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
-                tableModel.removeRow(row);
-                return;
-            }
-        }
+			// remove from table
+			for (int row = 0; row < tableModel.getRowCount(); row++) {
+				// name is stored in column 0
+				if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
+					tableModel.removeRow(row);
+					return;
+				}
+			}
+		});
 	}
 
     @Override
     public void onSimulationBegin(int numberOfStepResponses) {
-        // clear the table
-        while(tableModel.getRowCount() > 0) {
-            tableModel.removeRow(0);
-        }
+		SwingUtilities.invokeLater(() -> {
+			// clear the table
+			while (tableModel.getRowCount() > 0) {
+				tableModel.removeRow(0);
+			}
 
-        // allocate all rows with empty strings
-        for(int i = 0; i < numberOfStepResponses; i++) {
-            tableModel.addRow(new String[] {"calculating...", "", "", "", "", ""});
-        }
+			// allocate all rows with empty strings
+			for (int i = 0; i < numberOfStepResponses; i++) {
+				tableModel.addRow(new String[]{"calculating...", "", "", "", "", ""});
+			}
+		});
     }
 
 	@Override
 	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideStepResponse(ClosedLoop closedLoop) {}
+	public void onHideCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowStepResponse(ClosedLoop closedLoop) {}
+	public void onShowCalculation(ClosedLoop closedLoop) {}
 }

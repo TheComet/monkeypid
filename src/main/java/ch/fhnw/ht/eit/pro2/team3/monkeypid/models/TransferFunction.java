@@ -1,5 +1,9 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
+/**
+ * Defines a transfer function's numerator and denominator polynomial coefficients.
+ * @author Simon Wyss
+ */
 public class TransferFunction {
 	private double[] denominatorCoefficients;
 	private double[] numeratorCoefficients;
@@ -10,27 +14,29 @@ public class TransferFunction {
 	}
 
     /**
-     * @brief Sets the numerator coefficients.
+     * Sets the numerator coefficients.
      * The coefficients should be in descending order, i.e. the last
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.
+     * @param coeff A double array containing the coefficients.
      */
     public void setNumeratortorCoefficients(double[] coeff) {
         this.numeratorCoefficients = coeff;
     }
 
     /**
-     * @brief Sets the denominator coefficients.
+     * Sets the denominator coefficients.
      * The coefficients should be in descending order, i.e. the last
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.
+     * @param coeff A double array containing the coefficients.
      */
     public void setDenominatorCoefficients(double[] coeff) {
         this.denominatorCoefficients = coeff;
     }
 
     /**
-     * @brief Gets the array of numerator coefficients.
+     *  Gets the array of numerator coefficients.
      * @return The coefficients are returned in descending order, i.e. the last
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.
@@ -40,7 +46,7 @@ public class TransferFunction {
     }
 
     /**
-     * @brief Gets the array of denominator coefficients.
+     *  Gets the array of denominator coefficients.
      * @return The coefficients are returned in descending order, i.e. the last
      * coefficient is the constant value, the first coefficient is the product
      * of the greatest power.

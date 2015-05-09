@@ -8,6 +8,10 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+/**
+ * Contains various common math functions we need.
+ * @author Alex Murray
+ */
 public class MathStuff {
 
     /**
@@ -39,6 +43,14 @@ public class MathStuff {
         return largest;
     }
 
+    /**
+     * Generates an array of linearly spaced values ranging from the start value to the end value with the specified
+     * number of points.
+     * @param startValue The start value.
+     * @param endValue The end value.
+     * @param nValues How many values should be generated.
+     * @return Returns an array of doubles.
+     */
     public static double[] linspace(double startValue, double endValue, int nValues){
         double step = (endValue - startValue)/(nValues-1);
 
@@ -50,10 +62,21 @@ public class MathStuff {
         return res;
     }
 
+    /**
+     * Converts omega to the imaginary number s. (s = jw).
+     * @param omega Omega.
+     * @return Returns s.
+     */
     public static Complex omegaToS(double omega) {
         return new Complex(0.0, omega);
     }
 
+    /**
+     * Computes the complex frequency response of a given transfer function.
+     * @param g The transfer function.
+     * @param omega Omega.
+     * @return Complex frequency response.
+     */
     public static Complex[] freqs(TransferFunction g, double[] omega) {
         Complex[] res = new Complex[omega.length];
 
@@ -66,6 +89,7 @@ public class MathStuff {
         return res;
     }
 
+    // TODO documentation
     public static Complex polyVal(double[] poly, Complex s) {
         // If s is zero, the result will be 0. Apparently, apache commons
         // cannot raise the complex number 0+0j to any power without
@@ -100,6 +124,11 @@ public class MathStuff {
         return res;
     }*/
 
+    /**
+     * Returns a double array filled with ones.
+     * @param length The number of ones to fill.
+     * @return A double array.
+     */
     public static double[] ones(int length) {
         double[] array = new double[length];
         for(int i = 0; i < length; i++) {
@@ -108,11 +137,21 @@ public class MathStuff {
         return array;
     }
 
+    /**
+     * Computes the inverse fast fourier transform of a function.
+     * @param f A function in the frequency domain.
+     * @return A function in the time domain.
+     */
     public static Complex[] ifft(Complex[] f){
         FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
         return transformer.transform(f, TransformType.INVERSE);
     }
 
+    /**
+     * Returns the real parts of an array of complex numbers.
+     * @param c A list of complex numbers.
+     * @return A list of only the real parts.
+     */
     public static double[] real(Complex[] c) {
         double[] ret = new double[c.length];
         for(int i = 0; i < c.length; i++) {
@@ -121,6 +160,11 @@ public class MathStuff {
         return ret;
     }
 
+    /**
+     * Returns the imaginary parts of an array of complex numbers.
+     * @param c A list of complex numbers.
+     * @return A list of only the imaginary parts.
+     */
     public static double[] imag(Complex[] c) {
         double[] ret = new double[c.length];
         for(int i = 0; i < c.length; i++) {
@@ -129,6 +173,12 @@ public class MathStuff {
         return ret;
     }
 
+    /**
+     * Doubles the size of the array, then copies, mirrors, and conjugates all values into the second half of the array.
+     * The middle element N/2 will be 0. This is required to compute the fourier transform and get a real result.
+     * @param capitalH The function to prepare.
+     * @return A new function ready for fft/ifft.
+     */
     public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
         Complex[] symmetric = new Complex[capitalH.length * 2];
 
@@ -147,7 +197,8 @@ public class MathStuff {
 
         return symmetric;
     }
-    
+
+    // TODO documentation
     //residue help function
     public static Object[] residueSimple(TransferFunction g){
 		double K = 0.0;
@@ -167,9 +218,6 @@ public class MathStuff {
 			for (int i = 0; i < Numerator.length; i++) {
 				Numerator[i]  = Numerator[i] - K*Denominator[i];
 			}
-		}
-		else{
-			K = 0.0;
 		}
 		
 		Complex[] P = roots(Denominator);
@@ -198,9 +246,7 @@ public class MathStuff {
 			*/
 			
 			//copy every element from second of P in smallP
-			for (int i = 0; i < smallP.length; i++) {
-				smallP[i] = P[i+1];
-			}
+            System.arraycopy(P, 1, smallP, 0, smallP.length);
 			
 			Complex[] pa = poly(smallP);
 			double[] paReal = new double[pa.length];
@@ -220,6 +266,13 @@ public class MathStuff {
     	return new Object[]{R,P,K};    	
     }
 
+    /**
+     * Computes the polynomial coefficients with the specified roots.
+     * This was ported from matlab's poly() function
+     * Type ">> edit poly" and scroll to line 35.
+     * @param roots Roots.
+     * @return Polynomial coefficients.
+     */
     public static double[] poly(double[] roots) {
         // this was ported from matlab's poly() function
         // type ">> edit poly" and scroll to line 35.
@@ -240,8 +293,14 @@ public class MathStuff {
 
         return coefficients;
     }
-    
-    //complex version
+
+    /**
+     * Computes the polynomial coefficients with the specified roots.
+     * This was ported from matlab's poly() function
+     * Type ">> edit poly" and scroll to line 35.
+     * @param roots Roots.
+     * @return Polynomial coefficients.
+     */
     public static Complex[] poly(Complex[] roots) {
         // this was ported from matlab's poly() function
         // type ">> edit poly" and scroll to line 35.
@@ -269,27 +328,33 @@ public class MathStuff {
 
         return coefficients;
     }
-    
-    //remove leading zeros
-    public static final double[] removeLeadingZeros(double[] polynom){
+
+    /**
+     * Removes the leading zeros from an array.
+     * @param array The array.
+     * @return A new array with leading zeros removed.
+     */
+    public static double[] removeLeadingZeros(double[] array){
     	int startIndex = 0;
 		//remove leading Zeros
-		for (int i = 0; i < polynom.length; i++) {
-			if(polynom[i] != 0){
+		for (int i = 0; i < array.length; i++) {
+			if(array[i] != 0){
 				startIndex = i;
 				break;
 			}
 		}
 		
-		double[] polynomLeadingZerosRemoved = new double[polynom.length-startIndex];
-		for (int i = 0; i < polynomLeadingZerosRemoved.length; i++) {
-			polynomLeadingZerosRemoved[i] = polynom[startIndex + i];
-		}
+		double[] polynomLeadingZerosRemoved = new double[array.length - startIndex];
+        System.arraycopy(array, startIndex, polynomLeadingZerosRemoved, 0, polynomLeadingZerosRemoved.length);
 		return polynomLeadingZerosRemoved;
     }
-    
-    // taken from pdf Fachinput_Schrittantwort.pdf
-    public static final Complex[] roots(double[] p) {
+
+    /**
+     * taken from pdf Fachinput_Schrittantwort.pdf
+     * @param p Polynomial coefficients
+     * @return Roots.
+     */
+    public static Complex[] roots(double[] p) {
     	final LaguerreSolver solver = new LaguerreSolver();
     	double[] flip = new double[p.length];
     	// To be conform with Matlab ...
