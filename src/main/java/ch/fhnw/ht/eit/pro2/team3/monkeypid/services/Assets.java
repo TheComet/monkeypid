@@ -22,7 +22,7 @@ import javax.swing.ImageIcon;
  */
 public class Assets {
 
-    private static String RESOURCE_PREFIX =
+    private static final String RESOURCE_PREFIX =
             pathToPlatform("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid");
 
     public static String pathToPlatform(String path) {
@@ -77,12 +77,11 @@ public class Assets {
 
         return listOfSplines;
     }
-    
-    public static ArrayList<ArrayList<Double>> loadSaniCurvesDoubleValues(String fileName) {
 
-    	ArrayList<ArrayList<Double>> listOfDoubleArrays = new ArrayList<>();
+    public static ArrayList<double[]> loadMatlabTable(String fileName) {
 
-        // load the data points from disk
+        // the table is stored as rows of strings
+        ArrayList<double[]> table = new ArrayList<>();
         try {
             //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
             // TODO get classpath working
@@ -90,23 +89,19 @@ public class Assets {
             Stream<String> lines = Files.lines(path);
             lines.forEach(s -> {
 
-            	//one Row of the sani Table
-            	ArrayList<Double> saniRow = new ArrayList<>();
-            	 
-                // load the data points into an XYSeries object and add that to the
-                // list of XYSeries objects
-                String[] yValuesStr = s.split("\t");
-                for(int i = 0; i < yValuesStr.length; i++) {
-                	saniRow.add(Double.parseDouble(yValuesStr[i]));
+                // each element in the row is stored as tab separated strings
+                String[] rowStrings = s.split("\t");
+                double[] rowValues = new double[rowStrings.length];
+                table.add(rowValues);
+                for(int i = 0; i < rowStrings.length; i++) {
+                    rowValues[i] = Double.parseDouble(rowStrings[i]);
                 }
-                listOfDoubleArrays.add(saniRow);
-                
             });
         } catch(IOException e) {
             System.out.println("Failed to load matlab table: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return listOfDoubleArrays;
+        return table;
     }
 }

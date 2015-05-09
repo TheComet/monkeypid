@@ -242,7 +242,7 @@ public class Model implements ControllerCalculatorListener, ClosedLoopListener {
         // see issue #31 - disallow orders n=2 for PID simulations
         if(regulatorType == RegulatorType.PID) {
             double ratio = plant.getTu() / plant.getTg();
-            if(sani.lookupPower(ratio) == 2) {
+            if(sani.lookupOrder(ratio) == 2) {
                 throw new InvalidPlantForPIDSimulationException("Die Strecke ist n=2. Eine PID Simulation ist Sinnlos");
             }
         }

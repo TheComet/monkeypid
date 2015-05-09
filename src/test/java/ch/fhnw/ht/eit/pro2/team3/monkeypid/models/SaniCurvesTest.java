@@ -12,33 +12,33 @@ public class SaniCurvesTest {
         SaniCurves c = new SaniCurves();
 
         // test turning points according to the 6 magic numbers
-        assertEquals(2, c.lookupPower(0.0001));
+        assertEquals(2, c.lookupOrder(0.0001));
 
-        assertEquals(2, c.lookupPower(0.103638));
-        assertEquals(3, c.lookupPower(0.103639));
+        assertEquals(2, c.lookupOrder(0.103638));
+        assertEquals(3, c.lookupOrder(0.103639));
 
-        assertEquals(3, c.lookupPower(0.218017));
-        assertEquals(4, c.lookupPower(0.218018));
+        assertEquals(3, c.lookupOrder(0.218017));
+        assertEquals(4, c.lookupOrder(0.218018));
 
-        assertEquals(4, c.lookupPower(0.319357));
-        assertEquals(5, c.lookupPower(0.319358));
+        assertEquals(4, c.lookupOrder(0.319357));
+        assertEquals(5, c.lookupOrder(0.319358));
 
-        assertEquals(5, c.lookupPower(0.410303));
-        assertEquals(6, c.lookupPower(0.410304));
+        assertEquals(5, c.lookupOrder(0.410303));
+        assertEquals(6, c.lookupOrder(0.410304));
 
-        assertEquals(6, c.lookupPower(0.4933));
-        assertEquals(7, c.lookupPower(0.4934));
+        assertEquals(6, c.lookupOrder(0.4933));
+        assertEquals(7, c.lookupOrder(0.4934));
 
-        assertEquals(7, c.lookupPower(0.5700));
-        assertEquals(8, c.lookupPower(0.5701));
+        assertEquals(7, c.lookupOrder(0.5700));
+        assertEquals(8, c.lookupOrder(0.5701));
 
-        assertEquals(8, c.lookupPower(0.64173));
+        assertEquals(8, c.lookupOrder(0.64173));
     }
 
     @Test(expected=RuntimeException.class)
     public void testLookupPowerInvalidValue() {
         SaniCurves c = new SaniCurves();
-        c.lookupPower(0.64174); // last magic number
+        c.lookupOrder(0.64174); // last magic number
     }
 
     @Test

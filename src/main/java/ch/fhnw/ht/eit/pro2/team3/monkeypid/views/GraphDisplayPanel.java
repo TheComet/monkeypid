@@ -79,7 +79,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, ModelLi
                 System.out.println(e.getMessage());
             }
         });
-
 	}
 
     @Override
