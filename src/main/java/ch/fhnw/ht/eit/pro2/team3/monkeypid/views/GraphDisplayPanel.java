@@ -3,18 +3,13 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * GraphDisplayPanel is a panel which includes checkBoxes with names of all
@@ -28,13 +23,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		IModelListener {
 
 	private Controller controller;
-	private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
-
-	private class CheckBoxNotFoundException extends Exception {
-		public CheckBoxNotFoundException(String message) {
-			super(message);
-		}
-	}
+	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 
 	/**
 	 * Constructor of GraphDisplayPanel adds
@@ -45,24 +34,14 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 	}
 
-
-    private JCheckBox findCheckBox(String name) throws CheckBoxNotFoundException {
-        for(JCheckBox c : checkBoxes) {
-            if(c.getText().equals(name)) {
-                return c;
-            }
-        }
-        throw new CheckBoxNotFoundException("Checkbox with name \"" + name + "\" not found");
-    }
-
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        for(JCheckBox c : checkBoxes) {
-            if(actionEvent.getSource() == c) {
-                if(c.isSelected()) {
-                    controller.cbCheckAction(c.getText());
+        for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+            if (actionEvent.getSource() == entry.getValue()) {
+                if (entry.getValue().isSelected()) {
+                    controller.cbCheckAction(entry.getKey());
                 } else {
-                    controller.cbUncheckAction(c.getText());
+                    controller.cbUncheckAction(entry.getKey());
                 }
             }
         }
@@ -70,29 +49,24 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop) {
-		/*
-		@Override
-		public void onAddClosedLoop(ClosedLoop closedLoop) {
-		//get rgbColor from closedLoop and convert it to string
-		String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
-				.getRed(), closedLoop.getColor().getGreen(), closedLoop
-				.getColor().getBlue());
-		//create checkBox with colored dot and name of closedLoop
-		JCheckBox cb = new JCheckBox(
-				"<html><font style=\"font-family: unicode \"color=" + hexColor
-						+ ">" + "\u25CF" + "<font color=#000000>"
-						+ closedLoop.getName(), true);
-		//add actionListener to checkbox
-		cb.addActionListener(this);
-		
-		checkBoxes.add(cb);
-		add(cb);
-		}
-		 */
         SwingUtilities.invokeLater(() -> {
-            JCheckBox cb = new JCheckBox(closedLoop.getName(), true);
+
+            //get rgbColor from closedLoop and convert it to string
+            String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
+                    .getRed(), closedLoop.getColor().getGreen(), closedLoop
+                    .getColor().getBlue());
+
+            //create checkBox with colored dot and name of closedLoop
+            JCheckBox cb = new JCheckBox(
+                    "<html><font style=\"font-family: unicode \"color=" + hexColor
+                            + ">" + "\u25CF" + "<font color=#000000>"
+                            + closedLoop.getName(), true);
+
+            //add actionListener to checkbox
             cb.addActionListener(this);
-            checkBoxes.add(cb);
+
+            // insert into hash map and add to layout
+            checkBoxes.put(closedLoop.getName(), cb);
             add(cb);
         });
 	}
@@ -100,20 +74,17 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
         SwingUtilities.invokeLater(() -> {
-            try {
-                JCheckBox c = findCheckBox(closedLoop.getName());
-                checkBoxes.remove(c);
-                remove(c);
-            } catch (CheckBoxNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
+            JCheckBox c = checkBoxes.remove(closedLoop.getName());
+            remove(c);
         });
 	}
 
     @Override
     public void onSimulationBegin(int numberOfStepResponses) {
         SwingUtilities.invokeLater(() -> {
-            checkBoxes.forEach(this::remove);
+            for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+                remove(entry.getValue());
+            }
             checkBoxes.clear();
         });
     }
