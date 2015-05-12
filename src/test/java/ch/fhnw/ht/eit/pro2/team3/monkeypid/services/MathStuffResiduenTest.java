@@ -46,7 +46,7 @@ public class MathStuffResiduenTest {
 	@Test
 	public void testResidueSimpleCalculateK() {
 		
-		//calculate Order of Numerator (Zähler) and Denominator (Nenner)
+		//calculate Order of Numerator (Zï¿½hler) and Denominator (Nenner)
 		int N = Bequal.length -1;
 		int M = Aequal.length -1;
 		
@@ -94,7 +94,43 @@ public class MathStuffResiduenTest {
 		assertEquals( + 0.3537, myRoots[2].getImaginary(), delta);
 		assertEquals(+ 0.0000, myRoots[3].getImaginary(), delta);
 		assertEquals(- 0.3537, myRoots[4].getImaginary(), delta);
+	}
+	
+	@Test
+	public void testResidueSimpleRoots2() {
+		double delta = 0.001;
 		
+		double[] Z = { 0.7144, 4.5537, 10.6420, 11.3823, 5.5717, 1.0000};
+		Complex[] myRoots =  MathStuff.roots(Z);
+				
+		System.out.println("myRoots");
+		for (int i = 0; i < myRoots.length; i++) {
+			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
+		}
+		
+		double[] Z2 = {1, 2, 5, 7, 8, 2, 3, 1};
+		Complex[] myRoots2 =  MathStuff.roots(Z2);
+				
+		System.out.println("myRoots2");
+		for (int i = 0; i < myRoots2.length; i++) {
+			System.out.println("Real: "+myRoots2[i].getReal() +" Imag: " +myRoots2[i].getImaginary());
+		}
+		
+		
+		
+		/*
+		assertEquals( -2.3190, myRoots[0].getReal(), delta);
+		assertEquals(-1.5915, myRoots[1].getReal(), delta);
+		assertEquals(-0.1529, myRoots[2].getReal(), delta);
+		assertEquals(-0.2777, myRoots[3].getReal(), delta);
+		assertEquals(-0.1529, myRoots[4].getReal(), delta);
+		
+		assertEquals(+ 0.0000, myRoots[0].getImaginary(), delta);
+		assertEquals(+ 0.0000, myRoots[1].getImaginary(), delta);
+		assertEquals( + 0.3537, myRoots[2].getImaginary(), delta);
+		assertEquals(+ 0.0000, myRoots[3].getImaginary(), delta);
+		assertEquals(- 0.3537, myRoots[4].getImaginary(), delta);
+		*/
 	}
 	
 	@Test
