@@ -4,6 +4,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -314,4 +315,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 
 	@Override
 	public void onShowCalculation(ClosedLoop closedLoop) {}
+
+	@Override
+	public void onSetPlant(Plant plant) {}
 }

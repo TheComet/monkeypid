@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 /**
  * Allows classes to register as listeners of the Model class. Model is part of the MVC pattern.
@@ -8,6 +9,13 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
  */
 public interface IModelListener {
 
+	/**
+	 * This is called when the plant of the model has set and the timeConstants and order of the plant has finished
+	 * calculating
+	 * @param plant The plant, which was set by setPlant
+	 */
+	void onSetPlant(Plant plant);
+	
     /**
      * This is called when the model has finished calculating a closed system and its respective step response, and
      * has added it to its internal list. A single simulation usually has multiple calculations, and thus, will call

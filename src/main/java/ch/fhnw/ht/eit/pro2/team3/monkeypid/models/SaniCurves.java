@@ -31,6 +31,8 @@ public class SaniCurves {
     }
 
     private int numTableColumns;
+    private int order = 2;
+    private double TuTgRatio;
 
     // raw tables from matlab
     private ArrayList<double[]> tu_tg_ratio = null;
@@ -91,6 +93,14 @@ public class SaniCurves {
 
         return order;
     }
+    
+    /**
+     * Returns the order of the set plant
+     * @return order
+     */
+    public int getOrder(){
+    	return order;
+    }
 
     /**
      * Calculates the time constants of a given plant using the Sani approximation method and default interpolation.
@@ -100,6 +110,8 @@ public class SaniCurves {
      * up to 8 time constants.
      */
     public double[] calculateTimeConstants(double tu, double tg) {
+    	TuTgRatio = tu / tg;
+    	order = lookupOrder(TuTgRatio);
         return calculateTimeConstantsCubicNAK(tu, tg);
     }
 
@@ -113,11 +125,6 @@ public class SaniCurves {
      */
     @Deprecated
     public double[] calculateTimeConstantsLinear(double tu, double tg) {
-
-        double TuTgRatio = tu / tg;
-
-        // get order
-        int order = lookupOrder(TuTgRatio);
 
         // prepare return array (it has as many indices as the power, starting at ^2)
         double[] timeConstants = new double[order];
@@ -148,11 +155,6 @@ public class SaniCurves {
      */
     public double[] calculateTimeConstantsSpline(double tu, double tg) {
 
-        double TuTgRatio = tu / tg;
-
-        // get order
-        int order = lookupOrder(TuTgRatio);
-
         // prepare return array (it has as many indices as the power, starting at ^2)
         double[] timeConstants = new double[order];
 
@@ -181,11 +183,6 @@ public class SaniCurves {
      * up to 8 time constants.
      */
     public double[] calculateTimeConstantsCubicNAK(double tu, double tg) {
-
-        double TuTgRatio = tu / tg;
-
-        // get order
-        int order = lookupOrder(TuTgRatio);
 
         // prepare return array (it has as many indices as the power, starting at ^2)
         double[] timeConstants = new double[order];

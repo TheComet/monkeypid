@@ -17,6 +17,7 @@ public class Plant {
     private double tg = 0.0;
     private SaniCurves sani;
     private double[] timeConstants;
+    private int order = 2;
     private TransferFunction transferFunction = null;
 
     /**
@@ -45,6 +46,7 @@ public class Plant {
         this.ks = ks;
         //timeConstants = sani.calculateTimeConstants(tu, tg);
         timeConstants = sani.calculateTimeConstants(tu, tg);
+        order = sani.getOrder();
         calculateTransferFunction();
     }
 
@@ -78,6 +80,14 @@ public class Plant {
      */
     public double[] getTimeConstants() {
         return this.timeConstants;
+    }
+    
+    /**
+     * Gets the order of the plant
+     * @return The order of the plant as int
+     */
+    public int getOrder() {
+        return this.order;
     }
 
     /**

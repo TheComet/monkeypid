@@ -92,6 +92,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      */
     public final void setPlant(double tu, double tg, double ks) {
         this.plant = new Plant(tu, tg, ks, sani);
+        notifySetPlant(plant);
     }
 
     /**
@@ -356,6 +357,12 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         for(IModelListener listener : listeners) {
             listener.onShowCalculation(closedLoop);
         }
+    }
+    
+    private void notifySetPlant(Plant plant){
+    	for(IModelListener listener : listeners){
+    		listener.onSetPlant(plant);
+    	}
     }
 
     // -----------------------------------------------------------------------------------------------------------------

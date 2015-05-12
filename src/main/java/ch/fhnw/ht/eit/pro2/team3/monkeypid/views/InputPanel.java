@@ -1,11 +1,15 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +24,7 @@ import java.awt.event.KeyListener;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener, KeyListener {
+public class InputPanel extends JPanel implements ActionListener, KeyListener, IModelListener {
 
 	Controller controller;
 
@@ -142,9 +146,6 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 		//TODO best solution?
 		tfKs.setPreferredSize(new Dimension(50, 25));
 		tfKs.setMinimumSize(new Dimension(50, 25));
-		
-		// set color of error info label to red
-		lbValueErrorInfo.setForeground(Color.RED);
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");
@@ -243,9 +244,13 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 
 			// get index of selected overshoot in comboBox
 			int overswingIndex = cbSelectOvershoot.getSelectedIndex();
-
+			
 			// handling of wrong entries
 			lbValueErrorInfo.setText(" ");
+			
+			// set color of error info label to red
+			lbValueErrorInfo.setForeground(Color.RED);
+			
 			if (tfTuValue == 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tu darf nicht 0 sein");
@@ -270,8 +275,12 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 							tfTpValue, selectedRegulatorName,
 							overswingTable[overswingIndex]);
 				} catch (Model.InvalidPlantForPIDSimulationException ex) {
+					// set color of error info label to red
+					lbValueErrorInfo.setForeground(Color.RED);
 					lbValueErrorInfo.setText(ex.getMessage());
 				} catch (SaniCurves.TuTgRatioTooLargeException ex) {
+					// set color of error info label to red
+					lbValueErrorInfo.setForeground(Color.RED);
 					lbValueErrorInfo.setText(ex.getMessage());
 				}
 			}
@@ -298,4 +307,29 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		// not needed
 	}
+
+	@Override
+	public void onSetPlant(Plant plant) {
+		// set color of error info label to red
+		lbValueErrorInfo.setForeground(Color.BLACK);
+		lbValueErrorInfo.setText("Ordnung der Strecke = "+plant.getOrder());
+	}
+
+	@Override
+	public void onAddCalculation(ClosedLoop closedLoop) {}
+
+	@Override
+	public void onRemoveCalculation(ClosedLoop closedLoop) {}
+
+	@Override
+	public void onSimulationBegin(int numberOfStepResponses) {}
+
+	@Override
+	public void onSimulationComplete() {}
+
+	@Override
+	public void onHideCalculation(ClosedLoop closedLoop) {}
+
+	@Override
+	public void onShowCalculation(ClosedLoop closedLoop) {}
 }

@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -46,8 +47,6 @@ public class GraphPanel extends JPanel implements IModelListener {
 	    
 	    // create plot
 	 	 XYPlot plot = new XYPlot(dataCollection, xAxis, yAxis, renderer);
-
-		
 
 		// add plot into a new chart
 		chart = new JFreeChart("Sprungantwort Geschlossener Regelkreis", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
@@ -132,4 +131,7 @@ public class GraphPanel extends JPanel implements IModelListener {
     public void onShowCalculation(ClosedLoop closedLoop) {
         setSeriesVisible(closedLoop, true);
     }
+
+	@Override
+	public void onSetPlant(Plant plant) {}
 }

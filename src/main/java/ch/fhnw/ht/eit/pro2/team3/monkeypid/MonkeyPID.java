@@ -62,6 +62,7 @@ public class MonkeyPID {
 		model.registerListener(view.outputPanel);
         model.registerListener(view.graphPanel);
         model.registerListener(view.graphDisplayPanel);
+        model.registerListener(view.inputPanel);
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);
