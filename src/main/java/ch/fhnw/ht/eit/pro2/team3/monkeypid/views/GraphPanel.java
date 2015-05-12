@@ -67,11 +67,8 @@ public class GraphPanel extends JPanel implements IModelListener {
 	}
 	
 	public void autoScaleAxis(){
-		chart.getPlot().zoom(100);
-		//getRangeAxis().setAutoRange(true);
-		//chart.getXYPlot().getDomainAxis().setAutoRange(true);
-
-		System.out.println("autoscale");
+		chart.getXYPlot().getDomainAxis().setAutoRange(true);
+		chart.getXYPlot().getRangeAxis().setAutoRange(true);
 	}
 	
 	private XYItemRenderer getDatasetRenderer() {
