@@ -66,9 +66,13 @@ public class ClosedLoop {
      */
     public final void calculateStepResponse(int samplePoints) {
 
-        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
-        double tcMax = (double) Collections.max(timeConstantsList);
-        double fs = 1.0/(tcMax/400.0);
+    	// determine the optimal time window and compute fs
+        // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
+        // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
+        Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
+        double largestImag = MathStuff.max(MathStuff.imag(roots));
+        double magicConstant = 1000.0;
+        double fs = largestImag * magicConstant / (2.0 * Math.PI);
 
         // round sample points to the next power of two
         int powerOfTwo = 4;
