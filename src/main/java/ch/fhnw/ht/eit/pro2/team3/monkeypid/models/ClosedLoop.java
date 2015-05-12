@@ -71,9 +71,21 @@ public class ClosedLoop {
         // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
         Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
         double largestImag = MathStuff.max(MathStuff.imag(roots));
+       
+        /*
         double magicConstant = 1000.0;
         double fs = largestImag * magicConstant / (2.0 * Math.PI);
-
+        System.out.println("largest Imaga: "+largestImag + " fs: "+fs);
+        */
+        
+        //calculate fs based on the sum of all timeConstants
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
+                double timeAllTimeConstants = 0.0;
+        for (int i = 0; i < timeConstantsList.size(); i++) {
+			timeAllTimeConstants += (double)timeConstantsList.get(i);
+		}
+        double fs = 1.0/(timeAllTimeConstants/400.0);
+        
         // round sample points to the next power of two
         int powerOfTwo = 4;
         while(powerOfTwo < samplePoints) {
