@@ -41,7 +41,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private View view;
 
 	// projectname is used for link-path
-	private String projektName = "monkeypid";
+	private String projektName = "easypid";
 
 	// TODO besserer Name
 	private boolean miniVersionSelected = false;
@@ -77,6 +77,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			"pid-einstellen.pdf", 'p');
 	private JMenuItem LinkBuergieSolenickiV3PDF = new JMenuItem(
 			"Buergi_Solenicki-V3.pdf", 'P');
+	private JMenuItem LinkSaniMethodePDF = new JMenuItem(
+			"Aperiodic Filter Analysis and Designe by Symbolic Computation Sani.pdf", 'S');
 
 	/**
 	 * The constructor of MenuBar adds all the items to the menuBar.
@@ -140,6 +142,14 @@ public class MenuBar extends JMenuBar implements ActionListener {
 						+ "/Buergi_Solenicki-V3.pdf");
 			}
 		});
+		
+		LinkSaniMethodePDF.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openURLInBrowser("http://simonwyss.me/" + projektName
+						+ "/Aperiodic_Filter_Analysis_and_Designe_by_Symbolic_Computation_Sani.pdf");
+			}
+		});
 
 		// add actionListener to the menuItems
 		menuItemExit.addActionListener(this);
@@ -162,6 +172,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		usefulLinksSubMenu.add(LinkRegelkreiseUndRegelungenPDF);
 		usefulLinksSubMenu.add(LinkPidEinstellenPDF);
 		usefulLinksSubMenu.add(LinkBuergieSolenickiV3PDF);
+		usefulLinksSubMenu.add(LinkSaniMethodePDF);
 
 		// add menu items to the menu help
 		menuHelp.add(menuItemInfo);
