@@ -144,8 +144,8 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 		tfKs.setToolTipText("Test ToolTip");
 		
 		//TODO best solution?
-		tfKs.setPreferredSize(new Dimension(50, 25));
-		tfKs.setMinimumSize(new Dimension(50, 25));
+		//tfKs.setPreferredSize(new Dimension(50, 25));
+		//tfKs.setMinimumSize(new Dimension(50, 25));
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");

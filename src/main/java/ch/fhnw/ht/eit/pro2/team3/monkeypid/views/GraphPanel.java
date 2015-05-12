@@ -92,6 +92,8 @@ public class GraphPanel extends JPanel implements IModelListener {
 
                 // The closedLoop object specifies what color it wants to be rendered in
                 getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
+                //getDatasetRenderer().setSeriesOutlinePaint(getSeriesIndex(closedLoop), new Color(255, 128, 0));
+                //getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop), new BasicStroke(5.0f,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f}, 0.0f));
 
                 // See issue #21 - make visible again
                 setSeriesVisible(closedLoop, true);

@@ -262,8 +262,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			view.graphDisplayPanel.setVisible(miniVersionSelected);
 			// set visibility of components on the inputPanel
 			view.inputPanel.setMiniVersion(miniVersionSelected);
+			//view.inputPanel.setVisible(miniVersionSelected);
 			// set visibility of components on the outputPanel
 			view.outputPanel.setMiniVersion(miniVersionSelected);
+			//view.outputPanel.setVisible(miniVersionSelected);
+			// set visibility of components on the outputPanel
+			view.graphSettingPanel.setVisible(miniVersionSelected);
 
 			// change text of menuItem
 			if (miniVersionSelected) {
@@ -276,6 +280,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 			// pack frame
 			JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
+			myParent.setResizable(true);
 			myParent.pack(); // pack frame (make as small as possible)
 
 			// invert state variable

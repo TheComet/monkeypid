@@ -5,6 +5,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ public class View extends JPanel implements ActionListener {
 	public OutputPanel outputPanel;
 	public GraphDisplayPanel graphDisplayPanel;
 	public GraphPanel graphPanel;
+	public JPanel graphSettingPanel;
 
 	public JButton btAutoAdjust = new JButton(
 			Assets.loadImageIcon("autoSizeIcon.png"));
@@ -81,9 +83,7 @@ public class View extends JPanel implements ActionListener {
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 
-		//
-		JPanel graphSettingPanel = new JPanel();
-
+		graphSettingPanel = new JPanel(new GridLayout(1,1));
 		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
 		graphSettingPanel.add(btAutoAdjust);
 

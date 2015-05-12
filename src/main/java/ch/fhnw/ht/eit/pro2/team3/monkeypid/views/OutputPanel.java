@@ -111,6 +111,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 		
+		/*
 		// set size of first column
 		table.getColumnModel().getColumn(0).setMinWidth(90);
 		table.getColumnModel().getColumn(0).setMaxWidth(90);
@@ -119,11 +120,11 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		table.getColumnModel().getColumn(5).setMinWidth(100);
 		table.getColumnModel().getColumn(5).setMaxWidth(100);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
-		
+		*/
 		//table.getColumnModel().getColumn(5).setCellRenderer()) {
 			
 
-		
+		/*
 		// set size of the rest columns
 		for (int i = 1; i < table.getColumnCount()-1; i++) {
 			TableColumn col;
@@ -132,11 +133,14 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 			col.setMaxWidth(80);
 			col.setPreferredWidth(80);
 		}
+		*/
 
+		
 		// set preferred size of table
 		table.setPreferredSize(new Dimension(500, 200));
 		table.setMinimumSize(new Dimension(500, 200));
 		table.getTableHeader().setPreferredSize(new Dimension(500, 50));
+		
 		
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -225,18 +229,18 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		lbSimulationTitle.setVisible(miniVersionSelected);
-		slKp.setVisible(miniVersionSelected);
-		slTn.setVisible(miniVersionSelected);
-		slTv.setVisible(miniVersionSelected);
-		tfAdaptKp.setVisible(miniVersionSelected);
-		tfAdaptTn.setVisible(miniVersionSelected);
-		tfAdaptTv.setVisible(miniVersionSelected);
-		table.setVisible(miniVersionSelected);
-		table.getTableHeader().setVisible(miniVersionSelected);
+		//lbSimulationTitle.setVisible(miniVersionSelected);
+		//slKp.setVisible(miniVersionSelected);
+		//slTn.setVisible(miniVersionSelected);
+		//slTv.setVisible(miniVersionSelected);
+		//tfAdaptKp.setVisible(miniVersionSelected);
+		//tfAdaptTn.setVisible(miniVersionSelected);
+		//tfAdaptTv.setVisible(miniVersionSelected);
+		//table.setVisible(miniVersionSelected);
+		//table.getTableHeader().setVisible(miniVersionSelected);
 
-		btDelete.setVisible(miniVersionSelected);
-		btAdopt.setVisible(miniVersionSelected);
+		//btDelete.setVisible(miniVersionSelected);
+		//btAdopt.setVisible(miniVersionSelected);
 	}
 
 	/**

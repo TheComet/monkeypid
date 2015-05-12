@@ -72,7 +72,7 @@ public class MonkeyPID {
 		frame.setJMenuBar(menuBar);
 
 		// add statusBar to window
-		StatusBar statusBar = new StatusBar();
+		//StatusBar statusBar = new StatusBar();
 		//frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
 		//frame.setMinimumSize(new Dimension(1200, 900));
