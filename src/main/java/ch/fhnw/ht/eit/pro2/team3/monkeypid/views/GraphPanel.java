@@ -119,8 +119,7 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onSimulationComplete() {
-    }
+    public void onSimulationComplete() {}
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {

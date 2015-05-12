@@ -23,14 +23,16 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 
 	private Controller controller;
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
+	private View view;
 
 	/**
 	 * Constructor of GraphDisplayPanel adds
 	 */
-	public GraphDisplayPanel(Controller controller) {
+	public GraphDisplayPanel(Controller controller, View view) {
 		// super(new FlowLayout(FlowLayout.LEADING));
 		super(new WrapLayout(WrapLayout.LEFT));
 		this.controller = controller;
+		this.view = view;
 	}
 
     @Override
@@ -67,6 +69,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             // insert into hash map and add to layout
             checkBoxes.put(closedLoop.getName(), cb);
             add(cb);
+            view.validate();
         });
 	}
 
@@ -89,8 +92,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
     }
 
 	@Override
-	public void onSimulationComplete() {
-	}
+	public void onSimulationComplete() {}
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {}
