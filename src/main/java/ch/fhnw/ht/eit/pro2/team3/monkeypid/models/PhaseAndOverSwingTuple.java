@@ -6,6 +6,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
  * The phase margin is mapped to a corresponding overswing value in percent.
  * @author Alex Murray
  */
+@Deprecated
 public class PhaseAndOverSwingTuple {
     private double phaseMargin;
     private String overswingPercent;
@@ -26,6 +27,10 @@ public class PhaseAndOverSwingTuple {
      */
     public String percent() {
         return this.overswingPercent;
+    }
+
+    public double percentDouble() {
+        return Double.parseDouble(overswingPercent.replaceAll("%", ""));
     }
 
     /**

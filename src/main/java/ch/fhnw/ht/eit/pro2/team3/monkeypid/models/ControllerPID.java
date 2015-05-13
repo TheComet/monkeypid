@@ -73,6 +73,11 @@ public class ControllerPID extends AbstractController {
         return tp;
     }
 
+    @Override
+    public final void setKr(double kr) {
+        setParameters(tn, tv, kr, tp);
+    }
+
     /**
      * Calculates the transfer function for a PID controller.
      */
