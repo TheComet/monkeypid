@@ -7,14 +7,10 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -24,7 +20,8 @@ import java.awt.event.KeyListener;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener, KeyListener,
+
+public class InputPanel extends JPanel implements ActionListener,
 		IModelListener {
 
 	Controller controller;
@@ -55,8 +52,10 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener,
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Faktor für Parasitäre Zeitkonstante:");
+	
 	// private JLabel lbTp = new JLabel("Tp");
 	private JLabel lbTpInfo = new JLabel("%");
+
 	// private JTextField tfTp = new JTextField("10", 5);
 	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
 
@@ -207,26 +206,13 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener,
 		lbTimeConstantTitle.setEnabled(false);
 		lbTpInfo.setEnabled(false);
 		tfTp.setEnabled(false);
-
-		// set leftpanel focusable
-		this.setFocusable(true);
-
-		// add KeyListener to panel
-		this.addKeyListener(this);
-
-		JFrame myFrame = (JFrame) view.getTopLevelAncestor(); //doesn't work, returns null
-		//myParent = (JFrame) this.getRootPane().getParent();
-		//myFrame = (JFrame) view.getRootPane().getParent();
-		//myFrame = (JFrame) getParent().getParent();
-		//myFrame = (JFrame) getParent().getParent();
-		myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
-		System.out.println("parent:");
-		System.out.println(myFrame);
-		//myParent.getRootPane().setDefaultButton(btSimulate);
-		
 	}
-	
-	public void setEnterAsDefaultButton(){
+
+	/**
+	 * Sets the Simulation-Button as Default-Button. i.e. If the Enter-Key is pressed, 
+	 * the Simulation-Buttons gets clicked (internally).
+	 */
+	public void setDefaultButtonSimulation() {
 		JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
 		myFrame.getRootPane().setDefaultButton(btSimulate);
 	}
@@ -341,26 +327,6 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener,
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// not needed
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// if enter on keyboard is pressed simulation starts, same as btSimulate
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			// press button simulate
-			btSimulate.doClick();
-			e.setKeyCode(0);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// not needed
 	}
 
 	@Override
