@@ -111,6 +111,10 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 		
+		//get label height of a label from GUI
+		int labelHeight = lbSimulationTitle.getWidth();
+		System.out.println(labelHeight);
+		
 		/*
 		// set size of first column
 		table.getColumnModel().getColumn(0).setMinWidth(90);

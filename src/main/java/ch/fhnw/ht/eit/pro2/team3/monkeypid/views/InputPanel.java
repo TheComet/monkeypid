@@ -20,11 +20,15 @@ import java.awt.event.ActionListener;
  * @author Josua
  *
  */
+
 public class InputPanel extends JPanel implements ActionListener,
 		IModelListener {
 
 	Controller controller;
 	View view;
+
+	//
+	static final int I = 0, PI = 1, PID = 2;
 
 	// create test table
 	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
@@ -48,8 +52,10 @@ public class InputPanel extends JPanel implements ActionListener,
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Faktor für Parasitäre Zeitkonstante:");
+	
 	// private JLabel lbTp = new JLabel("Tp");
-	private JLabel lbTuInfo = new JLabel("%");
+	private JLabel lbTpInfo = new JLabel("%");
+
 	// private JTextField tfTp = new JTextField("10", 5);
 	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
 
@@ -65,9 +71,6 @@ public class InputPanel extends JPanel implements ActionListener,
 
 	// simulation button
 	private JButton btSimulate = new JButton("Simulieren");
-
-	// simulation title
-	private JLabel lbSimulationTitle = new JLabel("Simulationen");
 
 	// manual adjustment
 	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
@@ -131,9 +134,12 @@ public class InputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
 
-		add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 1.0, 0.0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 5, 0, 10), 50, 0));
+		// TODO löst problem mit centered ->josua
+		/*
+		 * add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 1.0, 0.0,
+		 * GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new
+		 * Insets(10, 5, 0, 10), 50, 0));
+		 */
 
 		// add tool tip for input fields
 		tfTu.setToolTipText("Test ToolTip");
@@ -152,47 +158,54 @@ public class InputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 0, 10), 0, 0));
 
-		// add items for Tp to GridBagLayout
-		add(lbTimeConstantTitle, new GridBagConstraints(0, 3, 6, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 10), 0, 0));
-		/*
-		 * add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 0), 0, 0));
-		 */
-		add(lbTuInfo, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
-				new Insets(10, 0, 10, 10), 0, 0));
-
-		tfTp.setValue(10); // set default value of Tp
-		add(tfTp, new GridBagConstraints(0, 4, 2, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 50, 0));
-
 		// add label and comboBox for for regulator selection to GridBagLayout
-		add(lbSelectRegulatorTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
+		add(lbSelectRegulatorTitle, new GridBagConstraints(0, 3, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(10, 10, 0, 10), 0, 0));
-		add(cbSelectRegulator, new GridBagConstraints(0, 6, 2, 1, 0.0, 0.0,
+		add(cbSelectRegulator, new GridBagConstraints(0, 4, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 10, 10, 10), 0, 0));
 
 		// add title and comboBox for overshoot selection to GridBagLayout
-		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 7, 6, 1, 0.0,
+		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(5, 10, 0, 10), 0, 0));
-		add(cbSelectOvershoot, new GridBagConstraints(0, 8, 6, 1, 0.0, 0.0,
+		add(cbSelectOvershoot, new GridBagConstraints(0, 6, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 10), 0, 0));
+				new Insets(5, 10, 10, 10), 0, 0));
+
+		// add items for Tp to GridBagLayout
+		add(lbTimeConstantTitle, new GridBagConstraints(0, 7, 6, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(10, 10, 0, 10), 0, 0));
+		add(lbTpInfo, new GridBagConstraints(1, 8, 1, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
+				new Insets(5, 0, 10, 10), 0, 0));
+
+		tfTp.setValue(10); // set default value of Tp
+		add(tfTp, new GridBagConstraints(0, 8, 2, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(5, 10, 10, 0), 50, 0));
 
 		// add button simulate to GridBagLayout
-		add(btSimulate, new GridBagConstraints(0, 9, 6, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
-				new Insets(0, 10, 20, 10), 0, 0));
+		add(btSimulate,
+				new GridBagConstraints(0, 9, 7, 1, 1.0, 0.0,
+						GridBagConstraints.FIRST_LINE_START,
+						GridBagConstraints.HORIZONTAL, new Insets(10, 10, 10,
+								10), 0, 0));
 
 		// add ActionListener to buttons
 		btSimulate.addActionListener(this);
+
+		// addActionListener to select regulator comboBox
+		cbSelectRegulator.addActionListener(this);
+		
+		//set fields greyed out for selected I-regulator 
+		lbPhasengangmethodTitle.setEnabled(false);
+		cbSelectOvershoot.setEnabled(false);
+		lbTimeConstantTitle.setEnabled(false);
+		lbTpInfo.setEnabled(false);
+		tfTp.setEnabled(false);
 	}
 
 	/**
@@ -212,7 +225,6 @@ public class InputPanel extends JPanel implements ActionListener,
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		lbSimulationTitle.setVisible(miniVersionSelected);
 		slKp.setVisible(miniVersionSelected);
 		slTn.setVisible(miniVersionSelected);
 		slTv.setVisible(miniVersionSelected);
@@ -283,13 +295,46 @@ public class InputPanel extends JPanel implements ActionListener,
 				}
 			}
 		}
+
+		// sets parts from inputPanel out greyed for different regulators
+		if (e.getSource() == cbSelectRegulator) {
+			switch (cbSelectRegulator.getSelectedIndex()) {
+			// I regulator selected
+			case I:
+				lbPhasengangmethodTitle.setEnabled(false);
+				cbSelectOvershoot.setEnabled(false);
+				lbTimeConstantTitle.setEnabled(false);
+				lbTpInfo.setEnabled(false);
+				tfTp.setEnabled(false);
+				break;
+			// PI regulator selected
+			case PI:
+				lbPhasengangmethodTitle.setEnabled(true);
+				cbSelectOvershoot.setEnabled(true);
+				lbTimeConstantTitle.setEnabled(false);
+				lbTpInfo.setEnabled(false);
+				tfTp.setEnabled(false);
+				break;
+			// PID regulator selected
+			case PID:
+				lbPhasengangmethodTitle.setEnabled(true);
+				cbSelectOvershoot.setEnabled(true);
+				lbTimeConstantTitle.setEnabled(true);
+				lbTpInfo.setEnabled(true);
+				tfTp.setEnabled(true);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
 	public void onSetPlant(Plant plant) {
 		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.BLACK);
-		lbValueErrorInfo.setText("Ordnung der Strecke = " + plant.getOrder());
+		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder()
+				+ ")");
 	}
 
 	@Override
