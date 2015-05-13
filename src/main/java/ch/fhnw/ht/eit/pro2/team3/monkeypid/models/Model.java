@@ -50,38 +50,61 @@ public class Model implements IClosedLoopListener {
         }
     }
 
+    /**
+     * Handles the entire process of calculating a controller, constructing a closed loop, and calculating the step
+     * response, as well as applying iterative approximation for the overswing.
+     */
     private class CalculationCycle implements Runnable {
         private AbstractControllerCalculator controllerCalculator;
         private IClosedLoopListener resultListener;
         private double targetOverswing;
 
+        /**
+         * Constructs a new calculation cycle from a given controller calculator.
+         * @param controllerCalculator The controller calculator to use.
+         * @param resultListener The listener to notify when the step response calculation completes.
+         */
         CalculationCycle(AbstractControllerCalculator controllerCalculator, IClosedLoopListener resultListener) {
             this.controllerCalculator = controllerCalculator;
             this.resultListener = resultListener;
         }
 
+        /**
+         * Gets the controller calculator.
+         * @return The controller calculator.
+         */
         public AbstractControllerCalculator getControllerCalculator() {
             return controllerCalculator;
         }
 
+        /**
+         * Sets the target overswing to approximate using the iterative approximation method.
+         * @param overswing The overswing in percent.
+         */
         public void setTargetOverswing(double overswing) {
             if(overswing < 0.5)
                 overswing = 0.5; // overswing of 0% produces weird results, round up to the maximum tolerant value
             this.targetOverswing = overswing;
         }
 
+        /**
+         * Executes the calculation cycle. 
+         */
         @Override
         public void run() {
             controllerCalculator.run();
             AbstractController controller = controllerCalculator.getController();
 
+            // the number of sample points to use for the end result
             int numSamplePoints = 8 * 1024;
 
+            // if maxKr is greater than minKr, it means we have a window to use for iterative approximation
             if(controller.getMaxKr() > controller.getMinKr())
             {
                 ClosedLoop closedLoop = new ClosedLoop(plant, controller);
                 closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
 
+                // approximate the overswing by adjusting Kr
                 double topKr = controller.getMaxKr();
                 double bottomKr = controller.getMinKr();
                 double actualKr = (topKr + bottomKr) / 2.0;
@@ -97,12 +120,15 @@ public class Model implements IClosedLoopListener {
                         actualKr = (topKr + bottomKr) / 2.0;
                     }
                 }
+
+                // do final step response calculation using the full number of sample points.
                 controller.setKr(actualKr);
                 closedLoop.setPlantAndController(plant, controller);
                 closedLoop.calculateStepResponse(numSamplePoints);
                 resultListener.onStepResponseCalculationComplete(closedLoop);
 
             } else {
+                // no approximation, just calculate as usual.
                 ClosedLoop closedLoop = new ClosedLoop(plant, controller);
                 closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
                 closedLoop.registerListener(resultListener);
