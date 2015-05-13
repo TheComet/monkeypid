@@ -88,7 +88,7 @@ public class Model implements IClosedLoopListener {
         }
 
         /**
-         * Executes the calculation cycle. 
+         * Executes the calculation cycle.
          */
         @Override
         public void run() {
@@ -212,7 +212,10 @@ public class Model implements IClosedLoopListener {
         this.parasiticTimeConstantFactor = parasiticTimeConstantFactor;
     }
 
-    // TODO documentation
+    /**
+     * Sets the overswing to use for zellweger based calculations.
+     * @param overswing The overswing in percent.
+     */
     public final void setOverswing(PhaseAndOverSwingTuple overswing) {
         this.overswing = overswing;
     }
