@@ -27,6 +27,7 @@ import java.awt.event.KeyListener;
 public class InputPanel extends JPanel implements ActionListener, KeyListener, IModelListener {
 
 	Controller controller;
+	View view;
 
 	// create test table
 	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
@@ -89,9 +90,10 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 	 * 
 	 * @param controller
 	 */
-	public InputPanel(Controller controller) {
+	public InputPanel(Controller controller, View view) {
 		super(new GridBagLayout());
 		this.controller = controller;
+		this.view = view;
 
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
 		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
@@ -201,10 +203,21 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 		// add KeyListener to panel
 		this.addKeyListener(this);
 
-		// pack frame
-		//JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
-		
+		JFrame myFrame = (JFrame) view.getTopLevelAncestor(); //doesn't work, returns null
+		//myParent = (JFrame) this.getRootPane().getParent();
+		//myFrame = (JFrame) view.getRootPane().getParent();
+		//myFrame = (JFrame) getParent().getParent();
+		//myFrame = (JFrame) getParent().getParent();
+		myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
+		System.out.println("parent:");
+		System.out.println(myFrame);
 		//myParent.getRootPane().setDefaultButton(btSimulate);
+		
+	}
+	
+	public void setEnterAsDefaultButton(){
+		JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
+		myFrame.getRootPane().setDefaultButton(btSimulate);
 	}
 
 	/**
