@@ -74,6 +74,23 @@ public class ZellwegerPI extends AbstractZellweger {
         // Tn parameter of controller
         double tn = 1.0 / findAngleOnPlantPhase();
 
+        // calculate Kr and create new controller
+        double kr = calculateKr(tn);
+        AbstractController controller = new ControllerPI(getName(), kr, tn);
+
+        // see issue #7 - calculate minimum and maximum Kr for iterative approximation of overswing
+        double oldPhiDamping = phiDamping; // we're modifying phiDamping by setting a new phase margin. This has to be
+        // restored once we're done
+        setPhaseMargin(30); // high overswing
+        controller.setMaxKr(calculateKr(tn));
+        setPhaseMargin(90); // low overswing
+        controller.setMinKr(calculateKr(tn));
+        phiDamping = oldPhiDamping; // restore
+
+        return controller;
+    }
+
+    private double calculateKr(double tn) {
         // get omega damping
         double omegaDamping = findAngleOnOpenLoopPhase(tn);
 
@@ -81,9 +98,7 @@ public class ZellwegerPI extends AbstractZellweger {
         double ampOpenLoopKr = calculatePlantAmplitude(omegaDamping) * calculateControllerAmplitude(omegaDamping, tn);
 
         // Kr is the reciprocal of the amplitude at omegaDamping
-        double kr = 1.0 / ampOpenLoopKr;
-
-        return new ControllerPI(getName(), kr, tn);
+        return 1.0 / ampOpenLoopKr;
     }
 
     /**
