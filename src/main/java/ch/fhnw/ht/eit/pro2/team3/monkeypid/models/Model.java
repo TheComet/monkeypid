@@ -1,7 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Alex Murray
  */
-public class Model implements IControllerCalculatorListener, IClosedLoopListener {
+public class Model implements IClosedLoopListener {
 
     /**
      * Is thrown when an unknown regulator string is passed to setRegulatorType().
@@ -48,6 +47,29 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     public class InvalidPlantForPIDSimulationException extends RuntimeException {
         InvalidPlantForPIDSimulationException(String message) {
             super(message);
+        }
+    }
+
+    private class CalculationCycle implements Runnable {
+        private AbstractControllerCalculator controllerCalculator;
+        private IClosedLoopListener resultListener;
+
+        CalculationCycle(AbstractControllerCalculator controllerCalculator, IClosedLoopListener resultListener) {
+            this.controllerCalculator = controllerCalculator;
+            this.resultListener = resultListener;
+        }
+
+        public AbstractControllerCalculator getControllerCalculator() {
+            return controllerCalculator;
+        }
+
+        @Override
+        public void run() {
+            controllerCalculator.run();
+            ClosedLoop closedLoop = new ClosedLoop(plant, controllerCalculator.getController());
+            closedLoop.registerListener(resultListener);
+            closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
+            closedLoop.calculateStepResponse(8 * 1024);
         }
     }
 
@@ -150,7 +172,7 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
         clearSimulation();
 
         // get all calculators and notify simulation begin
-        ArrayList<AbstractControllerCalculator> calculators = getControllerCalculators();
+        ArrayList<CalculationCycle> calculators = getCalculators();
         notifySimulationBegin(calculators.size());
 
         // dispatch all calculators
@@ -256,45 +278,45 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
      * order isn't undefined, even when they are computed in parallel.
      * @return An ArrayList of calculators. See issue #29
      */
-    private ArrayList<AbstractControllerCalculator> getControllerCalculators() {
-        ArrayList<AbstractControllerCalculator> calculators = new ArrayList<>();
+    private ArrayList<CalculationCycle> getCalculators() {
+
+        ArrayList<CalculationCycle> calculators = new ArrayList<>();
 
         // generate a list of all calculators matching the currently selected controller type
         switch(regulatorType) {
             case PID:
-                calculators.add(new FistFormulaOppeltPID(plant));
-                calculators.add(new FistFormulaReswickStoerPID0(plant));
-                calculators.add(new FistFormulaReswickStoerPID20(plant));
-                calculators.add(new FistFormulaReswickFuehrungPID0(plant));
-                calculators.add(new FistFormulaReswickFuehrungPID20(plant));
-                calculators.add(new FistFormulaRosenbergPID(plant));
-                calculators.add(new ZellwegerPID(plant, phaseMargin));
+                calculators.add(new CalculationCycle(new FistFormulaOppeltPID(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID0(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID20(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
+                calculators.add(new CalculationCycle(new ZellwegerPID(plant, phaseMargin), this));
                 break;
 
             case PI:
-                calculators.add(new FistFormulaOppeltPI(plant));
-                calculators.add(new FistFormulaReswickStoerPI0(plant));
-                calculators.add(new FistFormulaReswickStoerPI20(plant));
-                calculators.add(new FistFormulaReswickFuehrungPI0(plant));
-                calculators.add(new FistFormulaReswickFuehrungPI20(plant));
-                calculators.add(new FistFormulaRosenbergPI(plant));
-                calculators.add(new ZellwegerPI(plant, phaseMargin));
+                calculators.add(new CalculationCycle(new FistFormulaOppeltPI(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI0(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI20(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
+                calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
+                calculators.add(new CalculationCycle(new ZellwegerPI(plant, phaseMargin), this));
                 break;
 
             case I:
-                calculators.add(new ZellwegerI(plant));
+                calculators.add(new CalculationCycle(new ZellwegerI(plant), this));
 
             default:
                 break;
         }
 
-        // register us as a listener to each calculator, so we know when to pick up the result and calculate the
-        // step response
+        // set parasitic time constant
+        // set table row indices of calculator - See issue #29
         int i = 0;
-        for(AbstractControllerCalculator calculator : calculators) {
-            calculator.registerListener(this);
-            calculator.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
-            calculator.setTableRowIndex(i); // set table row indices of calculator - See issue #29
+        for(CalculationCycle calculator : calculators) {
+            calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+            calculator.getControllerCalculator().setTableRowIndex(i);
             i++;
         }
 
@@ -370,29 +392,12 @@ public class Model implements IControllerCalculatorListener, IClosedLoopListener
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Called when a controller finishes being calculated.
-     * @param calculator The calculator that finished.
-     */
-    @Override
-    public final synchronized void onControllerCalculationComplete(AbstractControllerCalculator calculator) {
-        ClosedLoop closedLoop = new ClosedLoop(plant, calculator.getController());
-
-        // register as listener so we know when the step response calculation completes
-        closedLoop.registerListener(this);
-
-        // Add to list of closed loops and let the closed loop know its index in the table - see issue #29
-        closedLoop.setTableRowIndex(calculator.getTableRowIndex());
-        closedLoops.add(closedLoop);
-
-        threadPool.submit(() -> closedLoop.calculateStepResponse(8 * 1024)); // number of sample points
-    }
-
-    /**
      * Called when a step response calculation completes.
      * @param closedLoop The closed loop object holding the results of the step response.
      */
     @Override
     public final synchronized void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
+        closedLoops.add(closedLoop);
         notifyAddCalculation(closedLoop);
     }
 }
