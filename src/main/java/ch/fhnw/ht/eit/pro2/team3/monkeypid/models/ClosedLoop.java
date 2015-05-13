@@ -71,7 +71,7 @@ public class ClosedLoop {
         // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
         Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
         double largestImag = MathStuff.max(MathStuff.imag(roots));
-       
+
         /*
         double magicConstant = 1000.0;
         double fs = largestImag * magicConstant / (2.0 * Math.PI);

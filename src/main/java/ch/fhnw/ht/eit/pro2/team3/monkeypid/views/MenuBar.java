@@ -282,6 +282,10 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
 			myParent.setResizable(true);
 			myParent.pack(); // pack frame (make as small as possible)
+			
+			JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
+			System.out.println("parent:");
+			System.out.println(myFrame);
 
 			// invert state variable
 			miniVersionSelected = !miniVersionSelected;

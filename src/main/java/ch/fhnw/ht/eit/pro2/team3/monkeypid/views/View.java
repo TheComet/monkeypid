@@ -44,7 +44,7 @@ public class View extends JPanel implements ActionListener {
 		this.controller = controller;
 
 		// create the panels
-		inputPanel = new InputPanel(controller);
+		inputPanel = new InputPanel(controller, this);
 		outputPanel = new OutputPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel(controller, this);
 		graphPanel = new GraphPanel();
@@ -96,7 +96,7 @@ public class View extends JPanel implements ActionListener {
 		// set border
 		graphSettingPanel.setBorder(new TitledBorder((null), "Einstellungen"));
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btAutoAdjust) {
