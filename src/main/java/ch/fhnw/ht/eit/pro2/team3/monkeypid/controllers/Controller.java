@@ -35,7 +35,7 @@ public class Controller {
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);
-		model.setPhaseMargin(overswing.angle());
+		model.setOverswing(overswing);
         model.simulateAll();
 	}
 

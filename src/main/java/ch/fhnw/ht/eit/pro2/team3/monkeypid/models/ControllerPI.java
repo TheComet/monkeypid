@@ -49,6 +49,11 @@ public class ControllerPI extends AbstractController {
         return tn;
     }
 
+    @Override
+    public final void setKr(double kr) {
+        setParameters(kr, tn);
+    }
+
     /**
      * Calculates the transfer function for a PI controller.
      */

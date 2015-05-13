@@ -144,8 +144,6 @@ public class ClosedLoop {
 
         double [] omega = MathStuff.linspace(0, fs * Math.PI, powerOfTwo / 2);
 
-        
-
         // calculate frequency response
         Complex[] H = MathStuff.freqs(transferFunction, omega);
 
@@ -262,6 +260,14 @@ public class ClosedLoop {
      */
     public final Color getColor() {
         return controller.getColor();
+    }
+
+    /**
+     * Returns the maximum measured overswing of the last step response calculation.
+     * @return The overswing in percent.
+     */
+    public final double getOverswing() {
+        return maxOverSwing;
     }
 
     /**

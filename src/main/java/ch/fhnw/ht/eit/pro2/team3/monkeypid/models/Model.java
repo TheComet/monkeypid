@@ -53,6 +53,7 @@ public class Model implements IClosedLoopListener {
     private class CalculationCycle implements Runnable {
         private AbstractControllerCalculator controllerCalculator;
         private IClosedLoopListener resultListener;
+        private double targetOverswing;
 
         CalculationCycle(AbstractControllerCalculator controllerCalculator, IClosedLoopListener resultListener) {
             this.controllerCalculator = controllerCalculator;
@@ -63,13 +64,45 @@ public class Model implements IClosedLoopListener {
             return controllerCalculator;
         }
 
+        public void setTargetOverswing(double overswing) {
+            this.targetOverswing = overswing;
+        }
+
         @Override
         public void run() {
             controllerCalculator.run();
-            ClosedLoop closedLoop = new ClosedLoop(plant, controllerCalculator.getController());
-            closedLoop.registerListener(resultListener);
-            closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
-            closedLoop.calculateStepResponse(8 * 1024);
+            AbstractController controller = controllerCalculator.getController();
+
+            int numSamplePoints = 8 * 1024;
+
+            if(controller.getMaxKr() > controller.getMinKr())
+            {
+                ClosedLoop closedLoop = new ClosedLoop(plant, controller);
+                closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
+
+                double topKr = controller.getMaxKr();
+                double bottomKr = controller.getMinKr();
+                double actualKr = (topKr + bottomKr) / 2.0;
+                for(int i = 0; i < 10; i++) {
+                    controller.setKr(actualKr);
+                    closedLoop.setPlantAndController(plant, controller);
+                    closedLoop.calculateStepResponse(8 * 1024);
+                    if(closedLoop.getOverswing() > targetOverswing) {
+                        topKr = actualKr;
+                        actualKr = (topKr + bottomKr) / 2.0;
+                    } else {
+                        bottomKr = actualKr;
+                        actualKr = (topKr + bottomKr) / 2.0;
+                    }
+                }
+                resultListener.onStepResponseCalculationComplete(closedLoop);
+
+            } else {
+                ClosedLoop closedLoop = new ClosedLoop(plant, controller);
+                closedLoop.setTableRowIndex(controllerCalculator.getTableRowIndex());
+                closedLoop.registerListener(resultListener);
+                closedLoop.calculateStepResponse(numSamplePoints);
+            }
         }
     }
 
@@ -83,7 +116,7 @@ public class Model implements IClosedLoopListener {
     private Plant plant = null;
 
     // phase margin for Zellweger
-    private double phaseMargin = 0.0;
+    private PhaseAndOverSwingTuple overswing = null;
 
     // regulator types to calculate when user simulates
     private enum RegulatorType {
@@ -148,12 +181,9 @@ public class Model implements IClosedLoopListener {
         this.parasiticTimeConstantFactor = parasiticTimeConstantFactor;
     }
 
-    /**
-     * Updates the phase margin used in Zellweger-based calculations.
-     * @param phaseMargin A positive angle in degrees, usually in the range of 45° and 76.3°
-     */
-    public final void setPhaseMargin(double phaseMargin) {
-        this.phaseMargin = phaseMargin;
+    // TODO documentation
+    public final void setOverswing(PhaseAndOverSwingTuple overswing) {
+        this.overswing = overswing;
     }
 
     /**
@@ -291,7 +321,7 @@ public class Model implements IClosedLoopListener {
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPID(plant, phaseMargin), this));
+                calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing.angle()), this));
                 break;
 
             case PI:
@@ -301,7 +331,7 @@ public class Model implements IClosedLoopListener {
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPI(plant, phaseMargin), this));
+                calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing.angle()), this));
                 break;
 
             case I:
@@ -317,6 +347,7 @@ public class Model implements IClosedLoopListener {
         for(CalculationCycle calculator : calculators) {
             calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
             calculator.getControllerCalculator().setTableRowIndex(i);
+            calculator.setTargetOverswing(overswing.percentDouble());
             i++;
         }
 
