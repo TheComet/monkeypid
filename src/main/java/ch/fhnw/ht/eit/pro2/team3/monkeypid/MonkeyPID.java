@@ -66,7 +66,8 @@ public class MonkeyPID {
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);
-		view.inputPanel.setEnterAsDefaultButton();
+		//sets the Simulation-Button as Default Button
+		view.inputPanel.setDefaultButtonSimulation();
 		
 		// add a menu bar to the frame
 		MenuBar menuBar = new MenuBar(controller, view);

@@ -7,14 +7,10 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -24,7 +20,8 @@ import java.awt.event.KeyListener;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener, KeyListener, IModelListener {
+public class InputPanel extends JPanel implements ActionListener,
+		IModelListener {
 
 	Controller controller;
 	View view;
@@ -51,7 +48,7 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Faktor für Parasitäre Zeitkonstante:");
-	//private JLabel lbTp = new JLabel("Tp");
+	// private JLabel lbTp = new JLabel("Tp");
 	private JLabel lbTuInfo = new JLabel("%");
 	// private JTextField tfTp = new JTextField("10", 5);
 	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
@@ -106,12 +103,11 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 			cbSelectOvershoot.addItem(overswingTable[i].percent());
 		}
 
-		//TODO remove
+		// TODO remove
 		tfTu.setValue(2);
 		tfTg.setValue(6);
 		tfKs.setValue(1);
-		
-		
+
 		// add items for input fields to GridBagLayout
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -135,19 +131,18 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
 
-		add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 	1.0, 0.0,
+		add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 1.0, 0.0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 5, 0, 10), 50, 0));
 
-		
-		//add tool tip for input fields
+		// add tool tip for input fields
 		tfTu.setToolTipText("Test ToolTip");
 		tfTg.setToolTipText("Test ToolTip");
 		tfKs.setToolTipText("Test ToolTip");
-		
-		//TODO best solution?
-		//tfKs.setPreferredSize(new Dimension(50, 25));
-		//tfKs.setMinimumSize(new Dimension(50, 25));
+
+		// TODO best solution?
+		// tfKs.setPreferredSize(new Dimension(50, 25));
+		// tfKs.setMinimumSize(new Dimension(50, 25));
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");
@@ -161,9 +156,11 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 		add(lbTimeConstantTitle, new GridBagConstraints(0, 3, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
-		/*add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 10, 0), 0, 0));*/
+		/*
+		 * add(lbTp, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
+		 * Insets(10, 10, 10, 0), 0, 0));
+		 */
 		add(lbTuInfo, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(10, 0, 10, 10), 0, 0));
@@ -196,26 +193,13 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 
 		// add ActionListener to buttons
 		btSimulate.addActionListener(this);
-
-		// set leftpanel focusable
-		this.setFocusable(true);
-
-		// add KeyListener to panel
-		this.addKeyListener(this);
-
-		JFrame myFrame = (JFrame) view.getTopLevelAncestor(); //doesn't work, returns null
-		//myParent = (JFrame) this.getRootPane().getParent();
-		//myFrame = (JFrame) view.getRootPane().getParent();
-		//myFrame = (JFrame) getParent().getParent();
-		//myFrame = (JFrame) getParent().getParent();
-		myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
-		System.out.println("parent:");
-		System.out.println(myFrame);
-		//myParent.getRootPane().setDefaultButton(btSimulate);
-		
 	}
-	
-	public void setEnterAsDefaultButton(){
+
+	/**
+	 * Sets the Simulation-Button as Default-Button. i.e. If the Enter-Key is pressed, 
+	 * the Simulation-Buttons gets clicked (internally).
+	 */
+	public void setDefaultButtonSimulation() {
 		JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
 		myFrame.getRootPane().setDefaultButton(btSimulate);
 	}
@@ -249,7 +233,8 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 			double tfKsValue = tfKs.doubleValue();
 			double tfTuValue = tfTu.doubleValue();
 			double tfTgValue = tfTg.doubleValue();
-			double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to absolute
+			double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to
+															// absolute
 
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
@@ -257,13 +242,13 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 
 			// get index of selected overshoot in comboBox
 			int overswingIndex = cbSelectOvershoot.getSelectedIndex();
-			
+
 			// handling of wrong entries
 			lbValueErrorInfo.setText(" ");
-			
+
 			// set color of error info label to red
 			lbValueErrorInfo.setForeground(Color.RED);
-			
+
 			if (tfTuValue == 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tu darf nicht 0 sein");
@@ -284,8 +269,8 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 
 				// give over the values to controller
 				try {
-					controller.btSimulateAction(tfKsValue, tfTuValue, tfTgValue,
-							tfTpValue, selectedRegulatorName,
+					controller.btSimulateAction(tfKsValue, tfTuValue,
+							tfTgValue, tfTpValue, selectedRegulatorName,
 							overswingTable[overswingIndex]);
 				} catch (Model.InvalidPlantForPIDSimulationException ex) {
 					// set color of error info label to red
@@ -297,52 +282,37 @@ public class InputPanel extends JPanel implements ActionListener, KeyListener, I
 					lbValueErrorInfo.setText(ex.getMessage());
 				}
 			}
-
 		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// not needed
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// if enter on keyboard is pressed simulation starts, same as btSimulate
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			// press button simulate
-			btSimulate.doClick();
-			e.setKeyCode(0);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// not needed
 	}
 
 	@Override
 	public void onSetPlant(Plant plant) {
 		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.BLACK);
-		lbValueErrorInfo.setText("Ordnung der Strecke = "+plant.getOrder());
+		lbValueErrorInfo.setText("Ordnung der Strecke = " + plant.getOrder());
 	}
 
 	@Override
-	public void onAddCalculation(ClosedLoop closedLoop) {}
+	public void onAddCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
-	public void onRemoveCalculation(ClosedLoop closedLoop) {}
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
-	public void onSimulationBegin(int numberOfStepResponses) {}
+	public void onSimulationBegin(int numberOfStepResponses) {
+	}
 
 	@Override
-	public void onSimulationComplete() {}
+	public void onSimulationComplete() {
+	}
 
 	@Override
-	public void onHideCalculation(ClosedLoop closedLoop) {}
+	public void onHideCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
-	public void onShowCalculation(ClosedLoop closedLoop) {}
+	public void onShowCalculation(ClosedLoop closedLoop) {
+	}
 }
