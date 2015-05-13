@@ -5,6 +5,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -279,14 +280,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			}
 
 			// pack frame
-			JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
-			myParent.setResizable(true);
-			myParent.pack(); // pack frame (make as small as possible)
+			JFrame myJFrame = (JFrame) view.getTopLevelAncestor(); // get frame
+			myJFrame.setMinimumSize(new Dimension(0, 0));
+			myJFrame.pack(); // pack frame (make as small as possible)
+			myJFrame.setMinimumSize(myJFrame.getPreferredSize());
 			
-			JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
-			System.out.println("parent:");
-			System.out.println(myFrame);
-
 			// invert state variable
 			miniVersionSelected = !miniVersionSelected;
 		}

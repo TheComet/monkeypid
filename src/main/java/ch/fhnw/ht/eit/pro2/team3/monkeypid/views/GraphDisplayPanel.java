@@ -22,7 +22,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		IModelListener {
 
 	private Controller controller;
-	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
+	public HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
 
 	/**

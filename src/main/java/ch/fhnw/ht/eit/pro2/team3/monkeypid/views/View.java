@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -30,7 +31,10 @@ public class View extends JPanel implements ActionListener {
 
 	public JButton btAutoAdjust = new JButton(
 			Assets.loadImageIcon("autoSizeIcon.png"));
-
+	
+	public JButton btToggleDisplayCurves = new JButton("Toggle");
+	private boolean curvesDisplayOn = true;
+	
 	/**
 	 * The constructor from view adds the panel leftPanel, graphPanel and
 	 * graphDisplayPanel with a GridBagLayout to the view panel. For each panel
@@ -83,11 +87,12 @@ public class View extends JPanel implements ActionListener {
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 
-		graphSettingPanel = new JPanel(new GridLayout(1,1));
+		graphSettingPanel = new JPanel();
 		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
 		graphSettingPanel.add(btAutoAdjust);
-
 		btAutoAdjust.addActionListener(this);
+		graphSettingPanel.add(btToggleDisplayCurves);
+		btToggleDisplayCurves.addActionListener(this);
 		
 		//
 		add(graphSettingPanel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
@@ -102,5 +107,21 @@ public class View extends JPanel implements ActionListener {
 		if (e.getSource() == btAutoAdjust) {
 			graphPanel.autoScaleAxis();
 		}
+		if (e.getSource() == btToggleDisplayCurves) {
+			if(curvesDisplayOn){
+				curvesDisplayOn = false;
+				for(Map.Entry<String, JCheckBox> entry : graphDisplayPanel.checkBoxes.entrySet()) {
+					controller.cbUncheckAction(entry.getKey());
+				}	
+			}
+			else{
+				curvesDisplayOn = true;
+				for(Map.Entry<String, JCheckBox> entry : graphDisplayPanel.checkBoxes.entrySet()) {
+					controller.cbCheckAction(entry.getKey());
+				}
+			}
+		}
+		
+		
 	}
 }

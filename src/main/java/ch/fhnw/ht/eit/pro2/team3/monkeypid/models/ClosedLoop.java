@@ -86,6 +86,7 @@ public class ClosedLoop {
 		}
         double fs = 1.0/(timeAllTimeConstants/400.0);
         
+        
         // round sample points to the next power of two
         int powerOfTwo = 4;
         while(powerOfTwo < samplePoints) {
