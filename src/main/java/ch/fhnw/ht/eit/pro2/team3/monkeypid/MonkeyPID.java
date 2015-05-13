@@ -88,7 +88,7 @@ public class MonkeyPID {
 			setLookAndFeel();
 			JFrame frame = createFrame();
 			createMVC(frame);
-
+			
 			frame.pack();
 			frame.setMinimumSize(frame.getPreferredSize());
 			frame.setVisible(true);

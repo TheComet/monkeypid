@@ -7,6 +7,8 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -32,7 +34,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// simulation title
-	private JLabel lbSimulationTitle = new JLabel("Simulationen");
+	public JLabel lbSimulationTitle = new JLabel("Simulationen");
 
 	// manual adjustment
 	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
@@ -112,8 +114,12 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 		
 		//get label height of a label from GUI
-		int labelHeight = lbSimulationTitle.getWidth();
+		int labelHeight = lbSimulationTitle.getHeight();
 		System.out.println(labelHeight);
+		
+		Graphics g;
+		FontMetrics fm = lbSimulationTitle.getFontMetrics(lbSimulationTitle.getFont());
+		System.out.println(fm.getHeight());
 		
 		/*
 		// set size of first column
