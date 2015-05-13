@@ -66,7 +66,7 @@ public class Model implements IClosedLoopListener {
 
         public void setTargetOverswing(double overswing) {
             if(overswing < 0.5)
-                overswing = 0.5;
+                overswing = 0.5; // overswing of 0% produces weird results, round up to the maximum tolerant value
             this.targetOverswing = overswing;
         }
 
