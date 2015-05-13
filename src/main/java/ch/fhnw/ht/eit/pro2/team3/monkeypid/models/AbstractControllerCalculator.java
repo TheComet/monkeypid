@@ -1,10 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IControllerCalculatorListener;
 
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /**
  * Defines the common interface for a class capable of calculating controllers. The class takes a plant as an input,
@@ -19,7 +17,6 @@ import java.util.ArrayList;
  */
 public abstract class AbstractControllerCalculator implements Runnable {
 
-    private ArrayList<IControllerCalculatorListener> listeners = new ArrayList<>();
     protected Plant plant = null;
     protected double parasiticTimeConstantFactor = 0.1;
 
@@ -113,22 +110,6 @@ public abstract class AbstractControllerCalculator implements Runnable {
         tableRowIndex = index;
     }
 
-    /**
-     * Register as a listener to this object in order to receive notifications of events.
-     * @param listener The object to register.
-     */
-    public final void registerListener(IControllerCalculatorListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Unregister as a listener from this object.
-     * @param listener The object to register.
-     */
-    public final void unregisterListener(IControllerCalculatorListener listener) {
-        listeners.remove(listener);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // Private methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -143,15 +124,6 @@ public abstract class AbstractControllerCalculator implements Runnable {
         return Double.parseDouble(f.format(value));
     }
 
-    /**
-     * This gets called once a calculation has completed, so listeners can pick up the resulting controller.
-     */
-    private synchronized void notifyCalculationComplete() {
-        for (IControllerCalculatorListener listener : listeners) {
-            listener.onControllerCalculationComplete(this);
-        }
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // Derived methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -163,6 +135,5 @@ public abstract class AbstractControllerCalculator implements Runnable {
     public final void run() {
         controller = calculate();
         controller.setColor(getColor());
-        notifyCalculationComplete();
     }
 }

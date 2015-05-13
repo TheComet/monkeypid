@@ -61,16 +61,16 @@ public class ClosedLoop {
 
     /**
      * Calculates the step response of the closed loop. This method uses ifft to get the step response.
-     * @param samplePoints The number of sample points to use for the inverse fourier transform. Note that if the
+     * @param numSamplePoints The number of sample points to use for the inverse fourier transform. Note that if the
      *                     specified number isn't a power of 2, it will be rounded up to the next power of 2.
      */
-    public final void calculateStepResponse(int samplePoints) {
+    public final void calculateStepResponse(int numSamplePoints) {
 
     	// determine the optimal time window and compute fs
         // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
         // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
-        Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
-        double largestImag = MathStuff.max(MathStuff.imag(roots));
+        /*Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
+        double largestImag = MathStuff.max(MathStuff.imag(roots));*/
 
         /*
         double magicConstant = 1000.0;
@@ -81,19 +81,70 @@ public class ClosedLoop {
         //calculate fs based on the sum of all timeConstants
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
                 double timeAllTimeConstants = 0.0;
-        for (int i = 0; i < timeConstantsList.size(); i++) {
-			timeAllTimeConstants += (double)timeConstantsList.get(i);
-		}
+        for (Object aTimeConstantsList : timeConstantsList) {
+            timeAllTimeConstants += (double) aTimeConstantsList;
+        }
         double fs = 1.0/(timeAllTimeConstants/400.0);
         
         
         // round sample points to the next power of two
         int powerOfTwo = 4;
-        while(powerOfTwo < samplePoints) {
+        while(powerOfTwo < numSamplePoints) {
             powerOfTwo <<= 1;
         }
 
         double [] omega = MathStuff.linspace(0, fs * Math.PI, powerOfTwo / 2);
+
+        // calculate frequency response
+        Complex[] H = MathStuff.freqs(transferFunction, omega);
+
+        // calculate impulse response
+        H = MathStuff.symmetricMirrorConjugate(H);
+        Complex[] h = MathStuff.ifft(H);
+
+        // calculate step response - note that h doesn't have an
+        // imaginary part, so we can use conv as if it were a double
+        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(powerOfTwo + 1));
+
+        // cut away mirrored part
+        y = Arrays.copyOfRange(y, 0, y.length / 2);
+
+        // compute maximum overswing in percent - see issue #23
+        maxOverSwing = MathStuff.max(y);
+        maxOverSwing = (maxOverSwing - 1.0) * 100;
+
+        // generate time axis
+        double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
+
+        // create XY data series for JFreeChart
+        stepResponse = new XYSeries(controller.getName());
+        for(int i = 0; i < t.length; i++) {
+            stepResponse.add(t[i], y[i]);
+        }
+
+        // done, notify
+        notifyCalculationComplete();
+    }
+
+    public final void calculateStepResponse(int numSamplePoints, int numOverswingIterations) {
+
+        //calculate fs based on the sum of all timeConstants
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
+        double timeAllTimeConstants = 0.0;
+        for (Object aTimeConstantsList : timeConstantsList) {
+            timeAllTimeConstants += (double) aTimeConstantsList;
+        }
+        double fs = 1.0/(timeAllTimeConstants/400.0);
+
+        // round sample points to the next power of two
+        int powerOfTwo = 4;
+        while(powerOfTwo < numSamplePoints) {
+            powerOfTwo <<= 1;
+        }
+
+        double [] omega = MathStuff.linspace(0, fs * Math.PI, powerOfTwo / 2);
+
+        
 
         // calculate frequency response
         Complex[] H = MathStuff.freqs(transferFunction, omega);

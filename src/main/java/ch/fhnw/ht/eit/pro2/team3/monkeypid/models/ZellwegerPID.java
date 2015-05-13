@@ -131,6 +131,24 @@ public class ZellwegerPID extends AbstractZellweger {
     }
 
     /**
+     * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
+     * @return The name of this controller.
+     */
+    @Override
+    public String getName() {
+        return CalculatorNames.ZELLWEGER_PID;
+    }
+
+    /**
+     * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
+     * @return The render color.
+     */
+    @Override
+    public Color getColor() {
+        return RenderColors.ZELLWEGER_PID;
+    }
+
+    /**
      * Calculates the appropriate controller for the specified plant.
      * @return Returns a new PID controller.
      */
@@ -148,6 +166,24 @@ public class ZellwegerPID extends AbstractZellweger {
         double tp = tvk * parasiticTimeConstantFactor; // Tp is one decade higher than Tvk
         tp = beautifyTpSoNiklausIsHappy(tp);
 
+        // calculate Tn, Tv, Kr and create controller
+        double[] tntvkr = calculateTnTvKr(tnk, tvk, tp);
+        AbstractController controller = new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
+
+        // see issue #7 - calculate minimum and maximum Kr for iterative approximation of overswing
+        double oldPhiDamping = phiDamping; // we're modifying phiDamping by setting a new phase margin. This has to be
+                                           // restored once we're done
+        setPhaseMargin(30); // high overswing
+        controller.setMaxKr(calculateTnTvKr(tnk, tvk, tp)[2]);
+        setPhaseMargin(90); // low overswing
+        controller.setMinKr(calculateTnTvKr(tnk, tvk, tp)[2]);
+        phiDamping = oldPhiDamping; // restore
+
+        return controller;
+    }
+
+    private double[] calculateTnTvKr(double tnk, double tvk, double tp) {
+
         // find phiDamping on the phase of the open loop
         double omegaDamping = findAngleOnOpenLoopPhase(tnk, tvk, tp);
 
@@ -157,26 +193,6 @@ public class ZellwegerPID extends AbstractZellweger {
         // Kr is the reciprocal of the amplitude at omegaDamping
         double krk = 1.0 / ampOpenLoopKr;
 
-        double[] tntvkr = bodeToController(tnk, tvk, tp, krk);
-
-        return new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
-    }
-
-    /**
-     * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
-     * @return The name of this controller.
-     */
-    @Override
-    public String getName() {
-        return CalculatorNames.ZELLWEGER_PID;
-    }
-
-    /**
-     * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
-     * @return The render color.
-     */
-    @Override
-    public Color getColor() {
-        return RenderColors.ZELLWEGER_PID;
+        return bodeToController(tnk, tvk, tp, krk);
     }
 }
