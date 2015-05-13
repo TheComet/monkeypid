@@ -65,6 +65,8 @@ public class Model implements IClosedLoopListener {
         }
 
         public void setTargetOverswing(double overswing) {
+            if(overswing < 0.5)
+                overswing = 0.5;
             this.targetOverswing = overswing;
         }
 
@@ -83,10 +85,10 @@ public class Model implements IClosedLoopListener {
                 double topKr = controller.getMaxKr();
                 double bottomKr = controller.getMinKr();
                 double actualKr = (topKr + bottomKr) / 2.0;
-                for(int i = 0; i < 10; i++) {
+                for(int i = 0; i < 9; i++) {
                     controller.setKr(actualKr);
                     closedLoop.setPlantAndController(plant, controller);
-                    closedLoop.calculateStepResponse(8 * 1024);
+                    closedLoop.calculateStepResponse(2048);
                     if(closedLoop.getOverswing() > targetOverswing) {
                         topKr = actualKr;
                         actualKr = (topKr + bottomKr) / 2.0;
@@ -95,6 +97,9 @@ public class Model implements IClosedLoopListener {
                         actualKr = (topKr + bottomKr) / 2.0;
                     }
                 }
+                controller.setKr(actualKr);
+                closedLoop.setPlantAndController(plant, controller);
+                closedLoop.calculateStepResponse(numSamplePoints);
                 resultListener.onStepResponseCalculationComplete(closedLoop);
 
             } else {
