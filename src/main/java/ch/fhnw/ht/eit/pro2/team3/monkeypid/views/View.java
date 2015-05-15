@@ -32,9 +32,14 @@ public class View extends JPanel implements ActionListener {
 	public JButton btAutoAdjust = new JButton(
 			Assets.loadImageIcon("autoSizeIcon.png"));
 	
-	public JButton btToggleDisplayCurves = new JButton(Assets.loadImageIcon("toggleIcon.png"));
+	//public JButton btToggleDisplayCurves = new JButton(Assets.loadImageIcon("toggleIcon.png"));
 	private boolean curvesDisplayOn = true;
 	
+	public JButton btToggleDisplayCurves = new JButton(
+			"<html>Toggle all<br>Curves display",Assets.loadImageIcon("toggleIcon.png"));
+	public JButton btToggleDiyplayFistCurves = new JButton(
+			"<html>Toggle Fist<br>Curves display");
+
 	/**
 	 * The constructor from view adds the panel leftPanel, graphPanel and
 	 * graphDisplayPanel with a GridBagLayout to the view panel. For each panel
@@ -95,7 +100,9 @@ public class View extends JPanel implements ActionListener {
 		btAutoAdjust.addActionListener(this);
 		graphSettingPanel.add(btToggleDisplayCurves);
 		btToggleDisplayCurves.addActionListener(this);
-		
+		graphSettingPanel.add(btToggleDiyplayFistCurves);
+		btToggleDiyplayFistCurves.addActionListener(this);
+
 		//
 		add(graphSettingPanel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
@@ -103,27 +110,18 @@ public class View extends JPanel implements ActionListener {
 		// set border
 		graphSettingPanel.setBorder(new TitledBorder((null), " "));
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btAutoAdjust) {
 			graphPanel.autoScaleAxis();
 		}
 		if (e.getSource() == btToggleDisplayCurves) {
-			if(curvesDisplayOn){
-				curvesDisplayOn = false;
-				for(Map.Entry<String, JCheckBox> entry : graphDisplayPanel.checkBoxes.entrySet()) {
-					controller.cbUncheckAction(entry.getKey());
-				}	
-			}
-			else{
-				curvesDisplayOn = true;
-				for(Map.Entry<String, JCheckBox> entry : graphDisplayPanel.checkBoxes.entrySet()) {
-					controller.cbCheckAction(entry.getKey());
-				}
-			}
+			graphDisplayPanel.toggleDisplayAllCurves();
 		}
-		
-		
+		if (e.getSource() == btToggleDiyplayFistCurves) {
+			graphDisplayPanel.toggleDisplayFistCurves();
+		}
+
 	}
 }

@@ -22,8 +22,9 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		IModelListener {
 
 	private Controller controller;
-	public HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
+	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
+	private boolean CurvesDisplayOn = true;
 
 	/**
 	 * Constructor of GraphDisplayPanel adds
@@ -47,6 +48,44 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             }
         }
     }
+    
+    public void toggleDisplayAllCurves(){
+    	if(CurvesDisplayOn){
+    		CurvesDisplayOn = false;
+			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				controller.cbUncheckAction(entry.getKey());
+				entry.getValue().setSelected(false);
+			}	
+		}
+		else{
+			CurvesDisplayOn = true;
+			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				controller.cbCheckAction(entry.getKey());
+				entry.getValue().setSelected(true);
+			}
+		}
+    }
+    
+    public void toggleDisplayFistCurves() {
+    	if(CurvesDisplayOn){
+    		CurvesDisplayOn = false;
+			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				if(entry.getKey() != "Zellweger"){
+					controller.cbUncheckAction(entry.getKey());
+					entry.getValue().setSelected(false);
+				}
+			}	
+		}
+		else{
+			CurvesDisplayOn = true;
+			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				if(entry.getKey() != "Zellweger"){
+					controller.cbCheckAction(entry.getKey());
+					entry.getValue().setSelected(true);
+				}
+			}
+		}
+	}
 
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop) {
