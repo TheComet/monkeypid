@@ -84,7 +84,7 @@ public class GraphPanel extends JPanel implements IModelListener {
     }
 
     @Override
-    public void onAddCalculation(ClosedLoop closedLoop) {
+    public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
         SwingUtilities.invokeLater(() -> {
             try {
 
@@ -96,7 +96,7 @@ public class GraphPanel extends JPanel implements IModelListener {
                 //getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop), new BasicStroke(5.0f,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f}, 0.0f));
 
                 // See issue #21 - make visible again
-                setSeriesVisible(closedLoop, true);
+                setSeriesVisible(closedLoop, visible);
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());

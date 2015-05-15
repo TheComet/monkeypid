@@ -165,7 +165,10 @@ public class Model implements IClosedLoopListener {
 
     // list of Model listeners
     private ArrayList<IModelListener> listeners = new ArrayList<>();
-
+    
+    // list, which represents the visibility of the stepResponse of a closedLoop in the Graph, default all visible
+    public boolean[] curvesVisible = {true,true,true,true,true,true,true};
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Public methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -267,12 +270,13 @@ public class Model implements IClosedLoopListener {
 
     /**
      * Hides the currently selected calculation. This sends an onHideCalculation() event to all model listeners.
+     * Saves the new visibility of the calculation i
      */
     public final void hideSelectedCalculation() {
         if(selectedCalculation == null) {
             return;
         }
-
+        curvesVisible[selectedCalculation.getTableRowIndex()] = false;
         notifyHideCalculation(selectedCalculation);
     }
 
@@ -283,7 +287,7 @@ public class Model implements IClosedLoopListener {
         if(selectedCalculation == null) {
             return;
         }
-
+        curvesVisible[selectedCalculation.getTableRowIndex()] = true;
         notifyShowCalculation(selectedCalculation);
     }
 
@@ -349,23 +353,23 @@ public class Model implements IClosedLoopListener {
         // generate a list of all calculators matching the currently selected controller type
         switch(regulatorType) {
             case PID:
+            	calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing.angle()), this));
                 calculators.add(new CalculationCycle(new FistFormulaOppeltPID(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing.angle()), this));
                 break;
 
             case PI:
+            	calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing.angle()), this));
                 calculators.add(new CalculationCycle(new FistFormulaOppeltPI(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing.angle()), this));
                 break;
 
             case I:
@@ -394,7 +398,7 @@ public class Model implements IClosedLoopListener {
      */
     private void notifyAddCalculation(ClosedLoop loop) {
         for(IModelListener listener : listeners) {
-            listener.onAddCalculation(loop);
+            listener.onAddCalculation(loop, curvesVisible[loop.getTableRowIndex()]);
         }
     }
 

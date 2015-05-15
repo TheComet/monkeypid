@@ -274,7 +274,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	}
 
 	@Override
-	public void onAddCalculation(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
 
 			// do we have a row allocated for this closed loop?

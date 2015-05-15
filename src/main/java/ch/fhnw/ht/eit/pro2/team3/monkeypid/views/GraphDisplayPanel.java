@@ -5,7 +5,9 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
+
 import javax.swing.*;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,7 +90,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void onAddCalculation(ClosedLoop closedLoop) {
+	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
         SwingUtilities.invokeLater(() -> {
 
             //get rgbColor from closedLoop and convert it to string
@@ -96,19 +98,40 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
                     .getRed(), closedLoop.getColor().getGreen(), closedLoop
                     .getColor().getBlue());
 
-            //create checkBox with colored dot and name of closedLoop
-            JCheckBox cb = new JCheckBox(
-                    "<html><font style=\"font-family: unicode \"color=" + hexColor
-                            + ">" + "\u25CF" + "<font color=#000000>"
-                            + closedLoop.getName(), true);
-
+            JCheckBox cb = new JCheckBox();
+            
+            for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+            	//get the entry which matches the index of the given closed-Loop
+            	try{
+            		int key = Integer.parseInt(entry.getKey());
+	            	if(key == closedLoop.getTableRowIndex()){
+	            		//replace the old key, wich was the index number as string with the name of the closedLoop
+	            		//because the key can't be renamed, remove the old has and insert the value of the old hash 
+	            		//with a new key, the new key is the name of the closedLoop
+	            		checkBoxes.put(closedLoop.getName(), checkBoxes.remove(""+closedLoop.getTableRowIndex()));
+	            		//get the checkBox of this closedLoop
+	            		cb = checkBoxes.get(closedLoop.getName());
+	            		break;
+	            	}
+            	}
+            	catch(NumberFormatException exc){
+            		// entry-key was no number -> try next entry
+            	}
+            }
+            
+            //set checkBox content: colored dot and name of closedLoop
+    		cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
+                    + ">" + "\u25CF" + "<font color=#000000>"
+                    + closedLoop.getName());
+            
+    		//set checkBox visible, before checkBox was only a space-holder (invisible)
+    		//cb.setVisible(false);
+    		
+            //set the checkbox selected dependent of the param visibles
+            cb.setSelected(visible);
+            
             //add actionListener to checkbox
             cb.addActionListener(this);
-
-            // insert into hash map and add to layout
-            checkBoxes.put(closedLoop.getName(), cb);
-            add(cb);
-            view.validate();
         });
 	}
 
@@ -124,14 +147,29 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
     public void onSimulationBegin(int numberOfStepResponses) {
         SwingUtilities.invokeLater(() -> {
             for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-                remove(entry.getValue());
+            	remove(entry.getValue());
             }
             checkBoxes.clear();
+            for (int i = 0; i < numberOfStepResponses; i++) {
+            	JCheckBox cb = new JCheckBox();
+            	cb.setVisible(false);
+            	add(cb);
+            	checkBoxes.put(""+i, cb); //set key temporary to the index-number of the closedLoops
+			}
+            view.validate();
         });
     }
 
 	@Override
-	public void onSimulationComplete() {}
+	public void onSimulationComplete() {
+		SwingUtilities.invokeLater(() -> {
+			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				JCheckBox cb = entry.getValue();
+				cb.setVisible(true);
+			}
+			view.validate();
+		});
+	}
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {}

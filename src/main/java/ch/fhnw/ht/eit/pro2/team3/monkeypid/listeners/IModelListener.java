@@ -22,8 +22,10 @@ public interface IModelListener {
      * this method multiple times with different closed loop objects.
      * @param closedLoop The closed loop object holding the step response information as well as the controller and
      *                   plant.
+     *  @param visible The visibility of the closedLoop which has to be added. If true, the stepResponse should be
+     *   				visible, else it should be added but invisible
      */
-    void onAddCalculation(ClosedLoop closedLoop);
+    void onAddCalculation(ClosedLoop closedLoop, boolean visible);
 
     /**
      * This is called when the model is about to remove a calculation from its internal list.
