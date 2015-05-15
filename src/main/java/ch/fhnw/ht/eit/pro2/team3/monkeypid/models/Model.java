@@ -147,7 +147,7 @@ public class Model implements IClosedLoopListener {
     private Plant plant = null;
 
     // phase margin for Zellweger
-    private PhaseAndOverSwingTuple overswing = null;
+    private double overswing;
 
     // regulator types to calculate when user simulates
     private enum RegulatorType {
@@ -216,7 +216,7 @@ public class Model implements IClosedLoopListener {
      * Sets the overswing to use for zellweger based calculations.
      * @param overswing The overswing in percent.
      */
-    public final void setOverswing(PhaseAndOverSwingTuple overswing) {
+    public final void setOverswing(double overswing) {
         this.overswing = overswing;
     }
 
@@ -355,7 +355,8 @@ public class Model implements IClosedLoopListener {
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing.angle()), this));
+                //TODO adapt for tfOverswing
+                //calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing.angle()), this));
                 break;
 
             case PI:
@@ -365,7 +366,8 @@ public class Model implements IClosedLoopListener {
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
                 calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
-                calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing.angle()), this));
+                //TODO adapt for tfOverswing
+                //calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing.angle()), this));
                 break;
 
             case I:
@@ -381,7 +383,7 @@ public class Model implements IClosedLoopListener {
         for(CalculationCycle calculator : calculators) {
             calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
             calculator.getControllerCalculator().setTableRowIndex(i);
-            calculator.setTargetOverswing(overswing.percentDouble());
+            calculator.setTargetOverswing(overswing);
             i++;
         }
 
