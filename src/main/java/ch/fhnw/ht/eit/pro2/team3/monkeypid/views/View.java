@@ -31,9 +31,12 @@ public class View extends JPanel implements ActionListener {
 
 	public JButton btAutoAdjust = new JButton(
 			Assets.loadImageIcon("autoSizeIcon.png"));
-
+	
+	//public JButton btToggleDisplayCurves = new JButton(Assets.loadImageIcon("toggleIcon.png"));
+	private boolean curvesDisplayOn = true;
+	
 	public JButton btToggleDisplayCurves = new JButton(
-			"<html>Toggle all<br>Curves display");
+			"<html>Toggle all<br>Curves display",Assets.loadImageIcon("toggleIcon.png"));
 	public JButton btToggleDiyplayFistCurves = new JButton(
 			"<html>Toggle Fist<br>Curves display");
 
@@ -89,8 +92,10 @@ public class View extends JPanel implements ActionListener {
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 
-		graphSettingPanel = new JPanel(new GridLayout(3,1));
+		graphSettingPanel = new JPanel();
+		graphSettingPanel.setLayout(new GridLayout(3, 1));
 		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
+		btToggleDisplayCurves.setMargin(new Insets(0, 0, 0, 0));
 		graphSettingPanel.add(btAutoAdjust);
 		btAutoAdjust.addActionListener(this);
 		graphSettingPanel.add(btToggleDisplayCurves);
@@ -100,10 +105,10 @@ public class View extends JPanel implements ActionListener {
 
 		//
 		add(graphSettingPanel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.VERTICAL,
+				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
 		// set border
-		graphSettingPanel.setBorder(new TitledBorder((null), "Einstellungen"));
+		graphSettingPanel.setBorder(new TitledBorder((null), " "));
 	}
 
 	@Override

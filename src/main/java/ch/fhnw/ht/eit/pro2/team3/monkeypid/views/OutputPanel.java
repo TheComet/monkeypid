@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
@@ -26,7 +28,8 @@ import javax.swing.table.TableColumn;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener, IModelListener {
+public class OutputPanel extends JPanel implements ActionListener,
+		IModelListener {
 
 	private Controller controller;
 
@@ -56,8 +59,8 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	JTable table = new JTable(tableModel);
 
 	// spinnerIcon icon
-	//ImageIcon spinnerIcon = Assets.loadImageSpinner();
-	//JLabel spinnerLabel = new JLabel();
+	// ImageIcon spinnerIcon = Assets.loadImageSpinner();
+	// JLabel spinnerLabel = new JLabel();
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
@@ -112,46 +115,48 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		tableModel.addColumn("Tv");
 		tableModel.addColumn("Tp");
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
-		
-		//get label height of a label from GUI
-		int labelHeight = lbSimulationTitle.getHeight();
-		System.out.println(labelHeight);
-		
-		Graphics g;
-		FontMetrics fm = lbSimulationTitle.getFontMetrics(lbSimulationTitle.getFont());
-		System.out.println(fm.getHeight());
-		
-		/*
+
+		// get font height of a label from GUI
+		FontMetrics fm = lbSimulationTitle.getFontMetrics(lbSimulationTitle
+				.getFont());
+		int fontHeight = fm.getHeight();
+		System.out.println(fontHeight);
+
 		// set size of first column
-		table.getColumnModel().getColumn(0).setMinWidth(90);
-		table.getColumnModel().getColumn(0).setMaxWidth(90);
-		table.getColumnModel().getColumn(0).setPreferredWidth(90);
+		table.getColumnModel().getColumn(0)
+				.setMinWidth((int) (5.5 * fontHeight));
+		table.getColumnModel().getColumn(0)
+				.setMaxWidth((int) (5.5 * fontHeight));
+		table.getColumnModel().getColumn(0)
+				.setPreferredWidth((int) (5.5 * fontHeight));
 
-		table.getColumnModel().getColumn(5).setMinWidth(100);
-		table.getColumnModel().getColumn(5).setMaxWidth(100);
-		table.getColumnModel().getColumn(5).setPreferredWidth(100);
-		*/
-		//table.getColumnModel().getColumn(5).setCellRenderer()) {
-			
+		table.getColumnModel().getColumn(5).setMinWidth((int) (4.6 * fontHeight));
+		table.getColumnModel().getColumn(5).setMaxWidth((int) (4.6 * fontHeight));
+		table.getColumnModel().getColumn(5)
+				.setPreferredWidth((int) (4.6 * fontHeight));
 
-		/*
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+		table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+
 		// set size of the rest columns
-		for (int i = 1; i < table.getColumnCount()-1; i++) {
+		for (int i = 1; i < table.getColumnCount() - 1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth(80);
-			col.setMaxWidth(80);
-			col.setPreferredWidth(80);
+			col.setMinWidth((int) (4.4 * fontHeight));
+			col.setMaxWidth((int) (4.4 * fontHeight));
+			col.setPreferredWidth((int) (4.4 * fontHeight));
 		}
-		*/
 
-		
 		// set preferred size of table
-		table.setPreferredSize(new Dimension(500, 200));
-		table.setMinimumSize(new Dimension(500, 200));
-		table.getTableHeader().setPreferredSize(new Dimension(500, 50));
-		
-		
+		table.setPreferredSize(new Dimension((int) (27.7 * fontHeight),
+				(int) (8.6 * fontHeight)));
+		table.setMinimumSize(new Dimension((int) (27.7 * fontHeight),
+				(int) (8.6 * fontHeight)));
+		table.getTableHeader().setPreferredSize(
+				new Dimension((int) (27.7 * fontHeight),
+						(int) (3 * fontHeight)));
+
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -171,8 +176,8 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 				new Insets(0, 10, 10, 10), 0, 0));
 
 		// init spinnerIcon icon label
-		//spinnerLabel.setIcon(spinnerIcon);
-		//spinnerIcon.setImageObserver(spinnerLabel);
+		// spinnerLabel.setIcon(spinnerIcon);
+		// spinnerIcon.setImageObserver(spinnerLabel);
 
 		// TODO entscheiden ob fuer profimodus integriert wird
 		/*
@@ -239,27 +244,27 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		//lbSimulationTitle.setVisible(miniVersionSelected);
-		//slKp.setVisible(miniVersionSelected);
-		//slTn.setVisible(miniVersionSelected);
-		//slTv.setVisible(miniVersionSelected);
-		//tfAdaptKp.setVisible(miniVersionSelected);
-		//tfAdaptTn.setVisible(miniVersionSelected);
-		//tfAdaptTv.setVisible(miniVersionSelected);
-		//table.setVisible(miniVersionSelected);
-		//table.getTableHeader().setVisible(miniVersionSelected);
+		// lbSimulationTitle.setVisible(miniVersionSelected);
+		// slKp.setVisible(miniVersionSelected);
+		// slTn.setVisible(miniVersionSelected);
+		// slTv.setVisible(miniVersionSelected);
+		// tfAdaptKp.setVisible(miniVersionSelected);
+		// tfAdaptTn.setVisible(miniVersionSelected);
+		// tfAdaptTv.setVisible(miniVersionSelected);
+		// table.setVisible(miniVersionSelected);
+		// table.getTableHeader().setVisible(miniVersionSelected);
 
-		//btDelete.setVisible(miniVersionSelected);
-		//btAdopt.setVisible(miniVersionSelected);
+		slTrimmSlider.setVisible(miniVersionSelected);
+		// btAdopt.setVisible(miniVersionSelected);
 	}
 
 	/**
 	 * 
 	 */
 	public void actionPerformed(ActionEvent e) {
-
+		//TODO remove
 		// if button delete is pressed
-		if (e.getSource() == btDelete) {
+		/*if (e.getSource() == btDelete) {
 			// call method of controller
 			// TODO controller.btDeleteAction();
 		}
@@ -270,7 +275,7 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 			int slTvValue = slTv.getValue();
 			// give over values to controller
 			// TODO controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
-		}
+		}*/
 	}
 
 	@Override
@@ -278,14 +283,40 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		SwingUtilities.invokeLater(() -> {
 
 			// do we have a row allocated for this closed loop?
-			if (closedLoop.getTableRowIndex() > -1 && closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
-				String[] tableRowStrings = closedLoop.getTableRowStrings();
-				for (int i = 0; i < tableRowStrings.length; i++) {
-					tableModel.setValueAt(tableRowStrings[i], closedLoop.getTableRowIndex(), i);
-				}
-			} else {
+				if (closedLoop.getTableRowIndex() > -1
+						&& closedLoop.getTableRowIndex() < tableModel
+								.getRowCount()) {
+					String[] tableRowStrings = closedLoop.getTableRowStrings();
 
-				// we don't have space allocated, so just append it to the end
+					// trimm string to get only the name of the regulator
+					for (int i = 0; i < tableRowStrings.length; i++) {
+						tableRowStrings[i] = tableRowStrings[i].split(" ")[0];
+					}
+
+					// get rgbColor from closedLoop and convert it to string
+					String hexColor = String.format("#%02x%02x%02x", closedLoop
+							.getColor().getRed(), closedLoop.getColor()
+							.getGreen(), closedLoop.getColor().getBlue());
+
+					//adds row with colored dot before name
+					for (int i = 0; i < tableRowStrings.length; i++) {
+						if (i==0) {
+							tableModel.setValueAt(
+									"<html><font style=\"font-family: unicode \"color="
+											+ hexColor + ">" + "\u25CF"
+											+ "<font color=#000000>"
+											+ tableRowStrings[i],
+									closedLoop.getTableRowIndex(), i);
+						} else {
+							tableModel.setValueAt(tableRowStrings[i],
+									closedLoop.getTableRowIndex(), i);
+						}
+
+					}
+				} else {
+
+					// we don't have space allocated, so just append it to the
+					// end
 				tableModel.addRow(closedLoop.getTableRowStrings());
 			}
 		});
@@ -296,40 +327,46 @@ public class OutputPanel extends JPanel implements ActionListener, IModelListene
 		SwingUtilities.invokeLater(() -> {
 
 			// remove from table
-			for (int row = 0; row < tableModel.getRowCount(); row++) {
-				// name is stored in column 0
-				if (closedLoop.getName().equals(tableModel.getValueAt(row, 0))) {
-					tableModel.removeRow(row);
-					return;
+				for (int row = 0; row < tableModel.getRowCount(); row++) {
+					// name is stored in column 0
+					if (closedLoop.getName().equals(
+							tableModel.getValueAt(row, 0))) {
+						tableModel.removeRow(row);
+						return;
+					}
 				}
-			}
-		});
+			});
 	}
 
-    @Override
-    public void onSimulationBegin(int numberOfStepResponses) {
+	@Override
+	public void onSimulationBegin(int numberOfStepResponses) {
 		SwingUtilities.invokeLater(() -> {
 			// clear the table
-			while (tableModel.getRowCount() > 0) {
-				tableModel.removeRow(0);
-			}
+				while (tableModel.getRowCount() > 0) {
+					tableModel.removeRow(0);
+				}
 
-			// allocate all rows with empty strings
-			for (int i = 0; i < numberOfStepResponses; i++) {
-				tableModel.addRow(new String[]{"calculating...", "", "", "", "", ""});
-			}
-		});
-    }
-
-	@Override
-	public void onSimulationComplete() {}
+				// allocate all rows with empty strings
+				for (int i = 0; i < numberOfStepResponses; i++) {
+					tableModel.addRow(new String[] { "calculating...", "", "",
+							"", "", "" });
+				}
+			});
+	}
 
 	@Override
-	public void onHideCalculation(ClosedLoop closedLoop) {}
+	public void onSimulationComplete() {
+	}
 
 	@Override
-	public void onShowCalculation(ClosedLoop closedLoop) {}
+	public void onHideCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
-	public void onSetPlant(Plant plant) {}
+	public void onShowCalculation(ClosedLoop closedLoop) {
+	}
+
+	@Override
+	public void onSetPlant(Plant plant) {
+	}
 }

@@ -30,8 +30,7 @@ public class Controller {
 	 * @param overswing The selected overswing from the dropdown.
 	 */
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
-                                 String selectedRegulatorName,
-                                 PhaseAndOverSwingTuple overswing){
+                                 String selectedRegulatorName, double overswing){
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);

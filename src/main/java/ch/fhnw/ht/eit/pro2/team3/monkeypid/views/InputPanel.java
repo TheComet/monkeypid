@@ -27,11 +27,12 @@ public class InputPanel extends JPanel implements ActionListener,
 	Controller controller;
 	View view;
 
-	//
+	// regulator types
 	static final int I = 0, PI = 1, PID = 2;
 
+	//TODO remove
 	// create test table
-	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
+	//private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
@@ -67,7 +68,8 @@ public class InputPanel extends JPanel implements ActionListener,
 	// Phasengangmethode overshoot
 	private JLabel lbPhasengangmethodTitle = new JLabel(
 			"Ueberschwingen der Phasengangmethode:");
-	private JComboBox<String> cbSelectOvershoot = new JComboBox<>();
+	private JTextField tfOvershoot = new JTextField("10");
+	private JLabel lbOvershootPercent = new JLabel("%");
 
 	// simulation button
 	private JButton btSimulate = new JButton("Simulieren");
@@ -95,16 +97,17 @@ public class InputPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 		this.view = view;
 
+		//TODO remove
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		/*overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
 		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
 		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
-		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
+		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");*/
 
 		// add overswing table strings to combo box
-		for (int i = 0; i < overswingTable.length; i++) {
+		/*for (int i = 0; i < overswingTable.length; i++) {
 			cbSelectOvershoot.addItem(overswingTable[i].percent());
-		}
+		}*/
 
 		// TODO remove
 		tfTu.setValue(2);
@@ -141,14 +144,10 @@ public class InputPanel extends JPanel implements ActionListener,
 		 * Insets(10, 5, 0, 10), 50, 0));
 		 */
 
-		// add tool tip for input fields
+		//TODO add tool tip for input fields
 		tfTu.setToolTipText("Test ToolTip");
 		tfTg.setToolTipText("Test ToolTip");
 		tfKs.setToolTipText("Test ToolTip");
-
-		// TODO best solution?
-		// tfKs.setPreferredSize(new Dimension(50, 25));
-		// tfKs.setMinimumSize(new Dimension(50, 25));
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");
@@ -166,13 +165,16 @@ public class InputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 10, 10, 10), 0, 0));
 
-		// add title and comboBox for overshoot selection to GridBagLayout
+		// add title and textField for overshoot to GridBagLayout
 		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(5, 10, 0, 10), 0, 0));
-		add(cbSelectOvershoot, new GridBagConstraints(0, 6, 6, 1, 0.0, 0.0,
+		add(tfOvershoot, new GridBagConstraints(0, 6, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(5, 10, 10, 10), 0, 0));
+				new Insets(5, 10, 10, 10), 50, 0));
+		add(lbOvershootPercent, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
+				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
+				new Insets(5, 0, 10, 10), 0, 0));
 
 		// add items for Tp to GridBagLayout
 		add(lbTimeConstantTitle, new GridBagConstraints(0, 7, 6, 1, 0.0, 0.0,
@@ -202,7 +204,8 @@ public class InputPanel extends JPanel implements ActionListener,
 		
 		//set fields greyed out for selected I-regulator 
 		lbPhasengangmethodTitle.setEnabled(false);
-		cbSelectOvershoot.setEnabled(false);
+		tfOvershoot.setEnabled(false);
+		lbOvershootPercent.setEnabled(false);
 		lbTimeConstantTitle.setEnabled(false);
 		lbTpInfo.setEnabled(false);
 		tfTp.setEnabled(false);
@@ -247,13 +250,11 @@ public class InputPanel extends JPanel implements ActionListener,
 			double tfTgValue = tfTg.doubleValue();
 			double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to
 															// absolute
-
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
 					.getSelectedItem());
 
-			// get index of selected overshoot in comboBox
-			int overswingIndex = cbSelectOvershoot.getSelectedIndex();
+			double valueOfOvershoot = Double.parseDouble(tfOvershoot.getText());
 
 			// handling of wrong entries
 			lbValueErrorInfo.setText(" ");
@@ -283,7 +284,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				try {
 					controller.btSimulateAction(tfKsValue, tfTuValue,
 							tfTgValue, tfTpValue, selectedRegulatorName,
-							overswingTable[overswingIndex]);
+							valueOfOvershoot);
 				} catch (Model.InvalidPlantForPIDSimulationException ex) {
 					// set color of error info label to red
 					lbValueErrorInfo.setForeground(Color.RED);
@@ -302,7 +303,8 @@ public class InputPanel extends JPanel implements ActionListener,
 			// I regulator selected
 			case I:
 				lbPhasengangmethodTitle.setEnabled(false);
-				cbSelectOvershoot.setEnabled(false);
+				tfOvershoot.setEnabled(false);
+				lbOvershootPercent.setEnabled(false);
 				lbTimeConstantTitle.setEnabled(false);
 				lbTpInfo.setEnabled(false);
 				tfTp.setEnabled(false);
@@ -310,7 +312,8 @@ public class InputPanel extends JPanel implements ActionListener,
 			// PI regulator selected
 			case PI:
 				lbPhasengangmethodTitle.setEnabled(true);
-				cbSelectOvershoot.setEnabled(true);
+				tfOvershoot.setEnabled(true);
+				lbOvershootPercent.setEnabled(true);
 				lbTimeConstantTitle.setEnabled(false);
 				lbTpInfo.setEnabled(false);
 				tfTp.setEnabled(false);
@@ -318,7 +321,8 @@ public class InputPanel extends JPanel implements ActionListener,
 			// PID regulator selected
 			case PID:
 				lbPhasengangmethodTitle.setEnabled(true);
-				cbSelectOvershoot.setEnabled(true);
+				tfOvershoot.setEnabled(true);
+				lbOvershootPercent.setEnabled(true);
 				lbTimeConstantTitle.setEnabled(true);
 				lbTpInfo.setEnabled(true);
 				tfTp.setEnabled(true);
