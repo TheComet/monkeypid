@@ -6,8 +6,14 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 
-import javax.swing.*;
 
+
+
+
+
+
+
+import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +33,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
 	private boolean CurvesDisplayOn = true;
-
+	//private JPanel dummyCheckBoxPn;
+	//private String[] closedLoopNames;
+	private int numberOfStepResponses;
+	
 	/**
 	 * Constructor of GraphDisplayPanel adds
 	 */
@@ -97,7 +106,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
                     .getRed(), closedLoop.getColor().getGreen(), closedLoop
                     .getColor().getBlue());
-
+            
+            //save closedLoop names in correct order
+        	//closedLoopNames[closedLoop.getTableRowIndex()] = closedLoop.getName();
+            
             JCheckBox cb = new JCheckBox();
             
             for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
@@ -118,7 +130,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             		// entry-key was no number -> try next entry
             	}
             }
-            
             //set checkBox content: colored dot and name of closedLoop
     		cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
                     + ">" + "\u25CF" + "<font color=#000000>"
@@ -126,12 +137,22 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             
     		//set checkBox visible, before checkBox was only a space-holder (invisible)
     		//cb.setVisible(false);
+    		System.out.println("on add");
     		
             //set the checkbox selected dependent of the param visibles
             cb.setSelected(visible);
             
             //add actionListener to checkbox
             cb.addActionListener(this);
+    		
+            numberOfStepResponses--;
+            if(numberOfStepResponses == 0){
+            	for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+    				JCheckBox cb2 = entry.getValue();
+    				cb2.setVisible(true);
+    			}
+            	view.validate();
+            }
         });
 	}
 
@@ -140,6 +161,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
         SwingUtilities.invokeLater(() -> {
             JCheckBox c = checkBoxes.remove(closedLoop.getName());
             remove(c);
+            view.validate();
         });
 	}
 
@@ -150,24 +172,45 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             	remove(entry.getValue());
             }
             checkBoxes.clear();
+            view.validate();
+            this.numberOfStepResponses = numberOfStepResponses;
+        	//closedLoopNames = new String[numberOfStepResponses];
+            //dummyCheckBoxPn = new JPanel();
             for (int i = 0; i < numberOfStepResponses; i++) {
+            	//closedLoopNames[i] = new String("");
             	JCheckBox cb = new JCheckBox();
             	cb.setVisible(false);
+            	//dummyCheckBoxPn.add(cb);
             	add(cb);
+            	//cb.setVisible(false);
             	checkBoxes.put(""+i, cb); //set key temporary to the index-number of the closedLoops
 			}
-            view.validate();
+            
         });
     }
 
 	@Override
 	public void onSimulationComplete() {
 		SwingUtilities.invokeLater(() -> {
+			/*
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
 				JCheckBox cb = entry.getValue();
 				cb.setVisible(true);
 			}
-			view.validate();
+			*/
+			//System.out.println("on complete");
+			/*
+			for (int i = 0; i < closedLoopNames.length; i++) {
+				for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+					if(closedLoopNames[i] == entry.getKey()){
+						add(entry.getValue());
+						entry.getValue().setVisible(true);
+						break;
+					}
+				}
+			}
+			*/
+			//view.validate();
 		});
 	}
 
