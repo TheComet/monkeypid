@@ -33,8 +33,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
 	private boolean CurvesDisplayOn = true;
-	//private JPanel dummyCheckBoxPn;
-	//private String[] closedLoopNames;
 	private int numberOfStepResponses;
 	
 	/**
@@ -107,9 +105,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
                     .getRed(), closedLoop.getColor().getGreen(), closedLoop
                     .getColor().getBlue());
             
-            //save closedLoop names in correct order
-        	//closedLoopNames[closedLoop.getTableRowIndex()] = closedLoop.getName();
-            
             JCheckBox cb = new JCheckBox();
             
             for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
@@ -134,10 +129,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
     		cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
                     + ">" + "\u25CF" + "<font color=#000000>"
                     + closedLoop.getName());
-            
-    		//set checkBox visible, before checkBox was only a space-holder (invisible)
-    		//cb.setVisible(false);
-    		System.out.println("on add");
     		
             //set the checkbox selected dependent of the param visibles
             cb.setSelected(visible);
@@ -174,15 +165,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             checkBoxes.clear();
             view.validate();
             this.numberOfStepResponses = numberOfStepResponses;
-        	//closedLoopNames = new String[numberOfStepResponses];
-            //dummyCheckBoxPn = new JPanel();
             for (int i = 0; i < numberOfStepResponses; i++) {
-            	//closedLoopNames[i] = new String("");
             	JCheckBox cb = new JCheckBox();
             	cb.setVisible(false);
-            	//dummyCheckBoxPn.add(cb);
             	add(cb);
-            	//cb.setVisible(false);
             	checkBoxes.put(""+i, cb); //set key temporary to the index-number of the closedLoops
 			}
             
@@ -192,25 +178,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	@Override
 	public void onSimulationComplete() {
 		SwingUtilities.invokeLater(() -> {
-			/*
-			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-				JCheckBox cb = entry.getValue();
-				cb.setVisible(true);
-			}
-			*/
-			//System.out.println("on complete");
-			/*
-			for (int i = 0; i < closedLoopNames.length; i++) {
-				for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-					if(closedLoopNames[i] == entry.getKey()){
-						add(entry.getValue());
-						entry.getValue().setVisible(true);
-						break;
-					}
-				}
-			}
-			*/
-			//view.validate();
 		});
 	}
 
