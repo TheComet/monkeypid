@@ -145,9 +145,10 @@ public class InputPanel extends JPanel implements ActionListener,
 		 */
 
 		//TODO add tool tip for input fields
-		tfTu.setToolTipText("Test ToolTip");
-		tfTg.setToolTipText("Test ToolTip");
-		tfKs.setToolTipText("Test ToolTip");
+		tfTu.setToolTipText("Verzögerungszeit");
+		tfTg.setToolTipText("Ausgleichszeit");
+		tfKs.setToolTipText("Strecken-Verstärkung");
+		tfTp.setToolTipText("Faktor für die Parasitäre Zeitkonstante in % von Tv/Tvk");
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");

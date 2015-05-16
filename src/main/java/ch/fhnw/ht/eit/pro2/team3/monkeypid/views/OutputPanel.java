@@ -67,12 +67,13 @@ public class OutputPanel extends JPanel implements ActionListener,
 		super(new GridBagLayout());
 		this.controller = controller;
 
-		//TODO remove
+		// TODO remove
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		/*overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
-		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
-		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
-		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
+		/*
+		 * overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		 * overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
+		 * overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
+		 * overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
 		 */
 
 		// TODO remove
@@ -116,8 +117,10 @@ public class OutputPanel extends JPanel implements ActionListener,
 		table.getColumnModel().getColumn(0)
 				.setPreferredWidth((int) (5.5 * fontHeight));
 
-		table.getColumnModel().getColumn(5).setMinWidth((int) (4.6 * fontHeight));
-		table.getColumnModel().getColumn(5).setMaxWidth((int) (4.6 * fontHeight));
+		table.getColumnModel().getColumn(5)
+				.setMinWidth((int) (4.6 * fontHeight));
+		table.getColumnModel().getColumn(5)
+				.setMaxWidth((int) (4.6 * fontHeight));
 		table.getColumnModel().getColumn(5)
 				.setPreferredWidth((int) (4.6 * fontHeight));
 
@@ -125,24 +128,23 @@ public class OutputPanel extends JPanel implements ActionListener,
 		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
 		table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
-		
 		// set size of the rest columns
 		for (int i = 1; i < table.getColumnCount() - 1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth((int) (4.4 * fontHeight));
-			col.setMaxWidth((int) (4.4 * fontHeight));
-			col.setPreferredWidth((int) (4.4 * fontHeight));
+			col.setMinWidth((int) (4.5 * fontHeight));
+			col.setMaxWidth((int) (4.5 * fontHeight));
+			col.setPreferredWidth((int) (4.5 * fontHeight));
 		}
 
 		// set preferred size of table
-		table.setPreferredSize(new Dimension((int) (27.7 * fontHeight),
-				(int) (8.6 * fontHeight)));
-		table.setMinimumSize(new Dimension((int) (27.7 * fontHeight),
-				(int) (8.6 * fontHeight)));
+		table.setPreferredSize(new Dimension((int) (28 * fontHeight),
+				(int) (9 * fontHeight)));
+		table.setMinimumSize(new Dimension((int) (28 * fontHeight),
+				(int) (9 * fontHeight)));
 		table.getTableHeader().setPreferredSize(
-				new Dimension((int) (27.7 * fontHeight),
-						(int) (3 * fontHeight)));
+						new Dimension((int) (28 * fontHeight),
+								(int) (2.5 * fontHeight)));
 
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -231,38 +233,25 @@ public class OutputPanel extends JPanel implements ActionListener,
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		// lbSimulationTitle.setVisible(miniVersionSelected);
-		// slKp.setVisible(miniVersionSelected);
-		// slTn.setVisible(miniVersionSelected);
-		// slTv.setVisible(miniVersionSelected);
-		// tfAdaptKp.setVisible(miniVersionSelected);
-		// tfAdaptTn.setVisible(miniVersionSelected);
-		// tfAdaptTv.setVisible(miniVersionSelected);
 		// table.setVisible(miniVersionSelected);
 		// table.getTableHeader().setVisible(miniVersionSelected);
-
 		slTrimmSlider.setVisible(miniVersionSelected);
-		// btAdopt.setVisible(miniVersionSelected);
 	}
 
 	/**
 	 * 
 	 */
 	public void actionPerformed(ActionEvent e) {
-		//TODO remove
+		// TODO remove
 		// if button delete is pressed
-		/*if (e.getSource() == btDelete) {
-			// call method of controller
-			// TODO controller.btDeleteAction();
-		}
-		// if button adopt is pressed
-		if (e.getSource() == btAdopt) {
-			int slKpValue = slKp.getValue();
-			int slTnValue = slTn.getValue();
-			int slTvValue = slTv.getValue();
-			// give over values to controller
-			// TODO controller.btAdoptAction(slKpValue, slTnValue, slTvValue);
-		}*/
+		/*
+		 * if (e.getSource() == btDelete) { // call method of controller // TODO
+		 * controller.btDeleteAction(); } // if button adopt is pressed if
+		 * (e.getSource() == btAdopt) { int slKpValue = slKp.getValue(); int
+		 * slTnValue = slTn.getValue(); int slTvValue = slTv.getValue(); // give
+		 * over values to controller // TODO controller.btAdoptAction(slKpValue,
+		 * slTnValue, slTvValue); }
+		 */
 	}
 
 	@Override
@@ -285,25 +274,25 @@ public class OutputPanel extends JPanel implements ActionListener,
 							.getColor().getRed(), closedLoop.getColor()
 							.getGreen(), closedLoop.getColor().getBlue());
 
-					//adds row with colored dot before name
-					for (int i = 0; i < tableRowStrings.length; i++) {
-						if (i==0) {
-							tableModel.setValueAt(
-									"<html><font style=\"font-family: unicode \"color="
-											+ hexColor + ">" + "\u25CF"
-											+ "<font color=#000000>"
-											+ tableRowStrings[i],
-									closedLoop.getTableRowIndex(), i);
-						} else {
-							tableModel.setValueAt(tableRowStrings[i],
-									closedLoop.getTableRowIndex(), i);
-						}
-
+					// adds row with colored dot before name
+				for (int i = 0; i < tableRowStrings.length; i++) {
+					if (i == 0) {
+						tableModel.setValueAt(
+								"<html><font style=\"font-family: unicode \"color="
+										+ hexColor + ">" + "\u25CF"
+										+ "<font color=#000000>"
+										+ tableRowStrings[i],
+								closedLoop.getTableRowIndex(), i);
+					} else {
+						tableModel.setValueAt(tableRowStrings[i],
+								closedLoop.getTableRowIndex(), i);
 					}
-				} else {
 
-					// we don't have space allocated, so just append it to the
-					// end
+				}
+			} else {
+
+				// we don't have space allocated, so just append it to the
+				// end
 				tableModel.addRow(closedLoop.getTableRowStrings());
 			}
 		});
