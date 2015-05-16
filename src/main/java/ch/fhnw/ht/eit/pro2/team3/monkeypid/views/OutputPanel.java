@@ -20,6 +20,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import com.sun.javafx.tk.Toolkit;
+
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
  * comboBox to select the regulator, a comboBox to select the overshoot, the
@@ -108,6 +110,9 @@ public class OutputPanel extends JPanel implements ActionListener,
 				.getFont());
 		int fontHeight = fm.getHeight();
 		System.out.println(fontHeight);
+		
+		double screenResolution = java.awt.Toolkit.getDefaultToolkit().getScreenResolution()/8;
+		
 
 		// set size of first column
 		table.getColumnModel().getColumn(0)
@@ -132,18 +137,20 @@ public class OutputPanel extends JPanel implements ActionListener,
 		for (int i = 1; i < table.getColumnCount() - 1; i++) {
 			TableColumn col;
 			col = table.getColumnModel().getColumn(i);
-			col.setMinWidth((int) (4.5 * fontHeight));
-			col.setMaxWidth((int) (4.5 * fontHeight));
-			col.setPreferredWidth((int) (4.5 * fontHeight));
+			col.setMinWidth((int) (4.6 * fontHeight));
+			col.setMaxWidth((int) (4.6 * fontHeight));
+			col.setPreferredWidth((int) (4.6 * fontHeight));
 		}
 
+
+		
 		// set preferred size of table
-		table.setPreferredSize(new Dimension((int) (28 * fontHeight),
-				(int) (9 * fontHeight)));
-		table.setMinimumSize(new Dimension((int) (28 * fontHeight),
-				(int) (9 * fontHeight)));
+		table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
+				(int) (10 * screenResolution)));
+		table.setMinimumSize(new Dimension((int) (28.5 * fontHeight),
+				(int) (10 * screenResolution)));
 		table.getTableHeader().setPreferredSize(
-						new Dimension((int) (28 * fontHeight),
+						new Dimension((int) (28.5 * fontHeight),
 								(int) (2.5 * fontHeight)));
 
 		// disable autoResize of table
