@@ -35,10 +35,8 @@ public class View extends JPanel implements ActionListener {
 	//public JButton btToggleDisplayCurves = new JButton(Assets.loadImageIcon("toggleIcon.png"));
 	private boolean curvesDisplayOn = true;
 	
-	public JButton btToggleDisplayCurves = new JButton(
-			"<html>Toggle all<br>Curves display",Assets.loadImageIcon("toggleIcon.png"));
-	public JButton btToggleDiyplayFistCurves = new JButton(
-			"<html>Toggle Fist<br>Curves display");
+	public JButton btToggleDisplayCurves = new JButton(Assets.loadImageIcon("toggleIcon.png"));
+	public JButton btToggleDiyplayFistCurves = new JButton(Assets.loadImageIcon("toggleFIcon.png"));
 
 	/**
 	 * The constructor from view adds the panel leftPanel, graphPanel and
@@ -92,10 +90,18 @@ public class View extends JPanel implements ActionListener {
 		graphDisplayPanel
 				.setBorder(new TitledBorder((null), "Ein-/Ausblenden"));
 
+		//graphSettingPanel
 		graphSettingPanel = new JPanel();
 		graphSettingPanel.setLayout(new GridLayout(3, 1));
+		//set insets of all buttons to zero
 		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
 		btToggleDisplayCurves.setMargin(new Insets(0, 0, 0, 0));
+		btToggleDiyplayFistCurves.setMargin(new Insets(0, 0, 0, 0));
+		//add toolTips for all buttons
+		btAutoAdjust.setToolTipText("Zur Originalansicht wechseln");
+		btToggleDisplayCurves.setToolTipText("Alle Kurven ein-/ausblenden");
+		btToggleDiyplayFistCurves.setToolTipText("Alle Faustformeln ein-/ausblenden");
+		//add buttons to panel and add actionListener
 		graphSettingPanel.add(btAutoAdjust);
 		btAutoAdjust.addActionListener(this);
 		graphSettingPanel.add(btToggleDisplayCurves);
@@ -103,7 +109,7 @@ public class View extends JPanel implements ActionListener {
 		graphSettingPanel.add(btToggleDiyplayFistCurves);
 		btToggleDiyplayFistCurves.addActionListener(this);
 
-		//
+		//add graphSettingPanel to gridBagLayout
 		add(graphSettingPanel, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));

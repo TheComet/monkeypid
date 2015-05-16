@@ -36,19 +36,8 @@ public class OutputPanel extends JPanel implements ActionListener,
 	// create test table
 	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
 
-	// simulation title
-	public JLabel lbSimulationTitle = new JLabel("Simulationen");
-
-	// manual adjustment
-	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JSlider slTn = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JSlider slTv = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JFormattedDoubleTextField tfAdaptKp = new JFormattedDoubleTextField(
-			1);
-	private JFormattedDoubleTextField tfAdaptTn = new JFormattedDoubleTextField(
-			1);
-	private JFormattedDoubleTextField tfAdaptTv = new JFormattedDoubleTextField(
-			1);
+	// dummy label to get height of label font
+	public JLabel lbDummyGetHeight = new JLabel(" ");
 
 	// buttons delete and adopt
 	private JButton btDelete = new JButton("Loeschen");
@@ -78,16 +67,13 @@ public class OutputPanel extends JPanel implements ActionListener,
 		super(new GridBagLayout());
 		this.controller = controller;
 
+		//TODO remove
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
+		/*overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
 		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
 		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
 		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
-
-		// add title simulate to GridBagLayout
-		add(lbSimulationTitle, new GridBagConstraints(0, 10, 5, 1, 0.0, 0.0,
-				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 10), 0, 0));
+		 */
 
 		// TODO remove
 		// tbTest.setEnabled(false);
@@ -117,7 +103,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 		tableModel.addColumn("<html><left>Über-<br>schwingen");
 
 		// get font height of a label from GUI
-		FontMetrics fm = lbSimulationTitle.getFontMetrics(lbSimulationTitle
+		FontMetrics fm = lbDummyGetHeight.getFontMetrics(lbDummyGetHeight
 				.getFont());
 		int fontHeight = fm.getHeight();
 		System.out.println(fontHeight);
@@ -139,6 +125,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 		rightRenderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
 		table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
+		
 		// set size of the rest columns
 		for (int i = 1; i < table.getColumnCount() - 1; i++) {
 			TableColumn col;
@@ -167,11 +154,11 @@ public class OutputPanel extends JPanel implements ActionListener,
 		table.getTableHeader().setReorderingAllowed(false);
 
 		// add header of table to GridBagLaout
-		add(table.getTableHeader(), new GridBagConstraints(0, 11, 7, 1, 0.0,
+		add(table.getTableHeader(), new GridBagConstraints(0, 0, 7, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(10, 10, 0, 10), 0, 0));
 		// add table to GridBagLayout
-		add(table, new GridBagConstraints(0, 12, 7, 1, 0.0, 0.0,
+		add(table, new GridBagConstraints(0, 1, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
 
@@ -212,17 +199,17 @@ public class OutputPanel extends JPanel implements ActionListener,
 		 */
 
 		// add title for trimm slider to GridbagLayout
-		add(lbTrimmSlider, new GridBagConstraints(0, 17, 2, 1, 0.0, 0.0,
+		add(lbTrimmSlider, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 10, 0, 10), 0, 0));
 
 		// add the trimm slider to GridbagLayout
-		add(slTrimmSlider, new GridBagConstraints(0, 18, 7, 1, 0.0, 0.0,
+		add(slTrimmSlider, new GridBagConstraints(0, 3, 7, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 10, 10), 0, 0));
 
 		// add vertical dummy to GridbagLayout
-		add(new JLabel(), new GridBagConstraints(0, 19, 1, 1, 0.0, 1.0,
+		add(new JLabel(), new GridBagConstraints(0, 4, 1, 1, 0.0, 1.0,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 
