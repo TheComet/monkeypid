@@ -7,9 +7,11 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
@@ -94,7 +96,15 @@ public class GraphPanel extends JPanel implements IModelListener {
                 getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
                 //getDatasetRenderer().setSeriesOutlinePaint(getSeriesIndex(closedLoop), new Color(255, 128, 0));
                 //getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop), new BasicStroke(5.0f,BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f}, 0.0f));
-
+                getDatasetRenderer().setSeriesToolTipGenerator(getSeriesIndex(closedLoop), new XYToolTipGenerator() {
+					private static final long serialVersionUID = 1L;
+					@Override
+					public String generateToolTip(XYDataset dataset, int series, int item) {
+						String toolTipStr = closedLoop.getName();
+						return toolTipStr;
+					}
+				});
+                
                 // See issue #21 - make visible again
                 setSeriesVisible(closedLoop, visible);
 
