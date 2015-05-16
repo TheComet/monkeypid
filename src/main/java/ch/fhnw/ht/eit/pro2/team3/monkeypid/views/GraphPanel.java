@@ -4,14 +4,19 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
@@ -25,7 +30,7 @@ import java.awt.*;
  * @author Josua
  *
  */
-public class GraphPanel extends JPanel implements IModelListener {
+public class GraphPanel extends JPanel implements IModelListener, ChartMouseListener{
     private XYSeriesCollection dataCollection = null;
     private JFreeChart chart = null;
 
@@ -58,6 +63,7 @@ public class GraphPanel extends JPanel implements IModelListener {
 
 		// need a panel to add the chart to
 		ChartPanel panel = new ChartPanel(chart);
+		panel.addChartMouseListener(this);
 
 		// TODO beste variante?
 		// set prefered size 
@@ -66,6 +72,9 @@ public class GraphPanel extends JPanel implements IModelListener {
 
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
+		
+		
+		
 	}
 	
 	public void autoScaleAxis(){
@@ -142,4 +151,33 @@ public class GraphPanel extends JPanel implements IModelListener {
 
 	@Override
 	public void onSetPlant(Plant plant) {}
+
+	@Override
+	public void chartMouseClicked(ChartMouseEvent e) {
+		if(e.getEntity().getClass() == XYItemEntity.class){
+			for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
+				getDatasetRenderer().setSeriesStroke(i, 
+						new BasicStroke(1.0f)
+						);
+			}
+			XYItemEntity entity = (XYItemEntity) e.getEntity();
+			getDatasetRenderer().setSeriesStroke(entity.getSeriesIndex(), 
+					new BasicStroke(3.0f)
+					);
+		}
+		else{
+			for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
+				getDatasetRenderer().setSeriesStroke(i, 
+						new BasicStroke(1.0f)
+						);
+			}
+		}
+		
+	}
+
+	@Override
+	public void chartMouseMoved(ChartMouseEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
 }
