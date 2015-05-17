@@ -107,6 +107,7 @@ public class GraphPanel extends JPanel implements IModelListener, ChartMouseList
             	}
             	*/
             	
+            	/*
             	try{
             		XYSeries seriesToReplace = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
             		dataCollection.removeSeries(seriesToReplace);
@@ -114,10 +115,16 @@ public class GraphPanel extends JPanel implements IModelListener, ChartMouseList
             	catch(UnknownKeyException e){
             		System.out.println(e.getMessage());
             	}
-            	 dataCollection.addSeries(closedLoop.getStepResponse());
+            	*/
+            	for(int i = 0; i < dataCollection.getSeriesCount(); i++){
+            		if(closedLoop.getName().equals(dataCollection.getSeries(i).getKey())){
+            			dataCollection.removeSeries(i);
+            			break;
+            		}
+            	}
             	
-               
-
+            	dataCollection.addSeries(closedLoop.getStepResponse());
+            	
                 // The closedLoop object specifies what color it wants to be rendered in
                 getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());
                 //getDatasetRenderer().setSeriesOutlinePaint(getSeriesIndex(closedLoop), new Color(255, 128, 0));
