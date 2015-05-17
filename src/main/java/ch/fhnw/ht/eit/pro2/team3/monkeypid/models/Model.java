@@ -343,6 +343,8 @@ public class Model implements IClosedLoopListener {
 		}
 
 		calculator.getControllerCalculator().setTableRowIndex(0);
+		calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+		calculator.setTargetOverswing(overswing);
 		
 		// dispatch all calculators
 		calculator.run();

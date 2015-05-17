@@ -58,6 +58,7 @@ public class MonkeyPID {
 		Model model = new Model();
 		Controller controller = new Controller(model);
 		View view = new View(controller);
+		controller.setView(view);
 
 		model.registerListener(view.outputPanel);
         model.registerListener(view.graphPanel);
