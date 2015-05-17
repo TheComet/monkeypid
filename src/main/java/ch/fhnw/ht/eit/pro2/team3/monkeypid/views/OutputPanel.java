@@ -282,9 +282,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 					String[] tableRowStrings = closedLoop.getTableRowStrings();
 
 					// trimm string to get only the name of the regulator
-					for (int i = 0; i < tableRowStrings.length; i++) {
-						tableRowStrings[i] = tableRowStrings[i].split(" ")[0];
-					}
+					tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
 
 					// get rgbColor from closedLoop and convert it to string
 					String hexColor = String.format("#%02x%02x%02x", closedLoop

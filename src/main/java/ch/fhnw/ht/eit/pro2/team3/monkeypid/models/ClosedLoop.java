@@ -126,55 +126,6 @@ public class ClosedLoop {
         notifyCalculationComplete();
     }
 
-    public final void calculateStepResponse(int numSamplePoints, int numOverswingIterations) {
-
-        //calculate fs based on the sum of all timeConstants
-        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
-        double timeAllTimeConstants = 0.0;
-        for (Object aTimeConstantsList : timeConstantsList) {
-            timeAllTimeConstants += (double) aTimeConstantsList;
-        }
-        double fs = 1.0/(timeAllTimeConstants/400.0);
-
-        // round sample points to the next power of two
-        int powerOfTwo = 4;
-        while(powerOfTwo < numSamplePoints) {
-            powerOfTwo <<= 1;
-        }
-
-        double [] omega = MathStuff.linspace(0, fs * Math.PI, powerOfTwo / 2);
-
-        // calculate frequency response
-        Complex[] H = MathStuff.freqs(transferFunction, omega);
-
-        // calculate impulse response
-        H = MathStuff.symmetricMirrorConjugate(H);
-        Complex[] h = MathStuff.ifft(H);
-
-        // calculate step response - note that h doesn't have an
-        // imaginary part, so we can use conv as if it were a double
-        double[] y = MathArrays.convolve(MathStuff.real(h), MathStuff.ones(powerOfTwo + 1));
-
-        // cut away mirrored part
-        y = Arrays.copyOfRange(y, 0, y.length / 2);
-
-        // compute maximum overswing in percent - see issue #23
-        maxOverSwing = MathStuff.max(y);
-        maxOverSwing = (maxOverSwing - 1.0) * 100;
-
-        // generate time axis
-        double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
-
-        // create XY data series for JFreeChart
-        stepResponse = new XYSeries(controller.getName());
-        for(int i = 0; i < t.length; i++) {
-            stepResponse.add(t[i], y[i]);
-        }
-
-        // done, notify
-        notifyCalculationComplete();
-    }
-
     /**
      * Should return an array of strings to insert into the table of results. The table is designed to contain all
      * result values of a PID controller in the following order:
