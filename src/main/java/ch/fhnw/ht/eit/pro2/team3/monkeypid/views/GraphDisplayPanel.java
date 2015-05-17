@@ -105,7 +105,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
                     .getRed(), closedLoop.getColor().getGreen(), closedLoop
                     .getColor().getBlue());
             
-            JCheckBox cb = new JCheckBox();
+            
             
             for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
             	//get the entry which matches the index of the given closed-Loop
@@ -117,40 +117,43 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	            		//with a new key, the new key is the name of the closedLoop
 	            		checkBoxes.put(closedLoop.getName(), checkBoxes.remove(""+closedLoop.getTableRowIndex()));
 	            		//get the checkBox of this closedLoop
+	            		JCheckBox cb = new JCheckBox();
 	            		cb = checkBoxes.get(closedLoop.getName());
-	            		break;
+	            		
+	            		//set checkBox content: colored dot and name of closedLoop
+	            		cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
+	                            + ">" + "\u25CF" + "<font color=#000000>"
+	                            + closedLoop.getName());
+	            		
+	                    //set the checkbox selected dependent of the param visibles
+	                    cb.setSelected(visible);
+	                    
+	                    //add actionListener to checkbox
+	                    cb.addActionListener(this);
+	            		
+	                    numberOfStepResponses--;
+	                    if(numberOfStepResponses == 0){
+	                    	for(Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
+	            				JCheckBox cb2 = entry2.getValue();
+	            				cb2.setVisible(true);
+	            			}
+	                    	view.validate();
+	                    }  		
+	                    break;
 	            	}
             	}
             	catch(NumberFormatException exc){
             		// entry-key was no number -> try next entry
             	}
+            	
             }
-            //set checkBox content: colored dot and name of closedLoop
-    		cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
-                    + ">" + "\u25CF" + "<font color=#000000>"
-                    + closedLoop.getName());
-    		
-            //set the checkbox selected dependent of the param visibles
-            cb.setSelected(visible);
-            
-            //add actionListener to checkbox
-            cb.addActionListener(this);
-    		
-            numberOfStepResponses--;
-            if(numberOfStepResponses == 0){
-            	for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-    				JCheckBox cb2 = entry.getValue();
-    				cb2.setVisible(true);
-    			}
-            	view.validate();
-            }
-        });
+         });
 	}
 
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
         SwingUtilities.invokeLater(() -> {
-            JCheckBox c = checkBoxes.remove(closedLoop.getName());
+        	JCheckBox c = checkBoxes.remove(closedLoop.getName());
             remove(c);
             view.validate();
         });
@@ -171,15 +174,11 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             	add(cb);
             	checkBoxes.put(""+i, cb); //set key temporary to the index-number of the closedLoops
 			}
-            
         });
     }
 
 	@Override
-	public void onSimulationComplete() {
-		SwingUtilities.invokeLater(() -> {
-		});
-	}
+	public void onSimulationComplete() {}
 
     @Override
     public void onHideCalculation(ClosedLoop closedLoop) {}

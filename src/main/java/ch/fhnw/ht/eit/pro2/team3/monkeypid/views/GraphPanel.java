@@ -99,23 +99,6 @@ public class GraphPanel extends JPanel implements IModelListener, ChartMouseList
     public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
         SwingUtilities.invokeLater(() -> {
             try {
-            	/*
-            	if(dataCollection.getSeriesCount() >= getSeriesIndex(closedLoop)){
-            		if(closedLoop.getName().equals(dataCollection.getSeries(getSeriesIndex(closedLoop)).getKey())){
-            			 dataCollection.removeSeries(getSeriesIndex(closedLoop));
-            		}
-            	}
-            	*/
-            	
-            	/*
-            	try{
-            		XYSeries seriesToReplace = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
-            		dataCollection.removeSeries(seriesToReplace);
-            	}
-            	catch(UnknownKeyException e){
-            		System.out.println(e.getMessage());
-            	}
-            	*/
             	for(int i = 0; i < dataCollection.getSeriesCount(); i++){
             		if(closedLoop.getName().equals(dataCollection.getSeries(i).getKey())){
             			dataCollection.removeSeries(i);
@@ -200,8 +183,5 @@ public class GraphPanel extends JPanel implements IModelListener, ChartMouseList
 	}
 
 	@Override
-	public void chartMouseMoved(ChartMouseEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void chartMouseMoved(ChartMouseEvent event) {}
 }

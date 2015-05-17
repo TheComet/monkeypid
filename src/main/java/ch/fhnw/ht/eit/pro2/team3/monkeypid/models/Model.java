@@ -348,6 +348,8 @@ public class Model implements IClosedLoopListener {
 		
 		// dispatch all calculators
 		calculator.run();
+		//remove the new calculated closedLoop from the list, else, it will be removed two times, what is impossible
+		closedLoops.remove(closedLoops.size()-1);
 
 		zellwegerPhaseInflectionAdjustingCalculationOngoing = false;
 	}
