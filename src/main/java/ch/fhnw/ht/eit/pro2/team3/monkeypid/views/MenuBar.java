@@ -20,6 +20,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import jdk.jfr.events.FileWriteEvent;
 
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
@@ -217,10 +221,32 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		// menu item PDF is pressed
 		if (e.getSource() == menuItemPDF) {
 			//print PDF
-			final String RESULT = "hello.pdf";
-			FileDialog getNameBox = new FileDialog((JFrame) view.getTopLevelAncestor(), "Namen lesen", FileDialog.LOAD);
-			getNameBox.show();
-			String fileName = getNameBox.getFile();
+			String fileName = "";
+			/*
+			FileDialog saveFileDialog = new FileDialog((JFrame) view.getTopLevelAncestor(), "PDF speichern unter ...", FileDialog.SAVE);
+			saveFileDialog.setVisible(true);
+			fileName = saveFileDialog.getFile();
+			*/
+			File workingDirectory = new File(System.getProperty("user.dir"));
+			JFileChooser fc = new JFileChooser();
+			fc.setCurrentDirectory(workingDirectory);
+			fc.setFileFilter(new FileNameExtensionFilter("PDF (*.pdf)", ".pdf"));
+			//fc.setFileFilter(new FileNameExtensionFilter("Alle Dateien (*.*)", "."));
+			//fc.setVisible(true);
+			int retrival = fc.showSaveDialog(null);
+			if(retrival == JFileChooser.APPROVE_OPTION){
+				fileName = fc.getSelectedFile().getAbsolutePath();
+			}
+			
+			/*
+			JFileChooser chooser = new JFileChooser();
+			chooser.addChoosableFileFilter(new F  );
+			chooser.addChoosableFileFilter(new OpenFileFilter("*.*","Alle Dateien") );
+			*/
+			
+			if(!fileName.endsWith(".pdf")){
+				fileName += ".pdf";
+			}
 			PrintFrameToPDF(fileName);
 			/*
 			try {
@@ -310,41 +336,20 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	}
 	
 	public void PrintFrameToPDF(String file) {
-		Document d = new Document();
+		//Document d = new Document();
+		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
 		try {
 			//works
 	        PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
 	        d.open();
-	        
-	        /*
-	        JPanel testPanel = new  JPanel();
-	        JLabel testLabel = new JLabel("testString");
-	        testPanel.add(testLabel);
-	        testPanel.setBackground(Color.RED);
-	        
-	        PdfContentByte contentByte = writer.getDirectContent();
-	        PdfTemplate template = contentByte.createTemplate(500, 500);
-	        Graphics2D g2 = template.createGraphics(100, 100, new DefaultFontMapper());
-	        testPanel.addNotify();
-	        testPanel.setSize(80,80);
-	        testPanel.validate();
-	        testPanel.paint(g2);
-	        contentByte.addTemplate(template, 0, 0);
-	        g2.dispose();
-	        */
-	        
-	        //works, but not beautifull.
-	        PdfContentByte contentByte = writer.getDirectContent();
-	        PdfTemplate template = contentByte.createTemplate(view.getWidth(), view.getHeight());
-	        //Graphics2D g2 = template.createGraphics(view.getWidth(), view.getHeight(), new DefaultFontMapper());
-	        Graphics2D g2 = template.createGraphicsShapes(view.getWidth(), view.getHeight());
-	        view.addNotify();
-	        view.setSize(80,80);
-	        view.validate();
-	        view.paintAll(g2);
-	        contentByte.addTemplate(template, 0, 0);
-	        g2.dispose();
-
+	     
+            PdfContentByte cb = writer.getDirectContent();
+            PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
+            Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
+            //g2.scale(0.8, 1.0);
+            view.print(g2);
+            g2.dispose();
+            cb.addTemplate(tp, 10, 10);
 	        
 	    } catch (Exception e) {
 	        System.out.println("ERROR: " + e.toString());
