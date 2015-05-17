@@ -250,6 +250,10 @@ public class OutputPanel extends JPanel implements ActionListener,
 		lbTrimmSlider.setVisible(miniVersionSelected);
 		slTrimmSlider.setVisible(miniVersionSelected);
 	}
+	
+	public void setSliderDefaultValue(){
+		slTrimmSlider.setValue(0);
+	}
 
 	/**
 	 * 
