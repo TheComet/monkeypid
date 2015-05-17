@@ -3,6 +3,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -308,48 +310,50 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	}
 	
 	public void PrintFrameToPDF(String file) {
-	    try {
-	        Document d = new Document();
+		Document d = new Document();
+		try {
+			//works
 	        PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
 	        d.open();
 	        
-	       // JFrame myFrame = (JFrame) view.getTopLevelAncestor();
-	        JPanel inputPn = view.inputPanel;
-
-	        PdfContentByte cb = writer.getDirectContent( );
-	        PdfTemplate template = cb.createTemplate(inputPn.getWidth(), inputPn.getHeight());
-	        Graphics2D g2d = template.createGraphics(inputPn.getWidth(), inputPn.getHeight());
-	        inputPn.print(g2d);
-	        inputPn.addNotify();
-	        inputPn.validate();
-	        
 	        /*
-	        PdfContentByte cb = writer.getDirectContent();
-	        PdfTemplate template = cb.createTemplate(PageSize.A4.getWidth(),PageSize.A4.getHeight());
-	        cb.addTemplate(template, 0, 0);
-
-	        Graphics2D g2d = template.createGraphics(PageSize.A4.getWidth(),PageSize.A4.getHeight());
-	        g2d.scale(0.4, 0.4);
-
-	        for(int i=0; i< view.getTopLevelAncestor().getComponents().length; i++){
-	            Component c = view.getTopLevelAncestor().getComponent(i);
-	            System.out.println(c);
-	            if(c instanceof JLabel || c instanceof JScrollPane){
-	                g2d.translate(c.getBounds().x,c.getBounds().y);
-	                if(c instanceof JScrollPane){c.setBounds(0,0,(int)PageSize.A4.getWidth()*2,(int)PageSize.A4.getHeight()*2);}
-	                c.paintAll(g2d);
-	                c.addNotify();
-	            }
-	        }
+	        JPanel testPanel = new  JPanel();
+	        JLabel testLabel = new JLabel("testString");
+	        testPanel.add(testLabel);
+	        testPanel.setBackground(Color.RED);
+	        
+	        PdfContentByte contentByte = writer.getDirectContent();
+	        PdfTemplate template = contentByte.createTemplate(500, 500);
+	        Graphics2D g2 = template.createGraphics(100, 100, new DefaultFontMapper());
+	        testPanel.addNotify();
+	        testPanel.setSize(80,80);
+	        testPanel.validate();
+	        testPanel.paint(g2);
+	        contentByte.addTemplate(template, 0, 0);
+	        g2.dispose();
 	        */
+	        
+	        //works, but not beautifull.
+	        PdfContentByte contentByte = writer.getDirectContent();
+	        PdfTemplate template = contentByte.createTemplate(view.getWidth(), view.getHeight());
+	        //Graphics2D g2 = template.createGraphics(view.getWidth(), view.getHeight(), new DefaultFontMapper());
+	        Graphics2D g2 = template.createGraphicsShapes(view.getWidth(), view.getHeight());
+	        view.addNotify();
+	        view.setSize(80,80);
+	        view.validate();
+	        view.paintAll(g2);
+	        contentByte.addTemplate(template, 0, 0);
+	        g2.dispose();
 
-
-	        g2d.dispose();
-
-	        d.close();
+	        
 	    } catch (Exception e) {
 	        System.out.println("ERROR: " + e.toString());
 	    }
+		finally{
+			if(d.isOpen()){
+				d.close();
+			}
+		}
 	}
 	
 	
