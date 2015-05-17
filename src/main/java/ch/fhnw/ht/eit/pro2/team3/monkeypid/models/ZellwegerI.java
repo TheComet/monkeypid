@@ -14,6 +14,12 @@ public class ZellwegerI extends AbstractZellweger {
      */
     public ZellwegerI(Plant plant) {
         super(plant, 0.0); // phase margin is irrelevant in Zellweger I
+        setAngleOfInflection(-45.0);
+    }
+    
+    public ZellwegerI(Plant plant, double angleOfInflection) {
+        super(plant, 0.0); // phase margin is irrelevant in Zellweger I
+        setAngleOfInflection(-45.0 + angleOfInflection);
     }
 
     /**
@@ -22,7 +28,6 @@ public class ZellwegerI extends AbstractZellweger {
      */
     @Override
     protected final AbstractController calculate() {
-        setAngleOfInflection(-45.0);
 
         // Ti parameter of controller
         double ti = 1.0 / findAngleOnPlantPhase();

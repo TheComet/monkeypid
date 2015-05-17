@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
 /**
  * Controller part of the MVC pattern
@@ -9,6 +10,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
  */
 public class Controller {
 	private Model model;
+	private View view;
 
 	/**
 	 * Constructor
@@ -16,6 +18,10 @@ public class Controller {
 	 */
 	public Controller(Model model) {
 		this.model = model;
+	}
+	
+	public void setView(View view){
+		this.view = view;
 	}
 
 	/**
@@ -31,11 +37,16 @@ public class Controller {
 	 */
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
                                  String selectedRegulatorName, double overswing){
+		view.outputPanel.setSliderDefaultValue();
 		model.setRegulatorType(selectedRegulatorName);
         model.setPlant(tuValue, tgValue, ksValue);
         model.setParasiticTimeConstantFactor(tpValue);
 		model.setOverswing(overswing);
         model.simulateAll();
+	}
+	
+	public void phaseInflectionChanged(int phaseInflectionOffset){
+		model.updateZellweger(phaseInflectionOffset);
 	}
 
     /**

@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -31,9 +33,10 @@ import com.sun.javafx.tk.Toolkit;
  *
  */
 public class OutputPanel extends JPanel implements ActionListener,
-		IModelListener {
+		IModelListener, ChangeListener {
 
 	private Controller controller;
+	private View view;
 
 	// create test table
 	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
@@ -55,8 +58,8 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
-	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, 45, 150,
-			100);
+	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, -90, 90,
+			0);
 
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
@@ -65,9 +68,10 @@ public class OutputPanel extends JPanel implements ActionListener,
 	 * 
 	 * @param controller
 	 */
-	public OutputPanel(Controller controller) {
+	public OutputPanel(Controller controller, View view) {
 		super(new GridBagLayout());
 		this.controller = controller;
+		this.view = view;
 
 		// TODO remove
 		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
@@ -113,7 +117,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		
 		double screenResolution = java.awt.Toolkit.getDefaultToolkit().getScreenResolution()/8;
 		
-
 		// set size of first column
 		table.getColumnModel().getColumn(0)
 				.setMinWidth((int) (5.5 * fontHeight));
@@ -142,12 +145,14 @@ public class OutputPanel extends JPanel implements ActionListener,
 			col.setPreferredWidth((int) (4.6 * fontHeight));
 		}
 
+
 		// allocate all rows with empty strings
 		for (int i = 0; i < 7; i++) {
 			tableModel.addRow(new String[] { "", "", "",
 					"", "", "" });
 		}
 		//TODO remove
+
 		// set preferred size of table
 		//table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
 		//		(int) (10 * screenResolution)));
@@ -229,6 +234,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 		// add ActionListener to buttons
 		btAdopt.addActionListener(this);
 		btDelete.addActionListener(this);
+		slTrimmSlider.addChangeListener(this);
 
 		// pack frame
 		// JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
@@ -246,7 +252,12 @@ public class OutputPanel extends JPanel implements ActionListener,
 		// set all changing components to in- or visible
 		// table.setVisible(miniVersionSelected);
 		// table.getTableHeader().setVisible(miniVersionSelected);
+		lbTrimmSlider.setVisible(miniVersionSelected);
 		slTrimmSlider.setVisible(miniVersionSelected);
+	}
+	
+	public void setSliderDefaultValue(){
+		slTrimmSlider.setValue(0);
 	}
 
 	/**
@@ -276,9 +287,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 					String[] tableRowStrings = closedLoop.getTableRowStrings();
 
 					// trimm string to get only the name of the regulator
-					for (int i = 0; i < tableRowStrings.length; i++) {
-						tableRowStrings[i] = tableRowStrings[i].split(" ")[0];
-					}
+					tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
 
 					// get rgbColor from closedLoop and convert it to string
 					String hexColor = String.format("#%02x%02x%02x", closedLoop
@@ -312,23 +321,23 @@ public class OutputPanel extends JPanel implements ActionListener,
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
 		SwingUtilities.invokeLater(() -> {
-
-			// remove from table
+				// remove from table
 				for (int row = 0; row < tableModel.getRowCount(); row++) {
 					// name is stored in column 0
-					if (closedLoop.getName().equals(
-							tableModel.getValueAt(row, 0))) {
+					String controllerName = (String) tableModel.getValueAt(row, 0);
+					if (controllerName.endsWith(closedLoop.getName())) {
 						tableModel.removeRow(row);
 						return;
 					}
 				}
+				//view.validate();				
 			});
 	}
 
 	@Override
 	public void onSimulationBegin(int numberOfStepResponses) {
 		SwingUtilities.invokeLater(() -> {
-			// clear the table
+				// clear the table
 				while (tableModel.getRowCount() > 0) {
 					tableModel.removeRow(0);
 				}
@@ -355,5 +364,10 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onSetPlant(Plant plant) {
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		controller.phaseInflectionChanged(slTrimmSlider.getValue());
 	}
 }
