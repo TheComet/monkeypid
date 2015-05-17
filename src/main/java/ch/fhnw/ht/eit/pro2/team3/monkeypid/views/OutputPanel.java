@@ -142,13 +142,17 @@ public class OutputPanel extends JPanel implements ActionListener,
 			col.setPreferredWidth((int) (4.6 * fontHeight));
 		}
 
-
-		
+		// allocate all rows with empty strings
+		for (int i = 0; i < 7; i++) {
+			tableModel.addRow(new String[] { "", "", "",
+					"", "", "" });
+		}
+		//TODO remove
 		// set preferred size of table
-		table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
-				(int) (10 * screenResolution)));
-		table.setMinimumSize(new Dimension((int) (28.5 * fontHeight),
-				(int) (10 * screenResolution)));
+		//table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
+		//		(int) (10 * screenResolution)));
+		//table.setMinimumSize(new Dimension((int) (28.5 * fontHeight),
+		//		(int) (10 * screenResolution)));
 		table.getTableHeader().setPreferredSize(
 						new Dimension((int) (28.5 * fontHeight),
 								(int) (2.5 * fontHeight)));
