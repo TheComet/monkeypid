@@ -17,6 +17,12 @@ public class ZellwegerPID extends AbstractZellweger {
      */
     public ZellwegerPID(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
+        setAngleOfInflection(-135.0);
+    }
+    
+    public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflection) {
+        super(plant, phaseMargin);
+        setAngleOfInflection(-135.0 + angleOfInflection);
     }
 
     /**
@@ -154,7 +160,6 @@ public class ZellwegerPID extends AbstractZellweger {
      */
     @Override
     protected final AbstractController calculate() {
-        setAngleOfInflection(-135.0);
 
         // find angleOfInflection on the phase of the control path
         double omegaInflection = findAngleOnPlantPhase();

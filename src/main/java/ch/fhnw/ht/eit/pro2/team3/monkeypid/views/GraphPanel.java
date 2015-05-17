@@ -15,6 +15,7 @@ import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.UnknownKeyException;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -98,8 +99,24 @@ public class GraphPanel extends JPanel implements IModelListener, ChartMouseList
     public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
         SwingUtilities.invokeLater(() -> {
             try {
-
-                dataCollection.addSeries(closedLoop.getStepResponse());
+            	/*
+            	if(dataCollection.getSeriesCount() >= getSeriesIndex(closedLoop)){
+            		if(closedLoop.getName().equals(dataCollection.getSeries(getSeriesIndex(closedLoop)).getKey())){
+            			 dataCollection.removeSeries(getSeriesIndex(closedLoop));
+            		}
+            	}
+            	*/
+            	
+            	try{
+            		XYSeries seriesToReplace = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
+            		dataCollection.removeSeries(seriesToReplace);
+            	}
+            	catch(UnknownKeyException e){
+            		System.out.println(e.getMessage());
+            	}
+            	 dataCollection.addSeries(closedLoop.getStepResponse());
+            	
+               
 
                 // The closedLoop object specifies what color it wants to be rendered in
                 getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop), closedLoop.getColor());

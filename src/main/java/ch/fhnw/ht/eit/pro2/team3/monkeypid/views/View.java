@@ -52,7 +52,7 @@ public class View extends JPanel implements ActionListener {
 
 		// create the panels
 		inputPanel = new InputPanel(controller, this);
-		outputPanel = new OutputPanel(controller);
+		outputPanel = new OutputPanel(controller, this);
 		graphDisplayPanel = new GraphDisplayPanel(controller, this);
 		graphPanel = new GraphPanel();
 

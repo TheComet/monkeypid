@@ -37,6 +37,10 @@ public class Controller {
 		model.setOverswing(overswing);
         model.simulateAll();
 	}
+	
+	public void phaseInflectionChanged(int phaseInflectionOffset){
+		model.updateZellweger(phaseInflectionOffset);
+	}
 
     /**
      * This is called when the user marks one of the show/hide checkboxes. The appropriate curve in the chart should

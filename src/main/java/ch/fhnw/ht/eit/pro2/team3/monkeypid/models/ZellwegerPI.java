@@ -15,7 +15,14 @@ public class ZellwegerPI extends AbstractZellweger {
      */
     public ZellwegerPI(Plant plant, double phaseMargin) {
         super(plant, phaseMargin);
+        setAngleOfInflection(-90.0);
     }
+    
+    public ZellwegerPI(Plant plant, double phaseMargin, double angleOfInflection) {
+        super(plant, phaseMargin);
+        setAngleOfInflection(-90.0 + angleOfInflection);
+    }
+    
 
     /**
      * Uses a binary search to approximate the angle on the phase of the open loop. Accuracy can be set by calling the
@@ -69,7 +76,7 @@ public class ZellwegerPI extends AbstractZellweger {
      */
     @Override
     protected final AbstractController calculate() {
-        setAngleOfInflection(-90.0);
+    	//setAngleOfInflection(-90.0);
 
         // Tn parameter of controller
         double tn = 1.0 / findAngleOnPlantPhase();
