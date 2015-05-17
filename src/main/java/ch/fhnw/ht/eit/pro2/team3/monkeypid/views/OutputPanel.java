@@ -58,7 +58,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
-	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, -50, 50,
+	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, -90, 90,
 			0);
 
 	/**
@@ -117,7 +117,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		
 		double screenResolution = java.awt.Toolkit.getDefaultToolkit().getScreenResolution()/8;
 		
-
 		// set size of first column
 		table.getColumnModel().getColumn(0)
 				.setMinWidth((int) (5.5 * fontHeight));
@@ -147,7 +146,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		}
 
 
-		
 		// set preferred size of table
 		table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
 				(int) (10 * screenResolution)));
@@ -364,6 +362,5 @@ public class OutputPanel extends JPanel implements ActionListener,
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		controller.phaseInflectionChanged(slTrimmSlider.getValue());
-		//System.out.println(slTrimmSlider.getValue());
 	}
 }

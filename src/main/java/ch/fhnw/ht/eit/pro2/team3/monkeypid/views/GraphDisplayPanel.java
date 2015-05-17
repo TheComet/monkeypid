@@ -104,9 +104,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
                     .getRed(), closedLoop.getColor().getGreen(), closedLoop
                     .getColor().getBlue());
-            
-            
-            
+
             for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
             	//get the entry which matches the index of the given closed-Loop
             	try{
@@ -144,8 +142,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
             	}
             	catch(NumberFormatException exc){
             		// entry-key was no number -> try next entry
-            	}
-            	
+            	}	
             }
          });
 	}

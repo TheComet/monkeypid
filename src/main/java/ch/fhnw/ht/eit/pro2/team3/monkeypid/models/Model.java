@@ -145,8 +145,7 @@ public class Model implements IClosedLoopListener {
 				closedLoop.setPlantAndController(plant, controller);
 				closedLoop.calculateStepResponse(numSamplePoints);
 				// because only ZellwegerControllers are calculated in this
-				// loop,
-				// all closedLoops here are lastZellwegerClosedLoop
+				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
 				resultListener.onStepResponseCalculationComplete(closedLoop);
 
@@ -157,6 +156,9 @@ public class Model implements IClosedLoopListener {
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
 				closedLoop.calculateStepResponse(numSamplePoints);
+				if(closedLoop.getName().equals("Zellweger")){
+					lastZellwegerClosedLoop = closedLoop;
+				}
 			}
 		}
 	}
