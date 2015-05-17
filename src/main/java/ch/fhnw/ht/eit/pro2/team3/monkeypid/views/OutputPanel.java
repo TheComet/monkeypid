@@ -3,7 +3,6 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 import java.awt.Dimension;
@@ -32,17 +31,16 @@ import com.sun.javafx.tk.Toolkit;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements ActionListener,
-		IModelListener, ChangeListener {
+public class OutputPanel extends JPanel implements IModelListener, ChangeListener, ActionListener {
 
 	private Controller controller;
 	private View view;
 
-	// create test table
-	private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
-
 	// dummy label to get height of label font
-	public JLabel lbDummyGetHeight = new JLabel(" ");
+	private JLabel lbDummyGetHeight = new JLabel(" ");
+	
+	// number of regulators for size of table
+	private int maxNumberOfRegulators = 7;
 
 	// buttons delete and adopt
 	private JButton btDelete = new JButton("Loeschen");
@@ -51,10 +49,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 	// table and table model
 	CustomTableModel tableModel = new CustomTableModel();
 	JTable table = new JTable(tableModel);
-
-	// spinnerIcon icon
-	// ImageIcon spinnerIcon = Assets.loadImageSpinner();
-	// JLabel spinnerLabel = new JLabel();
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
@@ -73,34 +67,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 		this.view = view;
 
-		// TODO remove
-		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		/*
-		 * overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
-		 * overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
-		 * overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
-		 * overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");
-		 */
-
-		// TODO remove
-		// tbTest.setEnabled(false);
-		// JTableHeader header = tbTest.getTableHeader();
-		// tbTest.setValueAt(aValue, row, column);
-
-		/*
-		 * DefaultTableModel model = new DefaultTableModel(); JTable table = new
-		 * JTable(model);
-		 * 
-		 * model.addColumn("Col3");
-		 * 
-		 * String testheader[] = new String[] { "Prority", "Task Title",
-		 * "Start", "Pause", "Stop", "Statulses" };
-		 * 
-		 * model.setColumnIdentifiers(testheader); table.setModel(model);
-		 * 
-		 * model.addRow(new Object[] { "v1", "v2" });
-		 */
-
 		// add columns to the table
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Kr");
@@ -113,9 +79,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 		FontMetrics fm = lbDummyGetHeight.getFontMetrics(lbDummyGetHeight
 				.getFont());
 		int fontHeight = fm.getHeight();
-		System.out.println(fontHeight);
-		
-		double screenResolution = java.awt.Toolkit.getDefaultToolkit().getScreenResolution()/8;
 		
 		// set size of first column
 		table.getColumnModel().getColumn(0)
@@ -145,19 +108,12 @@ public class OutputPanel extends JPanel implements ActionListener,
 			col.setPreferredWidth((int) (4.6 * fontHeight));
 		}
 
-
 		// allocate all rows with empty strings
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < maxNumberOfRegulators; i++) {
 			tableModel.addRow(new String[] { "", "", "",
 					"", "", "" });
 		}
-		//TODO remove
-
 		// set preferred size of table
-		//table.setPreferredSize(new Dimension((int) (28.5 * fontHeight),
-		//		(int) (10 * screenResolution)));
-		//table.setMinimumSize(new Dimension((int) (28.5 * fontHeight),
-		//		(int) (10 * screenResolution)));
 		table.getTableHeader().setPreferredSize(
 						new Dimension((int) (28.5 * fontHeight),
 								(int) (2.5 * fontHeight)));
@@ -231,9 +187,7 @@ public class OutputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 
-		// add ActionListener to buttons
-		btAdopt.addActionListener(this);
-		btDelete.addActionListener(this);
+		// add ActionListener to trimmer
 		slTrimmSlider.addChangeListener(this);
 
 		// pack frame
@@ -258,22 +212,6 @@ public class OutputPanel extends JPanel implements ActionListener,
 	
 	public void setSliderDefaultValue(){
 		slTrimmSlider.setValue(0);
-	}
-
-	/**
-	 * 
-	 */
-	public void actionPerformed(ActionEvent e) {
-		// TODO remove
-		// if button delete is pressed
-		/*
-		 * if (e.getSource() == btDelete) { // call method of controller // TODO
-		 * controller.btDeleteAction(); } // if button adopt is pressed if
-		 * (e.getSource() == btAdopt) { int slKpValue = slKp.getValue(); int
-		 * slTnValue = slTn.getValue(); int slTvValue = slTv.getValue(); // give
-		 * over values to controller // TODO controller.btAdoptAction(slKpValue,
-		 * slTnValue, slTvValue); }
-		 */
 	}
 
 	@Override
@@ -341,11 +279,15 @@ public class OutputPanel extends JPanel implements ActionListener,
 				while (tableModel.getRowCount() > 0) {
 					tableModel.removeRow(0);
 				}
-
-				// allocate all rows with empty strings
+				
+				// allocate rows with strings
 				for (int i = 0; i < numberOfStepResponses; i++) {
 					tableModel.addRow(new String[] { "calculating...", "", "",
 							"", "", "" });
+				}
+				// allocate the rest of rows with empty strings
+				for (int j = numberOfStepResponses; j < maxNumberOfRegulators; j++) {
+					tableModel.addRow(new String[] { "", "", "", "", "", "" });
 				}
 			});
 	}
@@ -369,5 +311,11 @@ public class OutputPanel extends JPanel implements ActionListener,
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		controller.phaseInflectionChanged(slTrimmSlider.getValue());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

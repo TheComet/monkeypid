@@ -7,10 +7,13 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -40,12 +43,9 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JLabel lbKs = new JLabel("Ks");
 	private JLabel lbTu = new JLabel("Tu");
 	private JLabel lbTg = new JLabel("Tg");
-	// private JTextField tfKs = new JTextField(5);
-	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(1);
-	// private JTextField tfTu = new JTextField(5);
-	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(1);
-	// private JTextField tfTg = new JTextField(5);
-	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(1);
+	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
+	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
+	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
 
 	// info label for wrong value textfields
 	private JLabel lbValueErrorInfo = new JLabel();
@@ -58,7 +58,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JLabel lbTpInfo = new JLabel("%");
 
 	// private JTextField tfTp = new JTextField("10", 5);
-	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(1);
+	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(new DecimalFormat("###.0"),1);
 
 	// select regulator
 	private JLabel lbSelectRegulatorTitle = new JLabel("Wahl des Reglers:");
@@ -78,7 +78,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
 	private JSlider slTn = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
 	private JSlider slTv = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JFormattedDoubleTextField tfAdaptKp = new JFormattedDoubleTextField(
+	private JFormattedDoubleTextField tfAdaptKp = new JFormattedDoubleTextField(new DecimalFormat("###.##"),
 			1);
 	private JFormattedDoubleTextField tfAdaptTn = new JFormattedDoubleTextField(
 			1);
