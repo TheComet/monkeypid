@@ -160,7 +160,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// add menu item to the menu data
 		menuData.add(menuItemMiniVersion);
-		menuData.add(menuItemPDF);
+		//TODO uncomment if PDF works
+		//menuData.add(menuItemPDF);
 		menuData.add(menuItemExit);
 
 		// submenu for useful links
