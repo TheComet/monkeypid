@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
@@ -89,7 +90,14 @@ public class MathStuff {
         return res;
     }
 
-    // TODO documentation
+    /**
+     * Calculates the value of the polynomial poly  at the given X-Value of s
+     * The coefficients of poly start with the highest order x^n.
+     * The last element of poly ist x^0
+     * @param poly The polynomial, for which the value is calculated
+     * @param s The X-Value, which is inserted as X into the polynomial
+     * @return the value of the polynomial poly at s
+     */
     public static Complex polyVal(double[] poly, Complex s) {
         // If s is zero, the result will be 0. Apparently, apache commons
         // cannot raise the complex number 0+0j to any power without
@@ -198,8 +206,12 @@ public class MathStuff {
         return symmetric;
     }
 
-    // TODO documentation
-    //residue help function
+    /**
+     * Converts a partial-fraction g into the residues R, poles P and constant-term K
+     * See Matlab file "residueSimple.m"
+     * @param g The TransferFunction which is the partial-fraction which is converted
+     * @return R, P, K Residues P, Poles P and Constant-Term K
+     */
     public static Object[] residueSimple(TransferFunction g){
 		double K = 0.0;
 		
@@ -219,6 +231,9 @@ public class MathStuff {
 				Numerator[i]  = Numerator[i] - K*Denominator[i];
 			}
 		}
+		else{
+			K = 0.0;
+		}
 		
 		Complex[] P = roots(Denominator);
 		//zeros(M,1)
@@ -231,7 +246,7 @@ public class MathStuff {
 			//Calculate Denominator polynominal wighout m-th root
 			
 			//copy P in smallP
-			Complex[] smallP = new Complex[P.length-1];
+			Complex[] smallP = new Complex[P.length];
 			
 			/*
 			for (int i = 0; i < smallP.length; i++) {
@@ -246,8 +261,12 @@ public class MathStuff {
 			*/
 			
 			//copy every element from second of P in smallP
-            System.arraycopy(P, 1, smallP, 0, smallP.length);
-			
+            //System.arraycopy(P, 1, smallP, 0, smallP.length);
+			System.arraycopy(P, 0, smallP, 0, P.length);
+			if((M-m-1) > 0){
+				System.arraycopy(smallP, m+1, smallP, m, M-m-1);
+			}
+			ArrayUtils.remove(smallP, smallP.length-1);
 			Complex[] pa = poly(smallP);
 			double[] paReal = new double[pa.length];
 			//pa is real (no imaginary part) -> get only real from pa
