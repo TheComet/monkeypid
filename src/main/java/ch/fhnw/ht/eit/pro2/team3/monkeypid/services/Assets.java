@@ -1,11 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,11 +16,8 @@ import java.util.stream.Stream;
  */
 public class Assets {
 
-    private static final String RESOURCE_PREFIX = "ch/fhnw/ht/eit/pro2/team3/monkeypid/";
-
-    private static URL getResourceURL(String resource) {
-        return Assets.class.getClassLoader().getResource(RESOURCE_PREFIX + resource);
-    }
+    private static final String RESOURCE_PREFIX =
+            pathToPlatform("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid");
 
     /**
      * Converts a path containing forward slashes to a platform specific path.
@@ -49,7 +43,7 @@ public class Assets {
      * @return Loaded image.
      */
    public static ImageIcon loadImageIcon(String name){
-       return new ImageIcon(getResourceURL("pictures/" + name));
+       return new ImageIcon(RESOURCE_PREFIX + "pictures/" + name);
    }
 
     /**
@@ -64,10 +58,9 @@ public class Assets {
         try {
             //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
             // TODO get classpath working
-            String path = String.valueOf(getResourceURL(fileName));
-            path = path.replaceAll("file:", ""); // horrible hack
-            BufferedReader br = new BufferedReader(new FileReader(path));
-            br.lines().forEach(s -> {
+            Path path = Paths.get(RESOURCE_PREFIX + fileName);
+            Stream<String> lines = Files.lines(path);
+            lines.forEach(s -> {
 
                 // each element in the row is stored as tab separated strings
                 String[] rowStrings = s.split("\t");
