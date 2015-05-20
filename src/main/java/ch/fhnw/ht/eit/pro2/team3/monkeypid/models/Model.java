@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
  * @author Alex Murray
  */
 public class Model implements IClosedLoopListener {
-
 	/**
 	 * Is thrown when an unknown regulator string is passed to
 	 * setRegulatorType().
