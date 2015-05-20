@@ -20,9 +20,9 @@ public class ControllerPIDTest {
 		ControllerPID myControllerPID = new ControllerPID("myPIDController", Tn, Tv, Kr, Tp);
 
 		//expected values
-		//Br = Kr*[Tn*Tv+Tn*Tp Tn+Tv 1];
+		//Br = Kr*[Tn*Tv+Tn*Tp Tn+Tp 1];
 		//Ar = [Tn*Tp Tn 0];
-		double[] NumeratorExpected = {7.2780, 8.3391, 1.7656};
+		double[] NumeratorExpected = {7.2780, 7.1693, 1.7656};
 		double[] DenominatorExpected = {0.7832, 3.8576, 0};
 		assertArrayEquals(NumeratorExpected, myControllerPID.getTransferFunction().getNumeratorCoefficients(), delta);
 		assertArrayEquals(DenominatorExpected, myControllerPID.getTransferFunction().getDenominatorCoefficients(), delta);
@@ -42,9 +42,9 @@ public class ControllerPIDTest {
 		myControllerPID.setParameters(Tn, Tv, Kr, Tp);
 		
 		//expected values
-		//Br = Kr*[Tn*Tv+Tn*Tp Tn+Tv 1];
+		//Br = Kr*[Tn*Tv+Tn*Tp Tn+Tp 1];
 		//Ar = [Tn*Tp Tn 0];
-		double[] NumeratorExpected = {7.2780, 8.3391, 1.7656};
+		double[] NumeratorExpected = {7.2780, 7.1693, 1.7656};
 		double[] DenominatorExpected = {0.7832, 3.8576, 0};
 		assertArrayEquals(NumeratorExpected, myControllerPID.getTransferFunction().getNumeratorCoefficients(), delta);
 		assertArrayEquals(DenominatorExpected, myControllerPID.getTransferFunction().getDenominatorCoefficients(), delta);
