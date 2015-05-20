@@ -166,8 +166,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// add menu item to the menu data
 		menuData.add(menuItemMiniVersion);
-		//TODO uncomment if PDF works
-		//menuData.add(menuItemPDF);
+		menuData.add(menuItemPDF);
 		menuData.add(menuItemExit);
 
 		// submenu for useful links
@@ -345,12 +344,22 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	        d.open();
 	     
             PdfContentByte cb = writer.getDirectContent();
+           // cb.
             PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
+            //tp.setA
             Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
-            //g2.scale(0.8, 1.0);
+            //g2.scale(0.8, 0.8);
+            //System.out.println("width: "+view.getWidth()+" height: "+view.getHeight());
+            //width: 1246 height: 705
+            double factorFromWidth = Math.round((1150.0/view.getWidth())*10.0)/10.0;
+            System.out.println("with factor: "+factorFromWidth);
+            double factorFromHeight = Math.round((690.0/view.getHeight())*10.0)/10.0; 
+            double factor = Math.min(factorFromWidth, factorFromHeight);
+            System.out.println("Factor: "+factor);
+            g2.scale(factor, factor);
             view.print(g2);
             g2.dispose();
-            cb.addTemplate(tp, 10, 10);
+            cb.addTemplate (tp, 10, 10);
 	        
 	    } catch (Exception e) {
 	        System.out.println("ERROR: " + e.toString());

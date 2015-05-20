@@ -4,12 +4,10 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.PhaseAndOverSwingTuple;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.SaniCurves;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
