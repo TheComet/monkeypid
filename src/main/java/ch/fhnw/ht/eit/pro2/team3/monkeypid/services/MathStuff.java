@@ -266,7 +266,11 @@ public class MathStuff {
 			if((M-m-1) > 0){
 				System.arraycopy(smallP, m+1, smallP, m, M-m-1);
 			}
-			ArrayUtils.remove(smallP, smallP.length-1);
+			smallP = ArrayUtils.remove(smallP, smallP.length-1);
+			System.out.println("Smallp: round:"+m);
+			for (int i = 0; i < smallP.length; i++) {
+				System.out.println("Smallp: "+smallP[i].getReal());
+			}
 			Complex[] pa = poly(smallP);
 			double[] paReal = new double[pa.length];
 			//pa is real (no imaginary part) -> get only real from pa
