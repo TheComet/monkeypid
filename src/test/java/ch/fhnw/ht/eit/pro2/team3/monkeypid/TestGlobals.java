@@ -11,4 +11,6 @@ public class TestGlobals {
     public static double zellwegerDelta = 0.001;
     // seems to be the closest accuracy we can get for plant transfer function
     public static double plantTransferDelta = 0.008;
+    // seems to be the closest accuracy we can get for the fistFormulas
+    public static double fistFormulas = 1e-3;
 }
