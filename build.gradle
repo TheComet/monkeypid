@@ -2,10 +2,26 @@ apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+version = '1.0-beta'
 sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 mainClassName = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID'
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID',
+                   'Implementation-Title': 'EasyPID',
+                   'Implementation-Version': version
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
 
 repositories {
     mavenCentral()
