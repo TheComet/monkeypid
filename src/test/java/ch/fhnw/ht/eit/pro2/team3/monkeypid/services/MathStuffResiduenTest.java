@@ -233,4 +233,24 @@ public class MathStuffResiduenTest {
 		
 	}
 	
+	@Test
+	public void testResiduestepResidue(){
+		double delta = 0.001;
+		
+		Object[] myObs = MathStuff.stepResidue(B, A, 1, 10);
+		double[] y = (double[]) myObs[0];
+		double[] t = (double[]) myObs[1];
+		
+		/*
+		System.out.println("stepResidue");
+		for (int i = 0; i < y.length; i++) {
+			System.out.println("y: "+y[i]);
+		}
+		*/
+		
+		double[] yMatlabExpected = {0.0000, 0.0342, 0.1516 ,0.3378, 0.5568, 0.7735, 0.9616, 1.1048, 1.1970, 1.2400};
+		assertArrayEquals(yMatlabExpected,y,delta);
+		
+	}
+	
 }

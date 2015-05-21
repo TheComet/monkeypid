@@ -235,6 +235,46 @@ public class MathStuff {
 
         return symmetric;
     }
+    
+    
+    public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
+    	double T = 1/fs;
+    	Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
+    	Complex[] R = (Complex[]) resdiueResult[0];
+		Complex[] P = (Complex[]) resdiueResult[1];
+		double K = (double) resdiueResult[2];
+    	
+		double[] y = new double[N];
+		for (int i = 0; i < y.length; i++) {
+			y[i] = 0.0;
+		}
+		
+		if(K != 0.0){
+			y[0] = K;
+		}
+		
+		double[] t = linspace(0, (N-1)*T, N);
+	
+		/*
+		for (int k = 0; k < t.length; k++) {
+			double temp = y[k];
+		}
+		*/
+		
+		for(int k = 0; k < R.length; k++){
+			for(int m = 0; m < y.length; m++){
+				y[m] = y[m] + ((new Complex(P[k].getReal(), P[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(R[k].getReal(),R[k].getImaginary()))).getReal()/fs;
+			}
+		}
+		
+		for (int i = 1; i < y.length; i++) {
+			y[i] = y[i] + y[i-1];
+		}
+		
+    	return new Object[]{y, t};    	
+    	
+    }
+    
 
     /**
      * Converts a partial-fraction g into the residues R, poles P and constant-term K
@@ -262,7 +302,7 @@ public class MathStuff {
 			}
 		}
 		else{
-			K = 0.0;
+			K = 0.0; 
 		}
 		
 		Complex[] P = roots(Denominator);
@@ -345,6 +385,8 @@ public class MathStuff {
 		
     	return new Object[]{R,P,K};    	
     }
+    
+    
 
     /**
      * Computes the polynomial coefficients with the specified roots.
