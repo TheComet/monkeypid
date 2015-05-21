@@ -44,10 +44,6 @@ public class ControllerPITest {
 		double[] DenominatorExpected = {3.3122, 0.0};
 		assertArrayEquals(NumeratorExpected, myControllerPI.getTransferFunction().getNumeratorCoefficients(),delta);
 		assertArrayEquals(DenominatorExpected, myControllerPI.getTransferFunction().getDenominatorCoefficients(),delta);
-		
-		Complex[] test = new Complex[2];
-		test[0] = new Complex(3.0000 ,  + 4.0000);
-		test[1] = new Complex(35.0000,  + 0.0000);
 	}
 
 }

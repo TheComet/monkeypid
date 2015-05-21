@@ -4,7 +4,6 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.MenuBar;
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.StatusBar;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 import de.javasoft.plaf.synthetica.SyntheticaSimple2DLookAndFeel;
 

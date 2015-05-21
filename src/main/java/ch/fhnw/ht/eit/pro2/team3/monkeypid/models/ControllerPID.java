@@ -85,10 +85,10 @@ public class ControllerPID extends AbstractController {
     protected final void calculateTransferFunction() {
         // Numerator and Denominator Poly of the pid-controller:
         // Gr = Kr*(1+ 1/(s*Tn) + s*Tv/(1+s*Tp))
-        //    = Kr * (s^2(Tn*Tv + Tn*Tp) + s*(Tn+Tv) + 1)/(s^2*(Tn*Tp)+ s*Tn)
-        // Br = Kr*[Tn*Tv+Tn*Tp Tn+Tv 1];
+        //    = Kr * (s^2(Tn*Tv + Tn*Tp) + s*(Tn+Tp) + 1)/(s^2*(Tn*Tp)+ s*Tn)
+        // Br = Kr*[Tn*Tv+Tn*Tp Tn+Tp 1];
         // Ar = [Tn*Tp Tn 0];
-        double[] numeratorCoefficients = new double[] {kr * (tn*tv + tn*tp), kr * (tn + tv), kr};
+        double[] numeratorCoefficients = new double[] {kr * (tn*tv + tn*tp), kr * (tn + tp), kr};
         double[] denominatorCoefficients = new double[] {tn*tp, tn, 0};
         setTransferFunction(
                 new TransferFunction(numeratorCoefficients, denominatorCoefficients)
