@@ -128,7 +128,8 @@ public class Model implements IClosedLoopListener {
 				for (int i = 0; i < 9; i++) {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
-					closedLoop.calculateStepResponse(4096);
+					//closedLoop.calculateStepResponse(4096);
+					closedLoop.calculateStepResponseResidue(4096);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
@@ -142,7 +143,8 @@ public class Model implements IClosedLoopListener {
 				// sample points.
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
-				closedLoop.calculateStepResponse(numSamplePoints);
+				//closedLoop.calculateStepResponse(numSamplePoints);
+				closedLoop.calculateStepResponseResidue(numSamplePoints);
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
