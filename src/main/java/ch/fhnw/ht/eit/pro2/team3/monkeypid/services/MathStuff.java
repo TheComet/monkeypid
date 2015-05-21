@@ -236,7 +236,6 @@ public class MathStuff {
         return symmetric;
     }
     
-    
     public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
     	double T = 1/fs;
     	Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
@@ -254,12 +253,6 @@ public class MathStuff {
 		}
 		
 		double[] t = linspace(0, (N-1)*T, N);
-	
-		/*
-		for (int k = 0; k < t.length; k++) {
-			double temp = y[k];
-		}
-		*/
 		
 		for(int k = 0; k < R.length; k++){
 			for(int m = 0; m < y.length; m++){
@@ -319,8 +312,6 @@ public class MathStuff {
 		//P[3] = P[4];
 		//P[4] = temp;
 		
-		
-		//zeros(M,1)
 		Complex[] R = new Complex[M];
 		for (int i = 0; i < R.length; i++) {
 			R[i] = new Complex(0);
@@ -332,18 +323,6 @@ public class MathStuff {
 			//copy P in smallP
 			Complex[] smallP = new Complex[P.length];
 			
-			/*
-			for (int i = 0; i < smallP.length; i++) {
-				smallP[i] = P[i];
-			}
-			//shift smallP left one cell
-			for (int j = m; j < M; j++) {
-				smallP[j] = smallP[j+1];
-			}
-			//remove last array cell
-			smallP = ArrayUtils.remove(smallP, smallP.length-1); //works?
-			*/
-			
 			//copy every element from second of P in smallP
             //System.arraycopy(P, 1, smallP, 0, smallP.length);
 			System.arraycopy(P, 0, smallP, 0, P.length);
@@ -351,12 +330,6 @@ public class MathStuff {
 				System.arraycopy(smallP, m+1, smallP, m, M-m-1);
 			}
 			smallP = ArrayUtils.remove(smallP, smallP.length-1);
-			/*
-			System.out.println("Smallp: round:"+m);
-			for (int i = 0; i < smallP.length; i++) {
-				System.out.println("Smallp: "+smallP[i].getReal());
-			}
-			*/
 			Complex[] pa = poly(smallP);
 			
 			/*
@@ -381,7 +354,6 @@ public class MathStuff {
 				R[i] = new Complex(R[i].getReal(), 0);
 			}
 		}
-		
 		
     	return new Object[]{R,P,K};    	
     }

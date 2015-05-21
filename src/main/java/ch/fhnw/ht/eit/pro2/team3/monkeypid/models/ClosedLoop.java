@@ -134,16 +134,20 @@ public class ClosedLoop {
         for (Object aTimeConstantsList : timeConstantsList) {
             timeAllTimeConstants += (double) aTimeConstantsList;
         }
+        //double fs = 45;
         double fs = 1.0/(timeAllTimeConstants/400.0);
+        //double fs = timeAllTimeConstants/0.05;
         
         
         // round sample points to the next power of two
+        /*
         int powerOfTwo = 4;
         while(powerOfTwo < numSamplePoints) {
             powerOfTwo <<= 1;
         }
+        */
 
-        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, powerOfTwo);
+        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);
 		double[] y = (double[]) residueResult[0];
 		double[] t = (double[]) residueResult[1];
 
