@@ -1,8 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,17 +20,7 @@ import java.util.stream.Stream;
  */
 public class Assets {
 
-    private static final String RESOURCE_PREFIX =
-            pathToPlatform("src/main/resources/ch/fhnw/ht/eit/pro2/team3/monkeypid");
-
-    /**
-     * Converts a path containing forward slashes to a platform specific path.
-     * @param path The path to convert.
-     * @return The converted path.
-     */
-    public static String pathToPlatform(String path) {
-        return String.join(File.separator, path.split("/")) + File.separator;
-    }
+    private static final String RESOURCE_PREFIX = "ch/fhnw/ht/eit/pro2/team3/monkeypid/";
 
     /**
      * Loads the "about" icon image.
@@ -42,9 +36,15 @@ public class Assets {
      * @param name The name of the image to load.
      * @return Loaded image.
      */
-   public static ImageIcon loadImageIcon(String name){
-       return new ImageIcon(RESOURCE_PREFIX + "pictures/" + name);
-   }
+    public static ImageIcon loadImageIcon(String name) {
+        try {
+            return new ImageIcon(Assets.class.getClassLoader().getResource(RESOURCE_PREFIX + "pictures/" + name));
+        } catch (NullPointerException e) {
+            System.out.println("Failed to load image " + name + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Loads an exported matlab table into a 2D array of doubles. Each value in each row should be separated by a tab.
@@ -56,11 +56,9 @@ public class Assets {
         // the table is stored as rows of strings
         ArrayList<double[]> table = new ArrayList<>();
         try {
-            //Path path = Paths.get(Assets.get().getResourceURL(fileName).getPath());
-            // TODO get classpath working
-            Path path = Paths.get(RESOURCE_PREFIX + fileName);
-            Stream<String> lines = Files.lines(path);
-            lines.forEach(s -> {
+            URL url = Assets.class.getClassLoader().getResource(RESOURCE_PREFIX + fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            br.lines().forEach(s -> {
 
                 // each element in the row is stored as tab separated strings
                 String[] rowStrings = s.split("\t");
