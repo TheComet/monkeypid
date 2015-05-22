@@ -77,11 +77,12 @@ public class MathStuffResiduenTest {
 		
 		double delta = 0.001;
 
-		
+		/*
 		System.out.println("myRoots");
 		for (int i = 0; i < myRoots.length; i++) {
-			//System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
+			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
 		}
+		*/
 		
 		assertEquals( -2.3190, myRoots[0].getReal(), delta);
 		assertEquals(-1.5915, myRoots[1].getReal(), delta);
@@ -100,37 +101,52 @@ public class MathStuffResiduenTest {
 	public void testResidueSimpleRoots2() {
 		double delta = 0.001;
 		
+		//Matlab: roots([0.7144, 4.5537, 10.6420, 11.3823, 5.5717, 1.0000]);
 		double[] Z = { 0.7144, 4.5537, 10.6420, 11.3823, 5.5717, 1.0000};
 		Complex[] myRoots =  MathStuff.roots(Z);
-				
+			
+		/*
 		System.out.println("myRoots");
 		for (int i = 0; i < myRoots.length; i++) {
 			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
 		}
+		*/
 		
+		double[] ZrootsMatlabExpected = {-2.5130, -1.6380, -1.0697, -0.6981, -0.4554};
+		assertEquals(ZrootsMatlabExpected[0], myRoots[0].getReal(),delta);
+		assertEquals(ZrootsMatlabExpected[1], myRoots[1].getReal(),delta);
+		assertEquals(ZrootsMatlabExpected[2], myRoots[2].getReal(),delta);
+		assertEquals(ZrootsMatlabExpected[3], myRoots[3].getReal(),delta);
+		assertEquals(ZrootsMatlabExpected[4], myRoots[4].getReal(),delta);
+		
+		//Matlab: roots([1, 2, 5, 7, 8, 2, 3, 1])
 		double[] Z2 = {1, 2, 5, 7, 8, 2, 3, 1};
 		Complex[] myRoots2 =  MathStuff.roots(Z2);
-				
+		
+		/*
 		System.out.println("myRoots2");
 		for (int i = 0; i < myRoots2.length; i++) {
 			System.out.println("Real: "+myRoots2[i].getReal() +" Imag: " +myRoots2[i].getImaginary());
 		}
-		
-		
-		
-		/*
-		assertEquals( -2.3190, myRoots[0].getReal(), delta);
-		assertEquals(-1.5915, myRoots[1].getReal(), delta);
-		assertEquals(-0.1529, myRoots[2].getReal(), delta);
-		assertEquals(-0.2777, myRoots[3].getReal(), delta);
-		assertEquals(-0.1529, myRoots[4].getReal(), delta);
-		
-		assertEquals(+ 0.0000, myRoots[0].getImaginary(), delta);
-		assertEquals(+ 0.0000, myRoots[1].getImaginary(), delta);
-		assertEquals( + 0.3537, myRoots[2].getImaginary(), delta);
-		assertEquals(+ 0.0000, myRoots[3].getImaginary(), delta);
-		assertEquals(- 0.3537, myRoots[4].getImaginary(), delta);
 		*/
+		
+		
+		assertEquals(0.0930, myRoots2[0].getReal(),delta);
+		assertEquals(0.0930, myRoots2[1].getReal(),delta);
+		assertEquals(-1.1423, myRoots2[2].getReal(),delta);
+		assertEquals(-1.1423, myRoots2[3].getReal(),delta);
+		assertEquals(0.2151, myRoots2[4].getReal(),delta);
+		assertEquals(0.2151, myRoots2[5].getReal(),delta);
+		assertEquals(-0.3317, myRoots2[6].getReal(),delta);
+
+		assertEquals(1.7650, myRoots2[0].getImaginary(),delta);
+		assertEquals(-1.7650, myRoots2[1].getImaginary(),delta);
+		assertEquals(-0.9540, myRoots2[2].getImaginary(),delta);	// +/- positions is swaped (normaly first +)
+		assertEquals(0.9540, myRoots2[3].getImaginary(),delta);		// +/- positions is swaped
+		assertEquals(0.6241, myRoots2[4].getImaginary(),delta);
+		assertEquals(-0.6241, myRoots2[5].getImaginary(),delta);
+		assertEquals(0, myRoots2[6].getImaginary(),delta);
+		
 	}
 	
 	@Test
@@ -145,10 +161,12 @@ public class MathStuffResiduenTest {
 		
 		Complex[] pa = MathStuff.poly(p);
 		
+		/*
 		System.out.println("myPolyComplex");
 		for (int i = 0; i < pa.length; i++) {
-			//System.out.println("Real: "+pa[i].getReal() +" Imag: " +pa[i].getImaginary());
+			System.out.println("Real: "+pa[i].getReal() +" Imag: " +pa[i].getImaginary());
 		}
+		*/
 		
 		assertEquals( 1.0, pa[0].getReal(), delta);
 		assertEquals(4.4940, pa[1].getReal(), delta);
@@ -169,10 +187,13 @@ public class MathStuffResiduenTest {
 	
 	@Test
 	public void testResidueSimpleItSelfe(){
+		double delta = 0.001;
+		
 		Object[] myObs = MathStuff.residueSimple(new TransferFunction(B, A));
 		Complex[] R = (Complex[]) myObs[0];
 		Complex[] P = (Complex[]) myObs[1];
 		double K = (double) myObs[2];
+		/*
 		System.out.println("ResidueSimple:");
 		//only value of first cell correct
 		System.out.println("R:");
@@ -184,6 +205,52 @@ public class MathStuffResiduenTest {
 		for (int i = 0; i < P.length; i++) {
 			System.out.println("Real: "+P[i].getReal() +" Imag: " +P[i].getImaginary());
 		}
+		*/
+		
+		assertEquals(-2.3190,P[0].getReal(),delta);
+		assertEquals(-1.5915 ,P[1].getReal(),delta);
+		assertEquals(-0.1529,P[2].getReal(),delta);
+		assertEquals(-0.2777,P[3].getReal(),delta);
+		assertEquals(-0.1529,P[4].getReal(),delta);
+		
+		assertEquals(0.0,P[0].getImaginary(),delta);
+		assertEquals(0.0 ,P[1].getImaginary(),delta);
+		assertEquals(0.3537,P[2].getImaginary(),delta);
+		assertEquals(0.0,P[3].getImaginary(),delta);
+		assertEquals(-0.3537,P[4].getImaginary(),delta);
+		
+		assertEquals(-0.1553,R[0].getReal(),delta);
+		assertEquals(0.3408 ,R[1].getReal(),delta);
+		assertEquals(-0.0939,R[2].getReal(),delta);
+		assertEquals(0.0024,R[3].getReal(),delta);
+		assertEquals(-0.0939,R[4].getReal(),delta);
+		
+		assertEquals(0.0,R[0].getImaginary(),delta);
+		assertEquals(0.0 ,R[1].getImaginary(),delta);
+		assertEquals(-0.2178,R[2].getImaginary(),delta);
+		assertEquals(0.0,R[3].getImaginary(),delta);
+		assertEquals(0.2178,R[4].getImaginary(),delta);
+		
+	}
+	
+	@Test
+	public void testResiduestepResidue(){
+		double delta = 0.001;
+		
+		Object[] myObs = MathStuff.stepResidue(B, A, 1, 10);
+		double[] y = (double[]) myObs[0];
+		double[] t = (double[]) myObs[1];
+		
+		/*
+		System.out.println("stepResidue");
+		for (int i = 0; i < y.length; i++) {
+			System.out.println("y: "+y[i]);
+		}
+		*/
+		
+		double[] yMatlabExpected = {0.0000, 0.0342, 0.1516 ,0.3378, 0.5568, 0.7735, 0.9616, 1.1048, 1.1970, 1.2400};
+		assertArrayEquals(yMatlabExpected,y,delta);
+		
 	}
 	
 }

@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
@@ -115,6 +116,47 @@ public class ClosedLoop {
 
         // generate time axis
         double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
+
+        // create XY data series for JFreeChart
+        stepResponse = new XYSeries(controller.getName());
+        for(int i = 0; i < t.length; i++) {
+            stepResponse.add(t[i], y[i]);
+        }
+
+        // done, notify
+        notifyCalculationComplete();
+    }
+    
+    public final void calculateStepResponseResidue(int numSamplePoints) {
+    	//calculate fs based on the sum of all timeConstants
+        List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
+                double timeAllTimeConstants = 0.0;
+        for (Object aTimeConstantsList : timeConstantsList) {
+            timeAllTimeConstants += (double) aTimeConstantsList;
+        }
+        //double fs = 45;
+        double fs = 1.0/(timeAllTimeConstants/400.0);
+        //double fs = timeAllTimeConstants/0.05;
+        
+        
+        // round sample points to the next power of two
+        /*
+        int powerOfTwo = 4;
+        while(powerOfTwo < numSamplePoints) {
+            powerOfTwo <<= 1;
+        }
+        */
+
+        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);
+		double[] y = (double[]) residueResult[0];
+		double[] t = (double[]) residueResult[1];
+
+        // compute maximum overswing in percent - see issue #23
+        maxOverSwing = MathStuff.max(y);
+        maxOverSwing = (maxOverSwing - 1.0) * 100;
+
+        // generate time axis
+        //double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
         // create XY data series for JFreeChart
         stepResponse = new XYSeries(controller.getName());

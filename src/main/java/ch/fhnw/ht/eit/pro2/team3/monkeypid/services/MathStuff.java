@@ -119,6 +119,36 @@ public class MathStuff {
 
         return res;
     }
+    
+    /**
+     * Calculates the value of the polynomial poly  at the given X-Value of s
+     * The coefficients of poly start with the highest order x^n.
+     * The last element of poly ist x^0
+     * @param poly The polynomial, for which the value is calculated
+     * @param s The X-Value, which is inserted as X into the polynomial
+     * @return the value of the polynomial poly at s
+     */
+    public static Complex polyVal(Complex[] poly, Complex s) {
+        // If s is zero, the result will be 0. Apparently, apache commons
+        // cannot raise the complex number 0+0j to any power without
+        // resulting in NaN. For these reasons, we cannot rely on the
+        // algorithm below to return the correct result.
+        if(s.equals(new Complex(0))) {
+            // since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
+            // and we know that s = 0, the result will be b*s^0 = b
+            return poly[poly.length - 1];
+        }
+
+        Complex res = new Complex(0);
+
+        for (int i = 0; i < poly.length; i++) {
+            Complex raised = s.pow(poly.length - i - 1);
+            raised = raised.multiply(poly[i]);
+            res=res.add(raised);
+        }
+
+        return res;
+    }
 
     /* WARNING This appears to be broken when used with two arrays with different sizes.
      * Use MathArrays.convolve from apache commons.
@@ -205,6 +235,39 @@ public class MathStuff {
 
         return symmetric;
     }
+    
+    public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
+    	double T = 1/fs;
+    	Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
+    	Complex[] R = (Complex[]) resdiueResult[0];
+		Complex[] P = (Complex[]) resdiueResult[1];
+		double K = (double) resdiueResult[2];
+    	
+		double[] y = new double[N];
+		for (int i = 0; i < y.length; i++) {
+			y[i] = 0.0;
+		}
+		
+		if(K != 0.0){
+			y[0] = K;
+		}
+		
+		double[] t = linspace(0, (N-1)*T, N);
+		
+		for(int k = 0; k < R.length; k++){
+			for(int m = 0; m < y.length; m++){
+				y[m] = y[m] + ((new Complex(P[k].getReal(), P[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(R[k].getReal(),R[k].getImaginary()))).getReal()/fs;
+			}
+		}
+		
+		for (int i = 1; i < y.length; i++) {
+			y[i] = y[i] + y[i-1];
+		}
+		
+    	return new Object[]{y, t};    	
+    	
+    }
+    
 
     /**
      * Converts a partial-fraction g into the residues R, poles P and constant-term K
@@ -232,11 +295,23 @@ public class MathStuff {
 			}
 		}
 		else{
-			K = 0.0;
+			K = 0.0; 
 		}
 		
 		Complex[] P = roots(Denominator);
-		//zeros(M,1)
+		//remove imaginary part if imaginary part is smaller than 1e-15
+		for (int i = 0; i < P.length; i++) {
+			if(Math.abs(P[i].getImaginary()) < 1e-15){
+				P[i] = new Complex(P[i].getReal(), 0);
+			}
+		}
+		
+		//swap two roots
+		//(because the  order of apache commons roots is not the same as in Matlab)
+		//Complex temp = P[3];
+		//P[3] = P[4];
+		//P[4] = temp;
+		
 		Complex[] R = new Complex[M];
 		for (int i = 0; i < R.length; i++) {
 			R[i] = new Complex(0);
@@ -248,18 +323,6 @@ public class MathStuff {
 			//copy P in smallP
 			Complex[] smallP = new Complex[P.length];
 			
-			/*
-			for (int i = 0; i < smallP.length; i++) {
-				smallP[i] = P[i];
-			}
-			//shift smallP left one cell
-			for (int j = m; j < M; j++) {
-				smallP[j] = smallP[j+1];
-			}
-			//remove last array cell
-			smallP = ArrayUtils.remove(smallP, smallP.length-1); //works?
-			*/
-			
 			//copy every element from second of P in smallP
             //System.arraycopy(P, 1, smallP, 0, smallP.length);
 			System.arraycopy(P, 0, smallP, 0, P.length);
@@ -267,27 +330,35 @@ public class MathStuff {
 				System.arraycopy(smallP, m+1, smallP, m, M-m-1);
 			}
 			smallP = ArrayUtils.remove(smallP, smallP.length-1);
-			System.out.println("Smallp: round:"+m);
-			for (int i = 0; i < smallP.length; i++) {
-				System.out.println("Smallp: "+smallP[i].getReal());
-			}
 			Complex[] pa = poly(smallP);
+			
+			/*
+			//wrong decision: pa has sometimes imaginary-part, which can't be ignored
 			double[] paReal = new double[pa.length];
 			//pa is real (no imaginary part) -> get only real from pa
 			for (int i = 0; i < paReal.length; i++) {
 				paReal[i] = pa[i].getReal();
 			}
+			*/
 			
 			//calculate Residues
 			Complex pvB = polyVal(Numerator, P[m]);
-			Complex pvA = polyVal(paReal, P[m]);
+			Complex pvA = polyVal(pa, P[m]);
 			Complex pvD = pvB.divide(pvA);
 			R[m] = pvD.divide(Denominator[0]);
 		}
 		
+		//remove imaginary part if imaginary part is smaller than 1e-15
+		for (int i = 0; i < R.length; i++) {
+			if(Math.abs(R[i].getImaginary()) < 1e-15){
+				R[i] = new Complex(R[i].getReal(), 0);
+			}
+		}
 		
     	return new Object[]{R,P,K};    	
     }
+    
+    
 
     /**
      * Computes the polynomial coefficients with the specified roots.
