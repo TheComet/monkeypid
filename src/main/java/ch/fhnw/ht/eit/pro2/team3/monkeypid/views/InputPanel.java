@@ -242,13 +242,22 @@ public class InputPanel extends JPanel implements ActionListener,
 
 		// if button simulate is pressed
 		if (e.getSource() == btSimulate) {
-
+			
+			// TODO remove
 			// convert string values to double
-			double tfKsValue = tfKs.doubleValue();
+			/*double tfKsValue = tfKs.doubleValue();
 			double tfTuValue = tfTu.doubleValue();
-			double tfTgValue = tfTg.doubleValue();
-			double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to
+			double tfTgValue = tfTg.doubleValue();*/
+			//double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to
 															// absolute
+			// convert string values to double
+			// .doubleValue(); from JFormatedDoubleTextfield doesn't update correct
+			double tfKsValue = Double.parseDouble(tfKs.getText());
+			double tfTuValue = Double.parseDouble(tfTu.getText());
+			double tfTgValue = Double.parseDouble(tfTg.getText());
+			//convert percent to absolute
+			double tfTpValue = Double.parseDouble(tfTp.getText()) * 0.01;
+			
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
 					.getSelectedItem());

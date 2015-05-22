@@ -338,13 +338,14 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void PrintFrameToPDF(String file) {
 		//Document d = new Document();
 		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
+
 		try {
 			//works
 	        PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
 	        d.open();
 	     
             PdfContentByte cb = writer.getDirectContent();
-           // cb.
+            //cb.set
             PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
             //tp.setA
             Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
@@ -359,8 +360,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
             g2.scale(factor, factor);
             view.print(g2);
             g2.dispose();
-            cb.addTemplate (tp, 10, 10);
-	        
+            System.out.println(tp.getHeight() + "   "+(-tp.getWidth()+1246.0+30));
+            System.out.println(tp.getWidth()+ "   "+(-tp.getHeight()+705.0+20));
+            
+            cb.addTemplate (tp, -tp.getWidth()+1246.0+30, -tp.getHeight()+705.0+20);
+            //cb.setLeading(TOP_ALIGNMENT);
 	    } catch (Exception e) {
 	        System.out.println("ERROR: " + e.toString());
 	    }
