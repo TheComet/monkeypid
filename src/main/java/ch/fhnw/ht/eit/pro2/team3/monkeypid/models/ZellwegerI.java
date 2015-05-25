@@ -17,9 +17,15 @@ public class ZellwegerI extends AbstractZellweger {
         setAngleOfInflection(-45.0);
     }
     
-    public ZellwegerI(Plant plant, double angleOfInflection) {
+    /**
+     * Overloads Constructor for additional offset for the angleOfInflection
+     * This can be used to adjust the the rise of the stepResponse of this Controller
+     * @param plant The plant to calculate a controller for.
+     * @param angleOfInflectionOffset The offset for the angleOfInflection.
+     */
+    public ZellwegerI(Plant plant, double angleOfInflectionOffset) {
         super(plant, 0.0); // phase margin is irrelevant in Zellweger I
-        setAngleOfInflection(-45.0 + angleOfInflection);
+        setAngleOfInflection(-45.0 + angleOfInflectionOffset);
     }
 
     /**
