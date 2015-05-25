@@ -38,7 +38,11 @@ public abstract class AbstractController {
      */
     public abstract String[] getTableRowStrings();
 
-    public void setKr(double kr) {}
+    /**
+     * This schould set the controller-parameter Kr of this controller.
+     * @param kr The controller-parameter Kr.
+     */
+    public abstract void setKr(double kr);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor

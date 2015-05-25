@@ -19,6 +19,10 @@ public class Controller {
 		this.model = model;
 	}
 	
+	/**
+	 * Connects the View with the Controller for the MVC pattern.
+	 * @param view The view to control.
+	 */
 	public void setView(View view){
 		this.view = view;
 	}
@@ -44,6 +48,11 @@ public class Controller {
         model.simulateAll();
 	}
 	
+	/**
+	 * This is called, when the user adjusts the slider. Then the model has to update the ZellwegerController.
+	 * This is done with updateZellweger()
+	 * @param phaseInflectionOffset The actual value of the slider (the offset of the phaseInflection).
+	 */
 	public void phaseInflectionChanged(int phaseInflectionOffset){
 		model.updateZellweger(phaseInflectionOffset);
 	}

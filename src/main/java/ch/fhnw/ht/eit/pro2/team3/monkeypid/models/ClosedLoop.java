@@ -127,6 +127,12 @@ public class ClosedLoop {
         notifyCalculationComplete();
     }
     
+    /**
+     * Calculates the step response of the closed loop. This method uses Residue to get the step response.
+     * @param numSamplePoints The number of sample points to use for the linspace of the time-axis.
+     * 							The max time-value is internally calculated by fs (the fs of the transfer-function,
+     * 							also internally calculated) and the numSamplePoints.
+     */
     public final void calculateStepResponseResidue(int numSamplePoints) {
     	//calculate fs based on the sum of all timeConstants
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
@@ -137,26 +143,15 @@ public class ClosedLoop {
         //double fs = 45;
         double fs = 1.0/(timeAllTimeConstants/400.0);
         //double fs = timeAllTimeConstants/0.05;
-        
-        
-        // round sample points to the next power of two
-        /*
-        int powerOfTwo = 4;
-        while(powerOfTwo < numSamplePoints) {
-            powerOfTwo <<= 1;
-        }
-        */
 
+        //calculates the step-response with residues
         Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);
-		double[] y = (double[]) residueResult[0];
-		double[] t = (double[]) residueResult[1];
+		double[] y = (double[]) residueResult[0]; //the y-values of the step-response
+		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 
         // compute maximum overswing in percent - see issue #23
         maxOverSwing = MathStuff.max(y);
         maxOverSwing = (maxOverSwing - 1.0) * 100;
-
-        // generate time axis
-        //double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
         // create XY data series for JFreeChart
         stepResponse = new XYSeries(controller.getName());
