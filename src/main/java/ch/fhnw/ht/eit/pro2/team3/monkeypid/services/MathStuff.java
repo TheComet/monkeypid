@@ -353,7 +353,7 @@ public class MathStuff {
 			
 			//copy every element from second of P in smallP
 			System.arraycopy(poles, 0, tempPoles, 0, poles.length);
-			//shift the elements of tempPoles to the left (not all elements, uses some magic)
+			//shift the elements of tempPoles to the left (not all elements, uses some magic[see Matlab-Files])
 			if((degreeDenominator-m-1) > 0){
 				System.arraycopy(tempPoles, m+1, tempPoles, m, degreeDenominator-m-1);
 			}

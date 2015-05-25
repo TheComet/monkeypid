@@ -93,14 +93,17 @@ public class View extends JPanel implements ActionListener {
 		//graphSettingPanel
 		graphSettingPanel = new JPanel();
 		graphSettingPanel.setLayout(new GridLayout(3, 1));
+		
 		//set insets of all buttons to zero
 		btAutoAdjust.setMargin(new Insets(0, 0, 0, 0));
 		btToggleDisplayCurves.setMargin(new Insets(0, 0, 0, 0));
 		btToggleDiyplayFistCurves.setMargin(new Insets(0, 0, 0, 0));
+		
 		//add toolTips for all buttons
 		btAutoAdjust.setToolTipText("Zur Originalansicht wechseln");
 		btToggleDisplayCurves.setToolTipText("Alle Kurven ein-/ausblenden");
 		btToggleDiyplayFistCurves.setToolTipText("Alle Faustformeln ein-/ausblenden");
+		
 		//add buttons to panel and add actionListener
 		graphSettingPanel.add(btAutoAdjust);
 		btAutoAdjust.addActionListener(this);
@@ -117,6 +120,9 @@ public class View extends JPanel implements ActionListener {
 		graphSettingPanel.setBorder(new TitledBorder((null), " "));
 	}
 
+	/**
+	 * This is called, when the user click onto the Buttons below the graph
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btAutoAdjust) {
