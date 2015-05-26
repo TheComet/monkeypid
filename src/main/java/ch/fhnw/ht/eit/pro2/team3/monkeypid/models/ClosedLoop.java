@@ -155,6 +155,10 @@ public class ClosedLoop {
     	 * -> change eventually the fs and N calculation to optimize the speed of the residue calculation
     	 * the calculation of fs and N was developed by Richard Gut for the ifft method, so probably for the
     	 * residue method, fs an N should be calculated different
+    	 * 
+    	 * React to the parameter numOfSampling points. At the moment it is overwritten by this method -> the model
+    	 * can't switch between normal accurate calculation and fast calculation (because the parameter is unused
+    	 * at the moment)
     	 */
     	
     	// determine the optimal time window and compute fs
