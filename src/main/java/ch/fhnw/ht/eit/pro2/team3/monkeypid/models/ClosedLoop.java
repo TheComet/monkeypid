@@ -8,6 +8,8 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
+import com.itextpdf.text.log.SysoCounter;
+
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -134,6 +136,8 @@ public class ClosedLoop {
      * 							also internally calculated) and the numSamplePoints.
      */
     public final void calculateStepResponseResidue(int numSamplePoints) {
+    	
+    	/*
     	//calculate fs based on the sum of all timeConstants
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
                 double timeAllTimeConstants = 0.0;
@@ -143,6 +147,23 @@ public class ClosedLoop {
         //double fs = 45;
         double fs = 1.0/(timeAllTimeConstants/400.0);
         //double fs = timeAllTimeConstants/0.05;
+         */
+    	
+    	// determine the optimal time window and compute fs
+        // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
+        // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
+        Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
+        double largestImag = MathStuff.max(MathStuff.imag(roots));
+        double largestReal  = MathStuff.maxToZeroFromNegativeInfinity(MathStuff.real(roots));
+        System.out.println("LargestImag: "+largestImag +"LargestReal: "+largestReal);
+        
+        double fs = 500.0*largestImag/(2.0*Math.PI);
+        System.out.println("fs: "+fs);
+      
+        double numberOfPoints = fs*Math.log(0.005)/largestReal;
+        numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
+        numSamplePoints = (int) Math.pow(2, numSamplePoints);
+        System.out.println("numOfPoints: "+numberOfPoints+ " numSamplePoints: "+numSamplePoints);
 
         //calculates the step-response with residues
         Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);

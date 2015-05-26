@@ -43,6 +43,16 @@ public class MathStuff {
         }
         return largest;
     }
+    
+    public static double maxToZeroFromNegativeInfinity(double[] arr) {
+        double largest = arr[0];
+        for(double value : arr) {
+            if(value > largest) {
+                largest = value;
+            }
+        }
+        return largest;
+    }
 
     /**
      * Generates an array of linearly spaced values ranging from the start value to the end value with the specified

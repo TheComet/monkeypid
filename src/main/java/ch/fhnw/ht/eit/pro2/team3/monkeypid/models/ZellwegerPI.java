@@ -96,18 +96,18 @@ public class ZellwegerPI extends AbstractZellweger {
         // see issue #7 - calculate minimum and maximum Kr for iterative approximation of overswing
         double oldPhiDamping = phiDamping; // we're modifying phiDamping by setting a new phase margin. This has to be
         // restored once we're done
-        System.out.println("current phiDamping: " + phiDamping);
-        System.out.println("angleOfInflection: " + angleOfInflection);
+        //System.out.println("current phiDamping: " + phiDamping);
+        //System.out.println("angleOfInflection: " + angleOfInflection);
         setPhaseMargin(30); // high overswing
         controller.setMaxKr(calculateKr(tn));
-        System.out.println("max phiDamping: " + phiDamping);
-        System.out.println("angleOfInflection: " + angleOfInflection);
-        System.out.println("setPhaseMargin(30), MaxKr: " + controller.getMaxKr());
+        //System.out.println("max phiDamping: " + phiDamping);
+        //System.out.println("angleOfInflection: " + angleOfInflection);
+        //System.out.println("setPhaseMargin(30), MaxKr: " + controller.getMaxKr());
         setPhaseMargin(90); // low overswing
         controller.setMinKr(calculateKr(tn));
-        System.out.println("min phiDamping: " + phiDamping);
-        System.out.println("angleOfInflection: " + angleOfInflection);
-        System.out.println("setPhaseMargin(90), MinKr: " + controller.getMinKr());
+        //System.out.println("min phiDamping: " + phiDamping);
+        //System.out.println("angleOfInflection: " + angleOfInflection);
+        //System.out.println("setPhaseMargin(90), MinKr: " + controller.getMinKr());
         phiDamping = oldPhiDamping; // restore
 
         return controller;
