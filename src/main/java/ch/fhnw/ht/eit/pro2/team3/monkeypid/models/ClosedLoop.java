@@ -149,13 +149,21 @@ public class ClosedLoop {
         //double fs = timeAllTimeConstants/0.05;
          */
     	
+    	//TODO:
+    	/*
+    	 * Limit the range of the num-of sampling points from 1024 to 2048
+    	 * -> change eventually the fs and N calculation to optimize the speed of the residue calculation
+    	 * the calculation of fs and N was developed by Richard Gut for the ifft method, so probably for the
+    	 * residue method, fs an N should be calculated different
+    	 */
+    	
     	// determine the optimal time window and compute fs
         // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
         // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
         Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
         double largestImag = MathStuff.max(MathStuff.imag(roots));
         double largestReal  = MathStuff.maxToZeroFromNegativeInfinity(MathStuff.real(roots));
-        System.out.println("LargestImag: "+largestImag +"LargestReal: "+largestReal);
+        //System.out.println("LargestImag: "+largestImag +"LargestReal: "+largestReal);
         
         double fs = 500.0*largestImag/(2.0*Math.PI);
         System.out.println("fs: "+fs);
@@ -164,6 +172,10 @@ public class ClosedLoop {
         numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
         numSamplePoints = (int) Math.pow(2, numSamplePoints);
         System.out.println("numOfPoints: "+numberOfPoints+ " numSamplePoints: "+numSamplePoints);
+        
+        if(numSamplePoints > 4096){
+        	numSamplePoints = 4096;
+        }
 
         //calculates the step-response with residues
         Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);
