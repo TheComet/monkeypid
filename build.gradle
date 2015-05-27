@@ -10,8 +10,6 @@ targetCompatibility = '1.8'
 
 mainClassName = 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID'
 
-libsDirName = 'targetLibs'
-
 task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'ch.fhnw.ht.eit.pro2.team3.monkeypid.MonkeyPID',
