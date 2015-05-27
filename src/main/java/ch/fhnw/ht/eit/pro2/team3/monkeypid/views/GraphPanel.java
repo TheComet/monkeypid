@@ -41,14 +41,14 @@ public class GraphPanel extends JPanel implements IModelListener,
 	 * @param controller
 	 */
 	public GraphPanel() {
-		// super(new GridBagLayout());
+		//set layout to BorderLayout
 		super(new BorderLayout());
 
 		// collection holds XY data series
 		dataCollection = new XYSeriesCollection();
 
 		// axes
-		NumberAxis xAxis = new NumberAxis("Zeit");
+		NumberAxis xAxis = new NumberAxis("Zeit in Sekunden");
 		NumberAxis yAxis = new NumberAxis("y(t)");
 
 		// renderer
@@ -67,11 +67,6 @@ public class GraphPanel extends JPanel implements IModelListener,
 		// need a panel to add the chart to
 		ChartPanel panel = new ChartPanel(chart);
 		panel.addChartMouseListener(this);
-
-		// TODO beste variante?
-		// set prefered size
-		// panel.setPreferredSize(new java.awt.Dimension (800, 600));
-		// panel.setMinimumSize(new Dimension(800, 600));
 
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
