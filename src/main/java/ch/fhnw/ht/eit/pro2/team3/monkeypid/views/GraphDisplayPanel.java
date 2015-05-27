@@ -39,7 +39,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	 * Constructor of GraphDisplayPanel adds
 	 */
 	public GraphDisplayPanel(Controller controller, View view) {
-		// super(new FlowLayout(FlowLayout.LEADING));
+		// set layout to wrapLayout, (FlowLayout doesn't wrap after resize)
 		super(new WrapLayout(WrapLayout.LEFT));
 		this.controller = controller;
 		this.view = view;

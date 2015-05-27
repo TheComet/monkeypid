@@ -25,6 +25,11 @@ import java.text.DecimalFormat;
 public class InputPanel extends JPanel implements ActionListener,
 		IModelListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	Controller controller;
 	View view;
 
@@ -41,9 +46,9 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JLabel lbKs = new JLabel("Ks");
 	private JLabel lbTu = new JLabel("Tu");
 	private JLabel lbTg = new JLabel("Tg");
-	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
-	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
-	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(new DecimalFormat("###.###"),1);
+	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(null, 1);
+	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(null, 1);
+	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(null, 1);
 
 	// info label for wrong value textfields
 	private JLabel lbValueErrorInfo = new JLabel();
@@ -56,7 +61,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JLabel lbTpInfo = new JLabel("%");
 
 	// private JTextField tfTp = new JTextField("10", 5);
-	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(new DecimalFormat("###.0"),1);
+	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(null, 1);
 
 	// select regulator
 	private JLabel lbSelectRegulatorTitle = new JLabel("Wahl des Reglers:");
@@ -66,22 +71,11 @@ public class InputPanel extends JPanel implements ActionListener,
 	// Phasengangmethode overshoot
 	private JLabel lbPhasengangmethodTitle = new JLabel(
 			"Ueberschwingen der Phasengangmethode:");
-	private JTextField tfOvershoot = new JTextField("10");
+	private JFormattedDoubleTextField tfOvershoot = new JFormattedDoubleTextField(null, 1);
 	private JLabel lbOvershootPercent = new JLabel("%");
 
 	// simulation button
 	private JButton btSimulate = new JButton("Simulieren");
-
-	// manual adjustment
-	private JSlider slKp = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JSlider slTn = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JSlider slTv = new JSlider(JSlider.HORIZONTAL, 0, 5, 3);
-	private JFormattedDoubleTextField tfAdaptKp = new JFormattedDoubleTextField(new DecimalFormat("###.##"),
-			1);
-	private JFormattedDoubleTextField tfAdaptTn = new JFormattedDoubleTextField(
-			1);
-	private JFormattedDoubleTextField tfAdaptTv = new JFormattedDoubleTextField(
-			1);
 
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
@@ -108,9 +102,9 @@ public class InputPanel extends JPanel implements ActionListener,
 		}*/
 
 		// TODO remove
-		tfTu.setValue(2);
-		tfTg.setValue(6);
-		tfKs.setValue(1);
+		tfTu.setText("2");
+		tfTg.setText("6");
+		tfKs.setText("1");
 
 		// add items for input fields to GridBagLayout
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
@@ -168,6 +162,7 @@ public class InputPanel extends JPanel implements ActionListener,
 		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(5, 10, 0, 10), 0, 0));
+		tfOvershoot.setText("10"); //set default value
 		add(tfOvershoot, new GridBagConstraints(0, 6, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 10, 10, 10), 50, 0));
@@ -183,7 +178,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE,
 				new Insets(5, 0, 10, 10), 0, 0));
 
-		tfTp.setValue(10); // set default value of Tp
+		tfTp.setText("10"); // set default value of Tp
 		add(tfTp, new GridBagConstraints(0, 8, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 10, 10, 0), 50, 0));
@@ -227,12 +222,6 @@ public class InputPanel extends JPanel implements ActionListener,
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		slKp.setVisible(miniVersionSelected);
-		slTn.setVisible(miniVersionSelected);
-		slTv.setVisible(miniVersionSelected);
-		tfAdaptKp.setVisible(miniVersionSelected);
-		tfAdaptTn.setVisible(miniVersionSelected);
-		tfAdaptTv.setVisible(miniVersionSelected);
 	}
 
 	/**
@@ -243,13 +232,6 @@ public class InputPanel extends JPanel implements ActionListener,
 		// if button simulate is pressed
 		if (e.getSource() == btSimulate) {
 			
-			// TODO remove
-			// convert string values to double
-			/*double tfKsValue = tfKs.doubleValue();
-			double tfTuValue = tfTu.doubleValue();
-			double tfTgValue = tfTg.doubleValue();*/
-			//double tfTpValue = tfTp.doubleValue() * 0.01; // convert percent to
-															// absolute
 			// convert string values to double
 			// .doubleValue(); from JFormatedDoubleTextfield doesn't update correct
 			double tfKsValue = Double.parseDouble(tfKs.getText());
@@ -261,10 +243,13 @@ public class InputPanel extends JPanel implements ActionListener,
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
 					.getSelectedItem());
-
+			// get value of overshoot textField
 			double valueOfOvershoot = Double.parseDouble(tfOvershoot.getText());
-
-			// handling of wrong entries
+			
+			//TODO remove syso
+			System.out.println(valueOfOvershoot);
+			
+			// set dummy value for error textField, if not height would be zero
 			lbValueErrorInfo.setText(" ");
 
 			// set color of error info label to red
