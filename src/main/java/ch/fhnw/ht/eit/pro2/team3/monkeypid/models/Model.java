@@ -92,8 +92,7 @@ public class Model implements IClosedLoopListener {
 		 * Sets the target overswing to approximate using the iterative
 		 * approximation method.
 		 * 
-		 * @param overswing
-		 *            The overswing in percent.
+		 * @param overswing The overswing in percent.
 		 */
 		public void setTargetOverswing(double overswing) {
 			if (overswing < 0.5)
@@ -199,8 +198,11 @@ public class Model implements IClosedLoopListener {
 	private boolean[] curvesVisible = { true, true, true, true, true, true,
 			true };
 
+	//stores the last calculated ZellwegerClosedLoop
+	//until one ZellwegerClosedLoop was calculated, this attribute shows that with null
 	private ClosedLoop lastZellwegerClosedLoop = null;
 
+	//used to show, if the Zellweger-Controller-Update is working, blocks parallel computing of Zellweger-Controllers
 	private boolean zellwegerPhaseInflectionAdjustingCalculationOngoing = false;
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -305,6 +307,16 @@ public class Model implements IClosedLoopListener {
 		}
 	}
 
+	/**
+	 * Updates the last caluclated Zellweger-Controller.
+	 * Uses the parameter phaseInflectionOffset as Offset for the phaseInflection
+	 * of the last Zellweger-Controller. This method calculates also the step-response.
+	 * The table and the graph of the GUI are automatically updated by the given 
+	 * notifiers.
+	 * This method calculates only a new zellwegerMethod, if no other Calculation
+	 * is active and at least one Zellweger-Calculation is done.
+	 * @param phaseInflectionOffset
+	 */
 	public void updateZellweger(int phaseInflectionOffset) {
 		// if at least one simulation done (lastZellwegerClosedLoop is then not
 		// null)
@@ -320,40 +332,46 @@ public class Model implements IClosedLoopListener {
 		if (zellwegerPhaseInflectionAdjustingCalculationOngoing) {
 			return;
 		}
+		
 		// block other alculations, until this is finished
 		zellwegerPhaseInflectionAdjustingCalculationOngoing = true; 
 		
 		//notifyRemoveCalculation(lastZellwegerClosedLoop);
 
+		//create a CalulationCycle for the Zellweger-Controller
 		CalculationCycle calculator;
 
+		//creats an the Zellweger-Controller depending of the regulatorType
 		switch (regulatorType) {
 		case PID:
-			calculator = (new CalculationCycle(new ZellwegerPID(plant,
-					overswing, phaseInflectionOffset), this));
+			calculator = (new CalculationCycle(new ZellwegerPID(plant, overswing, phaseInflectionOffset), this));
 			break;
 		case PI:
-			calculator = (new CalculationCycle(
-					new ZellwegerPI(plant, overswing, phaseInflectionOffset), this));
+			calculator = (new CalculationCycle(new ZellwegerPI(plant, overswing, phaseInflectionOffset), this));
 			break;
 		case I:
 			calculator = (new CalculationCycle(new ZellwegerI(plant, phaseInflectionOffset), this));
 			break;
-		//default not used, but wan't initialize variable calculator befor switch
+		//default not used, but wan't initialize variable calculator before switch
 		default:
 			calculator = (new CalculationCycle(new ZellwegerI(plant, phaseInflectionOffset), this));
 			break;
 		}
 
+		//Set the Zellweger-Controller as top-position in the table (it will replace the old Zellweger-Controller)
 		calculator.getControllerCalculator().setTableRowIndex(0);
+		//set the parasiticTimeConstantFactor as the last value entered by the user (hold in attribute)
 		calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+		//set the TargetOverswing as the last value entered by the user (hold in attribute)
 		calculator.setTargetOverswing(overswing);
 		
-		// dispatch all calculators
+		//dispatch the calculator
 		calculator.run();
-		//remove the new calculated closedLoop from the list, else, it will be removed two times, what is impossible
+		//remove the new calculated closedLoop from the list, else, it will be removed two times
+		//(when a new calculation is started by the user with the Simulate-Button), what is impossible
 		closedLoops.remove(closedLoops.size()-1);
 
+		//remove the block of new calls to this method.
 		zellwegerPhaseInflectionAdjustingCalculationOngoing = false;
 	}
 
@@ -599,6 +617,11 @@ public class Model implements IClosedLoopListener {
 		}
 	}
 
+	/**
+	 * Call this to notify that a Plant has been set. This should cause the inputPanel to
+	 * show the order of the new set  Plant in the GUI
+	 * @param plant
+	 */
 	private void notifySetPlant(Plant plant) {
 		for (IModelListener listener : listeners) {
 			listener.onSetPlant(plant);

@@ -8,6 +8,8 @@ import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
 
+import com.itextpdf.text.log.SysoCounter;
+
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -127,7 +129,15 @@ public class ClosedLoop {
         notifyCalculationComplete();
     }
     
+    /**
+     * Calculates the step response of the closed loop. This method uses Residue to get the step response.
+     * @param numSamplePoints The number of sample points to use for the linspace of the time-axis.
+     * 							The max time-value is internally calculated by fs (the fs of the transfer-function,
+     * 							also internally calculated) and the numSamplePoints.
+     */
     public final void calculateStepResponseResidue(int numSamplePoints) {
+    	
+    	/*
     	//calculate fs based on the sum of all timeConstants
         List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
                 double timeAllTimeConstants = 0.0;
@@ -137,26 +147,48 @@ public class ClosedLoop {
         //double fs = 45;
         double fs = 1.0/(timeAllTimeConstants/400.0);
         //double fs = timeAllTimeConstants/0.05;
+         */
+    	
+    	//TODO:
+    	/*
+    	 * Limit the range of the num-of sampling points from 1024 to 2048
+    	 * -> change eventually the fs and N calculation to optimize the speed of the residue calculation
+    	 * the calculation of fs and N was developed by Richard Gut for the ifft method, so probably for the
+    	 * residue method, fs an N should be calculated different
+    	 * 
+    	 * React to the parameter numOfSampling points. At the moment it is overwritten by this method -> the model
+    	 * can't switch between normal accurate calculation and fast calculation (because the parameter is unused
+    	 * at the moment)
+    	 */
+    	
+    	// determine the optimal time window and compute fs
+        // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
+        // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
+        Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
+        double largestImag = MathStuff.max(MathStuff.imag(roots));
+        double largestReal  = MathStuff.maxToZeroFromNegativeInfinity(MathStuff.real(roots));
+        //System.out.println("LargestImag: "+largestImag +"LargestReal: "+largestReal);
         
+        double fs = 500.0*largestImag/(2.0*Math.PI);
+        System.out.println("fs: "+fs);
+      
+        double numberOfPoints = fs*Math.log(0.005)/largestReal;
+        numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
+        numSamplePoints = (int) Math.pow(2, numSamplePoints);
+        System.out.println("numOfPoints: "+numberOfPoints+ " numSamplePoints: "+numSamplePoints);
         
-        // round sample points to the next power of two
-        /*
-        int powerOfTwo = 4;
-        while(powerOfTwo < numSamplePoints) {
-            powerOfTwo <<= 1;
+        if(numSamplePoints > 4096){
+        	numSamplePoints = 4096;
         }
-        */
 
+        //calculates the step-response with residues
         Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, numSamplePoints);
-		double[] y = (double[]) residueResult[0];
-		double[] t = (double[]) residueResult[1];
+		double[] y = (double[]) residueResult[0]; //the y-values of the step-response
+		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 
         // compute maximum overswing in percent - see issue #23
         maxOverSwing = MathStuff.max(y);
         maxOverSwing = (maxOverSwing - 1.0) * 100;
-
-        // generate time axis
-        //double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
 
         // create XY data series for JFreeChart
         stepResponse = new XYSeries(controller.getName());

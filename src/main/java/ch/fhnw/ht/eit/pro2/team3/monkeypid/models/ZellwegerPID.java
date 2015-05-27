@@ -20,6 +20,14 @@ public class ZellwegerPID extends AbstractZellweger {
         setAngleOfInflection(-135.0);
     }
     
+    /**
+     * Constructs a new Zellweger calculator using the specified plant.
+     * Overloads Constructor for additional offset for the angleOfInflection
+     * This can be used to adjust the the rise of the stepResponse of this Controller
+     * @param plant The plant to calculate a controller for.
+     * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
+     * @param angleOfInflectionOffset The offset for the angleOfInflection.
+     */
     public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflection) {
         super(plant, phaseMargin);
         setAngleOfInflection(-135.0 + angleOfInflection);

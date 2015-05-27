@@ -21,23 +21,7 @@ public class MathStuffResiduenTest {
 
 	@Test
 	public void testResidueSimpleRemoveLeadingZeros() {
-		
-		/*
-		int startIndex = 0;
-		//remove leading Zeros
-		for (int i = 0; i < B0.length; i++) {
-			if(B0[i] != 0){
-				startIndex = i;
-				break;
-			}
-		}
-		
-		double[] BzerosRemoved = new double[B0.length-startIndex];
-		for (int i = 0; i < BzerosRemoved.length; i++) {
-			BzerosRemoved[i] = B0[startIndex + i];
-		}
-		*/
-		
+				
 		double AremovedLeadingZeros[] = MathStuff.removeLeadingZeros(Bzeros);
 		
 		assertArrayEquals(B, AremovedLeadingZeros, 0.01);
@@ -46,7 +30,7 @@ public class MathStuffResiduenTest {
 	@Test
 	public void testResidueSimpleCalculateK() {
 		
-		//calculate Order of Numerator (Z�hler) and Denominator (Nenner)
+		//calculate Order of Numerator (Zähler) and Denominator (Nenner)
 		int N = Bequal.length -1;
 		int M = Aequal.length -1;
 		

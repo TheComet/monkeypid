@@ -73,6 +73,9 @@ public class ControllerPID extends AbstractController {
         return tp;
     }
 
+    /**
+     * Sets the controller parameter Kr.
+     */
     @Override
     public final void setKr(double kr) {
         setParameters(tn, tv, kr, tp);

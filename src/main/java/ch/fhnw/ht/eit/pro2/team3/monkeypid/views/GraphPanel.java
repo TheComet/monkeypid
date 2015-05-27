@@ -78,6 +78,9 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	}
 
+	/**
+	 * Autoscales the axis (x and y) of the graph, that all data points fit the visible area
+	 */
 	public void autoScaleAxis() {
 		chart.getXYPlot().getDomainAxis().setAutoRange(true);
 		chart.getXYPlot().getRangeAxis().setAutoRange(true);
@@ -95,6 +98,10 @@ public class GraphPanel extends JPanel implements IModelListener,
 		getDatasetRenderer().setSeriesVisible(getSeriesIndex(loop), flag);
 	}
 
+	/**
+	 * Adds a closedLoop stepResponse curve to the graph
+	 * If a curve with the same name is already in the graph, remove it first
+	 */
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
@@ -138,6 +145,9 @@ public class GraphPanel extends JPanel implements IModelListener,
 		});
 	}
 
+	/**
+	 * Remove the curve of the parameter closedLoop from the graph
+	 */
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
 		SwingUtilities.invokeLater(() -> {
@@ -169,6 +179,15 @@ public class GraphPanel extends JPanel implements IModelListener,
 	public void onSetPlant(Plant plant) {
 	}
 
+	/**
+	 * This is called, if the user clicks with the mouse onto the graph
+	 * If a curve is hit, its renderer-stroke is set wider
+	 * Else, all curves renderer-strokes are set to the default wide
+	 * (This is a basic highlighting-mechanism, it could be improved by also
+	 * highliting the corresponding table row. And reverse also from the table
+	 * to the graph. This highlighting-action should be controller over the 
+	 * controller and the model)
+	 */
 	@Override
 	public void chartMouseClicked(ChartMouseEvent e) {
 		if (e.getEntity().getClass() == XYItemEntity.class) {

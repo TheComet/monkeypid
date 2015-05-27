@@ -210,6 +210,11 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 		slTrimmSlider.setVisible(miniVersionSelected);
 	}
 	
+	/**
+	 * Sets the Slider to its default Value = 0
+	 * This is in the middle of the slider
+	 * This is called (from the controller) after the user clicks onto the Simulate-Button
+	 */
 	public void setSliderDefaultValue(){
 		slTrimmSlider.setValue(0);
 	}

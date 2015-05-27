@@ -49,6 +49,9 @@ public class ControllerPI extends AbstractController {
         return tn;
     }
 
+    /**
+     * Sets the controller parameter Kr.
+     */
     @Override
     public final void setKr(double kr) {
         setParameters(kr, tn);

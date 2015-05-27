@@ -43,6 +43,16 @@ public class MathStuff {
         }
         return largest;
     }
+    
+    public static double maxToZeroFromNegativeInfinity(double[] arr) {
+        double largest = arr[0];
+        for(double value : arr) {
+            if(value > largest) {
+                largest = value;
+            }
+        }
+        return largest;
+    }
 
     /**
      * Generates an array of linearly spaced values ranging from the start value to the end value with the specified
@@ -124,6 +134,8 @@ public class MathStuff {
      * Calculates the value of the polynomial poly  at the given X-Value of s
      * The coefficients of poly start with the highest order x^n.
      * The last element of poly ist x^0
+     * Overloads the Method, the parameter poly, the polynomial-function
+     * is now an array of complex-numbers
      * @param poly The polynomial, for which the value is calculated
      * @param s The X-Value, which is inserted as X into the polynomial
      * @return the value of the polynomial poly at s
@@ -236,126 +248,154 @@ public class MathStuff {
         return symmetric;
     }
     
+    /**
+     * Calculates the Step-Response of a Transfer-Function with the Numerator B and the Denominator A.
+     * 1/fs is and the Number of sampling Points N is used to calculate the time-axis of the Step-Response.
+     * The time-axis has N number of points.
+     * See Matlab file "schrittResidue".
+     * Uses the method residueSimple() to do a Partial-Fraction decomposition
+     * @param B The Numerator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
+     * @param A the Denominator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
+     * @param fs The fs of the Transfer-Function.
+     * @param N The number of sampling/x-axis points.
+     * @return {y,t} An array with the two double arrays y, the y-values and t, the time-values of the Step-Response.
+     */
     public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
+    	//Matlab-Function in comments with Brackets()
+    	//get the time from fs
     	double T = 1/fs;
+    	//Partial-Fraction decomposition
     	Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
-    	Complex[] R = (Complex[]) resdiueResult[0];
-		Complex[] P = (Complex[]) resdiueResult[1];
-		double K = (double) resdiueResult[2];
-    	
-		double[] y = new double[N];
+    	Complex[] residues = (Complex[]) resdiueResult[0];
+		Complex[] pole = (Complex[]) resdiueResult[1];
+		double constantK = (double) resdiueResult[2];
+
+		//y-values
+		//zeros()
+		double[] y = new double[N]; //initial all elements of the double array are zero
+		/*
 		for (int i = 0; i < y.length; i++) {
 			y[i] = 0.0;
 		}
+		*/
 		
-		if(K != 0.0){
-			y[0] = K;
+		//if constant terme K available, use it (as initial y-value)
+		//if K not empty, here tested with not 0.0, <- should be improved, better solution searched
+		if(constantK != 0.0){
+			y[0] = constantK;
 		}
 		
+		//time-axis, maximum-time-value depends on N and T
 		double[] t = linspace(0, (N-1)*T, N);
 		
-		for(int k = 0; k < R.length; k++){
+		//Calculate impulseResponse (stepResponse)
+		for(int k = 0; k < residues.length; k++){
 			for(int m = 0; m < y.length; m++){
-				y[m] = y[m] + ((new Complex(P[k].getReal(), P[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(R[k].getReal(),R[k].getImaginary()))).getReal()/fs;
+				y[m] = y[m] + ((new Complex(pole[k].getReal(), pole[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(residues[k].getReal(),residues[k].getImaginary()))).getReal()/fs;
 			}
 		}
 		
+		//sume up all values from the impulseResponse -> this is the stepResponse
 		for (int i = 1; i < y.length; i++) {
 			y[i] = y[i] + y[i-1];
 		}
 		
     	return new Object[]{y, t};    	
-    	
     }
     
 
     /**
      * Converts a partial-fraction g into the residues R, poles P and constant-term K
-     * See Matlab file "residueSimple.m"
+     * See Matlab file "residueSimple.m" or Matlab buildt in function residue()
      * @param g The TransferFunction which is the partial-fraction which is converted
      * @return R, P, K Residues P, Poles P and Constant-Term K
      */
     public static Object[] residueSimple(TransferFunction g){
-		double K = 0.0;
+		double constantK = 0.0;
 		
+		//Get the Numerator and Denominator from the TransferFunction
 		double[] Numerator = g.getNumeratorCoefficients();
 		double[] Denominator = g.getDenominatorCoefficients();
 		
+		//remove leading Zeros of both polynomial functions
 		Numerator = removeLeadingZeros(Numerator);
 		Denominator = removeLeadingZeros(Denominator);
 		
-		int N = Numerator.length -1;
-		int M = Denominator.length -1;
+		//calculate the degree of the polynomial functions
+		int degreeNumerator = Numerator.length -1;
+		int degreeDenominator = Denominator.length -1;
 		
-		//Have Numerator and Denominator the same Order? if yes -> calculate K
-		if(N==M){
-			K = Numerator[0]/Denominator[0];
+		//Have Numerator and Denominator the same degree? if yes -> calculate the constant factor K
+		if(degreeNumerator==degreeDenominator){
+			constantK = Numerator[0]/Denominator[0];
 			for (int i = 0; i < Numerator.length; i++) {
-				Numerator[i]  = Numerator[i] - K*Denominator[i];
+				Numerator[i]  = Numerator[i] - constantK*Denominator[i];
 			}
 		}
 		else{
-			K = 0.0; 
+			constantK = 0.0; 
 		}
 		
-		Complex[] P = roots(Denominator);
-		//remove imaginary part if imaginary part is smaller than 1e-15
-		for (int i = 0; i < P.length; i++) {
-			if(Math.abs(P[i].getImaginary()) < 1e-15){
-				P[i] = new Complex(P[i].getReal(), 0);
+		//get the roots of the Denominator polynomial function
+		Complex[] poles = roots(Denominator);
+		//remove imaginary part if imaginary part is smaller than 1e-15, 
+		//probably the trigger value 1e-15 should be lowered
+		for (int i = 0; i < poles.length; i++) {
+			if(Math.abs(poles[i].getImaginary()) < 1e-15){
+				poles[i] = new Complex(poles[i].getReal(), 0);
 			}
 		}
+		//Attention: order of the roots is not alwayse the same as in Matlab, but no problem here
 		
-		//swap two roots
-		//(because the  order of apache commons roots is not the same as in Matlab)
-		//Complex temp = P[3];
-		//P[3] = P[4];
-		//P[4] = temp;
-		
-		Complex[] R = new Complex[M];
-		for (int i = 0; i < R.length; i++) {
-			R[i] = new Complex(0);
+		//create an array of empty/zero residues
+		//zeros()
+		Complex[] residues = new Complex[degreeDenominator];
+		for (int i = 0; i < residues.length; i++) {
+			residues[i] = new Complex(0);
 		}
 		
-		for (int m = 0; m < M; m++) {
-			//Calculate Denominator polynominal wighout m-th root
+		//calculate the residues
+		for (int m = 0; m < degreeDenominator; m++) {
+			//Calculate Denominator polynomial without m-th root
 			
 			//copy P in smallP
-			Complex[] smallP = new Complex[P.length];
+			Complex[] tempPoles = new Complex[poles.length];
 			
 			//copy every element from second of P in smallP
-            //System.arraycopy(P, 1, smallP, 0, smallP.length);
-			System.arraycopy(P, 0, smallP, 0, P.length);
-			if((M-m-1) > 0){
-				System.arraycopy(smallP, m+1, smallP, m, M-m-1);
+			System.arraycopy(poles, 0, tempPoles, 0, poles.length);
+			//shift the elements of tempPoles to the left (not all elements, uses some magic[see Matlab-Files])
+			if((degreeDenominator-m-1) > 0){
+				System.arraycopy(tempPoles, m+1, tempPoles, m, degreeDenominator-m-1);
 			}
-			smallP = ArrayUtils.remove(smallP, smallP.length-1);
-			Complex[] pa = poly(smallP);
+			//removes the last elemenet of the tempPolse, after left-shifting, this is no longer used
+			tempPoles = ArrayUtils.remove(tempPoles, tempPoles.length-1);
+			//generate the aTile
+			Complex[] aTilde = poly(tempPoles); 
 			
 			/*
-			//wrong decision: pa has sometimes imaginary-part, which can't be ignored
-			double[] paReal = new double[pa.length];
-			//pa is real (no imaginary part) -> get only real from pa
-			for (int i = 0; i < paReal.length; i++) {
-				paReal[i] = pa[i].getReal();
+			//wrong decision: aTilde has sometimes imaginary-part, which can't be ignored
+			double[] aTildeReal = new double[aTilde.length];
+			//aTilde is real (no imaginary part) -> get only real from aTilde
+			for (int i = 0; i < aTildeReal.length; i++) {
+				aTildeReal[i] = aTilde[i].getReal();
 			}
 			*/
 			
-			//calculate Residues
-			Complex pvB = polyVal(Numerator, P[m]);
-			Complex pvA = polyVal(pa, P[m]);
+			//calculate Residue at position m of the residues-array
+			Complex pvB = polyVal(Numerator, poles[m]);
+			Complex pvA = polyVal(aTilde, poles[m]);
 			Complex pvD = pvB.divide(pvA);
-			R[m] = pvD.divide(Denominator[0]);
+			residues[m] = pvD.divide(Denominator[0]);
 		}
 		
 		//remove imaginary part if imaginary part is smaller than 1e-15
-		for (int i = 0; i < R.length; i++) {
-			if(Math.abs(R[i].getImaginary()) < 1e-15){
-				R[i] = new Complex(R[i].getReal(), 0);
+		for (int i = 0; i < residues.length; i++) {
+			if(Math.abs(residues[i].getImaginary()) < 1e-15){
+				residues[i] = new Complex(residues[i].getReal(), 0);
 			}
 		}
 		
-    	return new Object[]{R,P,K};    	
+    	return new Object[]{residues,poles,constantK};    	
     }
     
     
@@ -392,6 +432,7 @@ public class MathStuff {
      * Computes the polynomial coefficients with the specified roots.
      * This was ported from matlab's poly() function
      * Type ">> edit poly" and scroll to line 35.
+     * Method overloaded to calculate also the polynomial coefficients of complex roots
      * @param roots Roots.
      * @return Polynomial coefficients.
      */
@@ -446,7 +487,8 @@ public class MathStuff {
     /**
      * taken from pdf Fachinput_Schrittantwort.pdf
      * @param p Polynomial coefficients
-     * @return Roots.
+     * @return Roots Attention the Roots have sometimes not the same order as in Matlab
+     * 			(but no problem, they are only roots ;-))
      */
     public static Complex[] roots(double[] p) {
     	final LaguerreSolver solver = new LaguerreSolver();

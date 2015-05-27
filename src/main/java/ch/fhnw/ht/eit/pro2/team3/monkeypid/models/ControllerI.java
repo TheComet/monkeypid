@@ -28,6 +28,12 @@ public class ControllerI extends AbstractController {
         this.ti = ti;
         calculateTransferFunction();
     }
+    
+    /**
+     * This Method does nothing, because an I-Controller has no parameter Kr.
+     * This Method is implemented, because the abstract class AbstractController declares gives this method.
+     */
+    public void setKr(double kr) {};
 
     /**
      * Gets the controller parameter Ti.
