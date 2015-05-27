@@ -44,10 +44,10 @@ public class MathStuff {
         return largest;
     }
     
-    public static double maxToZeroFromNegativeInfinity(double[] arr) {
-        double largest = arr[0];
+    public static double maxFromNegativeInfinity(double[] arr) {
+        double largest = Double.NEGATIVE_INFINITY;
         for(double value : arr) {
-            if(value > largest) {
+            if(value != 0.0  && value > largest) {
                 largest = value;
             }
         }
@@ -270,9 +270,11 @@ public class MathStuff {
 		Complex[] pole = (Complex[]) resdiueResult[1];
 		double constantK = (double) resdiueResult[2];
 
+        int numOfPoints = 1024;
+
 		//y-values
 		//zeros()
-		double[] y = new double[N]; //initial all elements of the double array are zero
+		double[] y = new double[numOfPoints]; //initial all elements of the double array are zero
 		/*
 		for (int i = 0; i < y.length; i++) {
 			y[i] = 0.0;
@@ -286,12 +288,13 @@ public class MathStuff {
 		}
 		
 		//time-axis, maximum-time-value depends on N and T
-		double[] t = linspace(0, (N-1)*T, N);
-		
+		double[] t = linspace(0, (N-1)*T, numOfPoints);
+		double fsFactor = (N*T)/numOfPoints;
+
 		//Calculate impulseResponse (stepResponse)
 		for(int k = 0; k < residues.length; k++){
 			for(int m = 0; m < y.length; m++){
-				y[m] = y[m] + ((new Complex(pole[k].getReal(), pole[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(residues[k].getReal(),residues[k].getImaginary()))).getReal()/fs;
+				y[m] = y[m] + ((new Complex(pole[k].getReal(), pole[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(residues[k].getReal(),residues[k].getImaginary()))).getReal()*fsFactor; // /fs;
 			}
 		}
 		
@@ -340,11 +343,13 @@ public class MathStuff {
 		Complex[] poles = roots(Denominator);
 		//remove imaginary part if imaginary part is smaller than 1e-15, 
 		//probably the trigger value 1e-15 should be lowered
+        /*
 		for (int i = 0; i < poles.length; i++) {
-			if(Math.abs(poles[i].getImaginary()) < 1e-15){
+			if(Math.abs(poles[i].getImaginary()) < 1e-50){
 				poles[i] = new Complex(poles[i].getReal(), 0);
 			}
 		}
+		*/
 		//Attention: order of the roots is not alwayse the same as in Matlab, but no problem here
 		
 		//create an array of empty/zero residues
@@ -389,11 +394,13 @@ public class MathStuff {
 		}
 		
 		//remove imaginary part if imaginary part is smaller than 1e-15
-		for (int i = 0; i < residues.length; i++) {
-			if(Math.abs(residues[i].getImaginary()) < 1e-15){
+		/*
+        for (int i = 0; i < residues.length; i++) {
+			if(Math.abs(residues[i].getImaginary()) < 1e-50){
 				residues[i] = new Complex(residues[i].getReal(), 0);
 			}
 		}
+		*/
 		
     	return new Object[]{residues,poles,constantK};    	
     }

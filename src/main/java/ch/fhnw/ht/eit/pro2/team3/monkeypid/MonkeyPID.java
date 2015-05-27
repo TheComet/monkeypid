@@ -20,7 +20,9 @@ public class MonkeyPID {
 	 */
 	public void setLookAndFeel() {
 		try {
-            // TODO @Stierli - Kommentier s züg ih und us, jenachdem welles theme du willsch.
+            // TODO @Stierli - Kommentier s zü
+            //
+            // g ih und us, jenachdem welles theme du willsch.
             // UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
             // UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
             //UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
