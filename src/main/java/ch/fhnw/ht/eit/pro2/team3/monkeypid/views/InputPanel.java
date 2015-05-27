@@ -36,10 +36,6 @@ public class InputPanel extends JPanel implements ActionListener,
 	// regulator types
 	static final int I = 0, PI = 1, PID = 2;
 
-	//TODO remove
-	// create test table
-	//private PhaseAndOverSwingTuple[] overswingTable = new PhaseAndOverSwingTuple[4];
-
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
 			"Eingabe der Kenngroesse der Regelstrecke:");
@@ -89,18 +85,6 @@ public class InputPanel extends JPanel implements ActionListener,
 		this.controller = controller;
 		this.view = view;
 
-		//TODO remove
-		// init overswnig table - see Pflichtenheft Technischer Teil Kapitel 2.3
-		/*overswingTable[0] = new PhaseAndOverSwingTuple(76.3, "0%");
-		overswingTable[1] = new PhaseAndOverSwingTuple(65.5, "4.6%");
-		overswingTable[2] = new PhaseAndOverSwingTuple(51.5, "16.3%");
-		overswingTable[3] = new PhaseAndOverSwingTuple(45, "23.3%");*/
-
-		// add overswing table strings to combo box
-		/*for (int i = 0; i < overswingTable.length; i++) {
-			cbSelectOvershoot.addItem(overswingTable[i].percent());
-		}*/
-
 		// TODO remove
 		tfTu.setText("2");
 		tfTg.setText("6");
@@ -128,13 +112,6 @@ public class InputPanel extends JPanel implements ActionListener,
 		add(tfKs, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
-
-		// TODO löst problem mit centered ->josua
-		/*
-		 * add(new JLabel(), new GridBagConstraints(6, 0, 1, 1, 1.0, 0.0,
-		 * GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new
-		 * Insets(10, 5, 0, 10), 50, 0));
-		 */
 
 		//TODO add tool tip for input fields
 		tfTu.setToolTipText("Verzögerungszeit");
@@ -255,21 +232,35 @@ public class InputPanel extends JPanel implements ActionListener,
 			// set color of error info label to red
 			lbValueErrorInfo.setForeground(Color.RED);
 
-			if (tfTuValue == 0) {
+			if (tfTuValue < 0) {
 				// error message if value is zero
-				lbValueErrorInfo.setText("Wert von Tu darf nicht 0 sein");
-			} else if (tfTgValue == 0) {
+				lbValueErrorInfo.setText("Wert von Tu muss grösser 0 sein");
+			} else if (tfTgValue < 0) {
 				// error message if value is zero
-				lbValueErrorInfo.setText("Wert von Tg darf nicht 0 sein");
-			} else if (tfKsValue == 0) {
+				lbValueErrorInfo.setText("Wert von Tg muss grösser 0 sein");
+			} else if (tfKsValue < 0) {
 				// error message if value is zero
-				lbValueErrorInfo.setText("Wert von Ks darf nicht 0 sein");
+				lbValueErrorInfo.setText("Wert von Ks muss grösser 0 sein");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
 				// error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
 				lbValueErrorInfo
 						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
-			} else {
+			} else if (valueOfOvershoot < 0) {
+				// error message if value of ovsershoot is smaller than 0
+				lbValueErrorInfo.setText("Wert des Überschwingens ist kleiner als 0%");
+			}else if (valueOfOvershoot >45) {
+				// error message if value of overshoot is greater than 100
+			}else if (tfTpValue < 0) {
+				// error message if value of tp is smaller than 0
+				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
+			}else if (tfTpValue > 10) {
+				// error message if value of tp is greater than 10
+				lbValueErrorInfo.setText("Wert von TP ist grösser als 10");
+			}else if (tfOvershoot.getText().equals("")) {
+				lbValueErrorInfo.setText("error");
+				
+			}else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
 
