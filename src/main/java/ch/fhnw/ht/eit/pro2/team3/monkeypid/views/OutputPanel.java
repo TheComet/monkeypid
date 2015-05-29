@@ -136,42 +136,6 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 10, 10, 10), 0, 0));
 
-		// init spinnerIcon icon label
-		// spinnerLabel.setIcon(spinnerIcon);
-		// spinnerIcon.setImageObserver(spinnerLabel);
-
-		// TODO entscheiden ob fuer profimodus integriert wird
-		/*
-		 * //add sliders for manual adjustment add(slKp, new
-		 * GridBagConstraints(0, 12, 4, 1, 0.0, 0.0, GridBagConstraints.CENTER,
-		 * GridBagConstraints.NONE, new Insets( 10, 10, 10, 10), 0, 0));
-		 * add(slTn, new GridBagConstraints(0, 13, 4, 1, 0.0, 0.0,
-		 * GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets( 10,
-		 * 10, 10, 10), 0, 0)); add(slTv, new GridBagConstraints(0, 14, 4, 1,
-		 * 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new
-		 * Insets( 10, 10, 10, 10), 0, 0)); //add textfields for manual
-		 * adjustment add(tfAdaptKp, new GridBagConstraints(5, 12, 1, 1, 0.0,
-		 * 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new
-		 * Insets( 10, 10, 10, 10), 0, 0)); add(tfAdaptTn, new
-		 * GridBagConstraints(5, 13, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
-		 * GridBagConstraints.HORIZONTAL, new Insets( 10, 10, 10, 10), 0, 0));
-		 * add(tfAdaptTv, new GridBagConstraints(5, 14, 1, 1, 0.0, 0.0,
-		 * GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
-		 * 10, 10, 10, 10), 0, 0));
-		 */
-
-		// add button delete to GridBagLayout
-		/*
-		 * add(btDelete, new GridBagConstraints(4, 16, 2, 1, 0.0, 0.0,
-		 * GridBagConstraints.FIRST_LINE_END, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0));
-		 * 
-		 * // add button adopt to GridBagLayout add(btAdopt, new
-		 * GridBagConstraints(0, 16, 4, 1, 0.0, 0.0,
-		 * GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new
-		 * Insets(10, 10, 10, 10), 0, 0));
-		 */
-
 		// add title for trimm slider to GridbagLayout
 		add(lbTrimmSlider, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -189,11 +153,6 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 
 		// add ActionListener to trimmer
 		slTrimmSlider.addChangeListener(this);
-
-		// pack frame
-		// JFrame myParent = (JFrame) view.getTopLevelAncestor(); // get frame
-
-		// myParent.getRootPane().setDefaultButton(btSimulate);
 	}
 
 	/**
@@ -204,8 +163,6 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
-		// table.setVisible(miniVersionSelected);
-		// table.getTableHeader().setVisible(miniVersionSelected);
 		lbTrimmSlider.setVisible(miniVersionSelected);
 		slTrimmSlider.setVisible(miniVersionSelected);
 	}

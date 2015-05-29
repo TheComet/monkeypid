@@ -168,8 +168,7 @@ public class Model implements IClosedLoopListener {
 			.newCachedThreadPool();
 
 	// have the model own the sani curves, so they don't have to be reloaded
-	// from
-	// disk every time a new calculation is performed.
+	// from disk every time a new calculation is performed.
 	private SaniCurves sani = new SaniCurves();
 
 	// current plant to use for controller calculations

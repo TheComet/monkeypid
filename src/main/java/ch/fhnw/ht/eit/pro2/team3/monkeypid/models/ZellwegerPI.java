@@ -30,7 +30,6 @@ public class ZellwegerPI extends AbstractZellweger {
         super(plant, phaseMargin);
         setAngleOfInflection(-90.0 + angleOfInflection);
     }
-    
 
     /**
      * Uses a binary search to approximate the angle on the phase of the open loop. Accuracy can be set by calling the
