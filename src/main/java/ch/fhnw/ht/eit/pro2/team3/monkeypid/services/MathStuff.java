@@ -501,10 +501,11 @@ public class MathStuff {
     	final LaguerreSolver solver = new LaguerreSolver();
     	double[] flip = new double[p.length];
     	// To be conform with Matlab ...
+        double s = 1.0/p[0];
     	for (int i = 0; i < flip.length; i++) {
-    	flip[p.length - i - 1] = p[i];
+    	flip[p.length - i - 1] = p[i]*s;
     	}
-    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 1e10);
+    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
     	Complex[] complexRoots = new Complex[complexRootsReverse.length];
         //Flip order of roots
     	for (int i = 0; i < complexRoots.length; i++) {
