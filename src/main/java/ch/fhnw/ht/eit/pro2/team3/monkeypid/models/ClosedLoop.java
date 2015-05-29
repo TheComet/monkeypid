@@ -184,9 +184,9 @@ public class ClosedLoop {
         double largestImag = MathStuff.maxFromNegativeInfinity(MathStuff.imag(roots)); //MathStuff.max(MathStuff.imag(roots));
         double largestReal  = MathStuff.maxFromNegativeInfinity(MathStuff.real(roots));
 
-        double fs = 500.0*largestImag/(2.0*Math.PI);
+        double fs = 50.0*largestImag/(2.0*Math.PI);
 
-        double numberOfPoints = fs*Math.log(0.005)/largestReal;
+        double numberOfPoints = fs*Math.log(0.05)/largestReal;
         //numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
         //numSamplePoints = (int) Math.pow(2, numSamplePoints);
         //System.out.println("numOfPoints: "+numberOfPoints+ " numSamplePoints: "+numSamplePoints);
@@ -204,11 +204,11 @@ public class ClosedLoop {
         	numSamplePoints = 4096;
         }
         */
-        // fs = 1.0/(timeAllTimeConstants/400.0);
+         fs = 1.0/(timeAllTimeConstants/400.0);
         //numSamplePoints = 4096;
 
         //calculates the step-response with residues
-        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, (int) numberOfPoints);
+        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, (int) 4096);
 		double[] y = (double[]) residueResult[0]; //the y-values of the step-response
 		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 

@@ -271,6 +271,7 @@ public class MathStuff {
 		double constantK = (double) resdiueResult[2];
 
         int numOfPoints = 1024;
+        numOfPoints = N;
 
 		//y-values
 		//zeros()
@@ -288,8 +289,9 @@ public class MathStuff {
 		}
 		
 		//time-axis, maximum-time-value depends on N and T
-		double[] t = linspace(0, (N-1)*T, numOfPoints);
+		double[] t = linspace(0, (N-1)*T, N);
 		double fsFactor = (N*T)/numOfPoints;
+        fsFactor = 1/fs;
 
 		//Calculate impulseResponse (stepResponse)
 		for(int k = 0; k < residues.length; k++){
@@ -498,8 +500,18 @@ public class MathStuff {
      * 			(but no problem, they are only roots ;-))
      */
     public static Complex[] roots(double[] p) {
+        double[] p2 = new double[p.length];
+
+
+        for(int i=0; i < p2.length; i++){
+            p2[i] = p[i];
+        }
+
+
     	final LaguerreSolver solver = new LaguerreSolver();
     	double[] flip = new double[p.length];
+
+        /*
     	// To be conform with Matlab ...
         double s = 1.0/p[0];
     	for (int i = 0; i < flip.length; i++) {
@@ -508,10 +520,85 @@ public class MathStuff {
     	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
     	Complex[] complexRoots = new Complex[complexRootsReverse.length];
         //Flip order of roots
-    	for (int i = 0; i < complexRoots.length; i++) {
-			complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
-		}
-    	return complexRoots;
+
+    	//for (int i = 0; i < complexRoots.length; i++) {
+		//	complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
+       //     System.out.println("Old: real"+complexRoots[i].getReal()+" imag: "+complexRoots[i].getImaginary());
+		//}
+
+        for (int i = 0; i < complexRootsReverse.length; i++) {
+            System.out.println("Old: real"+complexRootsReverse[i].getReal()+" imag: "+complexRootsReverse[i].getImaginary());
+
+        }
+        //return complexRoots;
+        */
+
+
+        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+        double s2 = 1.0 / p[0];
+        for (int i = 0; i < p2.length; i++) {
+            p2[i] = p2[i] * s2;
+        }
+
+        // Normierungskonstante berechnen:
+        s2 = Math.pow(p2[p2.length - 1], 1.0 / (p2.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+        for (int i = 0; i < p2.length; i++) {
+            p2[i] /= Math.pow(s2, i);
+        }
+
+        // Um mit Matlab konform zu sein flippen:
+        for (int i = 0; i < flip.length; i++)
+            flip[p2.length - i - 1] = p2[i];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+        Complex[] r = solver.solveAllComplex(flip, 0.0);
+        for (int i = 0; i < r.length; i++) {
+            r[i] = r[i].multiply(s2);
+            System.out.println("new: real"+r[i].getReal()+" imag: "+r[i].getImaginary());
+        }
+        return r;
+
+        /*
+        //Test-Code
+
+     double[] p = {5.7154896901003664E-24,
+        3.642939834702842E-19,
+        8.513565673497964E-15,
+        9.105814499809592E-11,
+        4.457321122539636E-7,
+        0.00224,
+        1.7999999999999998};
+        final LaguerreSolver solver = new LaguerreSolver();
+        double[] flip = new double[p.length];
+
+        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+                double s = 1.0 / p[0];
+                for (int i = 0; i < p.length; i++) {
+                    p[i] = p[i] * s;
+                }
+
+        // Normierungskonstante berechnen:
+                s = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+                for (int k = 0; k < p.length; k++) {
+                    p[k] /= Math.pow(s, k);
+                }
+
+        // Um mit Matlab konform zu sein flippen:
+                for (int m = 0; m < flip.length; m++)
+                    flip[p.length - m - 1] = p[m];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+                Complex[] r = solver.solveAllComplex(flip, 0.0);
+                for (int n = 0; n < r.length; n++) {
+                    r[n] = r[n].multiply(s);
+                }
+                r;
+
+        */
     }
     
 }
