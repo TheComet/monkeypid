@@ -504,8 +504,9 @@ public class MathStuff {
     	for (int i = 0; i < flip.length; i++) {
     	flip[p.length - i - 1] = p[i];
     	}
-    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
+    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 1e10);
     	Complex[] complexRoots = new Complex[complexRootsReverse.length];
+        //Flip order of roots
     	for (int i = 0; i < complexRoots.length; i++) {
 			complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
 		}

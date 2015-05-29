@@ -127,8 +127,8 @@ public class Model implements IClosedLoopListener {
 				for (int i = 0; i < 9; i++) {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
-					closedLoop.calculateStepResponse(4096);
-					//closedLoop.calculateStepResponseResidue(2*1024);
+					//closedLoop.calculateStepResponse(4096);
+					closedLoop.calculateStepResponseResidue(2*1024);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
@@ -142,8 +142,8 @@ public class Model implements IClosedLoopListener {
 				// sample points.
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
-				closedLoop.calculateStepResponse(numSamplePoints);
-				//closedLoop.calculateStepResponseResidue(numSamplePoints);
+				//closedLoop.calculateStepResponse(numSamplePoints);
+				closedLoop.calculateStepResponseResidue(numSamplePoints);
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
@@ -155,8 +155,8 @@ public class Model implements IClosedLoopListener {
 				closedLoop.setTableRowIndex(controllerCalculator
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
-                closedLoop.calculateStepResponse(numSamplePoints);
-				//closedLoop.calculateStepResponseResidue(numSamplePoints);
+                //closedLoop.calculateStepResponse(numSamplePoints);
+				closedLoop.calculateStepResponseResidue(numSamplePoints);
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
 				}
