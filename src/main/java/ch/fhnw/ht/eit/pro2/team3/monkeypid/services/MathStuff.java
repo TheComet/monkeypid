@@ -501,6 +501,13 @@ public class MathStuff {
      * 			(but no problem, they are only roots ;-))
      */
     public static Complex[] roots(double[] p) {
+
+        /*
+        if(p[0] == 0.0){
+           p =  ArrayUtils.remove(p,0);
+        }
+        */
+
         double[] p2 = new double[p.length];
 
         System.out.println("poly: ");
@@ -576,7 +583,7 @@ public class MathStuff {
                 for (int j = 0; j < r.length; j++) {
                     if(j != i){
                         //if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
-                        if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 200) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),200)){
+                        if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 500) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),500)){
                             rootCorrect = true;
                             break;
                         }
