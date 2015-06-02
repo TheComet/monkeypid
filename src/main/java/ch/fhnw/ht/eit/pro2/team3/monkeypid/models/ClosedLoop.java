@@ -181,14 +181,14 @@ public class ClosedLoop {
         // this is achieved by calculating the roots of the closed loop's transfer function and searching for the
         // largest imaginary part. fs = magicFactor * largestImag / (2*pi)
 
-        /*
-        Complex[] roots = MathStuff.roots(transferFunction.getDenominatorCoefficients());
+
+        Complex[] roots = MathStuff.roots(MathStuff.removeLeadingZeros(transferFunction.getDenominatorCoefficients()));
         double largestImag = MathStuff.maxFromNegativeInfinity(MathStuff.imag(roots)); //MathStuff.max(MathStuff.imag(roots));
         double largestReal  = MathStuff.maxFromNegativeInfinity(MathStuff.real(roots));
 
         double fs = 50.0*largestImag/(2.0*Math.PI);
 
-        double numberOfPoints = fs*Math.log(0.05)/largestReal;
+        double numberOfPoints = fs*Math.log(0.01)/largestReal;
 
 
         //numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
@@ -202,18 +202,18 @@ public class ClosedLoop {
             System.out.println("fs: " + fs);
             System.out.println("time: " + (numberOfPoints - 1) / fs);
         }
-        */
+
 
         /*
         if(numSamplePoints > 4096){
         	numSamplePoints = 4096;
         }
         */
-        double fs = 1.0/(timeAllTimeConstants/400.0);
+        //fs = 1.0/(timeAllTimeConstants/400.0);
         //numSamplePoints = 4096;
 
         //calculates the step-response with residues
-        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, (int) 4096);
+        Object[] residueResult = MathStuff.stepResidue(transferFunction.getNumeratorCoefficients(), transferFunction.getDenominatorCoefficients(), fs, (int) numberOfPoints);
 		double[] y = (double[]) residueResult[0]; //the y-values of the step-response
 		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 
