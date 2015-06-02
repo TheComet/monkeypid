@@ -188,7 +188,7 @@ public class ClosedLoop {
 
         double fs = 50.0*largestImag/(2.0*Math.PI);
 
-        double numberOfPoints = fs*Math.log(0.01)/largestReal;
+        double numberOfPoints = fs*Math.log(0.001)/largestReal;
 
 
         //numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
