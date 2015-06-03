@@ -38,7 +38,7 @@ public class InputPanel extends JPanel implements ActionListener,
 
 	// enter value of Ks Tu Tg
 	private JLabel lbEnterKsTuTgTitle = new JLabel(
-			"Eingabe der Kenngroesse der Regelstrecke:");
+			"Eingabe der Kenngrösse der Regelstrecke:");
 	private JLabel lbKs = new JLabel("Ks");
 	private JLabel lbTu = new JLabel("Tu");
 	private JLabel lbTg = new JLabel("Tg");
@@ -216,6 +216,7 @@ public class InputPanel extends JPanel implements ActionListener,
 			double tfTgValue = Double.parseDouble(tfTg.getText());
 			//convert percent to absolute
 			double tfTpValue = Double.parseDouble(tfTp.getText()) * 0.01;
+			
 			
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
