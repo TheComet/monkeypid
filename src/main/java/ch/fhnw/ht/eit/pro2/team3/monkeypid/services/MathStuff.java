@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
+import com.itextpdf.text.log.SysoCounter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
@@ -44,10 +45,10 @@ public class MathStuff {
         return largest;
     }
     
-    public static double maxToZeroFromNegativeInfinity(double[] arr) {
-        double largest = arr[0];
+    public static double maxFromNegativeInfinity(double[] arr) {
+        double largest = Double.NEGATIVE_INFINITY;
         for(double value : arr) {
-            if(value > largest) {
+            if(value != 0.0  && value > largest) {
                 largest = value;
             }
         }
@@ -270,9 +271,12 @@ public class MathStuff {
 		Complex[] pole = (Complex[]) resdiueResult[1];
 		double constantK = (double) resdiueResult[2];
 
+        int numOfPoints = 1024;
+        numOfPoints = N;
+
 		//y-values
 		//zeros()
-		double[] y = new double[N]; //initial all elements of the double array are zero
+		double[] y = new double[numOfPoints]; //initial all elements of the double array are zero
 		/*
 		for (int i = 0; i < y.length; i++) {
 			y[i] = 0.0;
@@ -287,11 +291,13 @@ public class MathStuff {
 		
 		//time-axis, maximum-time-value depends on N and T
 		double[] t = linspace(0, (N-1)*T, N);
-		
+		double fsFactor = (N*T)/numOfPoints;
+        fsFactor = 1/fs;
+
 		//Calculate impulseResponse (stepResponse)
 		for(int k = 0; k < residues.length; k++){
 			for(int m = 0; m < y.length; m++){
-				y[m] = y[m] + ((new Complex(pole[k].getReal(), pole[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(residues[k].getReal(),residues[k].getImaginary()))).getReal()/fs;
+				y[m] = y[m] + ((new Complex(pole[k].getReal(), pole[k].getImaginary()).multiply(t[m])).exp().multiply(new Complex(residues[k].getReal(),residues[k].getImaginary()))).getReal()*fsFactor; // /fs;
 			}
 		}
 		
@@ -340,11 +346,13 @@ public class MathStuff {
 		Complex[] poles = roots(Denominator);
 		//remove imaginary part if imaginary part is smaller than 1e-15, 
 		//probably the trigger value 1e-15 should be lowered
+        /*
 		for (int i = 0; i < poles.length; i++) {
-			if(Math.abs(poles[i].getImaginary()) < 1e-15){
+			if(Math.abs(poles[i].getImaginary()) < 1e-50){
 				poles[i] = new Complex(poles[i].getReal(), 0);
 			}
 		}
+		*/
 		//Attention: order of the roots is not alwayse the same as in Matlab, but no problem here
 		
 		//create an array of empty/zero residues
@@ -389,11 +397,13 @@ public class MathStuff {
 		}
 		
 		//remove imaginary part if imaginary part is smaller than 1e-15
-		for (int i = 0; i < residues.length; i++) {
-			if(Math.abs(residues[i].getImaginary()) < 1e-15){
+		/*
+        for (int i = 0; i < residues.length; i++) {
+			if(Math.abs(residues[i].getImaginary()) < 1e-50){
 				residues[i] = new Complex(residues[i].getReal(), 0);
 			}
 		}
+		*/
 		
     	return new Object[]{residues,poles,constantK};    	
     }
@@ -491,18 +501,192 @@ public class MathStuff {
      * 			(but no problem, they are only roots ;-))
      */
     public static Complex[] roots(double[] p) {
+
+        /*
+        if(p[0] == 0.0){
+           p =  ArrayUtils.remove(p,0);
+        }
+        */
+
+        double[] p2 = new double[p.length];
+
+        System.out.println("poly: ");
+        for (int i = 0; i < p.length; i++) {
+            System.out.println("koef "+i+": real: "+p[i]);
+
+        }
+
+        for(int i=0; i < p2.length; i++){
+            p2[i] = p[i];
+        }
+
+
     	final LaguerreSolver solver = new LaguerreSolver();
     	double[] flip = new double[p.length];
+
+        /*
     	// To be conform with Matlab ...
+        double s = 1.0/p[0];
     	for (int i = 0; i < flip.length; i++) {
-    	flip[p.length - i - 1] = p[i];
+    	flip[p.length - i - 1] = p[i]*s;
     	}
     	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
     	Complex[] complexRoots = new Complex[complexRootsReverse.length];
-    	for (int i = 0; i < complexRoots.length; i++) {
-			complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
-		}
-    	return complexRoots;
+        //Flip order of roots
+
+    	//for (int i = 0; i < complexRoots.length; i++) {
+		//	complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
+       //     System.out.println("Old: real"+complexRoots[i].getReal()+" imag: "+complexRoots[i].getImaginary());
+		//}
+
+        for (int i = 0; i < complexRootsReverse.length; i++) {
+            System.out.println("Old: real"+complexRootsReverse[i].getReal()+" imag: "+complexRootsReverse[i].getImaginary());
+
+        }
+        //return complexRoots;
+        */
+
+
+        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+        double s2 = 1.0 / p[0];
+        for (int i = 0; i < p2.length; i++) {
+            p2[i] = p2[i] * s2;
+        }
+
+        // Normierungskonstante berechnen:
+        s2 = Math.pow(p2[p2.length - 1], 1.0 / (p2.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+        for (int i = 0; i < p2.length; i++) {
+            p2[i] /= Math.pow(s2, i);
+        }
+
+        // Um mit Matlab konform zu sein flippen:
+        for (int i = 0; i < flip.length; i++)
+            flip[p2.length - i - 1] = p2[i];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+        Complex[] r = solver.solveAllComplex(flip, 0.0);
+        System.out.println("Roots, count: " + r.length);
+        for (int i = 0; i < r.length; i++) {
+            r[i] = r[i].multiply(s2);
+            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+        }
+
+        for (int i = 0; i < r.length; i++) {
+            Complex rTemp = r[i];
+            boolean rootCorrect = false;
+            //if root is not real, check, if root is complex-conjugated, else, remove imaginary part
+            if(rTemp.getImaginary() != 0.0){
+                //check each other root, if it hase the same real-part, if yes, check, if the imaginary part is complex conjugated
+                //if no, remove the imaginary part of the root
+                for (int j = 0; j < r.length; j++) {
+                    if(j != i){
+                        //if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
+                        if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 500) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),500)){
+                            rootCorrect = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(rootCorrect == false){
+                r[i] = new Complex(r[i].getReal(),0.0);
+            }
+        }
+
+        System.out.println("roots cleande: ");
+        for (int i = 0; i < r.length; i++) {
+            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+        }
+
+
+        return r;
+
+        /*
+        //Test-Code
+
+     double[] p = {5.7154896901003664E-24,
+        3.642939834702842E-19,
+        8.513565673497964E-15,
+        9.105814499809592E-11,
+        4.457321122539636E-7,
+        0.00224,
+        1.7999999999999998};
+        final LaguerreSolver solver = new LaguerreSolver();
+        double[] flip = new double[p.length];
+
+        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+                double s = 1.0 / p[0];
+                for (int i = 0; i < p.length; i++) {
+                    p[i] = p[i] * s;
+                }
+
+        // Normierungskonstante berechnen:
+                s = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+                for (int k = 0; k < p.length; k++) {
+                    p[k] /= Math.pow(s, k);
+                }
+
+        // Um mit Matlab konform zu sein flippen:
+                for (int m = 0; m < flip.length; m++)
+                    flip[p.length - m - 1] = p[m];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+                Complex[] r = solver.solveAllComplex(flip, 0.0);
+                for (int n = 0; n < r.length; n++) {
+                    r[n] = r[n].multiply(s);
+                }
+                r;
+
+        */
     }
+
+    public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
+    {
+        // Make sure maxUlps is non-negative and small enough that the
+        // default NAN won't compare as equal to anything.
+        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+
+        // Make aInt lexicographically ordered as a two's complement int
+        long aInt = Double.doubleToRawLongBits( a);
+        if(aInt < 0)
+            aInt = 0x8000000000000000L - aInt;
+
+        // Make bInt lexicographically ordered as a two's complement int
+        long bInt = Double.doubleToRawLongBits( b);
+        if(bInt < 0)
+            bInt = 0x8000000000000000L - bInt;
+
+        // Apply delta comparison
+        if(Math.abs(aInt - bInt) <= maxUlps)
+            return true;
+        return false;
+    }
+
+    /*
+    //works probably only in c, not in java
+    // Usable AlmostEqual function
+    bool AlmostEqual2sComplement(float A, float B, int maxUlps)
+    {
+        // Make sure maxUlps is non-negative and small enough that the
+        // default NAN won't compare as equal to anything.
+        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+        int aInt = *(int*)&A;
+        // Make aInt lexicographically ordered as a twos-complement int
+        if (aInt < 0)
+            aInt = 0x80000000 - aInt;
+        // Make bInt lexicographically ordered as a twos-complement int
+        int bInt = *(int*)&B;
+        if (bInt < 0)
+            bInt = 0x80000000 - bInt;
+        int intDiff = abs(aInt - bInt);
+        if (intDiff <= maxUlps)
+            return true;
+        return false;
+    }
+    */
     
 }

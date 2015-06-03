@@ -111,7 +111,9 @@ public class Model implements IClosedLoopListener {
 					.getController();
 
 			// the number of sample points to use for the end result
-			int numSamplePoints = 4 * 1024;
+			int numSamplePoints = 8 * 1024;
+
+            boolean useResidueStepResponse = true;
 
 			// if maxKr is greater than minKr, it means we have a window to use
 			// for iterative approximation
@@ -127,8 +129,10 @@ public class Model implements IClosedLoopListener {
 				for (int i = 0; i < 9; i++) {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
-					//closedLoop.calculateStepResponse(4096);
-					closedLoop.calculateStepResponseResidue(2*1024);
+                    if(useResidueStepResponse)
+					    closedLoop.calculateStepResponseResidue(2*1024);
+                    else
+                        closedLoop.calculateStepResponse(4096);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
@@ -142,8 +146,10 @@ public class Model implements IClosedLoopListener {
 				// sample points.
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
-				//closedLoop.calculateStepResponse(numSamplePoints);
-				closedLoop.calculateStepResponseResidue(numSamplePoints);
+                if(useResidueStepResponse)
+				    closedLoop.calculateStepResponseResidue(numSamplePoints);
+                else
+                    closedLoop.calculateStepResponse(numSamplePoints);
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
@@ -155,7 +161,10 @@ public class Model implements IClosedLoopListener {
 				closedLoop.setTableRowIndex(controllerCalculator
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
-				closedLoop.calculateStepResponseResidue(numSamplePoints);
+                if(useResidueStepResponse)
+				    closedLoop.calculateStepResponseResidue(numSamplePoints);
+                else
+                    closedLoop.calculateStepResponse(numSamplePoints);
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
 				}
@@ -167,8 +176,7 @@ public class Model implements IClosedLoopListener {
 			.newCachedThreadPool();
 
 	// have the model own the sani curves, so they don't have to be reloaded
-	// from
-	// disk every time a new calculation is performed.
+	// from disk every time a new calculation is performed.
 	private SaniCurves sani = new SaniCurves();
 
 	// current plant to use for controller calculations
