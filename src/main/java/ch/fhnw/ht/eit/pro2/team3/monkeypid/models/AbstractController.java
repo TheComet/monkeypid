@@ -117,7 +117,7 @@ public abstract class AbstractController {
      * Sets the transfer function of this controller. Only derived classes should be able to set the transfer function,
      * because it doesn't really make sense for anything else outside to know how to calculate it.
      *
-     * @param transferFunction
+     * @param transferFunction The transferfunction to set.
      */
     protected final void setTransferFunction(TransferFunction transferFunction) {
         this.transferFunction = transferFunction;

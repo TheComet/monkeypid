@@ -128,7 +128,7 @@ public class Model implements IClosedLoopListener {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
 					//closedLoop.calculateStepResponse(4096);
-					closedLoop.calculateStepResponseResidue(2*1024);
+					closedLoop.calculateStepResponse(2 * 1024);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
@@ -143,7 +143,7 @@ public class Model implements IClosedLoopListener {
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
 				//closedLoop.calculateStepResponse(numSamplePoints);
-				closedLoop.calculateStepResponseResidue(numSamplePoints);
+				closedLoop.calculateStepResponse(numSamplePoints);
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
@@ -156,14 +156,13 @@ public class Model implements IClosedLoopListener {
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
                 //closedLoop.calculateStepResponse(numSamplePoints);
-				closedLoop.calculateStepResponseResidue(numSamplePoints);
+				closedLoop.calculateStepResponse(numSamplePoints);
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
 				}
 			}
 		}
 	}
-
 	private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors
 			.newCachedThreadPool();
 
@@ -211,13 +210,9 @@ public class Model implements IClosedLoopListener {
 
 	/**
 	 * Updates the plant to be used for all calculations.
-	 * 
-	 * @param tu
-	 *            Plant value Tu.
-	 * @param tg
-	 *            Plant value Ks.
-	 * @param ks
-	 *            Plant value Ks.
+	 * @param tu Plant parameter Tu.
+	 * @param tg Plant parameter Ks.
+	 * @param ks Plant parameter Ks.
 	 */
 	public final void setPlant(double tu, double tg, double ks) {
 		this.plant = new Plant(tu, tg, ks, sani);
@@ -255,10 +250,8 @@ public class Model implements IClosedLoopListener {
 	 * to use in all simulations. Zellweger methods will multiply this with Tvk
 	 * to get Tp (Tp = factor * Tvk). Fist formulas will multiply it with Tv to
 	 * get Tp (Tp = factor * Tv)
-	 * 
-	 * @param parasiticTimeConstantFactor
-	 *            The factor to use. The value should be absolute, not in
-	 *            percent.
+	 * @param parasiticTimeConstantFactor The factor to use. The value should be
+	 *                                    absolute, not in percent.
 	 */
 	public final void setParasiticTimeConstantFactor(
 			double parasiticTimeConstantFactor) {
@@ -267,9 +260,7 @@ public class Model implements IClosedLoopListener {
 
 	/**
 	 * Sets the overswing to use for zellweger based calculations.
-	 * 
-	 * @param overswing
-	 *            The overswing in percent.
+	 * @param overswing The overswing in percent.
 	 */
 	public final void setOverswing(double overswing) {
 		this.overswing = overswing;
