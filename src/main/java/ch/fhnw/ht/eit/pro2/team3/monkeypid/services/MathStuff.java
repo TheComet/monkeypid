@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
+import com.itextpdf.text.log.SysoCounter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
@@ -500,8 +501,20 @@ public class MathStuff {
      * 			(but no problem, they are only roots ;-))
      */
     public static Complex[] roots(double[] p) {
+
+        /*
+        if(p[0] == 0.0){
+           p =  ArrayUtils.remove(p,0);
+        }
+        */
+
         double[] p2 = new double[p.length];
 
+        System.out.println("poly: ");
+        for (int i = 0; i < p.length; i++) {
+            System.out.println("koef "+i+": real: "+p[i]);
+
+        }
 
         for(int i=0; i < p2.length; i++){
             p2[i] = p[i];
@@ -554,10 +567,40 @@ public class MathStuff {
 
         // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
         Complex[] r = solver.solveAllComplex(flip, 0.0);
+        System.out.println("Roots, count: " + r.length);
         for (int i = 0; i < r.length; i++) {
             r[i] = r[i].multiply(s2);
-            System.out.println("new: real"+r[i].getReal()+" imag: "+r[i].getImaginary());
+            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
         }
+
+        for (int i = 0; i < r.length; i++) {
+            Complex rTemp = r[i];
+            boolean rootCorrect = false;
+            //if root is not real, check, if root is complex-conjugated, else, remove imaginary part
+            if(rTemp.getImaginary() != 0.0){
+                //check each other root, if it hase the same real-part, if yes, check, if the imaginary part is complex conjugated
+                //if no, remove the imaginary part of the root
+                for (int j = 0; j < r.length; j++) {
+                    if(j != i){
+                        //if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
+                        if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 500) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),500)){
+                            rootCorrect = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(rootCorrect == false){
+                r[i] = new Complex(r[i].getReal(),0.0);
+            }
+        }
+
+        System.out.println("roots cleande: ");
+        for (int i = 0; i < r.length; i++) {
+            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+        }
+
+
         return r;
 
         /*
@@ -600,5 +643,50 @@ public class MathStuff {
 
         */
     }
+
+    public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
+    {
+        // Make sure maxUlps is non-negative and small enough that the
+        // default NAN won't compare as equal to anything.
+        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+
+        // Make aInt lexicographically ordered as a two's complement int
+        long aInt = Double.doubleToRawLongBits( a);
+        if(aInt < 0)
+            aInt = 0x8000000000000000L - aInt;
+
+        // Make bInt lexicographically ordered as a two's complement int
+        long bInt = Double.doubleToRawLongBits( b);
+        if(bInt < 0)
+            bInt = 0x8000000000000000L - bInt;
+
+        // Apply delta comparison
+        if(Math.abs(aInt - bInt) <= maxUlps)
+            return true;
+        return false;
+    }
+
+    /*
+    //works probably only in c, not in java
+    // Usable AlmostEqual function
+    bool AlmostEqual2sComplement(float A, float B, int maxUlps)
+    {
+        // Make sure maxUlps is non-negative and small enough that the
+        // default NAN won't compare as equal to anything.
+        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+        int aInt = *(int*)&A;
+        // Make aInt lexicographically ordered as a twos-complement int
+        if (aInt < 0)
+            aInt = 0x80000000 - aInt;
+        // Make bInt lexicographically ordered as a twos-complement int
+        int bInt = *(int*)&B;
+        if (bInt < 0)
+            bInt = 0x80000000 - bInt;
+        int intDiff = abs(aInt - bInt);
+        if (intDiff <= maxUlps)
+            return true;
+        return false;
+    }
+    */
     
 }

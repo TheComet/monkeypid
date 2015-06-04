@@ -127,7 +127,6 @@ public class Model implements IClosedLoopListener {
 				for (int i = 0; i < 9; i++) {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
-					//closedLoop.calculateStepResponse(4096);
 					closedLoop.calculateStepResponse(2 * 1024);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
@@ -142,8 +141,8 @@ public class Model implements IClosedLoopListener {
 				// sample points.
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
-				//closedLoop.calculateStepResponse(numSamplePoints);
 				closedLoop.calculateStepResponse(numSamplePoints);
+
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
@@ -155,7 +154,6 @@ public class Model implements IClosedLoopListener {
 				closedLoop.setTableRowIndex(controllerCalculator
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
-                //closedLoop.calculateStepResponse(numSamplePoints);
 				closedLoop.calculateStepResponse(numSamplePoints);
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
@@ -163,8 +161,7 @@ public class Model implements IClosedLoopListener {
 			}
 		}
 	}
-	private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors
-			.newCachedThreadPool();
+	private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
 	// have the model own the sani curves, so they don't have to be reloaded
 	// from disk every time a new calculation is performed.
@@ -306,7 +303,7 @@ public class Model implements IClosedLoopListener {
 	 * notifiers.
 	 * This method calculates only a new zellwegerMethod, if no other Calculation
 	 * is active and at least one Zellweger-Calculation is done.
-	 * @param phaseInflectionOffset
+	 * @param phaseInflectionOffset // TODO
 	 */
 	public void updateZellweger(int phaseInflectionOffset) {
 		// if at least one simulation done (lastZellwegerClosedLoop is then not
@@ -457,8 +454,7 @@ public class Model implements IClosedLoopListener {
 		if (regulatorType == RegulatorType.PID) {
 			double ratio = plant.getTu() / plant.getTg();
 			if (sani.lookupOrder(ratio) == 2) {
-				throw new InvalidPlantForPIDSimulationException(
-						"Die Strecke ist n=2. Eine PID Simulation ist Sinnlos");
+				throw new InvalidPlantForPIDSimulationException("Die Strecke ist n=2. Eine PID Simulation ist Sinnlos");
 			}
 		}
 	}
@@ -481,37 +477,23 @@ public class Model implements IClosedLoopListener {
 		// controller type
 		switch (regulatorType) {
 		case PID:
-			calculators.add(new CalculationCycle(new ZellwegerPID(plant,
-					overswing), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaOppeltPID(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPID0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPID20(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPID0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPID20(plant), this));
-			calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(
-					plant), this));
+			calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing), this));
+			calculators.add(new CalculationCycle(new FistFormulaOppeltPID(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
 			break;
 
 		case PI:
-			calculators.add(new CalculationCycle(new ZellwegerPI(plant,
-					overswing), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaOppeltPI(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPI0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPI20(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPI0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPI20(plant), this));
-			calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(
-					plant), this));
+			calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing), this));
+			calculators.add(new CalculationCycle(new FistFormulaOppeltPI(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
 			break;
 
 		case I:
@@ -525,9 +507,7 @@ public class Model implements IClosedLoopListener {
 		// set table row indices of calculator - See issue #29
 		int i = 0;
 		for (CalculationCycle calculator : calculators) {
-			calculator
-					.getControllerCalculator()
-					.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+			calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
 			calculator.getControllerCalculator().setTableRowIndex(i);
 			calculator.setTargetOverswing(overswing);
 			i++;
@@ -545,8 +525,7 @@ public class Model implements IClosedLoopListener {
 	 */
 	private void notifyAddCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
-			listener.onAddCalculation(loop,
-					curvesVisible[loop.getTableRowIndex()]);
+			listener.onAddCalculation(loop, curvesVisible[loop.getTableRowIndex()]);
 		}
 	}
 
