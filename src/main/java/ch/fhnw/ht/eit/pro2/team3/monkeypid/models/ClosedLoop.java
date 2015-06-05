@@ -322,10 +322,10 @@ public class ClosedLoop {
 		numberOfPoints = Math.round(numberOfPoints);
 
 		if(d) {
-			System.out.println("largestReal: "+largestReal+ " largestImag: "+largestImag);
-			System.out.println("numOfPoints: " + numberOfPoints);
-			System.out.println("fs: " + fs);
-			System.out.println("time: " + (numberOfPoints - 1) / fs);
+			//System.out.println("largestReal: "+largestReal+ " largestImag: "+largestImag);
+			//System.out.println("numOfPoints: " + numberOfPoints);
+			//System.out.println("fs: " + fs);
+			//System.out.println("time: " + (numberOfPoints - 1) / fs);
 		}
 
 

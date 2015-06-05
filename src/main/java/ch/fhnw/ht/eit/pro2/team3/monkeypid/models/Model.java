@@ -161,7 +161,6 @@ public class Model implements IClosedLoopListener {
 			}
 		}
 	}
-	private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
 	// have the model own the sani curves, so they don't have to be reloaded
 	// from disk every time a new calculation is performed.
@@ -270,9 +269,6 @@ public class Model implements IClosedLoopListener {
 	 */
 	public final void simulateAll() {
 
-		if (threadPool.getActiveCount() > 0)
-			return;
-
 		// see issue #31 - disallow orders n=2 for PID simulations
 		validatePlantIsPIDCompliant();
 
@@ -284,10 +280,12 @@ public class Model implements IClosedLoopListener {
 		notifySimulationBegin(calculators.size());
 
 		// dispatch all calculators
+		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 		calculators.forEach(threadPool::submit);
+		threadPool.shutdown();
 
 		try {
-			threadPool.awaitTermination(0, TimeUnit.SECONDS);
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
@@ -312,9 +310,8 @@ public class Model implements IClosedLoopListener {
 			return;
 		}
 		// if no calculations are ongoing
-		if (threadPool.getActiveCount() > 0) {
-			return;
-		}
+		// TODO if implementing async simulateAll(), add a check here again
+
 		// if no current PhaseInflectionAdjustingCalculation go on, else stop
 		// here
 		if (zellwegerPhaseInflectionAdjustingCalculationOngoing) {
