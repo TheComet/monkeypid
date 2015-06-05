@@ -158,6 +158,8 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
+		// here we will attach a straight line to those curves that are too short.
+		// TODO This is a terrible idea, remove when the lulz were had
 		SwingUtilities.invokeLater(() -> {
 			double maxX = 0.0;
 			for (Object series : dataCollection.getSeries()) {
