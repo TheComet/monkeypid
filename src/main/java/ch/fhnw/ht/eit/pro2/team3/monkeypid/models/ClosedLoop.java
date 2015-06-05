@@ -298,7 +298,7 @@ public class ClosedLoop {
 
 		//display debug info only, if zellweger:
 		boolean d = false;
-		if(controller.getName().equals("Zellweger") && numSamplePoints == 4*1024){
+		if(controller.getName().equals("Zellweger") && numSamplePoints == 8*1024){
 			d = true;
 		}
 
@@ -313,7 +313,7 @@ public class ClosedLoop {
 
 		double fs = 50.0*largestImag/(2.0*Math.PI);
 
-		double numberOfPoints = fs*Math.log(0.001)/largestReal;
+		double numberOfPoints = fs*Math.log(0.0001)/largestReal;
 
 
 		//numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));

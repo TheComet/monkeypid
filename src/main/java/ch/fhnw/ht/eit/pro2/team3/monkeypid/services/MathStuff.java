@@ -510,11 +510,11 @@ public class MathStuff {
 
 		double[] p2 = new double[p.length];
 
-		/*System.out.println("poly: ");
+		//System.out.println("poly: ");
 		for (int i = 0; i < p.length; i++) {
-			System.out.println("koef "+i+": real: "+p[i]);
+			//System.out.println("koef "+i+": real: "+p[i]);
 
-		}*/
+		}
 
 		for(int i=0; i < p2.length; i++){
 			p2[i] = p[i];
@@ -567,10 +567,10 @@ public class MathStuff {
 
 		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
 		Complex[] r = solver.solveAllComplex(flip, 0.0);
-		System.out.println("Roots, count: " + r.length);
+		//System.out.println("Roots, count: " + r.length);
 		for (int i = 0; i < r.length; i++) {
 			r[i] = r[i].multiply(s2);
-			System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+			//.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
 		}
 
 		for (int i = 0; i < r.length; i++) {
@@ -595,11 +595,10 @@ public class MathStuff {
 			}
 		}
 
-		/*System.out.println("roots cleande: ");
+		//System.out.println("roots cleande: ");
 		for (int i = 0; i < r.length; i++) {
-			System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
-		}*/
-
+			//System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+		}
 
 		return r;
 
