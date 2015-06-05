@@ -28,7 +28,7 @@ public class WrapLayout extends FlowLayout {
 	 * or <code>WrapLayout</code>.
 	 * 
 	 * @param align
-	 *            the alignment value
+	 *			the alignment value
 	 */
 	public WrapLayout(int align) {
 		super(align);
@@ -43,11 +43,11 @@ public class WrapLayout extends FlowLayout {
 	 * <code>WrapLayout</code>.
 	 * 
 	 * @param align
-	 *            the alignment value
+	 *			the alignment value
 	 * @param hgap
-	 *            the horizontal gap between components
+	 *			the horizontal gap between components
 	 * @param vgap
-	 *            the vertical gap between components
+	 *			the vertical gap between components
 	 */
 	public WrapLayout(int align, int hgap, int vgap) {
 		super(align, hgap, vgap);
@@ -58,9 +58,9 @@ public class WrapLayout extends FlowLayout {
 	 * components in the specified target container.
 	 * 
 	 * @param target
-	 *            the component which needs to be laid out
+	 *			the component which needs to be laid out
 	 * @return the preferred dimensions to lay out the subcomponents of the
-	 *         specified container
+	 *		 specified container
 	 */
 	@Override
 	public Dimension preferredLayoutSize(Container target) {
@@ -72,9 +72,9 @@ public class WrapLayout extends FlowLayout {
 	 * components contained in the specified target container.
 	 * 
 	 * @param target
-	 *            the component which needs to be laid out
+	 *			the component which needs to be laid out
 	 * @return the minimum dimensions to lay out the subcomponents of the
-	 *         specified container
+	 *		 specified container
 	 */
 	@Override
 	public Dimension minimumLayoutSize(Container target) {
@@ -88,9 +88,9 @@ public class WrapLayout extends FlowLayout {
 	 * container.
 	 *
 	 * @param target
-	 *            target to get layout size for
+	 *			target to get layout size for
 	 * @param preferred
-	 *            should preferred size be calculated
+	 *			should preferred size be calculated
 	 * @return the dimension to layout the target container
 	 */
 	private Dimension layoutSize(Container target, boolean preferred) {

@@ -68,10 +68,10 @@ public class Model implements IClosedLoopListener {
 		 * calculator.
 		 * 
 		 * @param controllerCalculator
-		 *            The controller calculator to use.
+		 *			The controller calculator to use.
 		 * @param resultListener
-		 *            The listener to notify when the step response calculation
-		 *            completes.
+		 *			The listener to notify when the step response calculation
+		 *			completes.
 		 */
 		CalculationCycle(AbstractControllerCalculator controllerCalculator,
 				IClosedLoopListener resultListener) {
@@ -222,7 +222,7 @@ public class Model implements IClosedLoopListener {
 	 * calculators matching the selected type will be calculated.
 	 * 
 	 * @param regulatorTypeName
-	 *            A string containing either "I", "IP", or "PID".
+	 *			A string containing either "I", "IP", or "PID".
 	 */
 	public final void setRegulatorType(String regulatorTypeName)
 			throws UnknownRegulatorTypeException {
@@ -248,7 +248,7 @@ public class Model implements IClosedLoopListener {
 	 * to get Tp (Tp = factor * Tvk). Fist formulas will multiply it with Tv to
 	 * get Tp (Tp = factor * Tv)
 	 * @param parasiticTimeConstantFactor The factor to use. The value should be
-	 *                                    absolute, not in percent.
+	 *									absolute, not in percent.
 	 */
 	public final void setParasiticTimeConstantFactor(
 			double parasiticTimeConstantFactor) {
@@ -369,7 +369,7 @@ public class Model implements IClosedLoopListener {
 	 * hideSelectedCalculation() or showSelectedCalculation().
 	 * 
 	 * @param name
-	 *            The unique name of the calculation to select.
+	 *			The unique name of the calculation to select.
 	 */
 	public final void selectCalculation(String name) {
 		for (ClosedLoop loop : closedLoops) {
@@ -409,7 +409,7 @@ public class Model implements IClosedLoopListener {
 	 * Registers a model listener.
 	 * 
 	 * @param listener
-	 *            An object implementing IModelListener.
+	 *			An object implementing IModelListener.
 	 */
 	public final void registerListener(IModelListener listener) {
 		listeners.add(listener);
@@ -419,7 +419,7 @@ public class Model implements IClosedLoopListener {
 	 * Unregisters a model listener.
 	 * 
 	 * @param listener
-	 *            An object that previously called registerListener.
+	 *			An object that previously called registerListener.
 	 */
 	public final void unregisterListener(IModelListener listener) {
 		listeners.remove(listener);
@@ -521,7 +521,7 @@ public class Model implements IClosedLoopListener {
 	 * internal list.
 	 * 
 	 * @param loop
-	 *            The closed loop that was added.
+	 *			The closed loop that was added.
 	 */
 	private void notifyAddCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
@@ -534,7 +534,7 @@ public class Model implements IClosedLoopListener {
 	 * list.
 	 * 
 	 * @param loop
-	 *            The closed loop that was removed.
+	 *			The closed loop that was removed.
 	 */
 	private void notifyRemoveCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
@@ -546,7 +546,7 @@ public class Model implements IClosedLoopListener {
 	 * Call this to notify that a new simulation is about to begin.
 	 * 
 	 * @param numberOfCalculators
-	 *            The number of calculators that will be executed.
+	 *			The number of calculators that will be executed.
 	 */
 	private void notifySimulationBegin(int numberOfCalculators) {
 		for (IModelListener listener : listeners) {
@@ -566,7 +566,7 @@ public class Model implements IClosedLoopListener {
 	 * curve in the plot to be hidden.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop being hidden.
+	 *			The closed loop being hidden.
 	 */
 	private void notifyHideCalculation(ClosedLoop closedLoop) {
 		for (IModelListener listener : listeners) {
@@ -579,7 +579,7 @@ public class Model implements IClosedLoopListener {
 	 * cause the curve in the plot to be made visible.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop to make visible.
+	 *			The closed loop to make visible.
 	 */
 	private void notifyShowCalculation(ClosedLoop closedLoop) {
 		for (IModelListener listener : listeners) {
@@ -606,8 +606,8 @@ public class Model implements IClosedLoopListener {
 	 * Called when a step response calculation completes.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop object holding the results of the step
-	 *            response.
+	 *			The closed loop object holding the results of the step
+	 *			response.
 	 */
 	@Override
 	public final synchronized void onStepResponseCalculationComplete(

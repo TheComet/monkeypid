@@ -158,6 +158,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
+
 	}
 
 	@Override
