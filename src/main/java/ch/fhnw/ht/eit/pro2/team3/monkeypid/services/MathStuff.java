@@ -55,6 +55,16 @@ public class MathStuff {
 		return largest;
 	}
 
+    public static double minFromPositivInfinity(double[] arr) {
+        double smallest = Double.POSITIVE_INFINITY;
+        for(double value : arr) {
+            if(value < smallest) {
+                smallest = value;
+            }
+        }
+        return smallest;
+    }
+
 	/**
 	 * Generates an array of linearly spaced values ranging from the start value to the end value with the specified
 	 * number of points.

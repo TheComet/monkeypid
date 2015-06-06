@@ -9,6 +9,7 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.labels.XYToolTipGenerator;
@@ -158,6 +159,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
+		/*
 		// here we will attach a straight line to those curves that are too short.
 		// TODO This is a terrible idea, remove when the lulz were had
 		SwingUtilities.invokeLater(() -> {
@@ -171,6 +173,10 @@ public class GraphPanel extends JPanel implements IModelListener,
 				((XYSeries) series).add(maxX, 1.0);
 			}
 		});
+		*/
+        ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
+        //set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
+        yAxis.setLowerMargin(0.00);
 	}
 
 	@Override

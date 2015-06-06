@@ -224,7 +224,7 @@ public class InputPanel extends JPanel implements ActionListener,
 			double valueOfOvershoot = Double.parseDouble(tfOvershoot.getText());
 			
 			//TODO remove syso
-			System.out.println(valueOfOvershoot);
+			//System.out.println(valueOfOvershoot);
 			
 			// set dummy value for error textField, if not height would be zero
 			lbValueErrorInfo.setText(" ");

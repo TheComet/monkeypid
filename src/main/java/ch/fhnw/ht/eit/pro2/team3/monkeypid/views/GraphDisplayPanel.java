@@ -213,7 +213,9 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void onSimulationComplete() {}
+	public void onSimulationComplete() {
+
+    }
 
 	@Override
 	public void onHideCalculation(ClosedLoop closedLoop) {}

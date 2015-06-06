@@ -313,7 +313,10 @@ public class ClosedLoop {
 
 		double fs = 50.0*largestImag/(2.0*Math.PI);
 
-		double numberOfPoints = fs*Math.log(0.0001)/largestReal;
+		double numberOfPoints = fs*Math.log(0.001)/largestReal;
+        if (controller.getName().equals("Zellweger")){
+            numberOfPoints = 1.5*numberOfPoints;
+        }
 
 
 		//numSamplePoints = (int) Math.ceil(Math.log(numberOfPoints)/Math.log(2.0));
@@ -343,7 +346,8 @@ public class ClosedLoop {
 		double[] y = (double[]) residueResult[0]; //the y-values of the step-response
 		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 
-		// compute maximum overswing in percent - see issue #23
+        //System.out.println("low value: "+MathStuff.minFromPositivInfinity(y));
+        // compute maximum overswing in percent - see issue #23
 		maxOverSwing = MathStuff.max(y);
 		maxOverSwing = (maxOverSwing - 1.0) * 100;
 
