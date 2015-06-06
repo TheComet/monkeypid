@@ -26,8 +26,13 @@ public class ZellwegerI extends AbstractZellweger {
 	 */
 	public ZellwegerI(Plant plant, double angleOfInflectionOffset) {
 		super(plant, 0.0); // phase margin is irrelevant in Zellweger I
+        //limit angleOfInflectionOffset to -55.0 degree -> angleOfInflection will be maximum -95 degree
+        //else, the controller swings to much and the calculation fails.
+        if((angleOfInflectionOffset) < -50.0){
+            angleOfInflectionOffset = -50.0;
+        }
 		setAngleOfInflection(-45.0 + angleOfInflectionOffset);
-	}
+    }
 
 	/**
 	 * Calculates the appropriate controller for the specified plant.

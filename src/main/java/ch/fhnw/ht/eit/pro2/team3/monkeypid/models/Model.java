@@ -155,6 +155,7 @@ public class Model implements IClosedLoopListener {
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
 				closedLoop.calculateStepResponse(numSamplePoints);
+                //save last Zellweger calculation for the slider-adjusted-calculation (in updateZellweger() )
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
 				}
@@ -319,9 +320,10 @@ public class Model implements IClosedLoopListener {
 		}
 		
 		// block other alculations, until this is finished
-		zellwegerPhaseInflectionAdjustingCalculationOngoing = true; 
-		
-		//notifyRemoveCalculation(lastZellwegerClosedLoop);
+		zellwegerPhaseInflectionAdjustingCalculationOngoing = true;
+
+        System.out.println("angle: "+phaseInflectionOffset);
+        //notifyRemoveCalculation(lastZellwegerClosedLoop);
 
 		//create a CalulationCycle for the Zellweger-Controller
 		CalculationCycle calculator;

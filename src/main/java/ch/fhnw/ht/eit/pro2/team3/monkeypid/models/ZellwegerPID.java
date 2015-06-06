@@ -28,9 +28,14 @@ public class ZellwegerPID extends AbstractZellweger {
 	 * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
 	 * @param angleOfInflectionOffset The offset for the angleOfInflection.
 	 */
-	public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflection) {
+	public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflectionOffset) {
 		super(plant, phaseMargin);
-		setAngleOfInflection(-135.0 + angleOfInflection);
+        //limit angleOfInflectionOffset to 50.0 degree -> angleOfInflection will be maximum -85 degree
+        //else, the controller swings to much and the calculation fails.
+        if((angleOfInflectionOffset) > 50.0){
+            angleOfInflectionOffset = 50.0;
+        }
+		setAngleOfInflection(-135.0 + angleOfInflectionOffset);
 	}
 
 	/**

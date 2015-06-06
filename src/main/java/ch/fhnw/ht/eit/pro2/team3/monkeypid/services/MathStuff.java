@@ -31,7 +31,7 @@ public class MathStuff {
 	}
 
 	/**
-	 * Returns the largest value in an array of doubles
+	 * Returns the largest (bigger than 0.0) value in an array of doubles
 	 * @param arr The array to find the largest value of.
 	 * @return The largest value.
 	 */
@@ -45,6 +45,11 @@ public class MathStuff {
 		return largest;
 	}
 
+    /**
+     * Returns the largest (bigger than -infinity) value in an array of doubles
+     * @param arr The array to find the largest value of.
+     * @return The largest value.
+     */
 	public static double maxFromNegativeInfinity(double[] arr) {
 		double largest = Double.NEGATIVE_INFINITY;
 		for(double value : arr) {
@@ -55,6 +60,11 @@ public class MathStuff {
 		return largest;
 	}
 
+    /**
+     * Returns the smallest (smaller than +infinity) value in an array of doubles
+     * @param arr The array to find the largest value of.
+     * @return The largest value.
+     */
     public static double minFromPositivInfinity(double[] arr) {
         double smallest = Double.POSITIVE_INFINITY;
         for(double value : arr) {
@@ -517,14 +527,17 @@ public class MathStuff {
 		   p =  ArrayUtils.remove(p,0);
 		}
 		*/
+        boolean d = false; //debug on/off
 
 		double[] p2 = new double[p.length];
 
-		//System.out.println("poly: ");
-		for (int i = 0; i < p.length; i++) {
-			//System.out.println("koef "+i+": real: "+p[i]);
+        if(d) {
+            System.out.println("poly: ");
+            for (int i = 0; i < p.length; i++) {
+                System.out.println("koef " + i + ": real: " + p[i]);
 
-		}
+            }
+        }
 
 		for(int i=0; i < p2.length; i++){
 			p2[i] = p[i];
@@ -577,10 +590,10 @@ public class MathStuff {
 
 		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
 		Complex[] r = solver.solveAllComplex(flip, 0.0);
-		//System.out.println("Roots, count: " + r.length);
+		if(d) System.out.println("Roots, count: " + r.length);
 		for (int i = 0; i < r.length; i++) {
 			r[i] = r[i].multiply(s2);
-			//.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+			if(d) System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
 		}
 
 		for (int i = 0; i < r.length; i++) {
@@ -593,7 +606,7 @@ public class MathStuff {
 				for (int j = 0; j < r.length; j++) {
 					if(j != i){
 						//if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
-						if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 500) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),500)){
+						if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 5000) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),5000)){  //old max: 500
 							rootCorrect = true;
 							break;
 						}
@@ -605,10 +618,12 @@ public class MathStuff {
 			}
 		}
 
-		//System.out.println("roots cleande: ");
-		for (int i = 0; i < r.length; i++) {
-			//System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
-		}
+        if(d) {
+            System.out.println("roots cleande: ");
+            for (int i = 0; i < r.length; i++) {
+                System.out.println("root " + i + ": real: " + r[i].getReal() + " imag: " + r[i].getImaginary());
+            }
+        }
 
 		return r;
 

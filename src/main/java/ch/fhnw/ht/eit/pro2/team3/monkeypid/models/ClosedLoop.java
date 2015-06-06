@@ -298,9 +298,10 @@ public class ClosedLoop {
 
 		//display debug info only, if zellweger:
 		boolean d = false;
-		if(controller.getName().equals("Zellweger") && numSamplePoints == 8*1024){
+		if(controller.getName().equals("Zellweger")){ //&& numSamplePoints == 8*1024){
 			d = true;
 		}
+        d = false; //debug off
 
 		// determine the optimal time window and compute fs
 		// this is achieved by calculating the roots of the closed loop's transfer function and searching for the
@@ -314,6 +315,8 @@ public class ClosedLoop {
 		double fs = 50.0*largestImag/(2.0*Math.PI);
 
 		double numberOfPoints = fs*Math.log(0.001)/largestReal;
+        //calculate more points, if this closedLoop is a Zellweger controller. This is used, because Zellweger-Controllers
+        //were calculated too short compared to the fistFormulas
         if (controller.getName().equals("Zellweger")){
             numberOfPoints = 1.5*numberOfPoints;
         }
@@ -325,10 +328,10 @@ public class ClosedLoop {
 		numberOfPoints = Math.round(numberOfPoints);
 
 		if(d) {
-			//System.out.println("largestReal: "+largestReal+ " largestImag: "+largestImag);
-			//System.out.println("numOfPoints: " + numberOfPoints);
-			//System.out.println("fs: " + fs);
-			//System.out.println("time: " + (numberOfPoints - 1) / fs);
+			System.out.println("largestReal: "+largestReal+ " largestImag: "+largestImag);
+			System.out.println("numOfPoints: " + numberOfPoints);
+			System.out.println("fs: " + fs);
+			System.out.println("time: " + (numberOfPoints - 1) / fs);
 		}
 
 
@@ -350,6 +353,7 @@ public class ClosedLoop {
         // compute maximum overswing in percent - see issue #23
 		maxOverSwing = MathStuff.max(y);
 		maxOverSwing = (maxOverSwing - 1.0) * 100;
+        if(d) System.out.println("\noverswing: "+maxOverSwing+"\n");
 
 		// create XY data series for JFreeChart
 		stepResponse = new XYSeries(controller.getName());
