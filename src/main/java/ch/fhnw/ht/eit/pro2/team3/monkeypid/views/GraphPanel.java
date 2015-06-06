@@ -36,14 +36,16 @@ public class GraphPanel extends JPanel implements IModelListener,
 		ChartMouseListener {
 	private XYSeriesCollection dataCollection = null;
 	private JFreeChart chart = null;
+    private View view;
 
 	/**
 	 * 
 	 * @param controller
 	 */
-	public GraphPanel() {
+	public GraphPanel(View view) {
 		//set layout to BorderLayout
 		super(new BorderLayout());
+        this.view = view;
 
 		// collection holds XY data series
 		dataCollection = new XYSeriesCollection();
@@ -102,24 +104,34 @@ public class GraphPanel extends JPanel implements IModelListener,
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
 			try {
-				for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
+                //System.out.println("\nbefore remove");
+                for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
+                    //System.out.println("series: " + dataCollection.getSeries(i).getKey());
+                }
+                for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
 					if (closedLoop.getName().equals(
 							dataCollection.getSeries(i).getKey())) {
-						dataCollection.removeSeries(i);
-						break;
+                        dataCollection.removeSeries(i);
 					}
 				}
+                view.validate();	//triggers repaint of the GU
 
 				dataCollection.addSeries(closedLoop.getStepResponse());
 
+                //System.out.println("\nafter remove");
+                for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
+                    //System.out.println("series: " + dataCollection.getSeries(i).getKey());
+                }
+
 				// The closedLoop object specifies what color it wants to be
 				// rendered in
-				getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop),
-						closedLoop.getColor());
+                getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop),
+                        closedLoop.getColor());
 				// getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop),
 				// new BasicStroke(5.0f,BasicStroke.CAP_BUTT,
 				// BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f},
 				// 0.0f));
+
 				getDatasetRenderer().setSeriesToolTipGenerator(
 						getSeriesIndex(closedLoop), new XYToolTipGenerator() {
 							private static final long serialVersionUID = 1L;

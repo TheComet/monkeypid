@@ -322,7 +322,6 @@ public class Model implements IClosedLoopListener {
 		// block other alculations, until this is finished
 		zellwegerPhaseInflectionAdjustingCalculationOngoing = true;
 
-        System.out.println("angle: "+phaseInflectionOffset);
         //notifyRemoveCalculation(lastZellwegerClosedLoop);
 
 		//create a CalulationCycle for the Zellweger-Controller
