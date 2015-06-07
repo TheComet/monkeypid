@@ -1,6 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ICalculationCycleListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -10,7 +9,6 @@ import org.jfree.data.xy.XYSeries;
 
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class ClosedLoop {
 	private Plant plant;
 	private AbstractController controller;
 	private XYSeries stepResponse = null;
-	private double maxOverSwing;
+	private double maxOvershoot;
 
 	// stores where the calculated controller will be inserted into the table
 	private int tableRowIndex = -1; // see issue #29
@@ -70,18 +68,18 @@ public class ClosedLoop {
 	/**
 	 * Should return an array of strings to insert into the table of results. The table is designed to contain all
 	 * result values of a PID controller in the following order:
-	 *	 new String[] {"Controller Name", "Kr", "Tn", "Tv", "Tp", "Overswing"};
+	 *	 new String[] {"Controller Name", "Kr", "Tn", "Tv", "Tp", "Overshoot"};
 	 * @return The length of the string array must be 6.
 	 */
 	public final String[] getTableRowStrings() {
 		// get the strings the controller wants to insert into the table,
-		// and expand the array by 1 to make space for the overswing value
+		// and expand the array by 1 to make space for the overshoot value
 		String[] controllerRow = getController().getTableRowStrings();
 		String[] tableRow = new String[controllerRow.length + 1];
 		System.arraycopy(controllerRow, 0, tableRow, 0, controllerRow.length);
 
-		// insert overswing value
-		String str = new DecimalFormat("00.0").format(maxOverSwing).replaceAll("\\G0", " ") + "%";
+		// insert overshoot value
+		String str = new DecimalFormat("00.0").format(maxOvershoot).replaceAll("\\G0", " ") + "%";
 		str = str.replace(" .", "0."); // this stops regex from removing a 0 before the point
 		tableRow[controllerRow.length] = str;
 
@@ -139,11 +137,11 @@ public class ClosedLoop {
 	}
 
 	/**
-	 * Returns the maximum measured overswing of the last step response calculation.
-	 * @return The overswing in percent.
+	 * Returns the maximum measured overshoot of the last step response calculation.
+	 * @return The overshoot in percent.
 	 */
-	public final double getOverswing() {
-		return maxOverSwing;
+	public final double getOvershoot() {
+		return maxOvershoot;
 	}
 
 	/**
@@ -216,9 +214,9 @@ public class ClosedLoop {
 		// cut away mirrored part
 		y = Arrays.copyOfRange(y, 0, y.length / 2);
 
-		// compute maximum overswing in percent - see issue #23
-		maxOverSwing = MathStuff.max(y);
-		maxOverSwing = (maxOverSwing - 1.0) * 100;
+		// compute maximum overshoot in percent - see issue #23
+		maxOvershoot = MathStuff.max(y);
+		maxOvershoot = (maxOvershoot - 1.0) * 100;
 
 		// generate time axis
 		double[] t = MathStuff.linspace(0, (y.length-1)/fs, y.length);
@@ -329,10 +327,10 @@ public class ClosedLoop {
 		double[] t = (double[]) residueResult[1]; //the x-values/time-axis of the step-response
 
         //System.out.println("low value: "+MathStuff.minFromPositivInfinity(y));
-        // compute maximum overswing in percent - see issue #23
-		maxOverSwing = MathStuff.max(y);
-		maxOverSwing = (maxOverSwing - 1.0) * 100;
-        if(d) System.out.println("\noverswing: "+maxOverSwing+"\n");
+        // compute maximum overshoot in percent - see issue #23
+		maxOvershoot = MathStuff.max(y);
+		maxOvershoot = (maxOvershoot - 1.0) * 100;
+        if(d) System.out.println("\novershoot: "+ maxOvershoot +"\n");
 
 		// create XY data series for JFreeChart
 		stepResponse = new XYSeries(controller.getName());
