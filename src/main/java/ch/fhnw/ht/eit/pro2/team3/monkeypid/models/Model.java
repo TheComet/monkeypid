@@ -68,10 +68,10 @@ public class Model implements IClosedLoopListener {
 		 * calculator.
 		 * 
 		 * @param controllerCalculator
-		 *            The controller calculator to use.
+		 *			The controller calculator to use.
 		 * @param resultListener
-		 *            The listener to notify when the step response calculation
-		 *            completes.
+		 *			The listener to notify when the step response calculation
+		 *			completes.
 		 */
 		CalculationCycle(AbstractControllerCalculator controllerCalculator,
 				IClosedLoopListener resultListener) {
@@ -113,8 +113,6 @@ public class Model implements IClosedLoopListener {
 			// the number of sample points to use for the end result
 			int numSamplePoints = 8 * 1024;
 
-            boolean useResidueStepResponse = true;
-
 			// if maxKr is greater than minKr, it means we have a window to use
 			// for iterative approximation
 			if (controller.getMaxKr() > controller.getMinKr()) {
@@ -129,10 +127,7 @@ public class Model implements IClosedLoopListener {
 				for (int i = 0; i < 9; i++) {
 					controller.setKr(actualKr);
 					closedLoop.setPlantAndController(plant, controller);
-                    if(useResidueStepResponse)
-					    closedLoop.calculateStepResponseResidue(2*1024);
-                    else
-                        closedLoop.calculateStepResponse(4096);
+					closedLoop.calculateStepResponse(2 * 1024);
 					if (closedLoop.getOverswing() > targetOverswing) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
@@ -146,10 +141,8 @@ public class Model implements IClosedLoopListener {
 				// sample points.
 				controller.setKr(actualKr);
 				closedLoop.setPlantAndController(plant, controller);
-                if(useResidueStepResponse)
-				    closedLoop.calculateStepResponseResidue(numSamplePoints);
-                else
-                    closedLoop.calculateStepResponse(numSamplePoints);
+				closedLoop.calculateStepResponse(numSamplePoints);
+
 				// because only ZellwegerControllers are calculated in this
 				// loop all closedLoops here are lastZellwegerClosedLoop
 				lastZellwegerClosedLoop = closedLoop;
@@ -161,19 +154,14 @@ public class Model implements IClosedLoopListener {
 				closedLoop.setTableRowIndex(controllerCalculator
 						.getTableRowIndex());
 				closedLoop.registerListener(resultListener);
-                if(useResidueStepResponse)
-				    closedLoop.calculateStepResponseResidue(numSamplePoints);
-                else
-                    closedLoop.calculateStepResponse(numSamplePoints);
+				closedLoop.calculateStepResponse(numSamplePoints);
+                //save last Zellweger calculation for the slider-adjusted-calculation (in updateZellweger() )
 				if(closedLoop.getName().equals("Zellweger")){
 					lastZellwegerClosedLoop = closedLoop;
 				}
 			}
 		}
 	}
-
-	private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors
-			.newCachedThreadPool();
 
 	// have the model own the sani curves, so they don't have to be reloaded
 	// from disk every time a new calculation is performed.
@@ -219,13 +207,9 @@ public class Model implements IClosedLoopListener {
 
 	/**
 	 * Updates the plant to be used for all calculations.
-	 * 
-	 * @param tu
-	 *            Plant value Tu.
-	 * @param tg
-	 *            Plant value Ks.
-	 * @param ks
-	 *            Plant value Ks.
+	 * @param tu Plant parameter Tu.
+	 * @param tg Plant parameter Ks.
+	 * @param ks Plant parameter Ks.
 	 */
 	public final void setPlant(double tu, double tg, double ks) {
 		this.plant = new Plant(tu, tg, ks, sani);
@@ -238,7 +222,7 @@ public class Model implements IClosedLoopListener {
 	 * calculators matching the selected type will be calculated.
 	 * 
 	 * @param regulatorTypeName
-	 *            A string containing either "I", "IP", or "PID".
+	 *			A string containing either "I", "IP", or "PID".
 	 */
 	public final void setRegulatorType(String regulatorTypeName)
 			throws UnknownRegulatorTypeException {
@@ -263,10 +247,8 @@ public class Model implements IClosedLoopListener {
 	 * to use in all simulations. Zellweger methods will multiply this with Tvk
 	 * to get Tp (Tp = factor * Tvk). Fist formulas will multiply it with Tv to
 	 * get Tp (Tp = factor * Tv)
-	 * 
-	 * @param parasiticTimeConstantFactor
-	 *            The factor to use. The value should be absolute, not in
-	 *            percent.
+	 * @param parasiticTimeConstantFactor The factor to use. The value should be
+	 *									absolute, not in percent.
 	 */
 	public final void setParasiticTimeConstantFactor(
 			double parasiticTimeConstantFactor) {
@@ -275,9 +257,7 @@ public class Model implements IClosedLoopListener {
 
 	/**
 	 * Sets the overswing to use for zellweger based calculations.
-	 * 
-	 * @param overswing
-	 *            The overswing in percent.
+	 * @param overswing The overswing in percent.
 	 */
 	public final void setOverswing(double overswing) {
 		this.overswing = overswing;
@@ -290,9 +270,6 @@ public class Model implements IClosedLoopListener {
 	 */
 	public final void simulateAll() {
 
-		if (threadPool.getActiveCount() > 0)
-			return;
-
 		// see issue #31 - disallow orders n=2 for PID simulations
 		validatePlantIsPIDCompliant();
 
@@ -304,10 +281,12 @@ public class Model implements IClosedLoopListener {
 		notifySimulationBegin(calculators.size());
 
 		// dispatch all calculators
+		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 		calculators.forEach(threadPool::submit);
+		threadPool.shutdown();
 
 		try {
-			threadPool.awaitTermination(0, TimeUnit.SECONDS);
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
@@ -323,7 +302,7 @@ public class Model implements IClosedLoopListener {
 	 * notifiers.
 	 * This method calculates only a new zellwegerMethod, if no other Calculation
 	 * is active and at least one Zellweger-Calculation is done.
-	 * @param phaseInflectionOffset
+	 * @param phaseInflectionOffset // TODO
 	 */
 	public void updateZellweger(int phaseInflectionOffset) {
 		// if at least one simulation done (lastZellwegerClosedLoop is then not
@@ -332,9 +311,8 @@ public class Model implements IClosedLoopListener {
 			return;
 		}
 		// if no calculations are ongoing
-		if (threadPool.getActiveCount() > 0) {
-			return;
-		}
+		// TODO if implementing async simulateAll(), add a check here again
+
 		// if no current PhaseInflectionAdjustingCalculation go on, else stop
 		// here
 		if (zellwegerPhaseInflectionAdjustingCalculationOngoing) {
@@ -342,9 +320,9 @@ public class Model implements IClosedLoopListener {
 		}
 		
 		// block other alculations, until this is finished
-		zellwegerPhaseInflectionAdjustingCalculationOngoing = true; 
-		
-		//notifyRemoveCalculation(lastZellwegerClosedLoop);
+		zellwegerPhaseInflectionAdjustingCalculationOngoing = true;
+
+        //notifyRemoveCalculation(lastZellwegerClosedLoop);
 
 		//create a CalulationCycle for the Zellweger-Controller
 		CalculationCycle calculator;
@@ -389,7 +367,7 @@ public class Model implements IClosedLoopListener {
 	 * hideSelectedCalculation() or showSelectedCalculation().
 	 * 
 	 * @param name
-	 *            The unique name of the calculation to select.
+	 *			The unique name of the calculation to select.
 	 */
 	public final void selectCalculation(String name) {
 		for (ClosedLoop loop : closedLoops) {
@@ -429,7 +407,7 @@ public class Model implements IClosedLoopListener {
 	 * Registers a model listener.
 	 * 
 	 * @param listener
-	 *            An object implementing IModelListener.
+	 *			An object implementing IModelListener.
 	 */
 	public final void registerListener(IModelListener listener) {
 		listeners.add(listener);
@@ -439,7 +417,7 @@ public class Model implements IClosedLoopListener {
 	 * Unregisters a model listener.
 	 * 
 	 * @param listener
-	 *            An object that previously called registerListener.
+	 *			An object that previously called registerListener.
 	 */
 	public final void unregisterListener(IModelListener listener) {
 		listeners.remove(listener);
@@ -474,8 +452,7 @@ public class Model implements IClosedLoopListener {
 		if (regulatorType == RegulatorType.PID) {
 			double ratio = plant.getTu() / plant.getTg();
 			if (sani.lookupOrder(ratio) == 2) {
-				throw new InvalidPlantForPIDSimulationException(
-						"Die Strecke ist n=2. Eine PID Simulation ist Sinnlos");
+				throw new InvalidPlantForPIDSimulationException("Die Strecke ist n=2. Eine PID Simulation ist Sinnlos");
 			}
 		}
 	}
@@ -498,37 +475,23 @@ public class Model implements IClosedLoopListener {
 		// controller type
 		switch (regulatorType) {
 		case PID:
-			calculators.add(new CalculationCycle(new ZellwegerPID(plant,
-					overswing), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaOppeltPID(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPID0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPID20(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPID0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPID20(plant), this));
-			calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(
-					plant), this));
+			calculators.add(new CalculationCycle(new ZellwegerPID(plant, overswing), this));
+			calculators.add(new CalculationCycle(new FistFormulaOppeltPID(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPID20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaRosenbergPID(plant), this));
 			break;
 
 		case PI:
-			calculators.add(new CalculationCycle(new ZellwegerPI(plant,
-					overswing), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaOppeltPI(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPI0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickStoerPI20(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPI0(plant), this));
-			calculators.add(new CalculationCycle(
-					new FistFormulaReswickFuehrungPI20(plant), this));
-			calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(
-					plant), this));
+			calculators.add(new CalculationCycle(new ZellwegerPI(plant, overswing), this));
+			calculators.add(new CalculationCycle(new FistFormulaOppeltPI(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI0(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaReswickFuehrungPI20(plant), this));
+			calculators.add(new CalculationCycle(new FistFormulaRosenbergPI(plant), this));
 			break;
 
 		case I:
@@ -542,9 +505,7 @@ public class Model implements IClosedLoopListener {
 		// set table row indices of calculator - See issue #29
 		int i = 0;
 		for (CalculationCycle calculator : calculators) {
-			calculator
-					.getControllerCalculator()
-					.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+			calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
 			calculator.getControllerCalculator().setTableRowIndex(i);
 			calculator.setTargetOverswing(overswing);
 			i++;
@@ -558,12 +519,11 @@ public class Model implements IClosedLoopListener {
 	 * internal list.
 	 * 
 	 * @param loop
-	 *            The closed loop that was added.
+	 *			The closed loop that was added.
 	 */
 	private void notifyAddCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
-			listener.onAddCalculation(loop,
-					curvesVisible[loop.getTableRowIndex()]);
+			listener.onAddCalculation(loop, curvesVisible[loop.getTableRowIndex()]);
 		}
 	}
 
@@ -572,7 +532,7 @@ public class Model implements IClosedLoopListener {
 	 * list.
 	 * 
 	 * @param loop
-	 *            The closed loop that was removed.
+	 *			The closed loop that was removed.
 	 */
 	private void notifyRemoveCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
@@ -584,7 +544,7 @@ public class Model implements IClosedLoopListener {
 	 * Call this to notify that a new simulation is about to begin.
 	 * 
 	 * @param numberOfCalculators
-	 *            The number of calculators that will be executed.
+	 *			The number of calculators that will be executed.
 	 */
 	private void notifySimulationBegin(int numberOfCalculators) {
 		for (IModelListener listener : listeners) {
@@ -604,7 +564,7 @@ public class Model implements IClosedLoopListener {
 	 * curve in the plot to be hidden.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop being hidden.
+	 *			The closed loop being hidden.
 	 */
 	private void notifyHideCalculation(ClosedLoop closedLoop) {
 		for (IModelListener listener : listeners) {
@@ -617,7 +577,7 @@ public class Model implements IClosedLoopListener {
 	 * cause the curve in the plot to be made visible.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop to make visible.
+	 *			The closed loop to make visible.
 	 */
 	private void notifyShowCalculation(ClosedLoop closedLoop) {
 		for (IModelListener listener : listeners) {
@@ -644,8 +604,8 @@ public class Model implements IClosedLoopListener {
 	 * Called when a step response calculation completes.
 	 * 
 	 * @param closedLoop
-	 *            The closed loop object holding the results of the step
-	 *            response.
+	 *			The closed loop object holding the results of the step
+	 *			response.
 	 */
 	@Override
 	public final synchronized void onStepResponseCalculationComplete(

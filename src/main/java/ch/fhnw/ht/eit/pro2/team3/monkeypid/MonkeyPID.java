@@ -20,15 +20,15 @@ public class MonkeyPID {
 	 */
 	public void setLookAndFeel() {
 		try {
-            // TODO @Stierli - Kommentier s zü
-            //
-            // g ih und us, jenachdem welles theme du willsch.
-            // UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
-            // UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
-            //UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
-            UIManager.setLookAndFeel(SyntheticaSimple2DLookAndFeel.class.getName());
-            // UIManager.setLookAndFeel(SyntheticaSkyMetallicLookAndFeel.class.getName());
-            //UIManager.setLookAndeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
+			// TODO @Stierli - Kommentier s zü
+			//
+			// g ih und us, jenachdem welles theme du willsch.
+			// UIManager.setLookAndFeel(SyntheticaAluOxideLookAndFeel.class.getName());
+			// UIManager.setLookAndFeel(SyntheticaBlueSteelLookAndFeel.class.getName());
+			//UIManager.setLookAndFeel(SyntheticaSilverMoonLookAndFeel.class.getName());
+			UIManager.setLookAndFeel(SyntheticaSimple2DLookAndFeel.class.getName());
+			// UIManager.setLookAndFeel(SyntheticaSkyMetallicLookAndFeel.class.getName());
+			//UIManager.setLookAndeel(SyntheticaWhiteVisionLookAndFeel.class.getName());
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -62,9 +62,9 @@ public class MonkeyPID {
 		controller.setView(view);
 
 		model.registerListener(view.outputPanel);
-        model.registerListener(view.graphPanel);
-        model.registerListener(view.graphDisplayPanel);
-        model.registerListener(view.inputPanel);
+		model.registerListener(view.graphPanel);
+		model.registerListener(view.graphDisplayPanel);
+		model.registerListener(view.inputPanel);
 
 		// add the view to the root pane
 		frame.getContentPane().add(view);

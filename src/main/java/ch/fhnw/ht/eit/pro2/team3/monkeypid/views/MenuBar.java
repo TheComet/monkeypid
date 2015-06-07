@@ -310,18 +310,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	
 	//TODO Wyss
 	public static class pdfPrinter {
-	    	//new HelloWorld().createPdf(RESULT);
+			//new HelloWorld().createPdf(RESULT);
 		public static void createPdf(String filename)throws IOException, DocumentException  {
-	    	        // step 1
-	    	        Document document = new Document();
-	    	        // step 2
-	    	        PdfWriter.getInstance(document, new FileOutputStream(filename));
-	    	        // step 3
-	    	        document.open();
-	    	        // step 4
-	    	        document.add(new Paragraph("Hello World!"));
-	    	        // step 5
-	    	        document.close();
+					// step 1
+					Document document = new Document();
+					// step 2
+					PdfWriter.getInstance(document, new FileOutputStream(filename));
+					// step 3
+					document.open();
+					// step 4
+					document.add(new Paragraph("Hello World!"));
+					// step 5
+					document.close();
 	   }
 	}
 	//TODO Wyss
@@ -331,33 +331,33 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		try {
 			//works
-	        PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
-	        d.open();
-	     
-            PdfContentByte cb = writer.getDirectContent();
-            //cb.set
-            PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
-            //tp.setA
-            Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
-            //g2.scale(0.8, 0.8);
-            //System.out.println("width: "+view.getWidth()+" height: "+view.getHeight());
-            //width: 1246 height: 705
-            double factorFromWidth = Math.round((1150.0/view.getWidth())*10.0)/10.0;
-            System.out.println("with factor: "+factorFromWidth);
-            double factorFromHeight = Math.round((690.0/view.getHeight())*10.0)/10.0; 
-            double factor = Math.min(factorFromWidth, factorFromHeight);
-            System.out.println("Factor: "+factor);
-            g2.scale(factor, factor);
-            view.print(g2);
-            g2.dispose();
-            System.out.println(tp.getHeight() + "   "+(-tp.getWidth()+1246.0+30));
-            System.out.println(tp.getWidth()+ "   "+(-tp.getHeight()+705.0+20));
-            
-            cb.addTemplate (tp, -tp.getWidth()+1246.0+30, -tp.getHeight()+705.0+20);
-            //cb.setLeading(TOP_ALIGNMENT);
-	    } catch (Exception e) {
-	        System.out.println("ERROR: " + e.toString());
-	    }
+			PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
+			d.open();
+
+			PdfContentByte cb = writer.getDirectContent();
+			//cb.set
+			PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
+			//tp.setA
+			Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
+			//g2.scale(0.8, 0.8);
+			//System.out.println("width: "+view.getWidth()+" height: "+view.getHeight());
+			//width: 1246 height: 705
+			double factorFromWidth = Math.round((1150.0/view.getWidth())*10.0)/10.0;
+			System.out.println("with factor: "+factorFromWidth);
+			double factorFromHeight = Math.round((690.0/view.getHeight())*10.0)/10.0;
+			double factor = Math.min(factorFromWidth, factorFromHeight);
+			System.out.println("Factor: "+factor);
+			g2.scale(factor, factor);
+			view.print(g2);
+			g2.dispose();
+			System.out.println(tp.getHeight() + "   "+(-tp.getWidth()+1246.0+30));
+			System.out.println(tp.getWidth()+ "   "+(-tp.getHeight()+705.0+20));
+
+			cb.addTemplate (tp, -tp.getWidth()+1246.0+30, -tp.getHeight()+705.0+20);
+			//cb.setLeading(TOP_ALIGNMENT);
+		} catch (Exception e) {
+			System.out.println("ERROR: " + e.toString());
+		}
 		finally{
 			if(d.isOpen()){
 				d.close();

@@ -325,26 +325,20 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
-	}
+	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {}
 
 	@Override
-	public void onRemoveCalculation(ClosedLoop closedLoop) {
-	}
+	public void onRemoveCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onSimulationBegin(int numberOfStepResponses) {
-	}
+	public void onSimulationBegin(int numberOfStepResponses) {}
 
 	@Override
-	public void onSimulationComplete() {
-	}
+	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideCalculation(ClosedLoop closedLoop) {
-	}
+	public void onHideCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowCalculation(ClosedLoop closedLoop) {
-	}
+	public void onShowCalculation(ClosedLoop closedLoop) {}
 }

@@ -16,263 +16,283 @@ import org.apache.commons.math3.transform.TransformType;
  */
 public class MathStuff {
 
-    /**
-     * Returns a copy of the array with every element multiplied by the constant.
-     * @param arr Array to multiply.
-     * @param constant Constant to multiply.
-     * @return New array.
-     */
-    public static double[] mul(double[] arr, double constant) {
-        double[] ret = new double[arr.length];
-        for(int i = 0; i < ret.length; i++) {
-            ret[i] = arr[i] * constant;
-        }
-        return ret;
-    }
+	/**
+	 * Returns a copy of the array with every element multiplied by the constant.
+	 * @param arr Array to multiply.
+	 * @param constant Constant to multiply.
+	 * @return New array.
+	 */
+	public static double[] mul(double[] arr, double constant) {
+		double[] ret = new double[arr.length];
+		for(int i = 0; i < ret.length; i++) {
+			ret[i] = arr[i] * constant;
+		}
+		return ret;
+	}
+
+	/**
+	 * Returns the largest (bigger than 0.0) value in an array of doubles
+	 * @param arr The array to find the largest value of.
+	 * @return The largest value.
+	 */
+	public static double max(double[] arr) {
+		double largest = Double.MIN_VALUE;
+		for(double value : arr) {
+			if(value > largest) {
+				largest = value;
+			}
+		}
+		return largest;
+	}
 
     /**
-     * Returns the largest value in an array of doubles
+     * Returns the largest (bigger than -infinity) value in an array of doubles
      * @param arr The array to find the largest value of.
      * @return The largest value.
      */
-    public static double max(double[] arr) {
-        double largest = Double.MIN_VALUE;
+	public static double maxFromNegativeInfinity(double[] arr) {
+		double largest = Double.NEGATIVE_INFINITY;
+		for(double value : arr) {
+			if(value != 0.0  && value > largest) {
+				largest = value;
+			}
+		}
+		return largest;
+	}
+
+    /**
+     * Returns the smallest (smaller than +infinity) value in an array of doubles
+     * @param arr The array to find the largest value of.
+     * @return The largest value.
+     */
+    public static double minFromPositivInfinity(double[] arr) {
+        double smallest = Double.POSITIVE_INFINITY;
         for(double value : arr) {
-            if(value > largest) {
-                largest = value;
+            if(value < smallest) {
+                smallest = value;
             }
         }
-        return largest;
-    }
-    
-    public static double maxFromNegativeInfinity(double[] arr) {
-        double largest = Double.NEGATIVE_INFINITY;
-        for(double value : arr) {
-            if(value != 0.0  && value > largest) {
-                largest = value;
-            }
-        }
-        return largest;
+        return smallest;
     }
 
-    /**
-     * Generates an array of linearly spaced values ranging from the start value to the end value with the specified
-     * number of points.
-     * @param startValue The start value.
-     * @param endValue The end value.
-     * @param nValues How many values should be generated.
-     * @return Returns an array of doubles.
-     */
-    public static double[] linspace(double startValue, double endValue, int nValues){
-        double step = (endValue - startValue)/(nValues-1);
+	/**
+	 * Generates an array of linearly spaced values ranging from the start value to the end value with the specified
+	 * number of points.
+	 * @param startValue The start value.
+	 * @param endValue The end value.
+	 * @param nValues How many values should be generated.
+	 * @return Returns an array of doubles.
+	 */
+	public static double[] linspace(double startValue, double endValue, int nValues){
+		double step = (endValue - startValue)/(nValues-1);
 
-        double[] res = new double[nValues];
+		double[] res = new double[nValues];
 
-        for (int i = 0; i < nValues; i++) {
-            res[i] = step * i + startValue;
-        }
-        return res;
-    }
+		for (int i = 0; i < nValues; i++) {
+			res[i] = step * i + startValue;
+		}
+		return res;
+	}
 
-    /**
-     * Converts omega to the imaginary number s. (s = jw).
-     * @param omega Omega.
-     * @return Returns s.
-     */
-    public static Complex omegaToS(double omega) {
-        return new Complex(0.0, omega);
-    }
+	/**
+	 * Converts omega to the imaginary number s. (s = jw).
+	 * @param omega Omega.
+	 * @return Returns s.
+	 */
+	public static Complex omegaToS(double omega) {
+		return new Complex(0.0, omega);
+	}
 
-    /**
-     * Computes the complex frequency response of a given transfer function.
-     * @param g The transfer function.
-     * @param omega Omega.
-     * @return Complex frequency response.
-     */
-    public static Complex[] freqs(TransferFunction g, double[] omega) {
-        Complex[] res = new Complex[omega.length];
+	/**
+	 * Computes the complex frequency response of a given transfer function.
+	 * @param g The transfer function.
+	 * @param omega Omega.
+	 * @return Complex frequency response.
+	 */
+	public static Complex[] freqs(TransferFunction g, double[] omega) {
+		Complex[] res = new Complex[omega.length];
 
-        for (int i = 0; i < res.length; i++) {
-            Complex s = omegaToS(omega[i]);
-            Complex zaehler = polyVal(g.getNumeratorCoefficients(), s);
-            Complex nenner = polyVal(g.getDenominatorCoefficients(), s);
-            res[i] = zaehler.divide(nenner);
-        }
-        return res;
-    }
+		for (int i = 0; i < res.length; i++) {
+			Complex s = omegaToS(omega[i]);
+			Complex zaehler = polyVal(g.getNumeratorCoefficients(), s);
+			Complex nenner = polyVal(g.getDenominatorCoefficients(), s);
+			res[i] = zaehler.divide(nenner);
+		}
+		return res;
+	}
 
-    /**
-     * Calculates the value of the polynomial poly  at the given X-Value of s
-     * The coefficients of poly start with the highest order x^n.
-     * The last element of poly ist x^0
-     * @param poly The polynomial, for which the value is calculated
-     * @param s The X-Value, which is inserted as X into the polynomial
-     * @return the value of the polynomial poly at s
-     */
-    public static Complex polyVal(double[] poly, Complex s) {
-        // If s is zero, the result will be 0. Apparently, apache commons
-        // cannot raise the complex number 0+0j to any power without
-        // resulting in NaN. For these reasons, we cannot rely on the
-        // algorithm below to return the correct result.
-        if(s.equals(new Complex(0))) {
-            // since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
-            // and we know that s = 0, the result will be b*s^0 = b
-            return new Complex(poly[poly.length - 1]);
-        }
+	/**
+	 * Calculates the value of the polynomial poly  at the given X-Value of s
+	 * The coefficients of poly start with the highest order x^n.
+	 * The last element of poly ist x^0
+	 * @param poly The polynomial, for which the value is calculated
+	 * @param s The X-Value, which is inserted as X into the polynomial
+	 * @return the value of the polynomial poly at s
+	 */
+	public static Complex polyVal(double[] poly, Complex s) {
+		// If s is zero, the result will be 0. Apparently, apache commons
+		// cannot raise the complex number 0+0j to any power without
+		// resulting in NaN. For these reasons, we cannot rely on the
+		// algorithm below to return the correct result.
+		if(s.equals(new Complex(0))) {
+			// since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
+			// and we know that s = 0, the result will be b*s^0 = b
+			return new Complex(poly[poly.length - 1]);
+		}
 
-        Complex res = new Complex(0);
+		Complex res = new Complex(0);
 
-        for (int i = 0; i < poly.length; i++) {
-            Complex raised = s.pow(poly.length - i - 1);
-            raised = raised.multiply(poly[i]);
-            res=res.add(raised);
-        }
+		for (int i = 0; i < poly.length; i++) {
+			Complex raised = s.pow(poly.length - i - 1);
+			raised = raised.multiply(poly[i]);
+			res=res.add(raised);
+		}
 
-        return res;
-    }
-    
-    /**
-     * Calculates the value of the polynomial poly  at the given X-Value of s
-     * The coefficients of poly start with the highest order x^n.
-     * The last element of poly ist x^0
-     * Overloads the Method, the parameter poly, the polynomial-function
-     * is now an array of complex-numbers
-     * @param poly The polynomial, for which the value is calculated
-     * @param s The X-Value, which is inserted as X into the polynomial
-     * @return the value of the polynomial poly at s
-     */
-    public static Complex polyVal(Complex[] poly, Complex s) {
-        // If s is zero, the result will be 0. Apparently, apache commons
-        // cannot raise the complex number 0+0j to any power without
-        // resulting in NaN. For these reasons, we cannot rely on the
-        // algorithm below to return the correct result.
-        if(s.equals(new Complex(0))) {
-            // since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
-            // and we know that s = 0, the result will be b*s^0 = b
-            return poly[poly.length - 1];
-        }
+		return res;
+	}
 
-        Complex res = new Complex(0);
+	/**
+	 * Calculates the value of the polynomial poly  at the given X-Value of s
+	 * The coefficients of poly start with the highest order x^n.
+	 * The last element of poly ist x^0
+	 * Overloads the Method, the parameter poly, the polynomial-function
+	 * is now an array of complex-numbers
+	 * @param poly The polynomial, for which the value is calculated
+	 * @param s The X-Value, which is inserted as X into the polynomial
+	 * @return the value of the polynomial poly at s
+	 */
+	public static Complex polyVal(Complex[] poly, Complex s) {
+		// If s is zero, the result will be 0. Apparently, apache commons
+		// cannot raise the complex number 0+0j to any power without
+		// resulting in NaN. For these reasons, we cannot rely on the
+		// algorithm below to return the correct result.
+		if(s.equals(new Complex(0))) {
+			// since the calculation is a*s^n + b*s^(n-1) + ... + b*s^0
+			// and we know that s = 0, the result will be b*s^0 = b
+			return poly[poly.length - 1];
+		}
 
-        for (int i = 0; i < poly.length; i++) {
-            Complex raised = s.pow(poly.length - i - 1);
-            raised = raised.multiply(poly[i]);
-            res=res.add(raised);
-        }
+		Complex res = new Complex(0);
 
-        return res;
-    }
+		for (int i = 0; i < poly.length; i++) {
+			Complex raised = s.pow(poly.length - i - 1);
+			raised = raised.multiply(poly[i]);
+			res=res.add(raised);
+		}
 
-    /* WARNING This appears to be broken when used with two arrays with different sizes.
-     * Use MathArrays.convolve from apache commons.
-    public static double[] conv(double[] a, double[] b) {
-        double[] res = new double[a.length + b.length - 1];
-        for (int n = 0; n < res.length; n++) {
-            for (int i = Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
-                res[n] += b[i] * a[n - i];
-            }
-        }
-        return res;
-    }*/
+		return res;
+	}
 
-    /**
-     * Returns a double array filled with ones.
-     * @param length The number of ones to fill.
-     * @return A double array.
-     */
-    public static double[] ones(int length) {
-        double[] array = new double[length];
-        for(int i = 0; i < length; i++) {
-            array[i] = 1;
-        }
-        return array;
-    }
+	/* WARNING This appears to be broken when used with two arrays with different sizes.
+	 * Use MathArrays.convolve from apache commons.
+	public static double[] conv(double[] a, double[] b) {
+		double[] res = new double[a.length + b.length - 1];
+		for (int n = 0; n < res.length; n++) {
+			for (int i = Math.max(0, n - a.length + 1); i <= Math.min(b.length - 1, n); i++) {
+				res[n] += b[i] * a[n - i];
+			}
+		}
+		return res;
+	}*/
 
-    /**
-     * Computes the inverse fast fourier transform of a function.
-     * @param f A function in the frequency domain.
-     * @return A function in the time domain.
-     */
-    public static Complex[] ifft(Complex[] f){
-        FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
-        return transformer.transform(f, TransformType.INVERSE);
-    }
+	/**
+	 * Returns a double array filled with ones.
+	 * @param length The number of ones to fill.
+	 * @return A double array.
+	 */
+	public static double[] ones(int length) {
+		double[] array = new double[length];
+		for(int i = 0; i < length; i++) {
+			array[i] = 1;
+		}
+		return array;
+	}
 
-    /**
-     * Returns the real parts of an array of complex numbers.
-     * @param c A list of complex numbers.
-     * @return A list of only the real parts.
-     */
-    public static double[] real(Complex[] c) {
-        double[] ret = new double[c.length];
-        for(int i = 0; i < c.length; i++) {
-            ret[i] = c[i].getReal();
-        }
-        return ret;
-    }
+	/**
+	 * Computes the inverse fast fourier transform of a function.
+	 * @param f A function in the frequency domain.
+	 * @return A function in the time domain.
+	 */
+	public static Complex[] ifft(Complex[] f){
+		FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+		return transformer.transform(f, TransformType.INVERSE);
+	}
 
-    /**
-     * Returns the imaginary parts of an array of complex numbers.
-     * @param c A list of complex numbers.
-     * @return A list of only the imaginary parts.
-     */
-    public static double[] imag(Complex[] c) {
-        double[] ret = new double[c.length];
-        for(int i = 0; i < c.length; i++) {
-            ret[i] = c[i].getImaginary();
-        }
-        return ret;
-    }
+	/**
+	 * Returns the real parts of an array of complex numbers.
+	 * @param c A list of complex numbers.
+	 * @return A list of only the real parts.
+	 */
+	public static double[] real(Complex[] c) {
+		double[] ret = new double[c.length];
+		for(int i = 0; i < c.length; i++) {
+			ret[i] = c[i].getReal();
+		}
+		return ret;
+	}
 
-    /**
-     * Doubles the size of the array, then copies, mirrors, and conjugates all values into the second half of the array.
-     * The middle element N/2 will be 0. This is required to compute the fourier transform and get a real result.
-     * @param capitalH The function to prepare.
-     * @return A new function ready for fft/ifft.
-     */
-    public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
-        Complex[] symmetric = new Complex[capitalH.length * 2];
+	/**
+	 * Returns the imaginary parts of an array of complex numbers.
+	 * @param c A list of complex numbers.
+	 * @return A list of only the imaginary parts.
+	 */
+	public static double[] imag(Complex[] c) {
+		double[] ret = new double[c.length];
+		for(int i = 0; i < c.length; i++) {
+			ret[i] = c[i].getImaginary();
+		}
+		return ret;
+	}
 
-        // fill first half with original array
-        System.arraycopy(capitalH, 0, symmetric, 0, capitalH.length);
+	/**
+	 * Doubles the size of the array, then copies, mirrors, and conjugates all values into the second half of the array.
+	 * The middle element N/2 will be 0. This is required to compute the fourier transform and get a real result.
+	 * @param capitalH The function to prepare.
+	 * @return A new function ready for fft/ifft.
+	 */
+	public static Complex[] symmetricMirrorConjugate(Complex[] capitalH) {
+		Complex[] symmetric = new Complex[capitalH.length * 2];
 
-        // middle is 0
-        symmetric[capitalH.length] = new Complex(0);
+		// fill first half with original array
+		System.arraycopy(capitalH, 0, symmetric, 0, capitalH.length);
 
-        // second half is the original array conjugated and mirrored
-        int sourceIndex = capitalH.length - 1;
-        for(int targetIndex = capitalH.length + 1; targetIndex < symmetric.length; targetIndex++) {
-            symmetric[targetIndex] = capitalH[sourceIndex].conjugate();
-            sourceIndex--;
-        }
+		// middle is 0
+		symmetric[capitalH.length] = new Complex(0);
 
-        return symmetric;
-    }
-    
-    /**
-     * Calculates the Step-Response of a Transfer-Function with the Numerator B and the Denominator A.
-     * 1/fs is and the Number of sampling Points N is used to calculate the time-axis of the Step-Response.
-     * The time-axis has N number of points.
-     * See Matlab file "schrittResidue".
-     * Uses the method residueSimple() to do a Partial-Fraction decomposition
-     * @param B The Numerator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
-     * @param A the Denominator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
-     * @param fs The fs of the Transfer-Function.
-     * @param N The number of sampling/x-axis points.
-     * @return {y,t} An array with the two double arrays y, the y-values and t, the time-values of the Step-Response.
-     */
-    public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
-    	//Matlab-Function in comments with Brackets()
-    	//get the time from fs
-    	double T = 1/fs;
-    	//Partial-Fraction decomposition
-    	Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
-    	Complex[] residues = (Complex[]) resdiueResult[0];
+		// second half is the original array conjugated and mirrored
+		int sourceIndex = capitalH.length - 1;
+		for(int targetIndex = capitalH.length + 1; targetIndex < symmetric.length; targetIndex++) {
+			symmetric[targetIndex] = capitalH[sourceIndex].conjugate();
+			sourceIndex--;
+		}
+
+		return symmetric;
+	}
+
+	/**
+	 * Calculates the Step-Response of a Transfer-Function with the Numerator B and the Denominator A.
+	 * 1/fs is and the Number of sampling Points N is used to calculate the time-axis of the Step-Response.
+	 * The time-axis has N number of points.
+	 * See Matlab file "schrittResidue".
+	 * Uses the method residueSimple() to do a Partial-Fraction decomposition
+	 * @param B The Numerator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
+	 * @param A the Denominator-Polynomial of the Transfer-Function (for which the Step-Response is calculated).
+	 * @param fs The fs of the Transfer-Function.
+	 * @param N The number of sampling/x-axis points.
+	 * @return {y,t} An array with the two double arrays y, the y-values and t, the time-values of the Step-Response.
+	 */
+	public static Object[] stepResidue(double[] B, double[] A, double fs, int N){
+		//Matlab-Function in comments with Brackets()
+		//get the time from fs
+		double T = 1/fs;
+		//Partial-Fraction decomposition
+		Object[] resdiueResult = residueSimple(new TransferFunction(B, A));
+		Complex[] residues = (Complex[]) resdiueResult[0];
 		Complex[] pole = (Complex[]) resdiueResult[1];
 		double constantK = (double) resdiueResult[2];
 
-        int numOfPoints = 1024;
-        numOfPoints = N;
+		int numOfPoints = 1024;
+		numOfPoints = N;
 
 		//y-values
 		//zeros()
@@ -292,7 +312,7 @@ public class MathStuff {
 		//time-axis, maximum-time-value depends on N and T
 		double[] t = linspace(0, (N-1)*T, N);
 		double fsFactor = (N*T)/numOfPoints;
-        fsFactor = 1/fs;
+		fsFactor = 1/fs;
 
 		//Calculate impulseResponse (stepResponse)
 		for(int k = 0; k < residues.length; k++){
@@ -306,17 +326,17 @@ public class MathStuff {
 			y[i] = y[i] + y[i-1];
 		}
 		
-    	return new Object[]{y, t};    	
-    }
-    
+		return new Object[]{y, t};
+	}
 
-    /**
-     * Converts a partial-fraction g into the residues R, poles P and constant-term K
-     * See Matlab file "residueSimple.m" or Matlab buildt in function residue()
-     * @param g The TransferFunction which is the partial-fraction which is converted
-     * @return R, P, K Residues P, Poles P and Constant-Term K
-     */
-    public static Object[] residueSimple(TransferFunction g){
+
+	/**
+	 * Converts a partial-fraction g into the residues R, poles P and constant-term K
+	 * See Matlab file "residueSimple.m" or Matlab buildt in function residue()
+	 * @param g The TransferFunction which is the partial-fraction which is converted
+	 * @return R, P, K Residues P, Poles P and Constant-Term K
+	 */
+	public static Object[] residueSimple(TransferFunction g){
 		double constantK = 0.0;
 		
 		//Get the Numerator and Denominator from the TransferFunction
@@ -346,7 +366,7 @@ public class MathStuff {
 		Complex[] poles = roots(Denominator);
 		//remove imaginary part if imaginary part is smaller than 1e-15, 
 		//probably the trigger value 1e-15 should be lowered
-        /*
+		/*
 		for (int i = 0; i < poles.length; i++) {
 			if(Math.abs(poles[i].getImaginary()) < 1e-50){
 				poles[i] = new Complex(poles[i].getReal(), 0);
@@ -398,89 +418,89 @@ public class MathStuff {
 		
 		//remove imaginary part if imaginary part is smaller than 1e-15
 		/*
-        for (int i = 0; i < residues.length; i++) {
+		for (int i = 0; i < residues.length; i++) {
 			if(Math.abs(residues[i].getImaginary()) < 1e-50){
 				residues[i] = new Complex(residues[i].getReal(), 0);
 			}
 		}
 		*/
 		
-    	return new Object[]{residues,poles,constantK};    	
-    }
-    
-    
+		return new Object[]{residues,poles,constantK};
+	}
 
-    /**
-     * Computes the polynomial coefficients with the specified roots.
-     * This was ported from matlab's poly() function
-     * Type ">> edit poly" and scroll to line 35.
-     * @param roots Roots.
-     * @return Polynomial coefficients.
-     */
-    public static double[] poly(double[] roots) {
-        // this was ported from matlab's poly() function
-        // type ">> edit poly" and scroll to line 35.
-        double[] coefficients = new double[roots.length + 1];
-        coefficients[0] = 1.0;
-        double[] temp = new double[roots.length + 1];
 
-        for (double root : roots) {
-            // multiply coefficients with current root and store in temp buffer
-            for (int i = 0; i < coefficients.length; i++) {
-                temp[i] = root * coefficients[i];
-            }
-            // subtract temp buffer from coefficients
-            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
-                coefficients[i] -= temp[i - 1];
-            }
-        }
 
-        return coefficients;
-    }
+	/**
+	 * Computes the polynomial coefficients with the specified roots.
+	 * This was ported from matlab's poly() function
+	 * Type ">> edit poly" and scroll to line 35.
+	 * @param roots Roots.
+	 * @return Polynomial coefficients.
+	 */
+	public static double[] poly(double[] roots) {
+		// this was ported from matlab's poly() function
+		// type ">> edit poly" and scroll to line 35.
+		double[] coefficients = new double[roots.length + 1];
+		coefficients[0] = 1.0;
+		double[] temp = new double[roots.length + 1];
 
-    /**
-     * Computes the polynomial coefficients with the specified roots.
-     * This was ported from matlab's poly() function
-     * Type ">> edit poly" and scroll to line 35.
-     * Method overloaded to calculate also the polynomial coefficients of complex roots
-     * @param roots Roots.
-     * @return Polynomial coefficients.
-     */
-    public static Complex[] poly(Complex[] roots) {
-        // this was ported from matlab's poly() function
-        // type ">> edit poly" and scroll to line 35.
-        Complex[] coefficients = new Complex[roots.length + 1];
-        for (int i = 0; i < coefficients.length; i++) {
+		for (double root : roots) {
+			// multiply coefficients with current root and store in temp buffer
+			for (int i = 0; i < coefficients.length; i++) {
+				temp[i] = root * coefficients[i];
+			}
+			// subtract temp buffer from coefficients
+			for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+				coefficients[i] -= temp[i - 1];
+			}
+		}
+
+		return coefficients;
+	}
+
+	/**
+	 * Computes the polynomial coefficients with the specified roots.
+	 * This was ported from matlab's poly() function
+	 * Type ">> edit poly" and scroll to line 35.
+	 * Method overloaded to calculate also the polynomial coefficients of complex roots
+	 * @param roots Roots.
+	 * @return Polynomial coefficients.
+	 */
+	public static Complex[] poly(Complex[] roots) {
+		// this was ported from matlab's poly() function
+		// type ">> edit poly" and scroll to line 35.
+		Complex[] coefficients = new Complex[roots.length + 1];
+		for (int i = 0; i < coefficients.length; i++) {
 			coefficients[i] = new Complex(0.0);
 		}
-        coefficients[0] = new Complex(1.0);
-        
-        Complex[] temp = new Complex[roots.length + 1];
-        for (int i = 0; i < temp.length; i++) {
+		coefficients[0] = new Complex(1.0);
+
+		Complex[] temp = new Complex[roots.length + 1];
+		for (int i = 0; i < temp.length; i++) {
 			temp[i] = new Complex(0.0);
 		}
 
-        for (Complex root : roots) {
-            // multiply coefficients with current root and store in temp buffer
-            for (int i = 0; i < coefficients.length; i++) {
-                temp[i] = root.multiply(coefficients[i]);
-            }
-            // subtract temp buffer from coefficients
-            for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
-                coefficients[i] = coefficients[i].subtract(temp[i - 1]);
-            }
-        }
+		for (Complex root : roots) {
+			// multiply coefficients with current root and store in temp buffer
+			for (int i = 0; i < coefficients.length; i++) {
+				temp[i] = root.multiply(coefficients[i]);
+			}
+			// subtract temp buffer from coefficients
+			for (int i = 1; i < coefficients.length; i++) { // from 1 to j+1
+				coefficients[i] = coefficients[i].subtract(temp[i - 1]);
+			}
+		}
 
-        return coefficients;
-    }
+		return coefficients;
+	}
 
-    /**
-     * Removes the leading zeros from an array.
-     * @param array The array.
-     * @return A new array with leading zeros removed.
-     */
-    public static double[] removeLeadingZeros(double[] array){
-    	int startIndex = 0;
+	/**
+	 * Removes the leading zeros from an array.
+	 * @param array The array.
+	 * @return A new array with leading zeros removed.
+	 */
+	public static double[] removeLeadingZeros(double[] array){
+		int startIndex = 0;
 		//remove leading Zeros
 		for (int i = 0; i < array.length; i++) {
 			if(array[i] != 0){
@@ -490,203 +510,205 @@ public class MathStuff {
 		}
 		
 		double[] polynomLeadingZerosRemoved = new double[array.length - startIndex];
-        System.arraycopy(array, startIndex, polynomLeadingZerosRemoved, 0, polynomLeadingZerosRemoved.length);
+		System.arraycopy(array, startIndex, polynomLeadingZerosRemoved, 0, polynomLeadingZerosRemoved.length);
 		return polynomLeadingZerosRemoved;
-    }
+	}
 
-    /**
-     * taken from pdf Fachinput_Schrittantwort.pdf
-     * @param p Polynomial coefficients
-     * @return Roots Attention the Roots have sometimes not the same order as in Matlab
-     * 			(but no problem, they are only roots ;-))
-     */
-    public static Complex[] roots(double[] p) {
+	/**
+	 * taken from pdf Fachinput_Schrittantwort.pdf
+	 * @param p Polynomial coefficients
+	 * @return Roots Attention the Roots have sometimes not the same order as in Matlab
+	 * 			(but no problem, they are only roots ;-))
+	 */
+	public static Complex[] roots(double[] p) {
 
-        /*
-        if(p[0] == 0.0){
-           p =  ArrayUtils.remove(p,0);
+		/*
+		if(p[0] == 0.0){
+		   p =  ArrayUtils.remove(p,0);
+		}
+		*/
+        boolean d = false; //debug on/off
+
+		double[] p2 = new double[p.length];
+
+        if(d) {
+            System.out.println("poly: ");
+            for (int i = 0; i < p.length; i++) {
+                System.out.println("koef " + i + ": real: " + p[i]);
+
+            }
         }
-        */
 
-        double[] p2 = new double[p.length];
-
-        System.out.println("poly: ");
-        for (int i = 0; i < p.length; i++) {
-            System.out.println("koef "+i+": real: "+p[i]);
-
-        }
-
-        for(int i=0; i < p2.length; i++){
-            p2[i] = p[i];
-        }
+		for(int i=0; i < p2.length; i++){
+			p2[i] = p[i];
+		}
 
 
-    	final LaguerreSolver solver = new LaguerreSolver();
-    	double[] flip = new double[p.length];
+		final LaguerreSolver solver = new LaguerreSolver();
+		double[] flip = new double[p.length];
 
-        /*
-    	// To be conform with Matlab ...
-        double s = 1.0/p[0];
-    	for (int i = 0; i < flip.length; i++) {
-    	flip[p.length - i - 1] = p[i]*s;
-    	}
-    	Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
-    	Complex[] complexRoots = new Complex[complexRootsReverse.length];
-        //Flip order of roots
+		/*
+		// To be conform with Matlab ...
+		double s = 1.0/p[0];
+		for (int i = 0; i < flip.length; i++) {
+		flip[p.length - i - 1] = p[i]*s;
+		}
+		Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
+		Complex[] complexRoots = new Complex[complexRootsReverse.length];
+		//Flip order of roots
 
-    	//for (int i = 0; i < complexRoots.length; i++) {
+		//for (int i = 0; i < complexRoots.length; i++) {
 		//	complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
-       //     System.out.println("Old: real"+complexRoots[i].getReal()+" imag: "+complexRoots[i].getImaginary());
+	   //	 System.out.println("Old: real"+complexRoots[i].getReal()+" imag: "+complexRoots[i].getImaginary());
 		//}
 
-        for (int i = 0; i < complexRootsReverse.length; i++) {
-            System.out.println("Old: real"+complexRootsReverse[i].getReal()+" imag: "+complexRootsReverse[i].getImaginary());
+		for (int i = 0; i < complexRootsReverse.length; i++) {
+			System.out.println("Old: real"+complexRootsReverse[i].getReal()+" imag: "+complexRootsReverse[i].getImaginary());
 
-        }
-        //return complexRoots;
-        */
+		}
+		//return complexRoots;
+		*/
 
 
-        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
-        double s2 = 1.0 / p[0];
-        for (int i = 0; i < p2.length; i++) {
-            p2[i] = p2[i] * s2;
-        }
+		// Koeffizient der hï¿½chsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+		double s2 = 1.0 / p[0];
+		for (int i = 0; i < p2.length; i++) {
+			p2[i] = p2[i] * s2;
+		}
 
-        // Normierungskonstante berechnen:
-        s2 = Math.pow(p2[p2.length - 1], 1.0 / (p2.length - 1));
+		// Normierungskonstante berechnen:
+		s2 = Math.pow(p2[p2.length - 1], 1.0 / (p2.length - 1));
 
-        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
-        for (int i = 0; i < p2.length; i++) {
-            p2[i] /= Math.pow(s2, i);
-        }
+		// Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+		for (int i = 0; i < p2.length; i++) {
+			p2[i] /= Math.pow(s2, i);
+		}
 
-        // Um mit Matlab konform zu sein flippen:
-        for (int i = 0; i < flip.length; i++)
-            flip[p2.length - i - 1] = p2[i];
+		// Um mit Matlab konform zu sein flippen:
+		for (int i = 0; i < flip.length; i++)
+			flip[p2.length - i - 1] = p2[i];
 
-        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
-        Complex[] r = solver.solveAllComplex(flip, 0.0);
-        System.out.println("Roots, count: " + r.length);
-        for (int i = 0; i < r.length; i++) {
-            r[i] = r[i].multiply(s2);
-            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
-        }
+		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+		Complex[] r = solver.solveAllComplex(flip, 0.0);
+		if(d) System.out.println("Roots, count: " + r.length);
+		for (int i = 0; i < r.length; i++) {
+			r[i] = r[i].multiply(s2);
+			if(d) System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+		}
 
-        for (int i = 0; i < r.length; i++) {
-            Complex rTemp = r[i];
-            boolean rootCorrect = false;
-            //if root is not real, check, if root is complex-conjugated, else, remove imaginary part
-            if(rTemp.getImaginary() != 0.0){
-                //check each other root, if it hase the same real-part, if yes, check, if the imaginary part is complex conjugated
-                //if no, remove the imaginary part of the root
-                for (int j = 0; j < r.length; j++) {
-                    if(j != i){
-                        //if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
-                        if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 500) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),500)){
-                            rootCorrect = true;
-                            break;
-                        }
-                    }
-                }
+		for (int i = 0; i < r.length; i++) {
+			Complex rTemp = r[i];
+			boolean rootCorrect = false;
+			//if root is not real, check, if root is complex-conjugated, else, remove imaginary part
+			if(rTemp.getImaginary() != 0.0){
+				//check each other root, if it hase the same real-part, if yes, check, if the imaginary part is complex conjugated
+				//if no, remove the imaginary part of the root
+				for (int j = 0; j < r.length; j++) {
+					if(j != i){
+						//if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
+						if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 5000) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),5000)){  //old max: 500
+							rootCorrect = true;
+							break;
+						}
+					}
+				}
+			}
+			if(rootCorrect == false){
+				r[i] = new Complex(r[i].getReal(),0.0);
+			}
+		}
+
+        if(d) {
+            System.out.println("roots cleande: ");
+            for (int i = 0; i < r.length; i++) {
+                System.out.println("root " + i + ": real: " + r[i].getReal() + " imag: " + r[i].getImaginary());
             }
-            if(rootCorrect == false){
-                r[i] = new Complex(r[i].getReal(),0.0);
-            }
         }
 
-        System.out.println("roots cleande: ");
-        for (int i = 0; i < r.length; i++) {
-            System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
-        }
+		return r;
 
+		/*
+		//Test-Code
 
-        return r;
+	 double[] p = {5.7154896901003664E-24,
+		3.642939834702842E-19,
+		8.513565673497964E-15,
+		9.105814499809592E-11,
+		4.457321122539636E-7,
+		0.00224,
+		1.7999999999999998};
+		final LaguerreSolver solver = new LaguerreSolver();
+		double[] flip = new double[p.length];
 
-        /*
-        //Test-Code
+		// Koeffizient der hï¿½chsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
+				double s = 1.0 / p[0];
+				for (int i = 0; i < p.length; i++) {
+					p[i] = p[i] * s;
+				}
 
-     double[] p = {5.7154896901003664E-24,
-        3.642939834702842E-19,
-        8.513565673497964E-15,
-        9.105814499809592E-11,
-        4.457321122539636E-7,
-        0.00224,
-        1.7999999999999998};
-        final LaguerreSolver solver = new LaguerreSolver();
-        double[] flip = new double[p.length];
+		// Normierungskonstante berechnen:
+				s = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
 
-        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
-                double s = 1.0 / p[0];
-                for (int i = 0; i < p.length; i++) {
-                    p[i] = p[i] * s;
-                }
+		// Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+				for (int k = 0; k < p.length; k++) {
+					p[k] /= Math.pow(s, k);
+				}
 
-        // Normierungskonstante berechnen:
-                s = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
+		// Um mit Matlab konform zu sein flippen:
+				for (int m = 0; m < flip.length; m++)
+					flip[p.length - m - 1] = p[m];
 
-        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
-                for (int k = 0; k < p.length; k++) {
-                    p[k] /= Math.pow(s, k);
-                }
+		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+				Complex[] r = solver.solveAllComplex(flip, 0.0);
+				for (int n = 0; n < r.length; n++) {
+					r[n] = r[n].multiply(s);
+				}
+				r;
 
-        // Um mit Matlab konform zu sein flippen:
-                for (int m = 0; m < flip.length; m++)
-                    flip[p.length - m - 1] = p[m];
+		*/
+	}
 
-        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
-                Complex[] r = solver.solveAllComplex(flip, 0.0);
-                for (int n = 0; n < r.length; n++) {
-                    r[n] = r[n].multiply(s);
-                }
-                r;
+	public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
+	{
+		// Make sure maxUlps is non-negative and small enough that the
+		// default NAN won't compare as equal to anything.
+		assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
 
-        */
-    }
+		// Make aInt lexicographically ordered as a two's complement int
+		long aInt = Double.doubleToRawLongBits( a);
+		if(aInt < 0)
+			aInt = 0x8000000000000000L - aInt;
 
-    public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
-    {
-        // Make sure maxUlps is non-negative and small enough that the
-        // default NAN won't compare as equal to anything.
-        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+		// Make bInt lexicographically ordered as a two's complement int
+		long bInt = Double.doubleToRawLongBits( b);
+		if(bInt < 0)
+			bInt = 0x8000000000000000L - bInt;
 
-        // Make aInt lexicographically ordered as a two's complement int
-        long aInt = Double.doubleToRawLongBits( a);
-        if(aInt < 0)
-            aInt = 0x8000000000000000L - aInt;
+		// Apply delta comparison
+		return Math.abs(aInt - bInt) <= maxUlps;
+	}
 
-        // Make bInt lexicographically ordered as a two's complement int
-        long bInt = Double.doubleToRawLongBits( b);
-        if(bInt < 0)
-            bInt = 0x8000000000000000L - bInt;
+	/*
+	//works probably only in c, not in java
+	// Usable AlmostEqual function
+	bool AlmostEqual2sComplement(float A, float B, int maxUlps)
+	{
+		// Make sure maxUlps is non-negative and small enough that the
+		// default NAN won't compare as equal to anything.
+		assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
+		int aInt = *(int*)&A;
+		// Make aInt lexicographically ordered as a twos-complement int
+		if (aInt < 0)
+			aInt = 0x80000000 - aInt;
+		// Make bInt lexicographically ordered as a twos-complement int
+		int bInt = *(int*)&B;
+		if (bInt < 0)
+			bInt = 0x80000000 - bInt;
+		int intDiff = abs(aInt - bInt);
+		if (intDiff <= maxUlps)
+			return true;
+		return false;
+	}
+	*/
 
-        // Apply delta comparison
-        if(Math.abs(aInt - bInt) <= maxUlps)
-            return true;
-        return false;
-    }
-
-    /*
-    //works probably only in c, not in java
-    // Usable AlmostEqual function
-    bool AlmostEqual2sComplement(float A, float B, int maxUlps)
-    {
-        // Make sure maxUlps is non-negative and small enough that the
-        // default NAN won't compare as equal to anything.
-        assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
-        int aInt = *(int*)&A;
-        // Make aInt lexicographically ordered as a twos-complement int
-        if (aInt < 0)
-            aInt = 0x80000000 - aInt;
-        // Make bInt lexicographically ordered as a twos-complement int
-        int bInt = *(int*)&B;
-        if (bInt < 0)
-            bInt = 0x80000000 - bInt;
-        int intDiff = abs(aInt - bInt);
-        if (intDiff <= maxUlps)
-            return true;
-        return false;
-    }
-    */
-    
 }

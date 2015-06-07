@@ -9,9 +9,9 @@ public class ControllerPITest {
 	double delta = 1.5e-4;
 	
 	@Test
-    public void testPIControllerConstructor()  throws Exception {
+	public void testPIControllerConstructor()  throws Exception {
 		//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
-		//Tn = 3.3122, Kr =    0.9840
+		//Tn = 3.3122, Kr =	0.9840
 		double Kr = 0.9840;
 		double Tn = 3.3122;
 		ControllerPI myControllerPI = new ControllerPI("myPI", Kr, Tn);
@@ -28,9 +28,9 @@ public class ControllerPITest {
 	}
 	
 	@Test
-    public void testPIControllerSetParameters()  throws Exception {
-	    //[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
-		//Tn = 3.3122, Kr =    0.9840
+	public void testPIControllerSetParameters()  throws Exception {
+		//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
+		//Tn = 3.3122, Kr =	0.9840
 		double Kr = 0.9840;
 		double Tn = 3.3122;
 		

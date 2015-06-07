@@ -55,7 +55,7 @@ public class View extends JPanel implements ActionListener {
 		inputPanel = new InputPanel(controller, this);
 		outputPanel = new OutputPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel(controller, this);
-		graphPanel = new GraphPanel();
+		graphPanel = new GraphPanel(this);
 
 		// set border for input and output panel
 		inputPanel.setBorder(new TitledBorder(null, "Eingabe"));
