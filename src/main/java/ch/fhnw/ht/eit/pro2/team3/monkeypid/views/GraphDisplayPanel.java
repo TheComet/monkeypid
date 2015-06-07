@@ -157,9 +157,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 
 			//add actionListener to checkbox
 			cb.addActionListener(this);
-
-			add(cb);
-			checkBoxes.put(closedLoop.getName(), cb);
 		 });
 	}
 
@@ -201,19 +198,22 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 				JCheckBox cb = new JCheckBox();
 				cb.setVisible(false);
 				add(cb);
-				checkBoxes.put(""+i, cb); //set key temporary to the index-number of the closedLoops
+				// HACK: We don't know any of the names at this point, but we have to somehow store
+				// the checkbox and be able to reference it later. The only unique identifier we
+				// have is the table row index. When the calculation is added in onAddCalculation,
+				// the key is replaced with the name of the calculation.
+				checkBoxes.put(""+i, cb);
 			}
 		});
 	}
 
 	@Override
 	public void onSimulationComplete() {
-		//if all step-responses were calculated and all checkboxes updated, show them to the user
-		//(make them visible)
 		SwingUtilities.invokeLater(() -> {
-			for (Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
-				JCheckBox cb2 = entry2.getValue();
-				cb2.setVisible(true);
+			//if all step-responses were calculated and all checkboxes updated, show them to the user
+			//(make them visible)
+			for (Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
+				entry.getValue().setVisible(true);
 			}
 			view.validate();    //triggers repaint of the GUI
 		});
