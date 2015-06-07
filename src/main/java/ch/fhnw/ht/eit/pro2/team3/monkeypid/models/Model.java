@@ -150,6 +150,7 @@ public class Model implements ICalculationCycleListener {
 				double bottomKr = controller.getMinKr();
 				double actualKr = (topKr + bottomKr) / 2.0;
 				controller.setKr(actualKr);
+				closedLoop.setPlantAndController(plant, controller);
 				closedLoop.calculateStepResponse();
 
 				// approximate the overswing using a binary search by adjusting Kr
@@ -164,6 +165,7 @@ public class Model implements ICalculationCycleListener {
 
 					// re-calculate step response with the next value of Kr
 					controller.setKr(actualKr);
+					closedLoop.setPlantAndController(plant, controller);
 					closedLoop.calculateStepResponse();
 				}
 			} else {
@@ -321,7 +323,6 @@ public class Model implements ICalculationCycleListener {
 			return;
 		}
 
-		// if no calculations are ongoing
 		// TODO if implementing async simulateAll(), add a check here again
 
 		// update the parasitic time constant factor
