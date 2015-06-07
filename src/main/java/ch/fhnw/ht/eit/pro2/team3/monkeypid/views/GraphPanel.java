@@ -145,10 +145,14 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onUpdateCalculation(ClosedLoop closedLoop) {
-		XYSeries oldSeries = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
-		if(oldSeries != null)
-			dataCollection.removeSeries(oldSeries);
-		dataCollection.addSeries(closedLoop.getStepResponse());
+		SwingUtilities.invokeLater(() -> {
+			XYSeries oldSeries = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
+			if (oldSeries != null)
+				dataCollection.removeSeries(oldSeries);
+			else
+				System.out.println("oh oh");
+			dataCollection.addSeries(closedLoop.getStepResponse());
+		});
 	}
 
 	@Override
@@ -157,9 +161,11 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
-        ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
-        //set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
-        yAxis.setLowerMargin(0.00);
+		SwingUtilities.invokeLater(() -> {
+			ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
+			//set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
+			yAxis.setLowerMargin(0.00);
+		});
 	}
 
 	@Override

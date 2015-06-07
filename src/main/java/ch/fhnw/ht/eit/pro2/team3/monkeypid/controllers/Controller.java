@@ -36,15 +36,15 @@ public class Controller {
 	 * @param tpValue The value the user entered for Tp.
 	 * @param selectedRegulatorName The regulator the user selected. This is passed as a string
 	 *                              containing "I", "PI", or "PID".
-	 * @param overswing The selected overswing from the dropdown.
+	 * @param overshoot The selected overshoot from the dropdown.
 	 */
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,
-								 String selectedRegulatorName, double overswing){
+								 String selectedRegulatorName, double overshoot){
 		view.outputPanel.setSliderDefaultValue();
 		model.setRegulatorType(selectedRegulatorName);
 		model.setPlant(tuValue, tgValue, ksValue);
 		model.setParasiticTimeConstantFactor(tpValue);
-		model.setOverswing(overswing);
+		model.setOvershoot(overshoot);
 		model.simulateAll();
 	}
 	

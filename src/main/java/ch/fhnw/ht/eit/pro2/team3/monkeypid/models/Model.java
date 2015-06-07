@@ -56,12 +56,12 @@ public class Model implements ICalculationCycleListener {
 	/**
 	 * Handles the entire process of calculating a controller, constructing a
 	 * closed loop, and calculating the step response, as well as applying
-	 * iterative approximation for the overswing.
+	 * iterative approximation for the overshoot.
 	 */
 	private class CalculationCycle implements Runnable {
 		private AbstractControllerCalculator controllerCalculator;
 		private ClosedLoop closedLoop;
-		private double targetOverswing;
+		private double targetOvershoot;
 		private ArrayList<ICalculationCycleListener> listeners = new ArrayList<>();
 		private boolean firstCalculation = true;
 
@@ -83,15 +83,15 @@ public class Model implements ICalculationCycleListener {
 		}
 
 		/**
-		 * Sets the target overswing to approximate using the iterative
+		 * Sets the target overshoot to approximate using the iterative
 		 * approximation method.
-		 * @param overswing The overswing in percent.
+		 * @param overshoot The overshoot in percent.
 		 */
-		public void setTargetOverswing(double overswing) {
-			if (overswing < 0.5)
-				overswing = 0.5; // overswing of 0% produces weird results,
+		public void setTargetOvershoot(double overshoot) {
+			if (overshoot < 0.5)
+				overshoot = 0.5; 	// overshoot of 0% produces weird results,
 									// round up to the maximum tolerant value
-			this.targetOverswing = overswing;
+			this.targetOvershoot = overshoot;
 		}
 
 		/**
@@ -153,9 +153,9 @@ public class Model implements ICalculationCycleListener {
 				closedLoop.setPlantAndController(plant, controller);
 				closedLoop.calculateStepResponse();
 
-				// approximate the overswing using a binary search by adjusting Kr
+				// approximate the overshoot using a binary search by adjusting Kr
 				for (int i = 0; i < 9; i++) {
-					if (closedLoop.getOverswing() > targetOverswing) {
+					if (closedLoop.getOvershoot() > targetOvershoot) {
 						topKr = actualKr;
 						actualKr = (topKr + bottomKr) / 2.0;
 					} else {
@@ -189,7 +189,7 @@ public class Model implements ICalculationCycleListener {
 	private Plant plant = null;
 
 	// phase margin for Zellweger
-	private double overswing;
+	private double overshoot;
 
 	// regulator types to calculate when user simulates
 	private enum RegulatorType {
@@ -269,11 +269,11 @@ public class Model implements ICalculationCycleListener {
 	}
 
 	/**
-	 * Sets the overswing to use for zellweger based calculations.
-	 * @param overswing The overswing in percent.
+	 * Sets the overshoot to use for zellweger based calculations.
+	 * @param overshoot The overshoot in percent.
 	 */
-	public final void setOverswing(double overswing) {
-		this.overswing = overswing;
+	public final void setOvershoot(double overshoot) {
+		this.overshoot = overshoot;
 	}
 
 	/**
@@ -333,8 +333,8 @@ public class Model implements ICalculationCycleListener {
 		((AbstractZellweger)currentZellwegerCalculationCycle.getControllerCalculator())
 				.setAngleOfInflectionOffset(angleOfInflectionOffset);
 
-		// update the target overswing
-		currentZellwegerCalculationCycle.setTargetOverswing(overswing);
+		// update the target overshoot
+		currentZellwegerCalculationCycle.setTargetOvershoot(overshoot);
 		
 		//dispatch the calculator
 		currentZellwegerCalculationCycle.run();
@@ -455,7 +455,7 @@ public class Model implements ICalculationCycleListener {
 		// NOTE: The Zellweger cycle is the only one that has to be stored for later use
 		switch (regulatorType) {
 		case PID:
-			currentZellwegerCalculationCycle = new CalculationCycle(new ZellwegerPID(plant, overswing));
+			currentZellwegerCalculationCycle = new CalculationCycle(new ZellwegerPID(plant, overshoot));
 			calculators.add(new CalculationCycle(new FistFormulaOppeltPID(plant)));
 			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID0(plant)));
 			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPID20(plant)));
@@ -465,7 +465,7 @@ public class Model implements ICalculationCycleListener {
 			break;
 
 		case PI:
-			currentZellwegerCalculationCycle = new CalculationCycle(new ZellwegerPI(plant, overswing));
+			currentZellwegerCalculationCycle = new CalculationCycle(new ZellwegerPI(plant, overshoot));
 			calculators.add(new CalculationCycle(new FistFormulaOppeltPI(plant)));
 			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI0(plant)));
 			calculators.add(new CalculationCycle(new FistFormulaReswickStoerPI20(plant)));
@@ -490,7 +490,7 @@ public class Model implements ICalculationCycleListener {
 		for (CalculationCycle calculator : calculators) {
 			calculator.getControllerCalculator().setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
 			calculator.getControllerCalculator().setTableRowIndex(i);
-			calculator.setTargetOverswing(overswing);
+			calculator.setTargetOvershoot(overshoot);
 			calculator.registerListener(this);
 			i++;
 		}
