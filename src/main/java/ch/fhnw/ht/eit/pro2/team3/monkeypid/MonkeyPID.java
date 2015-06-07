@@ -72,7 +72,7 @@ public class MonkeyPID {
 		view.inputPanel.setDefaultButtonSimulation();
 		
 		// add a menu bar to the frame
-		MenuBar menuBar = new MenuBar(controller, view);
+		MenuBar menuBar = new MenuBar(view);
 		frame.setJMenuBar(menuBar);
 	}
 

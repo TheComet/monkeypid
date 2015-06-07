@@ -11,27 +11,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
 /**
- * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
- * comboBox to select the regulator, a comboBox to select the overshoot, the
- * buttons and the table with the results of the simulation.
+ * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp,
+ * Overswing, a comboBox to select the regulator, the buttons and the table with
+ * the results of the simulation and a slider to trimm the curve.
  * 
  * @author Josua
  *
  */
-
 public class InputPanel extends JPanel implements ActionListener,
 		IModelListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
-	Controller controller;
-	View view;
+
+	private Controller controller;
+	private View view;
 
 	// regulator types
 	static final int I = 0, PI = 1, PID = 2;
@@ -42,9 +37,12 @@ public class InputPanel extends JPanel implements ActionListener,
 	private JLabel lbKs = new JLabel("Ks");
 	private JLabel lbTu = new JLabel("Tu");
 	private JLabel lbTg = new JLabel("Tg");
-	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(null, 1);
-	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(null, 1);
-	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(null, 1);
+	private JFormattedDoubleTextField tfKs = new JFormattedDoubleTextField(
+			null, 1);
+	private JFormattedDoubleTextField tfTu = new JFormattedDoubleTextField(
+			null, 1);
+	private JFormattedDoubleTextField tfTg = new JFormattedDoubleTextField(
+			null, 1);
 
 	// info label for wrong value textfields
 	private JLabel lbValueErrorInfo = new JLabel();
@@ -52,12 +50,9 @@ public class InputPanel extends JPanel implements ActionListener,
 	// time constant
 	private JLabel lbTimeConstantTitle = new JLabel(
 			"Faktor für Parasitäre Zeitkonstante:");
-	
-	// private JLabel lbTp = new JLabel("Tp");
 	private JLabel lbTpInfo = new JLabel("%");
-
-	// private JTextField tfTp = new JTextField("10", 5);
-	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(null, 1);
+	private JFormattedDoubleTextField tfTp = new JFormattedDoubleTextField(
+			null, 1);
 
 	// select regulator
 	private JLabel lbSelectRegulatorTitle = new JLabel("Wahl des Reglers:");
@@ -67,14 +62,15 @@ public class InputPanel extends JPanel implements ActionListener,
 	// Phasengangmethode overshoot
 	private JLabel lbPhasengangmethodTitle = new JLabel(
 			"Ueberschwingen der Phasengangmethode:");
-	private JFormattedDoubleTextField tfOvershoot = new JFormattedDoubleTextField(null, 1);
+	private JFormattedDoubleTextField tfOvershoot = new JFormattedDoubleTextField(
+			null, 1);
 	private JLabel lbOvershootPercent = new JLabel("%");
 
 	// simulation button
 	private JButton btSimulate = new JButton("Simulieren");
 
 	/**
-	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
+	 * The constuctor of LeftPanel set the layout to GridBagLayout and adds all
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
 	 * 
@@ -113,7 +109,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(10, 5, 0, 10), 50, 0));
 
-		//TODO add tool tip for input fields
+		// add tool tip for input fields
 		tfTu.setToolTipText("Verzögerungszeit");
 		tfTg.setToolTipText("Ausgleichszeit");
 		tfKs.setToolTipText("Strecken-Verstärkung");
@@ -139,7 +135,7 @@ public class InputPanel extends JPanel implements ActionListener,
 		add(lbPhasengangmethodTitle, new GridBagConstraints(0, 5, 6, 1, 0.0,
 				0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(5, 10, 0, 10), 0, 0));
-		tfOvershoot.setText("10"); //set default value
+		tfOvershoot.setText("10"); // set default value
 		add(tfOvershoot, new GridBagConstraints(0, 6, 6, 1, 0.0, 0.0,
 				GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(5, 10, 10, 10), 50, 0));
@@ -172,8 +168,8 @@ public class InputPanel extends JPanel implements ActionListener,
 
 		// addActionListener to select regulator comboBox
 		cbSelectRegulator.addActionListener(this);
-		
-		//set fields greyed out for selected I-regulator 
+
+		// set fields greyed out for selected I-regulator
 		lbPhasengangmethodTitle.setEnabled(false);
 		tfOvershoot.setEnabled(false);
 		lbOvershootPercent.setEnabled(false);
@@ -183,8 +179,8 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Sets the Simulation-Button as Default-Button. i.e. If the Enter-Key is pressed, 
-	 * the Simulation-Buttons gets clicked (internally).
+	 * Sets the Simulation-Button as Default-Button. i.e. If the Enter-Key is
+	 * pressed, the Simulation-Buttons gets clicked (internally).
 	 */
 	public void setDefaultButtonSimulation() {
 		JFrame myFrame = (JFrame) SwingUtilities.getWindowAncestor(view);
@@ -202,37 +198,38 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * 
+	 * If button simulate is pressed the fields will be checked and if
+	 * everything is correct the values will comitted to the controller.
+	 * Furthermore fields will be greyed out depending on the regulator which is
+	 * selected.
 	 */
 	public void actionPerformed(ActionEvent e) {
 
 		// if button simulate is pressed
 		if (e.getSource() == btSimulate) {
-			
+
 			// convert string values to double
-			// .doubleValue(); from JFormatedDoubleTextfield doesn't update correct
+			// .doubleValue(); from JFormatedDoubleTextfield doesn't update
+			// correct
 			double tfKsValue = Double.parseDouble(tfKs.getText());
 			double tfTuValue = Double.parseDouble(tfTu.getText());
 			double tfTgValue = Double.parseDouble(tfTg.getText());
-			//convert percent to absolute
+			// convert percent to absolute
 			double tfTpValue = Double.parseDouble(tfTp.getText()) * 0.01;
-			
-			
+
 			// get text of selected regulator in comboBox
 			String selectedRegulatorName = String.valueOf(cbSelectRegulator
 					.getSelectedItem());
 			// get value of overshoot textField
 			double valueOfOvershoot = Double.parseDouble(tfOvershoot.getText());
-			
-			//TODO remove syso
-			System.out.println(valueOfOvershoot);
-			
+
 			// set dummy value for error textField, if not height would be zero
 			lbValueErrorInfo.setText(" ");
 
 			// set color of error info label to red
 			lbValueErrorInfo.setForeground(Color.RED);
 
+			// check input values
 			if (tfTuValue < 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tu muss grösser 0 sein");
@@ -249,19 +246,20 @@ public class InputPanel extends JPanel implements ActionListener,
 						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
 			} else if (valueOfOvershoot < 0) {
 				// error message if value of ovsershoot is smaller than 0
-				lbValueErrorInfo.setText("Wert des Überschwingens ist kleiner als 0%");
-			}else if (valueOfOvershoot >45) {
+				lbValueErrorInfo
+						.setText("Wert des Überschwingens ist kleiner als 0%");
+			} else if (valueOfOvershoot > 45) {
 				// error message if value of overshoot is greater than 100
-			}else if (tfTpValue < 0) {
+			} else if (tfTpValue < 0) {
 				// error message if value of tp is smaller than 0
 				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
-			}else if (tfTpValue > 10) {
+			} else if (tfTpValue > 10) {
 				// error message if value of tp is greater than 10
 				lbValueErrorInfo.setText("Wert von TP ist grösser als 10");
-			}else if (tfOvershoot.getText().equals("")) {
+			} else if (tfOvershoot.getText().equals("")) {
 				lbValueErrorInfo.setText("error");
-				
-			}else {
+
+			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
 
@@ -282,7 +280,7 @@ public class InputPanel extends JPanel implements ActionListener,
 			}
 		}
 
-		// sets parts from inputPanel out greyed for different regulators
+		// sets parts from inputPanel greyed out for different regulators
 		if (e.getSource() == cbSelectRegulator) {
 			switch (cbSelectRegulator.getSelectedIndex()) {
 			// I regulator selected

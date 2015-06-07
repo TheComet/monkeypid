@@ -3,11 +3,8 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FileDialog;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,17 +12,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
 
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import jdk.jfr.events.FileWriteEvent;
-
-import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -44,13 +36,15 @@ import com.itextpdf.text.pdf.PdfWriter;
  *
  */
 public class MenuBar extends JMenuBar implements ActionListener {
-	private Controller controller;
+
+	private static final long serialVersionUID = 1L;
+	
 	private View view;
 
 	// projectname is used for link-path
 	private String projektName = "easypid";
 
-	// TODO besserer Name
+	// holds state of version which is shown
 	private boolean miniVersionSelected = false;
 
 	// menu data
@@ -92,8 +86,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	 * 
 	 * @param controller
 	 */
-	public MenuBar(Controller controller, View view) {
-		this.controller = controller;
+	public MenuBar(View view) {
 		this.view = view;
 
 		// item of submenu useful links
@@ -215,13 +208,14 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		// menu item exit is pressed
 		if (e.getSource() == menuItemExit) {
-			System.exit(1); // close pogramm
+			System.exit(1); // close program
 		}
 		
 		// menu item PDF is pressed
 		if (e.getSource() == menuItemPDF) {
 			//print PDF
 			String fileName = "";
+			// TODO remove Wyss
 			/*
 			FileDialog saveFileDialog = new FileDialog((JFrame) view.getTopLevelAncestor(), "PDF speichern unter ...", FileDialog.SAVE);
 			saveFileDialog.setVisible(true);
@@ -237,7 +231,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			if(retrival == JFileChooser.APPROVE_OPTION){
 				fileName = fc.getSelectedFile().getAbsolutePath();
 			}
-			
+			// TODO remove
 			/*
 			JFileChooser chooser = new JFileChooser();
 			chooser.addChoosableFileFilter(new F  );
@@ -266,18 +260,14 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 			// shows dialogBox with informations about the project
 			// used JLabel because icon is not center
-			//JLabel label = new JLabel("");
-			//label.setIcon(Assets.loadImageIconInfo());
 			Image img;
 			img = Assets.loadImageIconInfo().getImage();
 			img = img.getScaledInstance(700, 420,Image.SCALE_SMOOTH);
-
-			//Image img = new Image(Assets.loadImageIconInfo());
 			
-			ImageIcon test = new ImageIcon(img);
+			ImageIcon imageIcon = new ImageIcon(img);
 			
 			JLabel label = new JLabel("");
-			label.setIcon(test);
+			label.setIcon(imageIcon);
 			
 			JOptionPane.showMessageDialog(null, label, "Info",
 					JOptionPane.PLAIN_MESSAGE);
@@ -318,7 +308,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 	
-	
+	//TODO Wyss
 	public static class pdfPrinter {
 	    	//new HelloWorld().createPdf(RESULT);
 		public static void createPdf(String filename)throws IOException, DocumentException  {
@@ -334,7 +324,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	    	        document.close();
 	   }
 	}
-	
+	//TODO Wyss
 	public void PrintFrameToPDF(String file) {
 		//Document d = new Document();
 		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
@@ -374,6 +364,4 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			}
 		}
 	}
-	
-	
 }

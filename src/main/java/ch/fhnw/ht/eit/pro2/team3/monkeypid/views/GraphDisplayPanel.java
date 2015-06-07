@@ -5,14 +5,6 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
-
-
-
-
-
-
-
-
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
@@ -32,11 +24,11 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	private Controller controller;
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
-	private boolean CurvesDisplayOn = true;
+	private boolean curvesDisplayOn = true; // holds the state of curves displayed or not 
 	private int numberOfStepResponses;
 	
 	/**
-	 * Constructor of GraphDisplayPanel adds
+	 * Constructor of GraphDisplayPanel set layout and commit controller and view
 	 */
 	public GraphDisplayPanel(Controller controller, View view) {
 		// set layout to wrapLayout, (FlowLayout doesn't wrap after resize)
@@ -47,7 +39,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 
 	/**
 	 * This is called, when the user clicks onto the check-boxes of the graph-curves
-	 * Then the curves are hidden/showed by the model
+	 * then the curves are hidden/showed by the model
 	 */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -70,15 +62,15 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
      */
     public void toggleDisplayAllCurves(){
     	//toggle mechanism 
-    	if(CurvesDisplayOn){
-    		CurvesDisplayOn = false;
+    	if(curvesDisplayOn){
+    		curvesDisplayOn = false;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
 				controller.cbUncheckAction(entry.getKey());
 				entry.getValue().setSelected(false); //uncheck the checkboxes
 			}	
 		}
 		else{
-			CurvesDisplayOn = true;
+			curvesDisplayOn = true;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
 				controller.cbCheckAction(entry.getKey());
 				entry.getValue().setSelected(true); //check the checkboxes
@@ -93,8 +85,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
      */
     public void toggleDisplayFistCurves() {
     	//toggle mechanism
-    	if(CurvesDisplayOn){
-    		CurvesDisplayOn = false;
+    	if(curvesDisplayOn){
+    		curvesDisplayOn = false;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
 				if(entry.getKey() != "Zellweger"){	//toggle only, if not a Zellweger-Curve
 					controller.cbUncheckAction(entry.getKey());
@@ -103,7 +95,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 			}	
 		}
 		else{
-			CurvesDisplayOn = true;
+			curvesDisplayOn = true;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
 				if(entry.getKey() != "Zellweger"){	//toggle only, if not a Zellweger-Curve
 					controller.cbCheckAction(entry.getKey());
@@ -173,7 +165,7 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Removes the checkboxes from this panel
+	 * Removes the checkBoxes from the panel
 	 */
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {

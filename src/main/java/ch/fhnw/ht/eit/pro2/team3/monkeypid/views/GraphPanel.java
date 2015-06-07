@@ -9,15 +9,12 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.UnknownKeyException;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
@@ -33,21 +30,24 @@ import java.awt.*;
  */
 public class GraphPanel extends JPanel implements IModelListener,
 		ChartMouseListener {
+	private static final long serialVersionUID = 1L;
 	private XYSeriesCollection dataCollection = null;
 	private JFreeChart chart = null;
 
 	/**
+	 * The constructor of GraphPanel creates a JPanel with BorderLayout and adds
+	 * a JFreeChart-XY-Plot to the Panel
 	 * 
 	 * @param controller
 	 */
 	public GraphPanel() {
-		//set layout to BorderLayout
+		// set layout to BorderLayout
 		super(new BorderLayout());
 
 		// collection holds XY data series
 		dataCollection = new XYSeriesCollection();
 
-		// axes
+		// titles for the axis
 		NumberAxis xAxis = new NumberAxis("Zeit in Sekunden");
 		NumberAxis yAxis = new NumberAxis("y(t)");
 
@@ -70,11 +70,11 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 		// finally, add panel as an element in our GraphPanel
 		this.add(panel);
-
 	}
 
 	/**
-	 * Autoscales the axis (x and y) of the graph, that all data points fit the visible area
+	 * Autoscales the axis (x and y) of the graph, that all data points fit the
+	 * visible area
 	 */
 	public void autoScaleAxis() {
 		chart.getXYPlot().getDomainAxis().setAutoRange(true);
@@ -94,8 +94,8 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	/**
-	 * Adds a closedLoop stepResponse curve to the graph
-	 * If a curve with the same name is already in the graph, remove it first
+	 * Adds a closedLoop stepResponse curve to the graph If a curve with the
+	 * same name is already in the graph, remove it first
 	 */
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
@@ -121,7 +121,6 @@ public class GraphPanel extends JPanel implements IModelListener,
 				// 0.0f));
 				getDatasetRenderer().setSeriesToolTipGenerator(
 						getSeriesIndex(closedLoop), new XYToolTipGenerator() {
-							private static final long serialVersionUID = 1L;
 
 							@Override
 							public String generateToolTip(XYDataset dataset,
@@ -175,13 +174,13 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	/**
-	 * This is called, if the user clicks with the mouse onto the graph
-	 * If a curve is hit, its renderer-stroke is set wider
-	 * Else, all curves renderer-strokes are set to the default wide
-	 * (This is a basic highlighting-mechanism, it could be improved by also
-	 * highliting the corresponding table row. And reverse also from the table
-	 * to the graph. This highlighting-action should be controller over the 
-	 * controller and the model)
+	 * This is called, if the user clicks with the mouse onto the graph If a
+	 * curve is hit, its renderer-stroke is set wider Else, all curves
+	 * renderer-strokes are set to the default wide (This is a basic
+	 * highlighting-mechanism, it could be improved by also highliting the
+	 * corresponding table row. And reverse also from the table to the graph.
+	 * This highlighting-action should be controller over the controller and the
+	 * model)
 	 */
 	@Override
 	public void chartMouseClicked(ChartMouseEvent e) {

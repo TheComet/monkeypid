@@ -7,21 +7,14 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-
-import com.sun.javafx.tk.Toolkit;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp, a
@@ -31,20 +24,17 @@ import com.sun.javafx.tk.Toolkit;
  * @author Josua
  *
  */
-public class OutputPanel extends JPanel implements IModelListener, ChangeListener, ActionListener {
+public class OutputPanel extends JPanel implements IModelListener,
+		ChangeListener {
 
+	private static final long serialVersionUID = 1L;
 	private Controller controller;
-	private View view;
 
 	// dummy label to get height of label font
 	private JLabel lbDummyGetHeight = new JLabel(" ");
-	
+
 	// number of regulators for size of table
 	private int maxNumberOfRegulators = 7;
-
-	// buttons delete and adopt
-	private JButton btDelete = new JButton("Loeschen");
-	private JButton btAdopt = new JButton("Uebernehmen");
 
 	// table and table model
 	CustomTableModel tableModel = new CustomTableModel();
@@ -52,8 +42,7 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 
 	// adjustment slider
 	private JLabel lbTrimmSlider = new JLabel("Trimm für Zellwegermethode");
-	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, -90, 90,
-			0);
+	private JSlider slTrimmSlider = new JSlider(JSlider.HORIZONTAL, -90, 90, 0);
 
 	/**
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
@@ -62,10 +51,9 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 	 * 
 	 * @param controller
 	 */
-	public OutputPanel(Controller controller, View view) {
+	public OutputPanel(Controller controller) {
 		super(new GridBagLayout());
 		this.controller = controller;
-		this.view = view;
 
 		// add columns to the table
 		tableModel.addColumn("Name");
@@ -79,7 +67,7 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 		FontMetrics fm = lbDummyGetHeight.getFontMetrics(lbDummyGetHeight
 				.getFont());
 		int fontHeight = fm.getHeight();
-		
+
 		// set size of first column
 		table.getColumnModel().getColumn(0)
 				.setMinWidth((int) (5.5 * fontHeight));
@@ -110,13 +98,12 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 
 		// allocate all rows with empty strings
 		for (int i = 0; i < maxNumberOfRegulators; i++) {
-			tableModel.addRow(new String[] { "", "", "",
-					"", "", "" });
+			tableModel.addRow(new String[] { "", "", "", "", "", "" });
 		}
 		// set preferred size of table
 		table.getTableHeader().setPreferredSize(
-						new Dimension((int) (28.5 * fontHeight),
-								(int) (2.5 * fontHeight)));
+				new Dimension((int) (28.5 * fontHeight),
+						(int) (2.5 * fontHeight)));
 
 		// disable autoResize of table
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -166,16 +153,20 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 		lbTrimmSlider.setVisible(miniVersionSelected);
 		slTrimmSlider.setVisible(miniVersionSelected);
 	}
-	
+
 	/**
-	 * Sets the Slider to its default Value = 0
-	 * This is in the middle of the slider
-	 * This is called (from the controller) after the user clicks onto the Simulate-Button
+	 * Sets the Slider to its default Value = 0 This is in the middle of the
+	 * slider This is called (from the controller) after the user clicks onto
+	 * the Simulate-Button
 	 */
-	public void setSliderDefaultValue(){
+	public void setSliderDefaultValue() {
 		slTrimmSlider.setValue(0);
 	}
 
+	// TODO Wyss
+	/**
+	 * 
+	 */
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
@@ -218,30 +209,38 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 		});
 	}
 
+	// TODO Wyss
+	/**
+	 * 
+	 */
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
 		SwingUtilities.invokeLater(() -> {
-				// remove from table
+			// remove from table
 				for (int row = 0; row < tableModel.getRowCount(); row++) {
 					// name is stored in column 0
-					String controllerName = (String) tableModel.getValueAt(row, 0);
+					String controllerName = (String) tableModel.getValueAt(row,
+							0);
 					if (controllerName.endsWith(closedLoop.getName())) {
 						tableModel.removeRow(row);
 						return;
 					}
 				}
-				//view.validate();				
+				// view.validate();
 			});
 	}
-
+	// TODO Wyss
+	/**
+	 * 
+	 */
 	@Override
 	public void onSimulationBegin(int numberOfStepResponses) {
 		SwingUtilities.invokeLater(() -> {
-				// clear the table
+			// clear the table
 				while (tableModel.getRowCount() > 0) {
 					tableModel.removeRow(0);
 				}
-				
+
 				// allocate rows with strings
 				for (int i = 0; i < numberOfStepResponses; i++) {
 					tableModel.addRow(new String[] { "calculating...", "", "",
@@ -255,29 +254,19 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 	}
 
 	@Override
-	public void onSimulationComplete() {
-	}
+	public void onSimulationComplete() {}
 
 	@Override
-	public void onHideCalculation(ClosedLoop closedLoop) {
-	}
+	public void onHideCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onShowCalculation(ClosedLoop closedLoop) {
-	}
+	public void onShowCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onSetPlant(Plant plant) {
-	}
+	public void onSetPlant(Plant plant) {}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		controller.phaseInflectionChanged(slTrimmSlider.getValue());
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
