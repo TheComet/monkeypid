@@ -33,7 +33,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;
 	private boolean CurvesDisplayOn = true;
-	private int numberOfStepResponses;
 	
 	/**
 	 * Constructor of GraphDisplayPanel adds
@@ -161,17 +160,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 
 			add(cb);
 			checkBoxes.put(closedLoop.getName(), cb);
-
-			numberOfStepResponses--;
-			//if all step-responses were calculated and all checkboxes updated, show them to the user
-			//(make them visible)
-			if(numberOfStepResponses == 0){
-				for(Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
-					JCheckBox cb2 = entry2.getValue();
-					cb2.setVisible(true);
-				}
-				view.validate();	//triggers repaint of the GUI
-			}
 		 });
 	}
 
@@ -209,7 +197,6 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 			view.validate();	//triggers repaint of the GUI
 
 			//create the dummyCheckboxes
-			this.numberOfStepResponses = numberOfStepResponses;
 			for (int i = 0; i < numberOfStepResponses; i++) {
 				JCheckBox cb = new JCheckBox();
 				cb.setVisible(false);
@@ -220,7 +207,17 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	}
 
 	@Override
-	public void onSimulationComplete() {}
+	public void onSimulationComplete() {
+		//if all step-responses were calculated and all checkboxes updated, show them to the user
+		//(make them visible)
+		SwingUtilities.invokeLater(() -> {
+			for (Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
+				JCheckBox cb2 = entry2.getValue();
+				cb2.setVisible(true);
+			}
+			view.validate();    //triggers repaint of the GUI
+		});
+	}
 
 	@Override
 	public void onHideCalculation(ClosedLoop closedLoop) {}
