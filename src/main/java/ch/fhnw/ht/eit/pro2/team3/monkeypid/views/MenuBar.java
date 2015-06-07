@@ -1,6 +1,5 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.Assets;
 
 import java.awt.Desktop;
@@ -191,8 +190,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private void openURLInBrowser(String stringURL) {
 		try {
 			Desktop.getDesktop().browse(new URL(stringURL).toURI());
-		} catch (Exception a) { // catch only necessary exceptions
-			// a.printStackTrace();
+		} catch (Exception a) {
+
 		}
 	}
 

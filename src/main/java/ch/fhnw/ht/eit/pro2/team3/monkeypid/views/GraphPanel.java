@@ -11,7 +11,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.XYPlot;
@@ -44,7 +43,6 @@ public class GraphPanel extends JPanel implements IModelListener,
 	 * 
 	 * @param controller
 	 */
-
 	public GraphPanel(View view) {
 		super(new BorderLayout());
         this.view = view;
@@ -106,33 +104,20 @@ public class GraphPanel extends JPanel implements IModelListener,
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
 			try {
-                //System.out.println("\nbefore remove");
-                for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
-                    //System.out.println("series: " + dataCollection.getSeries(i).getKey());
-                }
+ 
                 for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
 					if (closedLoop.getName().equals(
 							dataCollection.getSeries(i).getKey())) {
                         dataCollection.removeSeries(i);
 					}
 				}
-                view.validate();	//triggers repaint of the GUI
 
 				dataCollection.addSeries(closedLoop.getStepResponse());
-
-                //System.out.println("\nafter remove");
-                for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
-                    //System.out.println("series: " + dataCollection.getSeries(i).getKey());
-                }
 
 				// The closedLoop object specifies what color it wants to be
 				// rendered in
                 getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop),
                         closedLoop.getColor());
-				// getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop),
-				// new BasicStroke(5.0f,BasicStroke.CAP_BUTT,
-				// BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f},
-				// 0.0f));
 
 				getDatasetRenderer().setSeriesToolTipGenerator(
 						getSeriesIndex(closedLoop), new XYToolTipGenerator() {
@@ -172,21 +157,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
-		/*
-		// here we will attach a straight line to those curves that are too short.
-		// TODO This is a terrible idea, remove when the lulz were had
-		SwingUtilities.invokeLater(() -> {
-			double maxX = 0.0;
-			for (Object series : dataCollection.getSeries()) {
-				if (maxX < ((XYSeries) series).getMaxX())
-					maxX = ((XYSeries) series).getMaxX();
-			}
 
-			for (Object series : dataCollection.getSeries()) {
-				((XYSeries) series).add(maxX, 1.0);
-			}
-		});
-		*/
         ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
         //set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
         yAxis.setLowerMargin(0.00);
@@ -203,8 +174,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	@Override
-	public void onSetPlant(Plant plant) {
-	}
+	public void onSetPlant(Plant plant) {}
 
 	/**
 	 * This is called, if the user clicks with the mouse onto the graph If a
@@ -229,10 +199,8 @@ public class GraphPanel extends JPanel implements IModelListener,
 				getDatasetRenderer().setSeriesStroke(i, new BasicStroke(1.0f));
 			}
 		}
-
 	}
 
 	@Override
-	public void chartMouseMoved(ChartMouseEvent event) {
-	}
+	public void chartMouseMoved(ChartMouseEvent event) {}
 }
