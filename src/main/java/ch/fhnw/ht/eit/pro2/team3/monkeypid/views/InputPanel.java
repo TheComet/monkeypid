@@ -192,7 +192,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
 	 * 
-	 * @param MiniVersionOn
+	 * @param miniVersionSelected
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible

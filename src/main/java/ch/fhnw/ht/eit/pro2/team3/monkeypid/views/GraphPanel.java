@@ -41,7 +41,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 	 * The constructor of GraphPanel creates a JPanel with BorderLayout and adds
 	 * a JFreeChart-XY-Plot to the Panel
 	 * 
-	 * @param controller
+	 * @param view
 	 */
 	public GraphPanel(View view) {
 		super(new BorderLayout());
