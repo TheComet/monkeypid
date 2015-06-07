@@ -61,7 +61,7 @@ public class InputPanel extends JPanel implements ActionListener,
 
 	// Phasengangmethode overshoot
 	private JLabel lbPhasengangmethodTitle = new JLabel(
-			"Ueberschwingen der Phasengangmethode:");
+			"Überschwingen der Phasengangmethode:");
 	private JFormattedDoubleTextField tfOvershoot = new JFormattedDoubleTextField(
 			null, 1);
 	private JLabel lbOvershootPercent = new JLabel("%");
@@ -114,6 +114,7 @@ public class InputPanel extends JPanel implements ActionListener,
 		tfTg.setToolTipText("Ausgleichszeit");
 		tfKs.setToolTipText("Strecken-Verstärkung");
 		tfTp.setToolTipText("Faktor für die Parasitäre Zeitkonstante in % von Tv/Tvk");
+		tfOvershoot.setToolTipText("Überschwingen");
 
 		// set dummy text to error info label
 		lbValueErrorInfo.setText(" ");
@@ -247,9 +248,11 @@ public class InputPanel extends JPanel implements ActionListener,
 			} else if (valueOfOvershoot < 0) {
 				// error message if value of ovsershoot is smaller than 0
 				lbValueErrorInfo
-						.setText("Wert des Überschwingens ist kleiner als 0%");
+						.setText("Wert des Überschwingens muss grösser gleich 0% sein");
 			} else if (valueOfOvershoot > 45) {
-				// error message if value of overshoot is greater than 100
+				// error message if value of overshoot is greater or equal 45%
+				lbValueErrorInfo
+				.setText("Wert des Überschwingens muss kleiner gleich 45% sein");
 			} else if (tfTpValue < 0) {
 				// error message if value of tp is smaller than 0
 				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
@@ -315,7 +318,10 @@ public class InputPanel extends JPanel implements ActionListener,
 			}
 		}
 	}
-
+	// TODO Murray
+	/**
+	 * 
+	 */
 	@Override
 	public void onSetPlant(Plant plant) {
 		// set color of error info label to red
