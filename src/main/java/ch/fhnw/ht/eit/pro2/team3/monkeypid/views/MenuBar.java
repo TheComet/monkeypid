@@ -84,7 +84,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	/**
 	 * The constructor of MenuBar adds all the items to the menuBar.
 	 * 
-	 * @param controller
+	 * @param view
 	 */
 	public MenuBar(View view) {
 		this.view = view;
