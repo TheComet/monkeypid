@@ -60,7 +60,7 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
 	 * 
-	 * @param controller
+	 * @param controller // TODO Stierli
 	 */
 	public OutputPanel(Controller controller, View view) {
 		super(new GridBagLayout());
@@ -235,6 +235,7 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 
 	@Override
 	public void onUpdateCalculation(ClosedLoop closedLoop) {
+
 	}
 
 	@Override

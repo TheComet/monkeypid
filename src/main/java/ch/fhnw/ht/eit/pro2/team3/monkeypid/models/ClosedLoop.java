@@ -277,7 +277,7 @@ public class ClosedLoop {
 
 		//display debug info only, if zellweger:
 		boolean d = false;
-		if(controller.getName().equals("Zellweger") && numSamplePoints == 8*1024){
+		if(controller.getName().equals(CalculatorNames.ZELLWEGER_I) && numSamplePoints == 8*1024){
 			d = true;
 		}
 

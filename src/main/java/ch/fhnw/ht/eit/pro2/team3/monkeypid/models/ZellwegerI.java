@@ -7,6 +7,7 @@ import java.awt.*;
  * @author Alex Murray
  */
 public class ZellwegerI extends AbstractZellweger {
+	private static final double angleOfInflection = -45.0;
 
 	/**
 	 * Constructs a new Zellweger calculator using the specified plant.
@@ -14,7 +15,12 @@ public class ZellwegerI extends AbstractZellweger {
 	 */
 	public ZellwegerI(Plant plant) {
 		super(plant, 0.0); // phase margin is irrelevant in Zellweger I
-		setAngleOfInflection(-45.0);
+		setAngleOfInflection(angleOfInflection);
+	}
+
+	@Override
+	public void setAngleOfInflectionOffset(double phaseOfInflectionOffset) {
+		setAngleOfInflection(angleOfInflection + phaseOfInflectionOffset);
 	}
 
 	/**

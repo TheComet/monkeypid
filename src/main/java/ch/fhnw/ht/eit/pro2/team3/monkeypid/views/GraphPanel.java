@@ -142,6 +142,10 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onUpdateCalculation(ClosedLoop closedLoop) {
+		XYSeries oldSeries = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
+		if(oldSeries != null)
+			dataCollection.removeSeries(oldSeries);
+		dataCollection.addSeries(closedLoop.getStepResponse());
 	}
 
 	@Override

@@ -63,6 +63,7 @@ public class Model implements ICalculationCycleListener {
 		private ClosedLoop closedLoop;
 		private double targetOverswing;
 		private ArrayList<ICalculationCycleListener> listeners = new ArrayList<>();
+		private boolean firstCalculation = true;
 
 		/**
 		 * Constructs a new calculation cycle from a given controller calculator.
@@ -110,8 +111,15 @@ public class Model implements ICalculationCycleListener {
 		}
 
 		private void notifyStepResponseCalculationComplete() {
-			for(ICalculationCycleListener listener : listeners) {
-				listener.onStepResponseCalculationComplete(closedLoop);
+			// depending on whether this is the first calculation or not, notify the appropriate methods
+			if(firstCalculation) {
+				for (ICalculationCycleListener listener : listeners) {
+					listener.onNewCalculationCycleComplete(closedLoop);
+				}
+			} else {
+				for(ICalculationCycleListener listener : listeners) {
+					listener.onUpdateCalculationCycleComplete(closedLoop);
+				}
 			}
 		}
 
@@ -165,6 +173,9 @@ public class Model implements ICalculationCycleListener {
 
 			// done - notify
 			notifyStepResponseCalculationComplete();
+
+			// set first calculation flag to false, now that we've calculated at least once
+			firstCalculation = false;
 		}
 	}
 
@@ -302,9 +313,9 @@ public class Model implements ICalculationCycleListener {
 	 * notifiers.
 	 * This method calculates only a new zellwegerMethod, if no other Calculation
 	 * is active and at least one Zellweger-Calculation is done.
-	 * @param phaseInflectionOffset // TODO
+	 * @param angleOfInflectionOffset // TODO
 	 */
-	public void updateZellweger(int phaseInflectionOffset) {
+	public void updateZellweger(int angleOfInflectionOffset) {
 		// No need to update if the user hasn't calculated anything yet.
 		if (currentZellwegerCalculationCycle == null) {
 			return;
@@ -316,6 +327,10 @@ public class Model implements ICalculationCycleListener {
 		// update the parasitic time constant factor
 		currentZellwegerCalculationCycle.getControllerCalculator()
 				.setParasiticTimeConstantFactor(parasiticTimeConstantFactor);
+
+		// update phase inflection offset - we know it's a zellweger so cast should be safe
+		((AbstractZellweger)currentZellwegerCalculationCycle.getControllerCalculator())
+				.setAngleOfInflectionOffset(angleOfInflectionOffset);
 
 		// update the target overswing
 		currentZellwegerCalculationCycle.setTargetOverswing(overswing);
@@ -485,9 +500,7 @@ public class Model implements ICalculationCycleListener {
 	/**
 	 * Call this to notify that a new completed calculation was added to the
 	 * internal list.
-	 * 
-	 * @param loop
-	 *			The closed loop that was added.
+	 * @param loop The closed loop that was added.
 	 */
 	private void notifyAddCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
@@ -496,11 +509,19 @@ public class Model implements ICalculationCycleListener {
 	}
 
 	/**
+	 * Call this to notify that an existing closed loop object was updated.
+	 * @param loop The closed loop that was updated.
+	 */
+	private void notifyUpdateCalculation(ClosedLoop loop) {
+		for(IModelListener listener : listeners) {
+			listener.onUpdateCalculation(loop);
+		}
+	}
+
+	/**
 	 * Call this to notify that a calculation was removed from the internal
 	 * list.
-	 * 
-	 * @param loop
-	 *			The closed loop that was removed.
+	 * @param loop The closed loop that was removed.
 	 */
 	private void notifyRemoveCalculation(ClosedLoop loop) {
 		for (IModelListener listener : listeners) {
@@ -510,9 +531,7 @@ public class Model implements ICalculationCycleListener {
 
 	/**
 	 * Call this to notify that a new simulation is about to begin.
-	 * 
-	 * @param numberOfCalculators
-	 *			The number of calculators that will be executed.
+	 * @param numberOfCalculators The number of calculators that will be executed.
 	 */
 	private void notifySimulationBegin(int numberOfCalculators) {
 		for (IModelListener listener : listeners) {
@@ -530,9 +549,7 @@ public class Model implements ICalculationCycleListener {
 	/**
 	 * Call this to notify that a calculation was hidden. This should cause the
 	 * curve in the plot to be hidden.
-	 * 
-	 * @param closedLoop
-	 *			The closed loop being hidden.
+	 * @param closedLoop The closed loop being hidden.
 	 */
 	private void notifyHideCalculation(ClosedLoop closedLoop) {
 		for (IModelListener listener : listeners) {
@@ -573,8 +590,13 @@ public class Model implements ICalculationCycleListener {
 	 * @param closedLoop The closed loop object holding the results of the step response.
 	 */
 	@Override
-	public final synchronized void onStepResponseCalculationComplete(ClosedLoop closedLoop) {
+	public final synchronized void onNewCalculationCycleComplete(ClosedLoop closedLoop) {
 		closedLoops.add(closedLoop);
 		notifyAddCalculation(closedLoop);
+	}
+
+	@Override
+	public void onUpdateCalculationCycleComplete(ClosedLoop closedLoop) {
+		notifyUpdateCalculation(closedLoop);
 	}
 }

@@ -19,6 +19,8 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator {
 	// 18 iterations is enough for a precision of 4 decimal digits (1.0000)
 	protected double maxIterations = 18;
 
+	public abstract void setAngleOfInflectionOffset(double angleOfInflectionOffset);
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// Constructor
 	// -----------------------------------------------------------------------------------------------------------------

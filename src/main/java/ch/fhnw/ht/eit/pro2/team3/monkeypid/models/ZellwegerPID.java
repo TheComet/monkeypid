@@ -7,8 +7,13 @@ import java.awt.*;
  * @author Alex Murray
  */
 public class ZellwegerPID extends AbstractZellweger {
-
+	private static final double angleOfInflection = -135.0;
 	private double beta = 0.0;
+
+	@Override
+	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
+		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
+	}
 
 	/**
 	 * Constructs a new Zellweger calculator using the specified plant.
