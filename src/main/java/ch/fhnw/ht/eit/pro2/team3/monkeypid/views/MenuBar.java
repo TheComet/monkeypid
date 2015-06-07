@@ -214,33 +214,27 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		if (e.getSource() == menuItemPDF) {
 			//print PDF
 			String fileName = "";
-			// TODO remove Wyss
-			/*
-			FileDialog saveFileDialog = new FileDialog((JFrame) view.getTopLevelAncestor(), "PDF speichern unter ...", FileDialog.SAVE);
-			saveFileDialog.setVisible(true);
-			fileName = saveFileDialog.getFile();
-			*/
-			File workingDirectory = new File(System.getProperty("user.dir"));
+
 			JFileChooser fc = new JFileChooser();
-			fc.setCurrentDirectory(workingDirectory);
-			fc.setFileFilter(new FileNameExtensionFilter("PDF (*.pdf)", ".pdf"));
-			//fc.setFileFilter(new FileNameExtensionFilter("Alle Dateien (*.*)", "."));
-			//fc.setVisible(true);
+			fc.setFileFilter(new FileNameExtensionFilter("PDF (*.pdf)", "pdf"));
 			int retrival = fc.showSaveDialog(null);
-			if(retrival == JFileChooser.APPROVE_OPTION){
+			//file chosen and process not canceled
+            if(retrival == JFileChooser.APPROVE_OPTION){
 				fileName = fc.getSelectedFile().getAbsolutePath();
-			}
-			// TODO remove
-			/*
-			JFileChooser chooser = new JFileChooser();
-			chooser.addChoosableFileFilter(new F  );
-			chooser.addChoosableFileFilter(new OpenFileFilter("*.*","Alle Dateien") );
-			*/
-			
-			if(!fileName.endsWith(".pdf")){
-				fileName += ".pdf";
-			}
-			PrintFrameToPDF(fileName, view);
+                File fTest = new File(fileName);
+                if(fTest.exists() && !fTest.isDirectory()) {
+                    JOptionPane.showMessageDialog(this, "Diese Datei exisitiert bereits! Bitte einen andern Datei-Namen aussuchen.");
+                }
+                //continue only, if file doesn't exist
+                else{
+                    //if fileName ends not with .pdf append .pdf
+                    if (!fileName.endsWith(".pdf")) {
+                        fileName += ".pdf";
+                    }
+                    //save view to PDF
+                    PrintFrameToPDF(fileName, view);
+                }
+            }
 		}
 
 		// menu item info is pressed
@@ -299,6 +293,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
     /**
      * Prints the View view to a pdf File with the Name/Location of file
      * The View is transformed to fit an A3 sheet.
+     * Code-Parts from:
+     * http://stackoverflow.com/questions/4517907/how2-add-a-jpanel-to-a-document-then-export-to-pdf
      * @param file
      * @param view
      */
@@ -307,26 +303,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		try {
 			PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
 			d.open();
-
 			PdfContentByte cb = writer.getDirectContent();
 			PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
 			Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
-			//g2.scale(0.8, 0.8);
-			//System.out.println("width: "+view.getWidth()+" height: "+view.getHeight());
-			//width: 1246 height: 705
-			double factorFromWidth = Math.round((1150.0/view.getWidth())*10.0)/10.0;
-			System.out.println("with factor: "+factorFromWidth);
-			double factorFromHeight = Math.round((690.0/view.getHeight())*10.0)/10.0;
+            //scale frame to A3 size
+            double factorFromWidth = 1150.0/view.getWidth();
+            double factorFromHeight = 800.0/view.getHeight();
 			double factor = Math.min(factorFromWidth, factorFromHeight);
-			System.out.println("Factor: "+factor);
 			g2.scale(factor, factor);
 			view.print(g2);
 			g2.dispose();
-			System.out.println(tp.getHeight() + "   "+(-tp.getWidth()+1246.0+30));
-			System.out.println(tp.getWidth()+ "   "+(-tp.getHeight()+705.0+20));
-
-			cb.addTemplate (tp, -tp.getWidth()+1246.0+30, -tp.getHeight()+705.0+20);
-			//cb.setLeading(TOP_ALIGNMENT);
+            //scale template position, that origin is in the bottom left corner
+            cb.addTemplate (tp, 20.0, (-1.0)*(1.0-factor)*view.getHeight()+20.0);
 		} catch (Exception e) {
 		}
 		finally{
