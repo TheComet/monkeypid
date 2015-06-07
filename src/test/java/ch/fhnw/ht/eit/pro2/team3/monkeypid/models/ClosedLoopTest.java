@@ -55,7 +55,7 @@ public class ClosedLoopTest {
 		Plant plant = new Plant(1.71, 7.6, 1, sani);
 		AbstractController controller = new ControllerPI("test", 1.14, 3.58);
 		ClosedLoop loop = new ClosedLoop(plant, controller);
-		loop.calculateStepResponse(8 * 1024);
+		loop.calculateStepResponse();
 		XYSeries series = loop.getStepResponse();
 
 		// make sure start and end times line up

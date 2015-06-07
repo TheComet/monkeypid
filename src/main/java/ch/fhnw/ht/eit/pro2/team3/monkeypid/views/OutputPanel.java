@@ -49,7 +49,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
 	 * 
-	 * @param controller
+	 * @param controller // TODO Stierli
 	 */
 	public OutputPanel(Controller controller) {
 		super(new GridBagLayout());
@@ -145,8 +145,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 	/**
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
-	 * 
-	 * @param miniVersionSelected
+	 * @param miniVersionSelected // TODO Stierli
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
@@ -172,20 +171,19 @@ public class OutputPanel extends JPanel implements IModelListener,
 		SwingUtilities.invokeLater(() -> {
 
 			// do we have a row allocated for this closed loop?
-				if (closedLoop.getTableRowIndex() > -1
-						&& closedLoop.getTableRowIndex() < tableModel
-								.getRowCount()) {
-					String[] tableRowStrings = closedLoop.getTableRowStrings();
+			if (closedLoop.getTableRowIndex() > -1
+					&& closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+				String[] tableRowStrings = closedLoop.getTableRowStrings();
 
-					// trimm string to get only the name of the regulator
-					tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
+				// trimm string to get only the name of the regulator
+				tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
 
-					// get rgbColor from closedLoop and convert it to string
-					String hexColor = String.format("#%02x%02x%02x", closedLoop
-							.getColor().getRed(), closedLoop.getColor()
-							.getGreen(), closedLoop.getColor().getBlue());
+				// get rgbColor from closedLoop and convert it to string
+				String hexColor = String.format("#%02x%02x%02x", closedLoop
+						.getColor().getRed(), closedLoop.getColor()
+						.getGreen(), closedLoop.getColor().getBlue());
 
-					// adds row with colored dot before name
+				// adds row with colored dot before name
 				for (int i = 0; i < tableRowStrings.length; i++) {
 					if (i == 0) {
 						tableModel.setValueAt(
@@ -233,6 +231,11 @@ public class OutputPanel extends JPanel implements IModelListener,
 	/**
 	 * 
 	 */
+	@Override
+	public void onUpdateCalculation(ClosedLoop closedLoop) {
+
+	}
+
 	@Override
 	public void onSimulationBegin(int numberOfStepResponses) {
 		SwingUtilities.invokeLater(() -> {

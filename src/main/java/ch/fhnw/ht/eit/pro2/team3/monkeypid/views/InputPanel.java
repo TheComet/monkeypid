@@ -20,8 +20,7 @@ import java.awt.event.ActionListener;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener,
-		IModelListener {
+public class InputPanel extends JPanel implements ActionListener, IModelListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -199,11 +198,16 @@ public class InputPanel extends JPanel implements ActionListener,
 	}
 
 	/**
+<<<<<<< HEAD
 	 * If button simulate is pressed the fields will be checked and if
 	 * everything is correct the values will comitted to the controller.
 	 * Furthermore fields will be greyed out depending on the regulator which is
 	 * selected.
+=======
+	 * // TODO Stierli
+>>>>>>> cleanup
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		// if button simulate is pressed
@@ -326,8 +330,7 @@ public class InputPanel extends JPanel implements ActionListener,
 	public void onSetPlant(Plant plant) {
 		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.BLACK);
-		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder()
-				+ ")");
+		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder() + ")");
 	}
 
 	@Override
@@ -337,7 +340,12 @@ public class InputPanel extends JPanel implements ActionListener,
 	public void onRemoveCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onSimulationBegin(int numberOfStepResponses) {}
+	public void onUpdateCalculation(ClosedLoop closedLoop) {
+	}
+
+	@Override
+	public void onSimulationBegin(int numberOfStepResponses) {
+	}
 
 	@Override
 	public void onSimulationComplete() {}

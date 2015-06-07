@@ -34,6 +34,12 @@ public interface IModelListener {
 	void onRemoveCalculation(ClosedLoop closedLoop);
 
 	/**
+	 * This is called when the model has updated/recalculated an existing calculation.
+	 * @param closedLoop The closed loop object that has been recalculated.
+	 */
+	void onUpdateCalculation(ClosedLoop closedLoop);
+
+	/**
 	 * This is called right before a simulation is initiated. A single simulation will usually have multiple
 	 * calculations. The exact number of calculations is passed with this method.
 	 * @param numberOfStepResponses The total number of calculations that will be made.
