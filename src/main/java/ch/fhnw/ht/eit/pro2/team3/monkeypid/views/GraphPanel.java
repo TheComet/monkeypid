@@ -100,43 +100,31 @@ public class GraphPanel extends JPanel implements IModelListener,
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
-			try {
-				for (int i = 0; i < dataCollection.getSeriesCount(); i++) {
-					if (closedLoop.getName().equals(
-							dataCollection.getSeries(i).getKey())) {
-						dataCollection.removeSeries(i);
-						break;
-					}
-				}
 
-				dataCollection.addSeries(closedLoop.getStepResponse());
+			dataCollection.addSeries(closedLoop.getStepResponse());
 
-				// The closedLoop object specifies what color it wants to be
-				// rendered in
-				getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop),
-						closedLoop.getColor());
-				// getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop),
-				// new BasicStroke(5.0f,BasicStroke.CAP_BUTT,
-				// BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f},
-				// 0.0f));
-				getDatasetRenderer().setSeriesToolTipGenerator(
-						getSeriesIndex(closedLoop), new XYToolTipGenerator() {
-							private static final long serialVersionUID = 1L;
+			// The closedLoop object specifies what color it wants to be
+			// rendered in
+			getDatasetRenderer().setSeriesPaint(getSeriesIndex(closedLoop),
+					closedLoop.getColor());
 
-							@Override
-							public String generateToolTip(XYDataset dataset,
-									int series, int item) {
-								String toolTipStr = closedLoop.getName();
-								return toolTipStr;
-							}
-						});
+			// getDatasetRenderer().setSeriesStroke(getSeriesIndex(closedLoop),
+			// new BasicStroke(5.0f,BasicStroke.CAP_BUTT,
+			// BasicStroke.JOIN_MITER, 10.0f, new float[] {1.0f, 0.0f},
+			// 0.0f));
+			getDatasetRenderer().setSeriesToolTipGenerator(
+					getSeriesIndex(closedLoop), new XYToolTipGenerator() {
+						private static final long serialVersionUID = 1L;
 
-				// See issue #21 - make visible again
-				setSeriesVisible(closedLoop, visible);
+						@Override
+						public String generateToolTip(XYDataset dataset,
+								int series, int item) {
+							return closedLoop.getName();
+						}
+					});
 
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-			}
+			// See issue #21 - make visible again
+			setSeriesVisible(closedLoop, visible);
 		});
 	}
 
@@ -150,6 +138,10 @@ public class GraphPanel extends JPanel implements IModelListener,
 				dataCollection.removeSeries(closedLoop.getStepResponse());
 			}
 		});
+	}
+
+	@Override
+	public void onUpdateCalculation(ClosedLoop closedLoop) {
 	}
 
 	@Override

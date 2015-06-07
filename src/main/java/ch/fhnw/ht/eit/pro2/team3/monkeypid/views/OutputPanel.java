@@ -159,7 +159,7 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
 	 * 
-	 * @param MiniVersionOn
+	 * @param miniVersionSelected // TODO Stierli
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
@@ -181,20 +181,19 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 		SwingUtilities.invokeLater(() -> {
 
 			// do we have a row allocated for this closed loop?
-				if (closedLoop.getTableRowIndex() > -1
-						&& closedLoop.getTableRowIndex() < tableModel
-								.getRowCount()) {
-					String[] tableRowStrings = closedLoop.getTableRowStrings();
+			if (closedLoop.getTableRowIndex() > -1
+					&& closedLoop.getTableRowIndex() < tableModel.getRowCount()) {
+				String[] tableRowStrings = closedLoop.getTableRowStrings();
 
-					// trimm string to get only the name of the regulator
-					tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
+				// trimm string to get only the name of the regulator
+				tableRowStrings[0] = tableRowStrings[0].split(" ")[0];
 
-					// get rgbColor from closedLoop and convert it to string
-					String hexColor = String.format("#%02x%02x%02x", closedLoop
-							.getColor().getRed(), closedLoop.getColor()
-							.getGreen(), closedLoop.getColor().getBlue());
+				// get rgbColor from closedLoop and convert it to string
+				String hexColor = String.format("#%02x%02x%02x", closedLoop
+						.getColor().getRed(), closedLoop.getColor()
+						.getGreen(), closedLoop.getColor().getBlue());
 
-					// adds row with colored dot before name
+				// adds row with colored dot before name
 				for (int i = 0; i < tableRowStrings.length; i++) {
 					if (i == 0) {
 						tableModel.setValueAt(
@@ -232,6 +231,10 @@ public class OutputPanel extends JPanel implements IModelListener, ChangeListene
 				}
 				//view.validate();				
 			});
+	}
+
+	@Override
+	public void onUpdateCalculation(ClosedLoop closedLoop) {
 	}
 
 	@Override

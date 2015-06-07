@@ -28,14 +28,14 @@ public class Controller {
 	}
 
 	/**
-	 * This is called when the user clicks on simulate. The model should receive all of the required information and
-	 * then simulate everything.
+	 * This is called when the user clicks on simulate. The model should receive all of the required
+	 * information and then simulate everything.
 	 * @param ksValue The value the user entered for Ks.
 	 * @param tuValue The value the user entered for Tu.
 	 * @param tgValue The value the user entered for Tg.
 	 * @param tpValue The value the user entered for Tp.
-	 * @param selectedRegulatorName The regulator the user selected. This is passed as a string containing "I", "PI",
-	 *							  or "PID".
+	 * @param selectedRegulatorName The regulator the user selected. This is passed as a string
+	 *                              containing "I", "PI", or "PID".
 	 * @param overswing The selected overswing from the dropdown.
 	 */
 	public void btSimulateAction(double ksValue, double tuValue, double tgValue, double tpValue,

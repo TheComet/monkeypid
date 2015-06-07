@@ -28,7 +28,7 @@ public class ZellwegerPID extends AbstractZellweger {
 	 * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
 	 * @param angleOfInflectionOffset The offset for the angleOfInflection.
 	 */
-	public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflection) {
+	public ZellwegerPID(Plant plant, double phaseMargin, double angleOfInflectionOffset) {
 		super(plant, phaseMargin);
 		setAngleOfInflection(-135.0 + angleOfInflection);
 	}

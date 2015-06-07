@@ -1,6 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IClosedLoopListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.ICalculationCycleListener;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -25,7 +25,6 @@ public class ClosedLoop {
 	private Plant plant;
 	private AbstractController controller;
 	private XYSeries stepResponse = null;
-	private ArrayList<IClosedLoopListener> listeners = new ArrayList<>();
 	private double maxOverSwing;
 
 	// stores where the calculated controller will be inserted into the table
@@ -56,17 +55,16 @@ public class ClosedLoop {
 	public final void setPlantAndController(Plant plant, AbstractController controller) {
 		this.plant = plant;
 		this.controller = controller;
-		this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
+		if(controller != null)
+			this.transferFunction = calculateCloseLoopTransferFunction(plant, controller);
 	}
 
 	/**
 	 * Wrapper around the specific methods for calculating the step response. The current default method
 	 * is Residue.
-	 * @param numSamplePoints The number of sample points to use. Read the docstring of calculateStepResponseResidue
-	 *						for more information on what this does.
 	 */
-	public final void calculateStepResponse(int numSamplePoints) {
-		calculateStepResponseResidue(numSamplePoints);
+	public final void calculateStepResponse() {
+		calculateStepResponseResidue(0);
 	}
 
 	/**
@@ -88,22 +86,6 @@ public class ClosedLoop {
 		tableRow[controllerRow.length] = str;
 
 		return tableRow;
-	}
-
-	/**
-	 * Register as a listener to this class in order to receive notifications.
-	 * @param listener The object to register.
-	 */
-	public final void registerListener(IClosedLoopListener listener) {
-		listeners.add(listener);
-	}
-
-	/**
-	 * Unregister as a listener from this class.
-	 * @param listener The object to unregister.
-	 */
-	public final void unregisterListener(IClosedLoopListener listener) {
-		listeners.remove(listener);
 	}
 
 	/**
@@ -246,9 +228,6 @@ public class ClosedLoop {
 		for(int i = 0; i < t.length; i++) {
 			stepResponse.add(t[i], y[i]);
 		}
-
-		// done, notify
-		notifyCalculationComplete();
 	}
 
 	/**
@@ -352,9 +331,6 @@ public class ClosedLoop {
 		for(int i = 0; i < t.length; i++) {
 			stepResponse.add(t[i], y[i]);
 		}
-
-		// done, notify
-		notifyCalculationComplete();
 	}
 
 	/**
@@ -384,14 +360,5 @@ public class ClosedLoop {
 		}
 
 		return new TransferFunction(numeratorCoefficients, denominatorCoefficients);
-	}
-
-	/**
-	 * Called when the step response calculation completes, so listeners can pick up the results.
-	 */
-	private synchronized void notifyCalculationComplete() {
-		for (IClosedLoopListener listener : listeners) {
-			listener.onStepResponseCalculationComplete(this);
-		}
 	}
 }

@@ -2,6 +2,7 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.views;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.controllers.Controller;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.listeners.IModelListener;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.CalculatorNames;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.ClosedLoop;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Plant;
 
@@ -26,8 +27,7 @@ import java.util.Map;
  * it isn't displayed anymore.
  * @author Josua Stierli
  */
-public class GraphDisplayPanel extends JPanel implements ActionListener,
-		IModelListener {
+public class GraphDisplayPanel extends JPanel implements ActionListener, IModelListener {
 
 	private Controller controller;
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
@@ -96,7 +96,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		if(CurvesDisplayOn){
 			CurvesDisplayOn = false;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-				if(entry.getKey() != "Zellweger"){	//toggle only, if not a Zellweger-Curve
+				//toggle only, if not a Zellweger-Curve
+				if(!entry.getKey().equals(CalculatorNames.ZELLWEGER_I)) {
 					controller.cbUncheckAction(entry.getKey());
 					entry.getValue().setSelected(false); //uncheck the checkboxes
 				}
@@ -105,7 +106,8 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 		else{
 			CurvesDisplayOn = true;
 			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-				if(entry.getKey() != "Zellweger"){	//toggle only, if not a Zellweger-Curve
+				//toggle only, if not a Zellweger-Curve
+				if(!entry.getKey().equals(CalculatorNames.ZELLWEGER_I)) {
 					controller.cbCheckAction(entry.getKey());
 					entry.getValue().setSelected(true); //check the checkboxes
 				}
@@ -123,51 +125,37 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
 
+			JCheckBox cb = new JCheckBox();
+
 			//get rgbColor from closedLoop and convert it to string
 			String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
 					.getRed(), closedLoop.getColor().getGreen(), closedLoop
 					.getColor().getBlue());
 
-			for(Map.Entry<String, JCheckBox> entry : checkBoxes.entrySet()) {
-				//get the entry which matches the index of the given closed-Loop
-				try{
-					int key = Integer.parseInt(entry.getKey());
-					if(key == closedLoop.getTableRowIndex()){
-						//replace the old key, which was the index number as string with the name of the closedLoop
-						//because the key can't be renamed, remove the old has and insert the value of the old hash
-						//with a new key, the new key is the name of the closedLoop
-						checkBoxes.put(closedLoop.getName(), checkBoxes.remove(""+closedLoop.getTableRowIndex()));
-						//get the checkBox of this closedLoop
-						JCheckBox cb = new JCheckBox();
-						cb = checkBoxes.get(closedLoop.getName());
+			//set checkBox content: colored dot and name of closedLoop
+			cb.setText("<html><font style=\"font-family: unicode \"color=" + hexColor
+					+ ">" + "\u25CF" + "<font color=#000000>"
+					+ closedLoop.getName());
 
-						//set checkBox content: colored dot and name of closedLoop
-						cb.setText( "<html><font style=\"font-family: unicode \"color=" + hexColor
-								+ ">" + "\u25CF" + "<font color=#000000>"
-								+ closedLoop.getName());
+			//set the checkbox selected dependent of the param visibles
+			cb.setSelected(visible);
+			cb.setVisible(false);
 
-						//set the checkbox selected dependent of the param visibles
-						cb.setSelected(visible);
+			//add actionListener to checkbox
+			cb.addActionListener(this);
 
-						//add actionListener to checkbox
-						cb.addActionListener(this);
+			add(cb);
+			checkBoxes.put(closedLoop.getName(), cb);
 
-						numberOfStepResponses--;
-						//if all step-responses were calculated and all checkboxes updated, show them to the user
-						//(make them visible)
-						if(numberOfStepResponses == 0){
-							for(Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
-								JCheckBox cb2 = entry2.getValue();
-								cb2.setVisible(true);
-							}
-							view.validate();	//triggers repaint of the GUI
-						}
-						break;
-					}
+			numberOfStepResponses--;
+			//if all step-responses were calculated and all checkboxes updated, show them to the user
+			//(make them visible)
+			if(numberOfStepResponses == 0){
+				for(Map.Entry<String, JCheckBox> entry2 : checkBoxes.entrySet()) {
+					JCheckBox cb2 = entry2.getValue();
+					cb2.setVisible(true);
 				}
-				catch(NumberFormatException exc){
-					// entry-key was no number -> try next entry
-				}
+				view.validate();	//triggers repaint of the GUI
 			}
 		 });
 	}
@@ -182,6 +170,10 @@ public class GraphDisplayPanel extends JPanel implements ActionListener,
 			remove(c);
 			view.validate();	//triggers repaint of the GUI
 		});
+	}
+
+	@Override
+	public void onUpdateCalculation(ClosedLoop closedLoop) {
 	}
 
 	/**

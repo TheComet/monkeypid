@@ -24,7 +24,7 @@ public class ZellwegerPI extends AbstractZellweger {
 	 * This can be used to adjust the the rise of the stepResponse of this Controller
 	 * @param plant The plant to calculate a controller for.
 	 * @param phaseMargin The phase margin to use during angle lookups on the phase of the open loop.
-	 * @param angleOfInflectionOffset The offset for the angleOfInflection.
+	 * @param angleOfInflection The offset for the angleOfInflection.
 	 */
 	public ZellwegerPI(Plant plant, double phaseMargin, double angleOfInflection) {
 		super(plant, phaseMargin);
