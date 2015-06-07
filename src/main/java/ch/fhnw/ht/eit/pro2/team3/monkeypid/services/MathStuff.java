@@ -364,15 +364,6 @@ public class MathStuff {
 		
 		//get the roots of the Denominator polynomial function
 		Complex[] poles = roots(Denominator);
-		//remove imaginary part if imaginary part is smaller than 1e-15, 
-		//probably the trigger value 1e-15 should be lowered
-		/*
-		for (int i = 0; i < poles.length; i++) {
-			if(Math.abs(poles[i].getImaginary()) < 1e-50){
-				poles[i] = new Complex(poles[i].getReal(), 0);
-			}
-		}
-		*/
 		//Attention: order of the roots is not alwayse the same as in Matlab, but no problem here
 		
 		//create an array of empty/zero residues
@@ -415,15 +406,6 @@ public class MathStuff {
 			Complex pvD = pvB.divide(pvA);
 			residues[m] = pvD.divide(Denominator[0]);
 		}
-		
-		//remove imaginary part if imaginary part is smaller than 1e-15
-		/*
-		for (int i = 0; i < residues.length; i++) {
-			if(Math.abs(residues[i].getImaginary()) < 1e-50){
-				residues[i] = new Complex(residues[i].getReal(), 0);
-			}
-		}
-		*/
 		
 		return new Object[]{residues,poles,constantK};
 	}
@@ -515,159 +497,106 @@ public class MathStuff {
 	}
 
 	/**
-	 * taken from pdf Fachinput_Schrittantwort.pdf
-	 * @param p Polynomial coefficients
+	 * Calculates the roots of a polynomial-function. The first coefficient has the highest power
+     * basic-code taken from pdf Fachinput_Schrittantwort.pdf
+     * This method removes at the end also imaginary-parts from real roots
+	 * @param pOriginal Polynomial coefficients
 	 * @return Roots Attention the Roots have sometimes not the same order as in Matlab
 	 * 			(but no problem, they are only roots ;-))
 	 */
-	public static Complex[] roots(double[] p) {
-
-		/*
-		if(p[0] == 0.0){
-		   p =  ArrayUtils.remove(p,0);
-		}
-		*/
+	public static Complex[] roots(double[] pOriginal) {
         boolean d = false; //debug on/off
 
-		double[] p2 = new double[p.length];
+        //make a copy of the original polynomial values -> original polynomial won't be touched
+		double[] p = new double[pOriginal.length];
+        for(int i=0; i < p.length; i++){
+            p[i] = pOriginal[i];
+        }
 
+        //debug
         if(d) {
             System.out.println("poly: ");
             for (int i = 0; i < p.length; i++) {
                 System.out.println("koef " + i + ": real: " + p[i]);
-
             }
         }
-
-		for(int i=0; i < p2.length; i++){
-			p2[i] = p[i];
-		}
-
 
 		final LaguerreSolver solver = new LaguerreSolver();
 		double[] flip = new double[p.length];
 
-		/*
-		// To be conform with Matlab ...
-		double s = 1.0/p[0];
-		for (int i = 0; i < flip.length; i++) {
-		flip[p.length - i - 1] = p[i]*s;
-		}
-		Complex[] complexRootsReverse = solver.solveAllComplex(flip, 0.0);
-		Complex[] complexRoots = new Complex[complexRootsReverse.length];
-		//Flip order of roots
-
-		//for (int i = 0; i < complexRoots.length; i++) {
-		//	complexRoots[i] = complexRootsReverse[complexRoots.length - i -1];
-	   //	 System.out.println("Old: real"+complexRoots[i].getReal()+" imag: "+complexRoots[i].getImaginary());
-		//}
-
-		for (int i = 0; i < complexRootsReverse.length; i++) {
-			System.out.println("Old: real"+complexRootsReverse[i].getReal()+" imag: "+complexRootsReverse[i].getImaginary());
-
-		}
-		//return complexRoots;
-		*/
-
-
-		// Koeffizient der h�chsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
-		double s2 = 1.0 / p[0];
-		for (int i = 0; i < p2.length; i++) {
-			p2[i] = p2[i] * s2;
+		// Koeffizient der höchsten Potenz durch Multiplikation mit einer Konstanten auf 1 normieren:
+		double sFactor = 1.0 / p[0];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = p[i] * sFactor;
 		}
 
 		// Normierungskonstante berechnen:
-		s2 = Math.pow(p2[p2.length - 1], 1.0 / (p2.length - 1));
+		sFactor = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
 
 		// Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
-		for (int i = 0; i < p2.length; i++) {
-			p2[i] /= Math.pow(s2, i);
+		for (int i = 0; i < p.length; i++) {
+			p[i] /= Math.pow(sFactor, i);
 		}
 
 		// Um mit Matlab konform zu sein flippen:
 		for (int i = 0; i < flip.length; i++)
-			flip[p2.length - i - 1] = p2[i];
+			flip[p.length - i - 1] = p[i];
 
 		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
-		Complex[] r = solver.solveAllComplex(flip, 0.0);
-		if(d) System.out.println("Roots, count: " + r.length);
-		for (int i = 0; i < r.length; i++) {
-			r[i] = r[i].multiply(s2);
-			if(d) System.out.println("root "+i+": real: "+r[i].getReal()+" imag: "+r[i].getImaginary());
+		Complex[] res = solver.solveAllComplex(flip, 0.0);
+		if(d) System.out.println("Roots, count: " + res.length);
+		for (int i = 0; i < res.length; i++) {
+			res[i] = res[i].multiply(sFactor);
+            //debug
+			if(d) System.out.println("root "+i+": real: "+res[i].getReal()+" imag: "+res[i].getImaginary());
 		}
 
-		for (int i = 0; i < r.length; i++) {
-			Complex rTemp = r[i];
+        //search for roots, which have an imaginary-part which isn't 0.0 and are not a complex-conjugated pairs.
+        //-> remove the imaginary-part from this roots, because polynomials with real coefficients are always
+        // complex-conjugated pairs.
+		for (int i = 0; i < res.length; i++) {
+			Complex rTemp = res[i];
 			boolean rootCorrect = false;
-			//if root is not real, check, if root is complex-conjugated, else, remove imaginary part
+			//if root is not only real, check, if root is complex-conjugated, else, remove imaginary part
 			if(rTemp.getImaginary() != 0.0){
-				//check each other root, if it hase the same real-part, if yes, check, if the imaginary part is complex conjugated
+				//check each other root, if it has the same real-part, if yes, check, if the imaginary part is complex conjugated
 				//if no, remove the imaginary part of the root
-				for (int j = 0; j < r.length; j++) {
+				for (int j = 0; j < res.length; j++) {
 					if(j != i){
-						//if(r[j].getReal() == rTemp.getReal() && r[j].getImaginary() == -rTemp.getImaginary()){
-						if(almostEqual2sComplement(r[j].getReal(), rTemp.getReal(), 5000) && almostEqual2sComplement(r[j].getImaginary(),-rTemp.getImaginary(),5000)){  //old max: 500
+						if(almostEqual2sComplement(res[j].getReal(), rTemp.getReal(), 5000) && almostEqual2sComplement(res[j].getImaginary(),-rTemp.getImaginary(),5000)){  //old max: 500
 							rootCorrect = true;
 							break;
 						}
 					}
 				}
 			}
+            //if root has no complex-conjugated partner -> remove imaginary-part
 			if(rootCorrect == false){
-				r[i] = new Complex(r[i].getReal(),0.0);
+				res[i] = new Complex(res[i].getReal(),0.0);
 			}
 		}
 
+        //debug
         if(d) {
             System.out.println("roots cleande: ");
-            for (int i = 0; i < r.length; i++) {
-                System.out.println("root " + i + ": real: " + r[i].getReal() + " imag: " + r[i].getImaginary());
+            for (int i = 0; i < res.length; i++) {
+                System.out.println("root " + i + ": real: " + res[i].getReal() + " imag: " + res[i].getImaginary());
             }
         }
 
-		return r;
-
-		/*
-		//Test-Code
-
-	 double[] p = {5.7154896901003664E-24,
-		3.642939834702842E-19,
-		8.513565673497964E-15,
-		9.105814499809592E-11,
-		4.457321122539636E-7,
-		0.00224,
-		1.7999999999999998};
-		final LaguerreSolver solver = new LaguerreSolver();
-		double[] flip = new double[p.length];
-
-		// Koeffizient der h�chsten Potenz auf durch Multiplikation mit einer Konstanten auf 1 normieren:
-				double s = 1.0 / p[0];
-				for (int i = 0; i < p.length; i++) {
-					p[i] = p[i] * s;
-				}
-
-		// Normierungskonstante berechnen:
-				s = Math.pow(p[p.length - 1], 1.0 / (p.length - 1));
-
-		// Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
-				for (int k = 0; k < p.length; k++) {
-					p[k] /= Math.pow(s, k);
-				}
-
-		// Um mit Matlab konform zu sein flippen:
-				for (int m = 0; m < flip.length; m++)
-					flip[p.length - m - 1] = p[m];
-
-		// Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
-				Complex[] r = solver.solveAllComplex(flip, 0.0);
-				for (int n = 0; n < r.length; n++) {
-					r[n] = r[n].multiply(s);
-				}
-				r;
-
-		*/
+		return res;
 	}
 
+    /**
+     * Compares two doubles and returns true, if they are equal in the range of maxUlps double values
+     * The method compares the bits of the mantissa and the exponent
+     * Original C code taken from: http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+     * C code translated to Java
+     * @param a The first double to compare with a second double b
+     * @param b The second double to compare with the first double a
+     * @param maxUlps The maximum difference of the two doubles in bits of the Mantisse
+     * @return
+     */
 	public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
 	{
 		// Make sure maxUlps is non-negative and small enough that the
@@ -687,28 +616,4 @@ public class MathStuff {
 		// Apply delta comparison
 		return Math.abs(aInt - bInt) <= maxUlps;
 	}
-
-	/*
-	//works probably only in c, not in java
-	// Usable AlmostEqual function
-	bool AlmostEqual2sComplement(float A, float B, int maxUlps)
-	{
-		// Make sure maxUlps is non-negative and small enough that the
-		// default NAN won't compare as equal to anything.
-		assert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024);
-		int aInt = *(int*)&A;
-		// Make aInt lexicographically ordered as a twos-complement int
-		if (aInt < 0)
-			aInt = 0x80000000 - aInt;
-		// Make bInt lexicographically ordered as a twos-complement int
-		int bInt = *(int*)&B;
-		if (bInt < 0)
-			bInt = 0x80000000 - bInt;
-		int intDiff = abs(aInt - bInt);
-		if (intDiff <= maxUlps)
-			return true;
-		return false;
-	}
-	*/
-
 }

@@ -240,18 +240,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			if(!fileName.endsWith(".pdf")){
 				fileName += ".pdf";
 			}
-			PrintFrameToPDF(fileName);
-			/*
-			try {
-				//pdfPrinter.createPdf(fileName);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (DocumentException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			*/
+			PrintFrameToPDF(fileName, view);
 		}
 
 		// menu item info is pressed
@@ -306,37 +295,21 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			miniVersionSelected = !miniVersionSelected;
 		}
 	}
-	
-	//TODO Wyss
-	public static class pdfPrinter {
-			//new HelloWorld().createPdf(RESULT);
-		public static void createPdf(String filename)throws IOException, DocumentException  {
-					// step 1
-					Document document = new Document();
-					// step 2
-					PdfWriter.getInstance(document, new FileOutputStream(filename));
-					// step 3
-					document.open();
-					// step 4
-					document.add(new Paragraph("Hello World!"));
-					// step 5
-					document.close();
-	   }
-	}
-	//TODO Wyss
-	public void PrintFrameToPDF(String file) {
-		//Document d = new Document();
-		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
 
+    /**
+     * Prints the View view to a pdf File with the Name/Location of file
+     * The View is transformed to fit an A3 sheet.
+     * @param file
+     * @param view
+     */
+	private void PrintFrameToPDF(String file, View view) {
+		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
 		try {
-			//works
 			PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(file));
 			d.open();
 
 			PdfContentByte cb = writer.getDirectContent();
-			//cb.set
 			PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
-			//tp.setA
 			Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
 			//g2.scale(0.8, 0.8);
 			//System.out.println("width: "+view.getWidth()+" height: "+view.getHeight());
@@ -355,7 +328,6 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			cb.addTemplate (tp, -tp.getWidth()+1246.0+30, -tp.getHeight()+705.0+20);
 			//cb.setLeading(TOP_ALIGNMENT);
 		} catch (Exception e) {
-			System.out.println("ERROR: " + e.toString());
 		}
 		finally{
 			if(d.isOpen()){
