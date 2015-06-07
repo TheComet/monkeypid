@@ -125,7 +125,22 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
 		SwingUtilities.invokeLater(() -> {
 
-			JCheckBox cb = new JCheckBox();
+			// The checkboxes were already created and are stored using the table row index as the key.
+			// This is a hack and relies on onAddCalculation only being called once for every calculation.
+			JCheckBox cb = checkBoxes.get("" + closedLoop.getTableRowIndex());
+
+			// since we're using this hack, we'll have to re-write the key if it was found to match
+			// the name of the closed loop
+			if(cb != null) {
+				checkBoxes.remove("" + closedLoop.getTableRowIndex());
+				checkBoxes.put(closedLoop.getName(), cb);
+			}
+
+			// If the key was not found (for instance, if the table row index was -1)
+			// create a new checkbox
+			if(cb == null) {
+				cb = new JCheckBox();
+			}
 
 			//get rgbColor from closedLoop and convert it to string
 			String hexColor = String.format("#%02x%02x%02x", closedLoop.getColor()
