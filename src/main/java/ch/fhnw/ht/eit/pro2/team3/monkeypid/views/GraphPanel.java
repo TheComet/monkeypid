@@ -157,7 +157,6 @@ public class GraphPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void onSimulationComplete() {
-
         ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
         //set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
         yAxis.setLowerMargin(0.00);

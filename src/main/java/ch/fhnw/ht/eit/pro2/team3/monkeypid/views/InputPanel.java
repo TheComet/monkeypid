@@ -235,13 +235,13 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 			lbValueErrorInfo.setForeground(Color.RED);
 
 			// check input values
-			if (tfTuValue < 0) {
+			if (tfTuValue <= 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tu muss grösser 0 sein");
-			} else if (tfTgValue < 0) {
+			} else if (tfTgValue <= 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tg muss grösser 0 sein");
-			} else if (tfKsValue < 0) {
+			} else if (tfKsValue <= 0) {
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Ks muss grösser 0 sein");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
@@ -257,7 +257,7 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 				// error message if value of overshoot is greater or equal 45%
 				lbValueErrorInfo
 				.setText("Wert des Überschwingens muss kleiner gleich 45% sein");
-			} else if (tfTpValue < 0) {
+			} else if (tfTpValue <= 0) {
 				// error message if value of tp is smaller than 0
 				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
 			} else if (tfTpValue > 10) {
