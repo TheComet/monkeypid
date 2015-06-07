@@ -163,7 +163,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 		slTrimmSlider.setValue(0);
 	}
 
-	// TODO Wyss
+	// TODO Murray
 	/**
 	 * 
 	 */
@@ -209,7 +209,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 		});
 	}
 
-	// TODO Wyss
+	// TODO Murray
 	/**
 	 * 
 	 */
@@ -229,7 +229,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 				// view.validate();
 			});
 	}
-	// TODO Wyss
+	// TODO Murray
 	/**
 	 * 
 	 */
