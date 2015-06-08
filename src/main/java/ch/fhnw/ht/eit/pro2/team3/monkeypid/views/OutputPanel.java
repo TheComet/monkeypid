@@ -37,7 +37,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 	private int maxNumberOfRegulators = 7;
 
 	// table and table model
-	CustomTableModel tableModel = new CustomTableModel();
+	NonEditableTableModel tableModel = new NonEditableTableModel();
 	JTable table = new JTable(tableModel);
 
 	// adjustment slider
@@ -48,9 +48,7 @@ public class OutputPanel extends JPanel implements IModelListener,
 	 * The constuctor of Leftpanel set the layout to GridBagLayout and adds all
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
-	 * 
-	 * @param controller
-	 *            // TODO Stierli
+	 * @param controller The controller part of the MVC pattern.
 	 */
 	public OutputPanel(Controller controller) {
 		super(new GridBagLayout());
@@ -151,9 +149,8 @@ public class OutputPanel extends JPanel implements IModelListener,
 	/**
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
-	 * 
-	 * @param miniVersionSelected
-	 *            // TODO Stierli
+	 * @param miniVersionSelected If true, the mini version is activated. If false,
+	 *                            the normal version is activated.
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
@@ -170,9 +167,9 @@ public class OutputPanel extends JPanel implements IModelListener,
 		slTrimmSlider.setValue(0);
 	}
 
-	// TODO Murray
 	/**
-	 * 
+	 * This is called when a calculation completes. It will add the controller parameters
+	 * to the output table in the GUI.
 	 */
 	@Override
 	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
@@ -216,9 +213,9 @@ public class OutputPanel extends JPanel implements IModelListener,
 		});
 	}
 
-	// TODO Murray
 	/**
-	 * 
+	 * This is called when a calculation is being removed. This will remove the
+	 * corresponding controller parameters from the output table.
 	 */
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
@@ -237,15 +234,14 @@ public class OutputPanel extends JPanel implements IModelListener,
 			});
 	}
 
-	// TODO Murray
-	/**
-	 * 
-	 */
 	@Override
-	public void onUpdateCalculation(ClosedLoop closedLoop) {
+	public void onUpdateCalculation(ClosedLoop closedLoop) {}
 
-	}
-
+	/**
+	 * This is called when a new simulation begins. The table is filled with placeholder
+	 * text which is overwritten when each calculation completes.
+	 * @param numberOfStepResponses The total number of calculations that will be executed.
+	 */
 	@Override
 	public void onSimulationBegin(int numberOfStepResponses) {
 		SwingUtilities.invokeLater(() -> {
@@ -279,11 +275,14 @@ public class OutputPanel extends JPanel implements IModelListener,
 	}
 
 	@Override
-	public void onSetPlant(Plant plant) {
+	public void onNewPlant(Plant plant) {
 	}
 
+	/**
+	 * This is called when the user adjusts the Zellweger slider.
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		controller.phaseInflectionChanged(slTrimmSlider.getValue());
+		controller.angleOfInflectionChanged(slTrimmSlider.getValue());
 	}
 }

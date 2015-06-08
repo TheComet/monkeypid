@@ -10,11 +10,6 @@ public class ZellwegerPID extends AbstractZellweger {
 	private static final double angleOfInflection = -135.0;
 	private double beta = 0.0;
 
-	@Override
-	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
-		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
-	}
-
 	/**
 	 * Constructs a new Zellweger calculator using the specified plant.
 	 * @param plant The plant to calculate a controller for.
@@ -170,6 +165,15 @@ public class ZellwegerPID extends AbstractZellweger {
 	@Override
 	public Color getColor() {
 		return RenderColors.ZELLWEGER_PID;
+	}
+
+	/**
+	 * Sets the angle of inflection with an additional offset added to it.
+	 * @param angleOfInflectionOffset The offset to add to the original angle of inflection.
+	 */
+	@Override
+	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
+		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
 	}
 
 	/**

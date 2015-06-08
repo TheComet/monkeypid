@@ -218,5 +218,5 @@ public class GraphDisplayPanel extends JPanel implements ActionListener, IModelL
     public void onShowCalculation(ClosedLoop closedLoop) {}
 
 	@Override
-	public void onSetPlant(Plant plant) {}
+	public void onNewPlant(Plant plant) {}
 }

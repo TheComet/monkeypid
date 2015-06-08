@@ -18,11 +18,6 @@ public class ZellwegerI extends AbstractZellweger {
 		setAngleOfInflection(angleOfInflection);
 	}
 
-	@Override
-	public void setAngleOfInflectionOffset(double phaseOfInflectionOffset) {
-		setAngleOfInflection(angleOfInflection + phaseOfInflectionOffset);
-	}
-
 	/**
 	 * Constructs a new Zellweger calculator using the specified plant.
 	 * Overloads Constructor for additional offset for the angleOfInflection
@@ -41,19 +36,6 @@ public class ZellwegerI extends AbstractZellweger {
     }
 
 	/**
-	 * Calculates the appropriate controller for the specified plant.
-	 * @return Returns a new I controller.
-	 */
-	@Override
-	protected final AbstractController calculate() {
-
-		// Ti parameter of controller
-		double ti = 1.0 / findAngleOnPlantPhase();
-
-		return new ControllerI(getName(), ti);
-	}
-
-	/**
 	 * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
 	 * @return The name of this controller.
 	 */
@@ -69,5 +51,27 @@ public class ZellwegerI extends AbstractZellweger {
 	@Override
 	public final Color getColor() {
 		return RenderColors.ZELLWEGER_I;
+	}
+
+	/**
+	 * Sets the angle of inflection with an additional offset added to it.
+	 * @param angleOfInflectionOffset The offset to add to the original angle of inflection.
+	 */
+	@Override
+	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
+		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
+	}
+
+	/**
+	 * Calculates the appropriate controller for the specified plant.
+	 * @return Returns a new I controller.
+	 */
+	@Override
+	protected final AbstractController calculate() {
+
+		// Ti parameter of controller
+		double ti = 1.0 / findAngleOnPlantPhase();
+
+		return new ControllerI(getName(), ti);
 	}
 }
