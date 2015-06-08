@@ -20,7 +20,8 @@ import java.awt.event.ActionListener;
  * @author Josua
  *
  */
-public class InputPanel extends JPanel implements ActionListener, IModelListener {
+public class InputPanel extends JPanel implements ActionListener,
+		IModelListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -198,14 +199,10 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 	}
 
 	/**
-<<<<<<< HEAD
-	 * If button simulate is pressed the fields will be checked and if
-	 * everything is correct the values will comitted to the controller.
+	 * <<<<<<< HEAD If button simulate is pressed the fields will be checked and
+	 * if everything is correct the values will comitted to the controller.
 	 * Furthermore fields will be greyed out depending on the regulator which is
-	 * selected.
-=======
-	 * // TODO Stierli
->>>>>>> cleanup
+	 * selected. ======= // TODO Stierli >>>>>>> cleanup
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -213,20 +210,36 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 		// if button simulate is pressed
 		if (e.getSource() == btSimulate) {
 
-			// convert string values to double
-			// .doubleValue(); from JFormatedDoubleTextfield doesn't update
-			// correct
-			double tfKsValue = Double.parseDouble(tfKs.getText());
-			double tfTuValue = Double.parseDouble(tfTu.getText());
-			double tfTgValue = Double.parseDouble(tfTg.getText());
-			// convert percent to absolute
-			double tfTpValue = Double.parseDouble(tfTp.getText()) * 0.01;
+			// variables for input values
+			double tfKsValue=0;
+			double tfTuValue=0;
+			double tfTgValue=0;
+			double tfTpValue=0;
+			double valueOfOvershoot=0;
+			String selectedRegulatorName=null;
+			
+			// catch if user enters engineering values without an exponent or only "-" / "+"
+			try {
+				// convert string values to double
+				// .doubleValue(); from JFormatedDoubleTextfield doesn't update
+				// correct
+				tfKsValue = Double.parseDouble(tfKs.getText());
+				tfTuValue = Double.parseDouble(tfTu.getText());
+				tfTgValue = Double.parseDouble(tfTg.getText());
+				// convert percent to absolute
+				tfTpValue = Double.parseDouble(tfTp.getText()) * 0.01;
 
-			// get text of selected regulator in comboBox
-			String selectedRegulatorName = String.valueOf(cbSelectRegulator
-					.getSelectedItem());
-			// get value of overshoot textField
-			double valueOfOvershoot = Double.parseDouble(tfOvershoot.getText());
+				// get text of selected regulator in comboBox
+				selectedRegulatorName = String.valueOf(cbSelectRegulator
+						.getSelectedItem());
+				// get value of overshoot textField
+				valueOfOvershoot = Double.parseDouble(tfOvershoot
+						.getText());
+			} catch (Exception e2) {
+				lbValueErrorInfo.setForeground(Color.RED);
+				lbValueErrorInfo.setText("Ungültige Eingabe");
+				return;
+			}
 
 			// set dummy value for error textField, if not height would be zero
 			lbValueErrorInfo.setText(" ");
@@ -256,7 +269,7 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 			} else if (valueOfOvershoot > 45) {
 				// error message if value of overshoot is greater or equal 45%
 				lbValueErrorInfo
-				.setText("Wert des Überschwingens muss kleiner gleich 45% sein");
+						.setText("Wert des Überschwingens muss kleiner gleich 45% sein");
 			} else if (tfTpValue <= 0) {
 				// error message if value of tp is smaller than 0
 				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
@@ -322,6 +335,7 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 			}
 		}
 	}
+
 	// TODO Murray
 	/**
 	 * 
@@ -330,14 +344,17 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 	public void onSetPlant(Plant plant) {
 		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.BLACK);
-		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder() + ")");
+		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder()
+				+ ")");
 	}
 
 	@Override
-	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {}
+	public void onAddCalculation(ClosedLoop closedLoop, boolean visible) {
+	}
 
 	@Override
-	public void onRemoveCalculation(ClosedLoop closedLoop) {}
+	public void onRemoveCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
 	public void onUpdateCalculation(ClosedLoop closedLoop) {
@@ -348,11 +365,14 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 	}
 
 	@Override
-	public void onSimulationComplete() {}
+	public void onSimulationComplete() {
+	}
 
 	@Override
-	public void onHideCalculation(ClosedLoop closedLoop) {}
+	public void onHideCalculation(ClosedLoop closedLoop) {
+	}
 
 	@Override
-	public void onShowCalculation(ClosedLoop closedLoop) {}
+	public void onShowCalculation(ClosedLoop closedLoop) {
+	}
 }
