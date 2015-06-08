@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp,
- * Overswing, a comboBox to select the regulator, the buttons and the table with
+ * Overshoot, a comboBox to select the regulator, the buttons and the table with
  * the results of the simulation and a slider to trimm the curve.
  * 
  * @author Josua

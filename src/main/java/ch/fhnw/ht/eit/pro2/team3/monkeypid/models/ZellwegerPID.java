@@ -193,12 +193,12 @@ public class ZellwegerPID extends AbstractZellweger {
 		double[] tntvkr = calculateTnTvKr(tnk, tvk, tp);
 		AbstractController controller = new ControllerPID(getName(), tntvkr[0], tntvkr[1], tntvkr[2], tp);
 
-		// see issue #7 - calculate minimum and maximum Kr for iterative approximation of overswing
+		// see issue #7 - calculate minimum and maximum Kr for iterative approximation of overshoot
 		double oldPhiDamping = phiDamping; // we're modifying phiDamping by setting a new phase margin. This has to be
 										   // restored once we're done
-		setPhaseMargin(30); // high overswing
+		setPhaseMargin(30); // high overshoot
 		controller.setMaxKr(calculateTnTvKr(tnk, tvk, tp)[2]);
-		setPhaseMargin(90); // low overswing
+		setPhaseMargin(90); // low overshoot
 		controller.setMinKr(calculateTnTvKr(tnk, tvk, tp)[2]);
 		phiDamping = oldPhiDamping; // restore
 

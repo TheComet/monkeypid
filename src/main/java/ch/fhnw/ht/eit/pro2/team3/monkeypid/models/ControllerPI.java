@@ -83,7 +83,7 @@ public class ControllerPI extends AbstractController {
 				getName(),
 				new DecimalFormat("0.000E0").format(getKr()),
 				new DecimalFormat("0.000E0").format(getTn()),
-						"", // Tv  (PID only)	 -- need to pad so overswing value has the correct offset in the table
+						"", // Tv  (PID only)	 -- need to pad so overshoot value has the correct offset in the table
 						""  // Tp  (PID only)
 		};
 	}
