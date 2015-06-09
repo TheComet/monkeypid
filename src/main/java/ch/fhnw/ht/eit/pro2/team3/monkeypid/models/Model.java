@@ -68,6 +68,7 @@ public class Model implements ICalculationCycleListener {
 		private double targetOvershoot;
 		private ArrayList<ICalculationCycleListener> listeners = new ArrayList<>();
 		private boolean firstCalculation = true;
+		private boolean isVisible = true;
 
 		/**
 		 * Constructs a new calculation cycle from a given controller calculator.
@@ -99,6 +100,46 @@ public class Model implements ICalculationCycleListener {
 		}
 
 		/**
+		 * Sets this calculation to be visible.
+		 */
+		public void show() {
+			isVisible = true;
+			notifyShowCalculation(closedLoop);
+		}
+
+		/**
+		 * Hides this calculation.
+		 */
+		public void hide() {
+			isVisible = false;
+			notifyHideCalculation(closedLoop);
+		}
+
+		/**
+		 * Sets the visibility flag. This is used to copy the settings of the old calculators to the new ones.
+		 * @param flag True or false.
+		 */
+		public void setVisibilityFlag(boolean flag) {
+			isVisible = flag;
+		}
+
+		/**
+		 * Returns if this calculation is visible or not.
+		 * @return True or false.
+		 */
+		public boolean isVisible() {
+			return isVisible;
+		}
+
+		/**
+		 * Gets the closed loop object that was last calculated (or still needs to be calculated.
+		 * @return The closed loop object.
+		 */
+		public ClosedLoop getClosedLoop() {
+			return closedLoop;
+		}
+
+		/**
 		 * Register as a listener to this class in order to receive notifications.
 		 * @param listener The object to register.
 		 */
@@ -120,7 +161,7 @@ public class Model implements ICalculationCycleListener {
 		private void notifyStepResponseCalculationComplete() {
 			if(firstCalculation) {
 				for (ICalculationCycleListener listener : listeners) {
-					listener.onNewCalculationCycleComplete(closedLoop);
+					listener.onNewCalculationCycleComplete(closedLoop, isVisible);
 				}
 			} else {
 				for(ICalculationCycleListener listener : listeners) {
@@ -207,19 +248,14 @@ public class Model implements ICalculationCycleListener {
 	}
 
 	private RegulatorType regulatorType;
-
 	private double parasiticTimeConstantFactor;
+	CalculationCycle selectedCalculation = null;
 
 	// list of closed loops to be displayed on the graph
-	ClosedLoop selectedCalculation = null;
-	private ArrayList<ClosedLoop> closedLoops = new ArrayList<>();
+	private ArrayList<CalculationCycle> calculationCycles = null;
 
 	// list of Model listeners
 	private ArrayList<IModelListener> listeners = new ArrayList<>();
-
-	// list, which represents the visibility of the stepResponse of a closedLoop
-	// in the Graph, default all visible
-	private boolean[] curvesVisible = { true, true, true, true, true, true, true };
 
 	// Stores the active zellweger calculation cycle. This is re-used when the user adjusts
 	// the angle of inflection slider in the GUI to re-calculate the zellweger step response.
@@ -298,12 +334,12 @@ public class Model implements ICalculationCycleListener {
 		clearSimulation();
 
 		// get all calculators and notify simulation begin
-		ArrayList<CalculationCycle> calculators = getCalculators();
-		notifySimulationBegin(calculators.size());
+		updateCalculators();
+		notifySimulationBegin(calculationCycles.size());
 
 		// dispatch all calculators
 		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-		calculators.forEach(threadPool::submit);
+		calculationCycles.forEach(threadPool::submit);
 		threadPool.shutdown();
 
 		try {
@@ -353,9 +389,9 @@ public class Model implements ICalculationCycleListener {
 	 * @param name The unique name of the calculation to select.
 	 */
 	public final void selectCalculation(String name) {
-		for (ClosedLoop loop : closedLoops) {
-			if (loop.getName().equals(name)) {
-				selectedCalculation = loop;
+		for (CalculationCycle cycle : calculationCycles) {
+			if (cycle.getClosedLoop().getName().equals(name)) {
+				selectedCalculation = cycle;
 				return;
 			}
 		}
@@ -370,8 +406,7 @@ public class Model implements ICalculationCycleListener {
 		if (selectedCalculation == null) {
 			return;
 		}
-		curvesVisible[selectedCalculation.getTableRowIndex()] = false;
-		notifyHideCalculation(selectedCalculation);
+		selectedCalculation.hide();
 	}
 
 	/**
@@ -382,8 +417,7 @@ public class Model implements ICalculationCycleListener {
 		if (selectedCalculation == null) {
 			return;
 		}
-		curvesVisible[selectedCalculation.getTableRowIndex()] = true;
-		notifyShowCalculation(selectedCalculation);
+		selectedCalculation.show();
 	}
 
 	/**
@@ -416,10 +450,14 @@ public class Model implements ICalculationCycleListener {
 
 		// deselect calculation
 		selectedCalculation = null;
+		currentZellwegerCalculationCycle = null;
 
 		// notify all listeners that we're removing all closed loops
-		closedLoops.forEach(this::notifyRemoveCalculation);
-		closedLoops = new ArrayList<>();
+		if(calculationCycles != null) {
+			for (CalculationCycle cycle : calculationCycles) {
+				notifyRemoveCalculation(cycle.getClosedLoop());
+			}
+		}
 	}
 
 	/**
@@ -444,9 +482,8 @@ public class Model implements ICalculationCycleListener {
 	 * calculator is given a unique index, which corresponds to the index they will
 	 * end up in in the result table. This is so their order isn't
 	 * undefined, even when they are computed in parallel (See issue #29).
-	 * @return An ArrayList of CalculationCycle objects.
 	 */
-	private ArrayList<CalculationCycle> getCalculators() {
+	private void updateCalculators() {
 
 		ArrayList<CalculationCycle> calculators = new ArrayList<>();
 
@@ -498,17 +535,31 @@ public class Model implements ICalculationCycleListener {
 			i++;
 		}
 
-		return calculators;
+		// in order for the calculators to remember whether they are visible or not, match and copy
+		// the visibility flags from the old calculators and insert them into the new calculators.
+		if(calculationCycles != null) {
+			for (CalculationCycle oldCC : calculationCycles) {
+				for (CalculationCycle newCC : calculators) {
+					if (oldCC.getControllerCalculator().getName().equals(newCC.getControllerCalculator().getName())) {
+						newCC.setVisibilityFlag(oldCC.isVisible());
+						break;
+					}
+				}
+			}
+		}
+
+		calculationCycles = calculators;
 	}
 
 	/**
 	 * Call this to notify that a new completed calculation was added to the
 	 * internal list.
 	 * @param loop The closed loop that was added.
+	 * @param visible Whether or not the calculation should be visible so the GUI knows to show or hide it.
 	 */
-	private synchronized void notifyAddCalculation(ClosedLoop loop) {
+	private synchronized void notifyAddCalculation(ClosedLoop loop, boolean visible) {
 		for (IModelListener listener : listeners) {
-			listener.onAddCalculation(loop, curvesVisible[loop.getTableRowIndex()]);
+			listener.onAddCalculation(loop, visible);
 		}
 	}
 
@@ -592,11 +643,11 @@ public class Model implements ICalculationCycleListener {
 	/**
 	 * Called when a step response calculation completes.
 	 * @param closedLoop The closed loop object holding the results of the step response.
+	 * @param visible Whether or not this calculation is visible, so the GUI knows to show or hide it.
 	 */
 	@Override
-	public final synchronized void onNewCalculationCycleComplete(ClosedLoop closedLoop) {
-		closedLoops.add(closedLoop);
-		notifyAddCalculation(closedLoop);
+	public final synchronized void onNewCalculationCycleComplete(ClosedLoop closedLoop, boolean visible) {
+		notifyAddCalculation(closedLoop, visible);
 	}
 
 	/**
