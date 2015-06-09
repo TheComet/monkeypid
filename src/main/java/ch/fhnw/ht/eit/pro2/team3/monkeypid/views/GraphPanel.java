@@ -27,7 +27,6 @@ import java.awt.*;
 /**
  * GraphPanel is a JPanel which includes the plot of the simulations. For the
  * plot JFreeChart is used.
- * 
  * @author Josua
  *
  */
@@ -36,17 +35,13 @@ public class GraphPanel extends JPanel implements IModelListener,
 	private static final long serialVersionUID = 1L;
 	private XYSeriesCollection dataCollection = null;
 	private JFreeChart chart = null;
-    private View view;
 
 	/**
 	 * The constructor of GraphPanel creates a JPanel with BorderLayout and adds
 	 * a JFreeChart-XY-Plot to the Panel
-	 * 
-	 * @param view
 	 */
-	public GraphPanel(View view) {
+	public GraphPanel() {
 		super(new BorderLayout());
-        this.view = view;
 
 		// collection holds XY data series
 		dataCollection = new XYSeriesCollection();
@@ -77,7 +72,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	/**
-	 * Autoscales the axis (x and y) of the graph, that all data points fit the
+	 * Autoscales the axis (x and y) of the graph so all data points fit the
 	 * visible area
 	 */
 	public void autoScaleAxis() {
@@ -85,14 +80,28 @@ public class GraphPanel extends JPanel implements IModelListener,
 		chart.getXYPlot().getRangeAxis().setAutoRange(true);
 	}
 
+	/**
+	 * Convenience method for retrieving JFreeChart's dataset renderer of the current data collection.
+	 * @return The dataset renderer of the current data collection.
+	 */
 	private XYItemRenderer getDatasetRenderer() {
 		return chart.getXYPlot().getRendererForDataset(dataCollection);
 	}
 
+	/**
+	 * Convenience method for retrieving JFreeChart's series index of the specified closed loop object.
+	 * @param loop The closed loop object to retrieve the index for.
+	 * @return Returns the index of the series corresponding to the specified closed loop object.
+	 */
 	private int getSeriesIndex(ClosedLoop loop) {
 		return dataCollection.getSeriesIndex(loop.getStepResponse().getKey());
 	}
 
+	/**
+	 * Makes the specified closed loop object either visible or hidden.
+	 * @param loop The closed loop object.
+	 * @param flag True to show, false to hide.
+	 */
 	private void setSeriesVisible(ClosedLoop loop, boolean flag) {
 		getDatasetRenderer().setSeriesVisible(getSeriesIndex(loop), flag);
 	}
@@ -132,7 +141,8 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	/**
-	 * Remove the curve of the parameter closedLoop from the graph
+	 * Removes the curve of a closed loop object from the graph.
+	 * @param closedLoop The closed loop object to remove.
 	 */
 	@Override
 	public void onRemoveCalculation(ClosedLoop closedLoop) {
@@ -143,14 +153,17 @@ public class GraphPanel extends JPanel implements IModelListener,
 		});
 	}
 
+	/**
+	 * This is called when a closed loop object has been recalculated and a new XYSeries object is present. This will
+	 * switch the new XYSeries object with the old one. If there was no old one, then a new one will be added.
+	 * @param closedLoop The closed loop object that has been recalculated.
+	 */
 	@Override
 	public void onUpdateCalculation(ClosedLoop closedLoop) {
 		SwingUtilities.invokeLater(() -> {
 			XYSeries oldSeries = dataCollection.getSeries(closedLoop.getStepResponse().getKey());
 			if (oldSeries != null)
 				dataCollection.removeSeries(oldSeries);
-			else
-				System.out.println("oh oh");
 			dataCollection.addSeries(closedLoop.getStepResponse());
 		});
 	}
@@ -159,11 +172,13 @@ public class GraphPanel extends JPanel implements IModelListener,
 	public void onSimulationBegin(int numberOfStepResponses) {
 	}
 
+	/**
+	 * Set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
+	 */
 	@Override
 	public void onSimulationComplete() {
 		SwingUtilities.invokeLater(() -> {
 			ValueAxis yAxis = chart.getXYPlot().getRangeAxis();
-			//set lower y-Axis margin to 0.0 (from default 5%) -> display doesn't flicker, if slider is adjusted
 			yAxis.setLowerMargin(0.00);
 		});
 	}
@@ -179,7 +194,7 @@ public class GraphPanel extends JPanel implements IModelListener,
 	}
 
 	@Override
-	public void onSetPlant(Plant plant) {}
+	public void onNewPlant(Plant plant) {}
 
 	/**
 	 * This is called, if the user clicks with the mouse onto the graph If a

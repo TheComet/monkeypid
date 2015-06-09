@@ -1,8 +1,8 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 /**
- * A global list of the names of each calculator. This makes it easier to have an overview of the names, and manage the
- * names. The calculators will return these in their getName() methods.
+ * A global list of the names of each calculator. This makes it easier to have an overview of the names and to manage
+ * the names. The calculators will return these in their getName() methods.
  * @author Alex Murray
  */
 public class CalculatorNames {

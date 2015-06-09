@@ -14,9 +14,9 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 /**
- * 
+ * The View component of the MVC pattern. This is the top level view and encapsulates all
+ * other views. The views were made public for convenience.
  * @author Josua
- *
  */
 public class View extends JPanel implements ActionListener {
 
@@ -43,8 +43,7 @@ public class View extends JPanel implements ActionListener {
 	 * The constructor from view adds the panel leftPanel, graphPanel and
 	 * graphDisplayPanel with a GridBagLayout to the view panel. For each panel
 	 * a border with a title will be added.
-	 * 
-	 * @param controller
+	 * @param controller The controller to pass events to.
 	 */
 	public View(Controller controller) {
 		super(new GridBagLayout());
@@ -55,7 +54,7 @@ public class View extends JPanel implements ActionListener {
 		inputPanel = new InputPanel(controller, this);
 		outputPanel = new OutputPanel(controller);
 		graphDisplayPanel = new GraphDisplayPanel(controller, this);
-		graphPanel = new GraphPanel(this);
+		graphPanel = new GraphPanel();
 
 		// set border for input and output panel
 		inputPanel.setBorder(new TitledBorder(null, "Eingabe"));

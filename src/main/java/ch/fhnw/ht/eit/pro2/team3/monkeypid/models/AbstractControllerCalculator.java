@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 
 /**
  * Defines the common interface for a class capable of calculating controllers. The class takes a plant as an input,
- * and spits out new controller objects as its output. There are many different ways to calculate a controller, see
+ * and spits out new controller objects as its output. There are many different ways to calculate a controller. See
  * the derived classes for more detailed information on various methods.
  *
  * Each calculator defines a unique name, colour, and holds various other values required for various methods being

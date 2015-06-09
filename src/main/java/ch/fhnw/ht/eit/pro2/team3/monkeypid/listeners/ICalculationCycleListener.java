@@ -13,7 +13,7 @@ public interface ICalculationCycleListener {
 	 * By "new" this means that this is the first time the step response has been calculated.
 	 * @param closedLoop The closed loop object that completed the step response calculation.
 	 */
-	void onNewCalculationCycleComplete(ClosedLoop closedLoop);
+	void onNewCalculationCycleComplete(ClosedLoop closedLoop, boolean visible);
 
 	/**
 	 * This is called when the calculation cycle finishes re-calculating an existing step response.

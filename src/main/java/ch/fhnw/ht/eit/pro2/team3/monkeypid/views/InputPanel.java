@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
  * Creates a panel which includes the input fields for Tu, Tg, Ks, Tp,
  * Overshoot, a comboBox to select the regulator, the buttons and the table with
  * the results of the simulation and a slider to trimm the curve.
- * 
+ *
  * @author Josua
  *
  */
@@ -278,7 +278,6 @@ public class InputPanel extends JPanel implements ActionListener,
 				lbValueErrorInfo.setText("Wert von TP ist grösser als 10");
 			} else if (tfOvershoot.getText().equals("")) {
 				lbValueErrorInfo.setText("error");
-
 			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
@@ -336,16 +335,14 @@ public class InputPanel extends JPanel implements ActionListener,
 		}
 	}
 
-	// TODO Murray
 	/**
-	 * 
+	 * Updates the view with the order of the plant.
 	 */
 	@Override
-	public void onSetPlant(Plant plant) {
+	public void onNewPlant(Plant plant) {
 		// set color of error info label to red
 		lbValueErrorInfo.setForeground(Color.BLACK);
-		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder()
-				+ ")");
+		lbValueErrorInfo.setText("(Ordnung der Strecke = " + plant.getOrder() + ")");
 	}
 
 	@Override

@@ -23,8 +23,6 @@ public class ControllerPITest {
 		double[] DenominatorExpected = {3.3122, 0.0};
 		assertArrayEquals(NumeratorExpected, myControllerPI.getTransferFunction().getNumeratorCoefficients(),delta);
 		assertArrayEquals(DenominatorExpected, myControllerPI.getTransferFunction().getDenominatorCoefficients(),delta);
-		
-		
 	}
 	
 	@Test

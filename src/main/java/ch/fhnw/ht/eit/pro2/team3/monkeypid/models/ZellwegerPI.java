@@ -9,11 +9,6 @@ import java.awt.*;
 public class ZellwegerPI extends AbstractZellweger {
 	private static final double angleOfInflection = -90.0;
 
-	@Override
-	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
-		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
-	}
-
 	/**
 	 * Constructs a new Zellweger calculator using the specified plant.
 	 * @param plant The plant to calculate a controller for.
@@ -84,6 +79,33 @@ public class ZellwegerPI extends AbstractZellweger {
 	}
 
 	/**
+	 * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
+	 * @return The name of this controller.
+	 */
+	@Override
+	public String getName() {
+		return CalculatorNames.ZELLWEGER_PI;
+	}
+
+	/**
+	 * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
+	 * @return The render color.
+	 */
+	@Override
+	public Color getColor() {
+		return RenderColors.ZELLWEGER_PI;
+	}
+
+	/**
+	 * Sets the angle of inflection with an additional offset added to it.
+	 * @param angleOfInflectionOffset The offset to add to the original angle of inflection.
+	 */
+	@Override
+	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
+		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
+	}
+
+	/**
 	 * Calculates the appropriate controller for the specified plant.
 	 * @return Returns a new PI controller.
 	 */
@@ -127,23 +149,5 @@ public class ZellwegerPI extends AbstractZellweger {
 
 		// Kr is the reciprocal of the amplitude at omegaDamping
 		return 1.0 / ampOpenLoopKr;
-	}
-
-	/**
-	 * Gets the name of this calculator. The names are stored in a global class called CalculatorNames.
-	 * @return The name of this controller.
-	 */
-	@Override
-	public String getName() {
-		return CalculatorNames.ZELLWEGER_PI;
-	}
-
-	/**
-	 * Gets the render colour of this calculator. The colours are stored in a global class called RenderColors.
-	 * @return The render color.
-	 */
-	@Override
-	public Color getColor() {
-		return RenderColors.ZELLWEGER_PI;
 	}
 }

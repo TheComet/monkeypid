@@ -31,7 +31,6 @@ public class SaniCurves {
 	}
 
 	private int numTableColumns;
-	private double TuTgRatio;
 
 	// raw tables from matlab
 	private ArrayList<double[]> tu_tg_ratio = null;
@@ -101,7 +100,6 @@ public class SaniCurves {
 	 * up to 8 time constants.
 	 */
 	public double[] calculateTimeConstants(double tu, double tg) {
-		TuTgRatio = tu / tg;
 		return calculateTimeConstantsCubicNAK(tu, tg);
 	}
 
@@ -148,6 +146,7 @@ public class SaniCurves {
 	 * @return Returns a double array of time constants. Depending on the complexity of the plant, this array can have
 	 * up to 8 time constants.
 	 */
+	@Deprecated
 	public double[] calculateTimeConstantsSpline(double tu, double tg) {
 
 		double TuTgRatio = tu / tg;
@@ -291,7 +290,6 @@ public class SaniCurves {
 	 * Prepares the cubic NAK b, c, and d coefficients so there's less overhead when calculating the time constants
 	 * later.
 	 */
-	//calculate double arrays b, c, d of all orders for CubicNAK
 	private void calculateCubicNAKFunctions(){
 
 		double[] r = MathStuff.linspace(0, 1, numTableColumns);
