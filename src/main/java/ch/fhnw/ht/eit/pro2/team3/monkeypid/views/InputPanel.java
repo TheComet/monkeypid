@@ -73,7 +73,8 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
 	 * 
-	 * @param controller
+	 * @param controller // TODO Stierli
+	 * @param view // TODO Stierli
 	 */
 	public InputPanel(Controller controller, View view) {
 		super(new GridBagLayout());
@@ -191,21 +192,18 @@ public class InputPanel extends JPanel implements ActionListener, IModelListener
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
 	 * 
-	 * @param miniVersionSelected
+	 * @param miniVersionSelected // TODO Stierli
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
 	}
 
 	/**
-<<<<<<< HEAD
 	 * If button simulate is pressed the fields will be checked and if
 	 * everything is correct the values will comitted to the controller.
 	 * Furthermore fields will be greyed out depending on the regulator which is
 	 * selected.
-=======
 	 * // TODO Stierli
->>>>>>> cleanup
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

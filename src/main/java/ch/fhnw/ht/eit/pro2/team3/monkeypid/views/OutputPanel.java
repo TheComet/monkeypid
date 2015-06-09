@@ -270,6 +270,6 @@ public class OutputPanel extends JPanel implements IModelListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		controller.phaseInflectionChanged(slTrimmSlider.getValue());
+		controller.angleOfInflectionOffsetChanged(slTrimmSlider.getValue());
 	}
 }

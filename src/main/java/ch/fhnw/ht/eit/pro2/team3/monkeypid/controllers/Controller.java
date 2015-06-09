@@ -51,10 +51,10 @@ public class Controller {
 	/**
 	 * This is called, when the user adjusts the slider. Then the model has to update the ZellwegerController.
 	 * This is done with updateZellweger()
-	 * @param phaseInflectionOffset The actual value of the slider (the offset of the phaseInflection).
+	 * @param angleOfInflectionOffset The actual value of the slider (the offset of the phaseInflection).
 	 */
-	public void phaseInflectionChanged(int phaseInflectionOffset){
-		model.updateZellweger(phaseInflectionOffset);
+	public void angleOfInflectionOffsetChanged(int angleOfInflectionOffset){
+		model.updateZellweger(angleOfInflectionOffset);
 	}
 
 	/**
