@@ -46,6 +46,7 @@ public class Controller {
 		model.setParasiticTimeConstantFactor(tpValue);
 		model.setOvershoot(overshoot);
 		model.simulateAll();
+		angleOfInflectionOffsetChanged(-10);
 	}
 	
 	/**
