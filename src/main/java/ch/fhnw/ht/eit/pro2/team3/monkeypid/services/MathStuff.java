@@ -10,6 +10,8 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+import java.text.DecimalFormat;
+
 /**
  * Contains various common math functions we need.
  * @author Alex Murray
@@ -503,7 +505,7 @@ public class MathStuff {
 	 * 			(but no problem, they are only roots ;-))
 	 */
 	public static Complex[] roots(double[] pOriginal) {
-        boolean d = false; //debug on/off
+        boolean d = true; //debug on/off
 
         //make a copy of the original polynomial values -> original polynomial won't be touched
 		double[] p = new double[pOriginal.length];
@@ -569,9 +571,9 @@ public class MathStuff {
 				}
 			}
             //if root has no complex-conjugated partner -> remove imaginary-part
-			if(rootCorrect == false){
-				res[i] = new Complex(res[i].getReal(),0.0);
-			}
+			if(rootCorrect == false) {
+                res[i] = new Complex(res[i].getReal(), 0.0);
+            }
 		}
 
         //debug
@@ -582,8 +584,214 @@ public class MathStuff {
             }
         }
 
-		return res;
+        // Um mit Matlab konform zu sein flippen:
+        Complex[] resFlip = new Complex[res.length];
+        for (int k = 0; k < res.length; k++)
+            resFlip[res.length - k - 1] = res[k];
+
+		return resFlip;
 	}
+
+    /**
+     * new Wyss
+     * @param pOriginal
+     * @return
+     */
+    public static Complex[] roots2(double[] pOriginal) {
+        boolean d = true; //debug on/off
+        final LaguerreSolver solver = new LaguerreSolver(1e-16);
+
+        //make a copy of the original polynomial values -> original polynomial won't be touched
+        double[] p = new double[pOriginal.length];
+        for(int i=0; i < p.length; i++){
+            p[i] = pOriginal[i];
+        }
+
+        //debug
+        if(d) {
+            System.out.println("poly: ");
+            for (int i = 0; i < p.length; i++) {
+                System.out.println("koef " + i + ": real: " + p[i]);
+            }
+        }
+
+        // Koeffizient der höchsten Potenz durch Multiplikation mit einer Konstanten auf 1 normieren:
+        double sFactor = 1.0 / p[0];
+        for (int i = 0; i < p.length; i++) {
+            p[i] = p[i] * sFactor;
+        }
+
+        // Nullstellen bei Null zählen und entfernen
+        int n = 0;
+        while (p[p.length-1-n]<=1e-15) {
+            n++;
+        }
+        double[] pnz = new double[p.length - n];
+        for (int k = 0; k < pnz.length; k++) {
+            pnz[k] = p[k];
+        }
+
+        // Normierungskonstante berechnen:
+        sFactor = Math.pow(p[pnz.length - 1], 1.0 / (p.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+        for (int i = 0; i < pnz.length; i++) {
+            pnz[i] /= Math.pow(sFactor, i);
+        }
+
+        // Um mit Matlab konform zu sein flippen:
+        double[] flip = new double[pnz.length];
+        for (int i = 0; i < flip.length; i++)
+            flip[pnz.length - i - 1] = pnz[i];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+        Complex[] resTemp = solver.solveAllComplex(flip, 0.0);
+        if(d) System.out.println("Roots, count: " + resTemp.length);
+        for (int i = 0; i < resTemp.length; i++) {
+            resTemp[i] = resTemp[i].multiply(sFactor);
+            if(d) System.out.println("root "+i+": real: "+resTemp[i].getReal()+" imag: "+resTemp[i].getImaginary());
+        }
+
+        Complex[] res = new Complex[resTemp.length + n];
+
+        // Um mit Matlab konform zu sein flippen:
+        int k = 0;
+        for (; k < resTemp.length; k++)
+            res[res.length - k - 1] = resTemp[k];
+        // Nullstellen bei Null hinzufügen:
+        for (; k < res.length; k++) {
+            res[res.length - k - 1] = new Complex(0.0, 0.0);
+        }
+
+        //search for roots, which have an imaginary-part which isn't 0.0 and are not a complex-conjugated pairs.
+        //-> remove the imaginary-part from this roots, because polynomials with real coefficients are always
+        // complex-conjugated pairs.
+        for (int i = 0; i < res.length; i++) {
+            Complex resBuffer = res[i];
+            boolean rootCorrect = false;
+            //if root is not only real, check, if root is complex-conjugated, else, remove imaginary part
+            if(resBuffer.getImaginary() != 0.0){
+                //check each other root, if it has the same real-part, if yes, check, if the imaginary part is complex conjugated
+                //if no, remove the imaginary part of the root
+                for (int j = 0; j < res.length; j++) {
+                    if(j != i){
+                        if(almostEqual2sComplement(res[j].getReal(), resBuffer.getReal(), 5000) && almostEqual2sComplement(res[j].getImaginary(),-resBuffer.getImaginary(),5000)){  //old max: 500
+                            rootCorrect = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            //if root has no complex-conjugated partner -> remove imaginary-part
+            if(rootCorrect == false){
+                res[i] = new Complex(res[i].getReal(),0.0);
+            }
+        }
+
+        //debug
+        if(d) {
+            System.out.println("roots cleande: ");
+            for (int i = 0; i < res.length; i++) {
+                System.out.println("root " + i + ": real: " + res[i].getReal() + " imag: " + res[i].getImaginary());
+            }
+        }
+
+        return res;
+    }
+
+
+    public static final Complex[] rootsGut(double[] poly) {
+        final LaguerreSolver solver = new LaguerreSolver(1e-16);
+        double[] p = new double[poly.length];
+
+        // Koeffizient der höchsten Potenz auf durch Multiplikation mit einer
+        // Konstanten auf 1 normieren:
+        double s = 1.0 / poly[0];
+        for (int i = 0; i < poly.length; i++) {
+            p[i] = poly[i] * s;
+        }
+
+        // Nullstellen bei Null zählen und entfernen
+        int n = 0;
+        while (p[p.length-1-n]<=1e-15) {
+            n++;
+        }
+        double[] pnz = new double[p.length - n];
+        for (int k = 0; k < pnz.length; k++) {
+            pnz[k] = p[k];
+        }
+
+        // Normierungskonstante berechnen:
+        s = Math.pow(p[pnz.length - 1], 1.0 / (p.length - 1));
+
+        // Durch [s^0 s^1 s^2 s^3 ... s^N] dividieren:
+        for (int i = 0; i < pnz.length; i++)
+            pnz[i] /= Math.pow(s, i);
+
+        // Um mit Matlab konform zu sein flippen:
+        double[] flip = new double[pnz.length];
+        for (int i = 0; i < flip.length; i++)
+            flip[pnz.length - i - 1] = pnz[i];
+
+        // Wurzeln berechnen und durch Multiplikation mit s wieder entnormieren:
+        Complex[] r = solver.solveAllComplex(flip, 0.0);
+        for (int i = 0; i < r.length; i++) {
+            r[i] = r[i].multiply(s);
+        }
+
+        Complex[] res = new Complex[r.length + n];
+
+        // Um mit Matlab konform zu sein flippen:
+        int i = 0;
+        for (; i < r.length; i++)
+            res[res.length - i - 1] = r[i];
+        // Nullstellen bei Null hinzufügen:
+        for (; i < res.length; i++) {
+            res[res.length - i - 1] = new Complex(0.0, 0.0);
+        }
+
+        // Imaginärteil von NS, die nich konjugiert komplex vorkommen, auf Null setzen.
+        boolean[] cc = new boolean[res.length];
+        for (int j = 0; j < res.length-1; j++) {
+            if( assertEq(res[j].getReal(), res[j+1].getReal(), 8) && assertEq(res[j].getImaginary(), -res[j+1].getImaginary(), 8)){
+                cc[j] = cc[j+1] = true;
+            }
+        }
+        for (int j = 0; j < cc.length; j++) {
+            if(!cc[j])
+                res[j] = new Complex(res[j].getReal(), 0.0);
+            else {
+                res[j] = new Complex((res[j].getReal()+res[j+1].getReal())/2.0, (res[j].getImaginary()-res[j+1].getImaginary())/2.0);
+                res[j+1] = new Complex(res[j].getReal(), -res[j++].getImaginary());
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * <pre>
+     * Prüft ob exp und act, auf n signifikante Stellen, übereinstimmen.
+     * </pre>
+     * @param exp
+     * @param act
+     * @param n
+     * @return
+     */
+    public static boolean assertEq(double exp, double act, int n) {
+        String fmt = "0.";
+        for (int j = 0; j < n-1; j++) {
+            fmt += "0";
+        }
+        fmt +="E000";
+
+        DecimalFormat decimalFormat = new DecimalFormat(fmt);
+        String stExp = decimalFormat.format(exp);
+        String stAct = decimalFormat.format(act);
+        return stExp.equals(stAct);
+    }
+
+
 
     /**
      * Compares two doubles and returns true if they are equal in the range of maxUlps double values

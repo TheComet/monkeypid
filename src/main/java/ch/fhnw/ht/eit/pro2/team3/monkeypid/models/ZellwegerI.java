@@ -59,7 +59,12 @@ public class ZellwegerI extends AbstractZellweger {
 	 */
 	@Override
 	public void setAngleOfInflectionOffset(double angleOfInflectionOffset) {
-		setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
+        //limit angleOfInflectionOffset to -50.0 degree -> angleOfInflection will be maximum -95 degree
+        //else, the controller swings to much and the calculation fails.
+        if((angleOfInflectionOffset) < -50.0){
+            angleOfInflectionOffset = -50.0;
+        }
+        setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
 	}
 
 	/**
