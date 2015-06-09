@@ -502,7 +502,6 @@ public class MathStuff {
      * This method removes at the end also imaginary-parts from real roots
 	 * @param pOriginal Polynomial coefficients
 	 * @return Roots Attention the Roots have sometimes not the same order as in Matlab
-	 * 			(but no problem, they are only roots ;-))
 	 */
 	public static Complex[] roots(double[] pOriginal) {
         boolean d = true; //debug on/off
@@ -593,11 +592,11 @@ public class MathStuff {
 	}
 
     /**
-     * new Wyss
-     * @param pOriginal
-     * @return
+     * Does the same as roots, but should also work for multiple roots at Zero
+     * @param pOriginal Polynomial coefficients
+     * @return Roots Attention the Roots have sometimes not the same order as in Matlab
      */
-    public static Complex[] roots2(double[] pOriginal) {
+    public static Complex[] roots1(double[] pOriginal) {
         boolean d = true; //debug on/off
         final LaguerreSolver solver = new LaguerreSolver(1e-16);
 

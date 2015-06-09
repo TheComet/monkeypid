@@ -178,6 +178,11 @@ public class ZellwegerPID extends AbstractZellweger {
         if((angleOfInflectionOffset) > 50.0){
             angleOfInflectionOffset = 50.0;
         }
+        //limit angleOfInflectionOffset to -35.0 degree -> angleOfInflection will be minimum -165 degree
+        //else, the controller swings to much and the calculation fails.
+        if((angleOfInflectionOffset) < -30.0){
+            angleOfInflectionOffset = -30.0;
+        }
         setAngleOfInflection(angleOfInflection + angleOfInflectionOffset);
 	}
 
