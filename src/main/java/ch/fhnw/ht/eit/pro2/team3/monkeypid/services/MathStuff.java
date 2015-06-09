@@ -410,8 +410,6 @@ public class MathStuff {
 		return new Object[]{residues,poles,constantK};
 	}
 
-
-
 	/**
 	 * Computes the polynomial coefficients with the specified roots.
 	 * This was ported from matlab's poly() function
@@ -588,14 +586,14 @@ public class MathStuff {
 	}
 
     /**
-     * Compares two doubles and returns true, if they are equal in the range of maxUlps double values
+     * Compares two doubles and returns true if they are equal in the range of maxUlps double values
      * The method compares the bits of the mantissa and the exponent
      * Original C code taken from: http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
-     * C code translated to Java
+     * C code ported to Java
      * @param a The first double to compare with a second double b
      * @param b The second double to compare with the first double a
      * @param maxUlps The maximum difference of the two doubles in bits of the Mantisse
-     * @return
+     * @return Returns true of the values are closed enough, false if otherwise.
      */
 	public static boolean almostEqual2sComplement(double a, double b, int maxUlps)
 	{

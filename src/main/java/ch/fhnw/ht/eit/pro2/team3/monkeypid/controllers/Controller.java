@@ -4,7 +4,7 @@ import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.Model;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.views.View;
 
 /**
- * Controller part of the MVC pattern
+ * The controller part of the MVC pattern. This delegates tasks from the View to the model.
  * @author Josua Stierli
  */
 public class Controller {
@@ -12,7 +12,7 @@ public class Controller {
 	private View view;
 
 	/**
-	 * Constructor
+	 * Constructs a new controller and controls the specified model.
 	 * @param model The model to control.
 	 */
 	public Controller(Model model) {
@@ -21,7 +21,7 @@ public class Controller {
 	
 	/**
 	 * Connects the View with the Controller for the MVC pattern.
-	 * @param view The view to control.
+	 * @param view The view.
 	 */
 	public void setView(View view){
 		this.view = view;
@@ -58,7 +58,7 @@ public class Controller {
 	}
 
 	/**
-	 * This is called when the user marks one of the show/hide checkboxes. The appropriate curve in the chart should
+	 * This is called when the user checks one of the show/hide checkboxes. The appropriate curve in the chart should
 	 * be shown.
 	 * @param closedLoopName The name of the curve to show.
 	 */
@@ -68,9 +68,9 @@ public class Controller {
 	}
 
 	/**
-	 * This is called when the user unmarks one of the show/hide checkboxes. The appropriate curve in the chart should
+	 * This is called when the user unchecks one of the show/hide checkboxes. The appropriate curve in the chart should
 	 * be hidden.
-	 * @param closedLoopName
+	 * @param closedLoopName The name of the curve to hide.
 	 */
 	public void cbUncheckAction(String closedLoopName) {
 		model.selectCalculation(closedLoopName);

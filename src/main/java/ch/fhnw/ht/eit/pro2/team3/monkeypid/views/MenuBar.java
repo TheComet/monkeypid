@@ -30,7 +30,6 @@ import com.itextpdf.text.pdf.PdfWriter;
  * MenuBar creates a menuBar with two menuItems: data and help. The menuItem
  * data includes two items. The first one is for selecting the mini- or normal
  * version. The second item is for closing the whole java application.
- * 
  * @author Josua
  *
  */
@@ -82,8 +81,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 	/**
 	 * The constructor of MenuBar adds all the items to the menuBar.
-	 * 
-	 * @param view
+	 * @param view The root view object. This is required to make components visible/invisible when
+	 *             switching between mini version and normal version.
 	 */
 	public MenuBar(View view) {
 		this.view = view;
@@ -184,8 +183,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 	/**
 	 * Opens an URL in the standard browser.
-	 * 
-	 * @param stringURL
+	 * @param stringURL The URL to open.
 	 */
 	private void openURLInBrowser(String stringURL) {
 		try {
@@ -200,7 +198,6 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	 * closes the application - If menuItem info is selected, a dialog windows
 	 * is appears with informations about the tool - if menuItem
 	 * miniVersionSelected is pressed, it switch between mini- and normal-version
-	 * 
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -295,8 +292,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
      * The View is transformed to fit an A3 sheet.
      * Code-Parts from:
      * http://stackoverflow.com/questions/4517907/how2-add-a-jpanel-to-a-document-then-export-to-pdf
-     * @param file
-     * @param view
+     * @param file The suggested filename.
+     * @param view The view to print.
      */
 	private void PrintFrameToPDF(String file, View view) {
 		Document d = new Document(PageSize.A3.rotate(), 50, 50, 50, 50);
