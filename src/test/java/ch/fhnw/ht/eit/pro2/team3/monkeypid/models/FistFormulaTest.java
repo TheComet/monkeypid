@@ -6,12 +6,18 @@ import org.junit.Test;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
 
+/**
+ * Test the FistFormulas
+ */
 public class FistFormulaTest {
 
 	private SaniCurves sani = new SaniCurves();
 	Plant plant = new Plant(2, 6, 3, sani);
 	//Tu = 2, Tg = 6, Ks = 3
-	
+
+    /**
+     * Test all FistFormulas
+     */
 	@Test
 	public void testFistFormulas() {
 		AbstractControllerCalculator cc = new FistFormulaOppeltPI(plant);

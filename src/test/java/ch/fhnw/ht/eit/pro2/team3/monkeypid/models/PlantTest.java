@@ -5,10 +5,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test the plant
+ */
 public class PlantTest {
 
 	private SaniCurves sani = new SaniCurves();
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testTimeConstantsTu2Tg6Ks1() throws Exception {
 		Plant plant = new Plant(2, 6, 1, sani);
@@ -19,6 +25,9 @@ public class PlantTest {
 		assertEquals(2.19568059974042, plant.getTimeConstants()[4], TestGlobals.saniDelta);
 	}
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testTimeConstantsTu2Tg9Ks3() throws Exception {
 		Plant plant = new Plant(2, 9, 3, sani);
@@ -28,6 +37,9 @@ public class PlantTest {
 		assertEquals(4.22070379102517, plant.getTimeConstants()[3], TestGlobals.saniDelta);
 	}
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testConstructorTransferFunctionTu2Tg6Ks1() throws Exception {
 		Plant plant = new Plant(2, 6, 1, sani);
@@ -46,6 +58,9 @@ public class PlantTest {
 		assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
 	}
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testConstructorTransferFunctionTu2Tg9Ks3() throws Exception {
 		Plant plant = new Plant(2, 9, 3, sani);
@@ -63,6 +78,9 @@ public class PlantTest {
 		assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[4], TestGlobals.plantTransferDelta);
 	}
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testSetParametersTransferFunctionTu2Tg6Ks1() throws Exception {
 		Plant plant = new Plant(0, 1, 14, sani); // some garbage values that don't throw an exception
@@ -84,6 +102,9 @@ public class PlantTest {
 		assertEquals(1.00000000000000, plant.getTransferFunction().getDenominatorCoefficients()[5], TestGlobals.plantTransferDelta);
 	}
 
+    /**
+     * TimeConstants calculation Test
+     */
 	@Test
 	public void testSetParametersTtransferFunctionTu2Tg9Ks3() throws Exception {
 		Plant plant = new Plant(0, 1, 18, sani); // some garbage values that don't throw an exception

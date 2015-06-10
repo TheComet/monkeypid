@@ -5,8 +5,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test the saniCurves
+ */
 public class SaniCurvesTest {
 
+    /**
+     * Test the LookupPower
+     */
 	@Test
 	public void testLookupPower() throws Exception {
 		SaniCurves c = new SaniCurves();
@@ -35,12 +41,18 @@ public class SaniCurvesTest {
 		assertEquals(8, c.lookupOrder(0.64173));
 	}
 
+    /**
+     * Test the LookupPower
+     */
 	@Test(expected=RuntimeException.class)
 	public void testLookupPowerInvalidValue() {
 		SaniCurves c = new SaniCurves();
 		c.lookupOrder(0.64174); // last magic number
 	}
 
+    /**
+     * Test the TimeConstants calculation
+     */
 	@Test
 	public void testcalculateTimeConstantsLinear() throws Exception {
 		SaniCurves c = new SaniCurves();
@@ -96,13 +108,18 @@ public class SaniCurvesTest {
 		assertEquals(0.315939670441090, tc[7], TestGlobals.saniDelta);
 	}
 
+    /**
+     * Test the TimeConstants calculation
+     */
 	@Test(expected=RuntimeException.class)
 	public void testcalculateTimeConstantsLinearWithInvalidRatio() {
 		SaniCurves c = new SaniCurves();
 		c.calculateTimeConstantsLinear(1, 1.5582);
 	}
 
-	//test with new spline function
+    /**
+     * Test the TimeConstants calculation with new spline function
+     */
 	@Test
 	public void testcalculateTimeConstantsSpline() throws Exception {
 		SaniCurves c = new SaniCurves();
@@ -158,7 +175,9 @@ public class SaniCurvesTest {
 		assertEquals(0.315939670441090, tc[7], TestGlobals.saniDeltaSpline);
 	}
 
-	//test with new spline function
+    /**
+     * Test the TimeConstants calculation with new spline function
+     */
 	@Test
 	public void testcalculateTimeConstantsCubicNAK() throws Exception {
 		SaniCurves c = new SaniCurves();
