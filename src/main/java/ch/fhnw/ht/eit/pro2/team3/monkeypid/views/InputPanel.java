@@ -286,21 +286,21 @@ public class InputPanel extends JPanel implements ActionListener,
 						.setText("Wert des Überschwingens muss kleiner gleich 45% sein");
 			} else if (tfTpValue <= 0) {
 				// error message if value of tp is smaller than 0
-				lbValueErrorInfo.setText("Wert von TP ist kleiner als 0");
-			} else if (tfTpValue > 10) {
+				lbValueErrorInfo.setText("Der Faktor für Tp muss grösser als 0% sein");
+			} else if (tfTpValue > 1) {
 				// error message if value of tp is greater than 10
-				lbValueErrorInfo.setText("Wert von TP ist grösser als 10");
+				lbValueErrorInfo.setText("Der Faktor für Tp muss kleiner gleich 100% sein");
 			} else if (tfOvershoot.getText().equals("")) {
                 lbValueErrorInfo.setText("error");
-            } else if(selectedRegulatorName.equals("I") && (tfKsValue  <= 0.09)) {
+            } else if(selectedRegulatorName.equals("I") && (tfKsValue  < 0.1)) {
                 //if I-Controller selected -> limit Ks to lower values
                 // error message if value is too small
-                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler grösser als 0.09 sein");
+                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler grösser gleich 0.1 sein");
             }
-            else if(selectedRegulatorName.equals("I") && (tfKsValue  >= 2.6)) {
+            else if(selectedRegulatorName.equals("I") && (tfKsValue  > 2.5)) {
                 //if I-Controller selected -> limit Ks to lower values
                 // error message if value is too big
-                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler kleiner als 2.6 sein");
+                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler kleiner gleich 2.5 sein");
 			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
