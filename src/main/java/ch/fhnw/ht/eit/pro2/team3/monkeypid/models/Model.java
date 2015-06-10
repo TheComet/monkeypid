@@ -628,7 +628,7 @@ public class Model implements ICalculationCycleListener {
 	/**
 	 * Call this to notify that a Plant has been set. This should cause the inputPanel to
 	 * show the order of the new set plant in the GUI
-	 * @param plant
+	 * @param plant The plant being set.
 	 */
 	private void notifySetPlant(Plant plant) {
 		for (IModelListener listener : listeners) {
