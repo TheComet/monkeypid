@@ -5,10 +5,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test the ZellwegerPID
+ */
 public class ZellwegerPIDTest {
 
 	SaniCurves sani = new SaniCurves();
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu0_1Tg0_3Ks1phi45() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 45);
@@ -22,6 +28,9 @@ public class ZellwegerPIDTest {
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu0_1Tg0_3Ks1phi76_3() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(0.1, 0.3, 1, sani), 76.3);
@@ -35,6 +44,9 @@ public class ZellwegerPIDTest {
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu2Tg6Ks1phi45() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 1, sani), 45);
@@ -48,6 +60,9 @@ public class ZellwegerPIDTest {
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu2Tg6Ks3phi45() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 6, 3, sani), 45);
@@ -61,6 +76,9 @@ public class ZellwegerPIDTest {
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu2Tg9Ks1phi45() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(2, 9, 1, sani), 45);
@@ -74,6 +92,9 @@ public class ZellwegerPIDTest {
 		assertEquals(0.7572, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
+    /**
+     * Test the ZellwegerPID
+     */
 	@Test
 	public void testCalculateTu1_5Tg17Ks1phi45() throws Exception {
 		AbstractControllerCalculator cc = new ZellwegerPID(new Plant(1.5, 17, 1, sani), 45);

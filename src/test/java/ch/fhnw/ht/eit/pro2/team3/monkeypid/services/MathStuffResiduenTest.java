@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
+/**
+ * Test MathFunctions which are used by stepResidue()
+ */
 public class MathStuffResiduenTest {
 	double[] B = {4.0812, 1.1400};
 	double[] A = {7.4902, 33.6613, 46.4843, 23.2772, 7.6612, 1.1400};
@@ -18,6 +21,9 @@ public class MathStuffResiduenTest {
 	
 	double[] BequalExpected = {0,  -17.2011};
 
+    /**
+     * Test RemoveLeadingZeros
+     */
 	@Test
 	public void testResidueSimpleRemoveLeadingZeros() {
 				
@@ -25,7 +31,10 @@ public class MathStuffResiduenTest {
 		
 		assertArrayEquals(B, AremovedLeadingZeros, 0.01);
 	}
-	
+
+    /**
+     * Test calculateK
+     */
 	@Test
 	public void testResidueSimpleCalculateK() {
 		
@@ -54,6 +63,9 @@ public class MathStuffResiduenTest {
 		
 	}
 
+    /**
+     * Test Roots()
+     */
 	@Test
 	public void testResidueSimpleRoots() {
 		Complex[] myRoots =  MathStuff.roots(A);
@@ -72,7 +84,10 @@ public class MathStuffResiduenTest {
 		assertEquals(+ 0.0000, myRoots[3].getImaginary(), delta);
 		assertEquals(- 0.3537, myRoots[4].getImaginary(), delta);
 	}
-	
+
+    /**
+     * Test Roots()
+     */
 	@Test
 	public void testResidueSimpleRoots2() {
 		double delta = 0.001;
@@ -109,7 +124,10 @@ public class MathStuffResiduenTest {
 		assertEquals(0, myRoots2[6].getImaginary(),delta);
 		
 	}
-	
+
+    /**
+     * Test poly()
+     */
 	@Test
 	public void testResidueSimpleComplexPoly() {
 		double delta = 0.001;
@@ -137,7 +155,10 @@ public class MathStuffResiduenTest {
 		assertEquals(0.0, pa[5].getImaginary(), delta);
 		
 	}
-	
+
+    /**
+     * Test residueSimple
+     */
 	@Test
 	public void testResidueSimpleItSelfe(){
 		double delta = 0.001;
@@ -172,7 +193,10 @@ public class MathStuffResiduenTest {
 		assertEquals(0.2178,R[4].getImaginary(),delta);
 		
 	}
-	
+
+    /**
+     * Test setpResidue
+     */
 	@Test
 	public void testResidueStepResidue(){
 		double delta = 0.001;
@@ -186,6 +210,9 @@ public class MathStuffResiduenTest {
 		
 	}
 
+    /**
+     * Test Roots()
+     */
     @Test
     public void testResidueSimpleRoots3() {
         double delta = 0.001;
@@ -205,6 +232,9 @@ public class MathStuffResiduenTest {
         assertEquals(1.4142135623730951,r[0].getImaginary(),delta);
     }
 
+    /**
+     * Test Roots()
+     */
     @Test
     public void testResidueSimpleRoots4() {
         double delta = 0.001;
