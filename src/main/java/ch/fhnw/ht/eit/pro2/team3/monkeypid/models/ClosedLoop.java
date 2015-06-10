@@ -2,7 +2,6 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.MathArrays;
 import org.jfree.data.xy.XYSeries;
@@ -10,7 +9,6 @@ import org.jfree.data.xy.XYSeries;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Defines a system consisting of a plant and a controller. The closed loop will calculate its own transfer function
@@ -177,14 +175,14 @@ public class ClosedLoop {
 	 * @param numSamplePoints The number of sample points to use for the inverse fourier transform. Note that if the
 	 *                        specified number isn't a power of 2, it will be rounded up to the next power of 2.
 	 */
+	@SuppressWarnings("unused")
 	private void calculateStepResponseIFFT(int numSamplePoints) {
 
 		//calculate fs based on the sum of all timeConstants
 		double magicConstant = 400.0; // this was determined by testing
-		List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
 		double timeAllTimeConstants = 0.0;
-		for (Object aTimeConstantsList : timeConstantsList) {
-			timeAllTimeConstants += (double) aTimeConstantsList;
+		for (double aTimeConstantsList : plant.getTimeConstants()) {
+			timeAllTimeConstants += aTimeConstantsList;
 		}
 		double fs = 1.0/(timeAllTimeConstants/magicConstant);
 
@@ -233,8 +231,8 @@ public class ClosedLoop {
 		// largest imaginary part. fs = magicFactor * largestImag / (2*pi)
 		double magicConstant = 50.0; // This was determined through testing
 		Complex[] roots = MathStuff.roots(MathStuff.removeLeadingZeros(transferFunction.getDenominatorCoefficients()));
-		double largestImag = MathStuff.maxFromNegativeInfinity(MathStuff.imag(roots));
-		double largestReal  = MathStuff.maxFromNegativeInfinity(MathStuff.real(roots));
+		double largestImag = MathStuff.max(MathStuff.imag(roots));
+		double largestReal  = MathStuff.max(MathStuff.real(roots));
 		double fs = magicConstant * largestImag  / (2.0 * Math.PI);
 
 		// determine number of sample points now that fs is known

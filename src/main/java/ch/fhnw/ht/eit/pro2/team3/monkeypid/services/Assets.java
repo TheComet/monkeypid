@@ -1,17 +1,12 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.stream.Stream;
+
+import javax.swing.ImageIcon;
 
 /**
  * Manages the loading of various assets used throughout the application. All methods are static, so the Assets class

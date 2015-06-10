@@ -24,7 +24,6 @@ public class JFormattedDoubleTextField extends JTextField implements
 	private DecimalFormat formatter = new DecimalFormat("###.##");
 	private int digits = 0;
 	private boolean edited = false;
-	private boolean errorDisplayed = false;
 	private InputVerifier verifyer;
 
 	public JFormattedDoubleTextField(int col) {

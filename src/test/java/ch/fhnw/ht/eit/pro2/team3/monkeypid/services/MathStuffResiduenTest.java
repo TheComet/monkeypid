@@ -8,7 +8,7 @@ import org.junit.Test;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
 /**
- * Test MathFunctions which are used by stepResidue()
+ * Test MathFunctions which are used by stepResidue
  */
 public class MathStuffResiduenTest {
 	double[] B = {4.0812, 1.1400};
@@ -64,7 +64,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
 	@Test
 	public void testResidueSimpleRoots() {
@@ -86,7 +86,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
 	@Test
 	public void testResidueSimpleRoots2() {
@@ -126,7 +126,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test poly()
+     * Test poly
      */
 	@Test
 	public void testResidueSimpleComplexPoly() {
@@ -166,7 +166,6 @@ public class MathStuffResiduenTest {
 		Object[] myObs = MathStuff.residueSimple(new TransferFunction(B, A));
 		Complex[] R = (Complex[]) myObs[0];
 		Complex[] P = (Complex[]) myObs[1];
-		double K = (double) myObs[2];
 
 		assertEquals(-2.3190,P[0].getReal(),delta);
 		assertEquals(-1.5915 ,P[1].getReal(),delta);
@@ -203,7 +202,6 @@ public class MathStuffResiduenTest {
 		
 		Object[] myObs = MathStuff.stepResidue(B, A, 1, 10);
 		double[] y = (double[]) myObs[0];
-		double[] t = (double[]) myObs[1];
 
 		double[] yMatlabExpected = {0.0000, 0.0342, 0.1516 ,0.3378, 0.5568, 0.7735, 0.9616, 1.1048, 1.1970, 1.2400};
 		assertArrayEquals(yMatlabExpected,y,delta);
@@ -211,7 +209,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
     @Test
     public void testResidueSimpleRoots3() {
@@ -233,7 +231,7 @@ public class MathStuffResiduenTest {
     }
 
     /**
-     * Test Roots()
+     * Test Roots
      */
     @Test
     public void testResidueSimpleRoots4() {

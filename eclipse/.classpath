@@ -8,12 +8,7 @@
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/itext-pdfa-5.5.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/itext-xtra-5.5.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/synthetica.jar"/>
-	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaAluOxide.jar"/>
-	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaBlueSteel.jar"/>
-	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaSilverMoon.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaSimple2D.jar"/>
-	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaSkyMetallic.jar"/>
-	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/libs/syntheticaWhiteVision.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/eclipse/gradle-auto-libs/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/eclipse/gradle-auto-libs/commons-math3-3.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/faggot/monkeypid/eclipse/gradle-auto-libs/jcommon-1.0.21.jar"/>

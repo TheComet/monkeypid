@@ -1,10 +1,6 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import ch.fhnw.ht.eit.pro2.team3.monkeypid.services.MathStuff;
 
 /**
  * Defines the common interface for classes implementing the Zellweger calculator. Zellweger requires some additional
@@ -129,9 +125,8 @@ public abstract class AbstractZellweger extends AbstractControllerCalculator {
 	private void updateFrequencyRange() {
 
 		// get minimum and maximum time constants
-		List timeConstantsList = Arrays.asList(ArrayUtils.toObject(plant.getTimeConstants()));
-		double tcMin = (double) Collections.min(timeConstantsList);
-		double tcMax = (double) Collections.max(timeConstantsList);
+		double tcMin = MathStuff.min(plant.getTimeConstants());
+		double tcMax = MathStuff.max(plant.getTimeConstants());
 
 		// calculate the frequency range to use in all following calculations,
 		// based on the time constants.

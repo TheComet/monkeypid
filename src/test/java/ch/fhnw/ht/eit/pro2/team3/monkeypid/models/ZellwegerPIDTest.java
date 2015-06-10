@@ -23,7 +23,7 @@ public class ZellwegerPIDTest {
 
 		assertEquals(0.1929, c.getTn(), TestGlobals.zellwegerDelta);
 		assertEquals(0.0433, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(1.7656, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(1.7702, c.getKr(), TestGlobals.zellwegerDelta);
 		assertEquals(0.0102, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
@@ -39,7 +39,7 @@ public class ZellwegerPIDTest {
 
 		assertEquals(0.1929, c.getTn(), TestGlobals.zellwegerDelta);
 		assertEquals(0.0433, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(0.5348, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(0.5363, c.getKr(), TestGlobals.zellwegerDelta);
 		assertEquals(0.0102, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
@@ -53,10 +53,10 @@ public class ZellwegerPIDTest {
 		cc.run();
 		ControllerPID c = (ControllerPID) cc.getController();
 
-		assertEquals(3.8576, c.getTn(), TestGlobals.zellwegerDelta);
-		assertEquals(0.8656, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(1.7656, c.getKr(), TestGlobals.zellwegerDelta);
-		assertEquals(0.203, c.getTp(), TestGlobals.zellwegerDelta);
+		assertEquals(3.8606, c.getTn(), TestGlobals.zellwegerDelta);
+		assertEquals(0.8677, c.getTv(), TestGlobals.zellwegerDelta);
+		assertEquals(1.7702, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(0.2000, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
@@ -69,10 +69,10 @@ public class ZellwegerPIDTest {
 		cc.run();
 		ControllerPID c = (ControllerPID) cc.getController();
 
-		assertEquals(3.8576, c.getTn(), TestGlobals.zellwegerDelta);
-		assertEquals(0.8656, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(0.5885, c.getKr(), TestGlobals.zellwegerDelta);
-		assertEquals(0.203, c.getTp(), TestGlobals.zellwegerDelta);
+		assertEquals(3.8606, c.getTn(), TestGlobals.zellwegerDelta);
+		assertEquals(0.8677, c.getTv(), TestGlobals.zellwegerDelta);
+		assertEquals(0.5900, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(0.2000, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(1.0000, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
@@ -85,10 +85,10 @@ public class ZellwegerPIDTest {
 		cc.run();
 		ControllerPID c = (ControllerPID) cc.getController();
 
-		assertEquals(4.7238, c.getTn(), TestGlobals.zellwegerDelta);
+		assertEquals(4.7224, c.getTn(), TestGlobals.zellwegerDelta);
 		assertEquals(0.9998, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(2.3891, c.getKr(), TestGlobals.zellwegerDelta);
-		assertEquals(0.1787, c.getTp(), TestGlobals.zellwegerDelta);
+		assertEquals(2.3849, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(0.1800, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(0.7572, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 
@@ -101,10 +101,10 @@ public class ZellwegerPIDTest {
 		cc.run();
 		ControllerPID c = (ControllerPID) cc.getController();
 
-		assertEquals(26.0638, c.getTn(), TestGlobals.zellwegerDelta);
-		assertEquals(0.1594, c.getTv(), TestGlobals.zellwegerDelta);
-		assertEquals(8.3468, c.getKr(), TestGlobals.zellwegerDelta);
-		assertEquals(0.0178, c.getTp(), TestGlobals.zellwegerDelta);
+		assertEquals(26.0616, c.getTn(), TestGlobals.zellwegerDelta);
+		assertEquals(0.1572, c.getTv(), TestGlobals.zellwegerDelta);
+		assertEquals(8.3207, c.getKr(), TestGlobals.zellwegerDelta);
+		assertEquals(0.0200, c.getTp(), TestGlobals.zellwegerDelta);
 		assertEquals(0.083, ((ZellwegerPID) cc).getBeta(), TestGlobals.zellwegerDelta);
 	}
 }

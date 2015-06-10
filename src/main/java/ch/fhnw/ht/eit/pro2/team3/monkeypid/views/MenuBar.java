@@ -10,17 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
-
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -302,6 +298,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			d.open();
 			PdfContentByte cb = writer.getDirectContent();
 			PdfTemplate tp = cb.createTemplate(view.getWidth(), view.getHeight());
+			@SuppressWarnings("deprecation")
 			Graphics2D g2 = tp.createGraphics(view.getWidth(), view.getHeight());
             //scale frame to A3 size
             double factorFromWidth = 1150.0/view.getWidth();
