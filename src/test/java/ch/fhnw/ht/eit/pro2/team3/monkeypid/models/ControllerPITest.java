@@ -5,9 +5,15 @@ import static org.junit.Assert.*;
 import org.apache.commons.math3.complex.Complex;
 import org.junit.Test;
 
+/**
+ * Test the ControllerPI
+ */
 public class ControllerPITest {
 	double delta = 1.5e-4;
-	
+
+    /**
+     * Test the Consturctor
+     */
 	@Test
 	public void testPIControllerConstructor()  throws Exception {
 		//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)
@@ -24,7 +30,10 @@ public class ControllerPITest {
 		assertArrayEquals(NumeratorExpected, myControllerPI.getTransferFunction().getNumeratorCoefficients(),delta);
 		assertArrayEquals(DenominatorExpected, myControllerPI.getTransferFunction().getDenominatorCoefficients(),delta);
 	}
-	
+
+    /**
+     * Test setParams
+     */
 	@Test
 	public void testPIControllerSetParameters()  throws Exception {
 		//[Tn, Kr] = p2_zellweger_pi_tu_tg(45-180,2,6,1)

@@ -60,13 +60,6 @@ public class MathStuffResiduenTest {
 		
 		double delta = 0.001;
 
-		/*
-		System.out.println("myRoots");
-		for (int i = 0; i < myRoots.length; i++) {
-			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
-		}
-		*/
-		
 		assertEquals( -2.3190, myRoots[0].getReal(), delta);
 		assertEquals(-1.5915, myRoots[1].getReal(), delta);
 		assertEquals(-0.1529, myRoots[2].getReal(), delta);
@@ -87,14 +80,7 @@ public class MathStuffResiduenTest {
 		//Matlab: roots([0.7144, 4.5537, 10.6420, 11.3823, 5.5717, 1.0000]);
 		double[] Z = { 0.7144, 4.5537, 10.6420, 11.3823, 5.5717, 1.0000};
 		Complex[] myRoots =  MathStuff.roots(Z);
-			
-		/*
-		System.out.println("myRoots");
-		for (int i = 0; i < myRoots.length; i++) {
-			System.out.println("Real: "+myRoots[i].getReal() +" Imag: " +myRoots[i].getImaginary());
-		}
-		*/
-		
+
 		double[] ZrootsMatlabExpected = {-2.5130, -1.6380, -1.0697, -0.6981, -0.4554};
 		assertEquals(ZrootsMatlabExpected[0], myRoots[0].getReal(),delta);
 		assertEquals(ZrootsMatlabExpected[1], myRoots[1].getReal(),delta);
@@ -105,14 +91,6 @@ public class MathStuffResiduenTest {
 		//Matlab: roots([1, 2, 5, 7, 8, 2, 3, 1])
 		double[] Z2 = {1, 2, 5, 7, 8, 2, 3, 1};
 		Complex[] myRoots2 =  MathStuff.roots(Z2);
-		
-		/*
-		System.out.println("myRoots2");
-		for (int i = 0; i < myRoots2.length; i++) {
-			System.out.println("Real: "+myRoots2[i].getReal() +" Imag: " +myRoots2[i].getImaginary());
-		}
-		*/
-		
 		
 		assertEquals(0.0930, myRoots2[0].getReal(),delta);
 		assertEquals(0.0930, myRoots2[1].getReal(),delta);
@@ -143,21 +121,13 @@ public class MathStuffResiduenTest {
 		p[4] = new Complex(-0.277661923535474, 0.000000000000000);
 		
 		Complex[] pa = MathStuff.poly(p);
-		
-		/*
-		System.out.println("myPolyComplex");
-		for (int i = 0; i < pa.length; i++) {
-			System.out.println("Real: "+pa[i].getReal() +" Imag: " +pa[i].getImaginary());
-		}
-		*/
-		
+
 		assertEquals( 1.0, pa[0].getReal(), delta);
 		assertEquals(4.4940, pa[1].getReal(), delta);
 		assertEquals(6.2060, pa[2].getReal(), delta);
 		assertEquals(3.1077, pa[3].getReal(), delta);
 		assertEquals(1.0228, pa[4].getReal(), delta);
 		assertEquals(0.1522, pa[5].getReal(), delta);
-		
 		
 		assertEquals(0.0, pa[0].getImaginary(), delta);
 		assertEquals(0.0, pa[1].getImaginary(), delta);
@@ -176,20 +146,7 @@ public class MathStuffResiduenTest {
 		Complex[] R = (Complex[]) myObs[0];
 		Complex[] P = (Complex[]) myObs[1];
 		double K = (double) myObs[2];
-		/*
-		System.out.println("ResidueSimple:");
-		//only value of first cell correct
-		System.out.println("R:");
-		for (int i = 0; i < R.length; i++) {
-			System.out.println("Real: "+R[i].getReal() +" Imag: " +R[i].getImaginary());
-		}
-		//only some cell values correct
-		System.out.println("P:");
-		for (int i = 0; i < P.length; i++) {
-			System.out.println("Real: "+P[i].getReal() +" Imag: " +P[i].getImaginary());
-		}
-		*/
-		
+
 		assertEquals(-2.3190,P[0].getReal(),delta);
 		assertEquals(-1.5915 ,P[1].getReal(),delta);
 		assertEquals(-0.1529,P[2].getReal(),delta);
@@ -223,14 +180,7 @@ public class MathStuffResiduenTest {
 		Object[] myObs = MathStuff.stepResidue(B, A, 1, 10);
 		double[] y = (double[]) myObs[0];
 		double[] t = (double[]) myObs[1];
-		
-		/*
-		System.out.println("stepResidue");
-		for (int i = 0; i < y.length; i++) {
-			System.out.println("y: "+y[i]);
-		}
-		*/
-		
+
 		double[] yMatlabExpected = {0.0000, 0.0342, 0.1516 ,0.3378, 0.5568, 0.7735, 0.9616, 1.1048, 1.1970, 1.2400};
 		assertArrayEquals(yMatlabExpected,y,delta);
 		
@@ -273,23 +223,4 @@ public class MathStuffResiduenTest {
         assertEquals(-1.4142135623730951,r[1].getImaginary(),delta);
         assertEquals(1.4142135623730951,r[0].getImaginary(),delta);
     }
-
-    @Test
-    public void testResidueSimpleRoots5() {
-        double delta = 0.001;
-
-        double test[] = {
-                0.3061908663200513,
-                3.9928723301913873,
-                17.57156304448614,
-                35.284158168954505,
-                34.90906343891816,
-                17.853741376040745,
-                4.860327898597027,
-                0.6661220343723565
-        };
-
-        //Complex[] res = MathStuff.roots(test);
-    }
-	
 }

@@ -7,9 +7,15 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test the calculation of the StepResponse with the Closed-Loop
+ */
 public class ClosedLoopTest {
 	private SaniCurves sani = new SaniCurves();
 
+    /**
+     * Test the Constructor
+     */
 	@Test
 	public void testCalculateTransferFunctionWithConstructor() {
 		Plant plant = new Plant(2, 6, 1, sani);
@@ -29,6 +35,9 @@ public class ClosedLoopTest {
 		assertArrayEquals(loop.getTransferFunction().getDenominatorCoefficients(), expectedDenominator, TestGlobals.floatDelta);
 	}
 
+    /**
+     * Test the Plant and the Controller
+     */
 	@Test
 	public void testSetPlantAndController() {
 
@@ -50,6 +59,11 @@ public class ClosedLoopTest {
 		assertArrayEquals(loop.getTransferFunction().getDenominatorCoefficients(), expectedDenominator, delta);
 	}
 
+    /**
+     * Test the StepResponse
+     * Time start- and end-value have to match
+     * All y-values have to match
+     */
 	@Test
 	public void testStepResponse() {
 		Plant plant = new Plant(1.71, 7.6, 1, sani);

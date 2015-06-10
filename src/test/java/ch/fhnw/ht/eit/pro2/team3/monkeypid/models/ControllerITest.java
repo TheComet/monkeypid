@@ -4,9 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Test the ControllerI
+ */
 public class ControllerITest {
 	double delta = 1.5e-4;
-	
+
+    /**
+     * Test the Consturctor
+     */
 	@Test
 	public void testPIControllerConstructor()  throws Exception {
 		//[Ti] = p2_zellweger_i_tu_tg(2,6,1)
@@ -23,6 +29,9 @@ public class ControllerITest {
 		assertArrayEquals(DenominatorExpected, myControllerI.getTransferFunction().getDenominatorCoefficients(),delta);
 	}
 
+    /**
+     * Test setParams
+     */
 	@Test
 	public void testPIControllerConstructorSetParams()  throws Exception {
 		//[Ti] = p2_zellweger_i_tu_tg(2,6,1)

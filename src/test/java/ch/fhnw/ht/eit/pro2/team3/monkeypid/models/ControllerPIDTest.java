@@ -4,9 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Test the ControllerPID
+ */
 public class ControllerPIDTest {
 	double delta = 1e-3;
 
+    /**
+     * Test the Constructor
+     */
 	@Test
 	public void testPIDControllerConstructor(){
 		// [Tnk,Tvk,Tp,Krk,   Tn,Tv,Kr] = p2_zellweger_pid_tu_tg(45-180,2,6,1)
@@ -28,6 +34,9 @@ public class ControllerPIDTest {
 		assertArrayEquals(DenominatorExpected, myControllerPID.getTransferFunction().getDenominatorCoefficients(), delta);
 	}
 
+    /**
+     * Test setParams
+     */
 	@Test
 	public void testPIDControllerSetParameters(){
 		// [Tnk,Tvk,Tp,Krk,   Tn,Tv,Kr] = p2_zellweger_pid_tu_tg(45-180,2,6,1)
