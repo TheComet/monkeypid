@@ -338,6 +338,8 @@ public class Model implements ICalculationCycleListener {
 		notifySimulationBegin(calculationCycles.size());
 
 		// dispatch all calculators
+		calculationCycles.forEach(CalculationCycle::run);
+		/*
 		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 		calculationCycles.forEach(threadPool::submit);
 		threadPool.shutdown();
@@ -348,7 +350,7 @@ public class Model implements ICalculationCycleListener {
 			e.printStackTrace();
 		} finally {
 			notifySimulationComplete();
-		}
+		}*/
 	}
 
 	/**
