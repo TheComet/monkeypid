@@ -264,10 +264,22 @@ public class InputPanel extends JPanel implements ActionListener,
 				// error message if value is zero
 				lbValueErrorInfo.setText("Wert von Tg muss grösser 0 sein");
 			} else if (tfKsValue <= 0) {
-				// error message if value is zero
-				lbValueErrorInfo.setText("Wert von Ks muss grösser 0 sein");
+                // error message if value is zero
+                lbValueErrorInfo.setText("Wert von Ks muss grösser 0 sein");
+            } else if(tfTuValue  <= 1e-10){
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Tu muss grösser als 1e-10 sein");
+            } else if(tfTgValue  <= 1e-10){
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Tg muss grösser als 1e-10 sein");
+            } else if(tfTuValue  >= 1e10){
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Tu muss kleiner als 1e10 sein");
+            } else if(tfTgValue  >= 1e10){
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Tg muss kleiner als 1e10 sein");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
-				// error message if tu/tg is smaller than 0.001 (value from
+                // error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
 				lbValueErrorInfo
 						.setText("Tu/Tg zu klein N = 1  => Verhältnis grösser wählen");
@@ -275,7 +287,7 @@ public class InputPanel extends JPanel implements ActionListener,
 				// error message if value of ovsershoot is smaller than 0
 				lbValueErrorInfo
 						.setText("Wert des Überschwingens muss grösser gleich 0% sein");
-			} else if (valueOfOvershoot > 45) {
+            } else if (valueOfOvershoot > 45) {
 				// error message if value of overshoot is greater or equal 45%
 				lbValueErrorInfo
 						.setText("Wert des Überschwingens muss kleiner gleich 45% sein");

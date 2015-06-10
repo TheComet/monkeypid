@@ -504,7 +504,7 @@ public class MathStuff {
 	 * @return Roots Attention the Roots have sometimes not the same order as in Matlab
 	 */
 	public static Complex[] roots(double[] pOriginal) {
-        boolean d = true; //debug on/off
+        boolean d = false; //debug on/off
 
         //make a copy of the original polynomial values -> original polynomial won't be touched
 		double[] p = new double[pOriginal.length];
