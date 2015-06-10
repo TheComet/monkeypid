@@ -74,18 +74,13 @@ public class InputPanel extends JPanel implements ActionListener,
 	 * the components to the panel. Furthermore it creates the table for the
 	 * results and the buttons listen to the ActionListener
 	 * 
-	 * @param controller // TODO Stierli
-	 * @param view // TODO Stierli
+	 * @param controller
+	 * @param view
 	 */
 	public InputPanel(Controller controller, View view) {
 		super(new GridBagLayout());
 		this.controller = controller;
 		this.view = view;
-
-		// TODO remove
-		tfTu.setText("2");
-		tfTg.setText("6");
-		tfKs.setText("1");
 
 		// add items for input fields to GridBagLayout
 		add(lbEnterKsTuTgTitle, new GridBagConstraints(0, 0, 6, 1, 0.0, 0.0,
@@ -193,25 +188,17 @@ public class InputPanel extends JPanel implements ActionListener,
 	 * Sets the elements to visible or invisible. It depends on which version
 	 * (mini or normal) is selected in the menu.
 	 * 
-	 * @param miniVersionSelected // TODO Stierli
+	 * @param miniVersionSelected
 	 */
 	public void setMiniVersion(boolean miniVersionSelected) {
 		// set all changing components to in- or visible
 	}
 
 	/**
-<<<<<<< HEAD
-	 * If button simulate is pressed the fields will be checked and if
-	 * everything is correct the values will comitted to the controller.
-	 * Furthermore fields will be greyed out depending on the regulator which is
-	 * selected.
-	 * // TODO Stierli
-=======
-	 * <<<<<<< HEAD If button simulate is pressed the fields will be checked and
+     *If button simulate is pressed the fields will be checked and
 	 * if everything is correct the values will comitted to the controller.
 	 * Furthermore fields will be greyed out depending on the regulator which is
-	 * selected. ======= // TODO Stierli >>>>>>> cleanup
->>>>>>> ac517e00ec63e817a74c4f3a839ccb4bc980285c
+	 * selected.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -273,11 +260,17 @@ public class InputPanel extends JPanel implements ActionListener,
                 // error message if value is too small
                 lbValueErrorInfo.setText("Wert von Tg muss grösser als 1e-10 sein");
             } else if(tfTuValue  >= 1e10){
-                // error message if value is too small
+                // error message if value is too big
                 lbValueErrorInfo.setText("Wert von Tu muss kleiner als 1e10 sein");
             } else if(tfTgValue  >= 1e10){
-                // error message if value is too small
+                // error message if value is too big
                 lbValueErrorInfo.setText("Wert von Tg muss kleiner als 1e10 sein");
+            } else if(tfKsValue  <= 1e-10){
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Ks muss grösser als 1e-10 sein");
+            } else if(tfKsValue  >= 1e10){
+                // error message if value is too big
+                lbValueErrorInfo.setText("Wert von Ks muss kleiner als 1e10 sein");
 			} else if ((tfTuValue / tfTgValue) < 0.001) {
                 // error message if tu/tg is smaller than 0.001 (value from
 				// matlab sani example)
@@ -298,7 +291,16 @@ public class InputPanel extends JPanel implements ActionListener,
 				// error message if value of tp is greater than 10
 				lbValueErrorInfo.setText("Wert von TP ist grösser als 10");
 			} else if (tfOvershoot.getText().equals("")) {
-				lbValueErrorInfo.setText("error");
+                lbValueErrorInfo.setText("error");
+            } else if(selectedRegulatorName.equals("I") && (tfKsValue  <= 0.09)) {
+                //if I-Controller selected -> limit Ks to lower values
+                // error message if value is too small
+                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler grösser als 0.09 sein");
+            }
+            else if(selectedRegulatorName.equals("I") && (tfKsValue  >= 2.6)) {
+                //if I-Controller selected -> limit Ks to lower values
+                // error message if value is too big
+                lbValueErrorInfo.setText("Wert von Ks muss für I-Regler kleiner als 2.6 sein");
 			} else {
 				// set dummy value in textfield
 				lbValueErrorInfo.setText(" ");
