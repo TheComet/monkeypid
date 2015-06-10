@@ -18,17 +18,17 @@
 		<link>
 			<name>resources</name>
 			<type>2</type>
-			<location>C:/Users/faggot/monkeypid/src/main/resources</location>
+			<location>../src/main/resources</location>
 		</link>
 		<link>
 			<name>src</name>
 			<type>2</type>
-			<location>C:/Users/faggot/monkeypid/src/main/java</location>
+			<location>../src/main/java</location>
 		</link>
 		<link>
 			<name>test</name>
 			<type>2</type>
-			<location>C:/Users/faggot/monkeypid/src/test/java</location>
+			<location>../src/test/java</location>
 		</link>
 	</linkedResources>
 </projectDescription>
