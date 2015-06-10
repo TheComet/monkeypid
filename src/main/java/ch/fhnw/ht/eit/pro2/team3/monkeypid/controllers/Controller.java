@@ -54,7 +54,8 @@ public class Controller {
 	 * @param angleOfInflectionOffset The actual value of the slider (the offset of the phaseInflection).
 	 */
 	public void angleOfInflectionOffsetChanged(int angleOfInflectionOffset){
-		model.updateZellweger(angleOfInflectionOffset);
+		//swap slider direction by multiplying with (-1)
+        model.updateZellweger((-1)*angleOfInflectionOffset);
 	}
 
 	/**

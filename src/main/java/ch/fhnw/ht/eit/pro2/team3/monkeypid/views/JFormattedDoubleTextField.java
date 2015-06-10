@@ -15,7 +15,6 @@ import javax.swing.JTextField;
  * 
  */
 
-//TODO kommentieren
 public class JFormattedDoubleTextField extends JTextField implements
 		FocusListener {
 	private static final long serialVersionUID = 1L;
@@ -167,7 +166,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 		return String.format(stFormatter, engVal, engExp);
 	}
 
-	//TODO auskommentiert weil wir keine Errormeldungen möchten
+	//auskommentiert weil wir keine Errormeldungen möchten
 	/*private void errorMsg() {
 		if (errorDisplayed)
 			return;
