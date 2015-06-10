@@ -1,6 +1,7 @@
 package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.TestGlobals;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -53,6 +54,7 @@ public class SaniCurvesTest {
     /**
      * Test the TimeConstants calculation
      */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testcalculateTimeConstantsLinear() throws Exception {
 		SaniCurves c = new SaniCurves();
@@ -111,6 +113,7 @@ public class SaniCurvesTest {
     /**
      * Test the TimeConstants calculation
      */
+	@SuppressWarnings("deprecation")
 	@Test(expected=RuntimeException.class)
 	public void testcalculateTimeConstantsLinearWithInvalidRatio() {
 		SaniCurves c = new SaniCurves();
@@ -120,6 +123,7 @@ public class SaniCurvesTest {
     /**
      * Test the TimeConstants calculation with new spline function
      */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testcalculateTimeConstantsSpline() throws Exception {
 		SaniCurves c = new SaniCurves();

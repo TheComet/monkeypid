@@ -42,6 +42,7 @@ public class Model implements ICalculationCycleListener {
 	 * setRegulatorType().
 	 */
 	public class UnknownRegulatorTypeException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
 		UnknownRegulatorTypeException(String message) {
 			super(message);
 		}
@@ -52,6 +53,7 @@ public class Model implements ICalculationCycleListener {
 	 * of n=2. See issue #31.
 	 */
 	public class InvalidPlantForPIDSimulationException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
 		InvalidPlantForPIDSimulationException(String message) {
 			super(message);
 		}
@@ -151,6 +153,7 @@ public class Model implements ICalculationCycleListener {
 		 * Unregister as a listener from this class.
 		 * @param listener The object to unregister.
 		 */
+		@SuppressWarnings("unused")
 		public final void unregisterListener(ICalculationCycleListener listener) {
 			listeners.remove(listener);
 		}

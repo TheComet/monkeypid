@@ -166,7 +166,6 @@ public class MathStuffResiduenTest {
 		Object[] myObs = MathStuff.residueSimple(new TransferFunction(B, A));
 		Complex[] R = (Complex[]) myObs[0];
 		Complex[] P = (Complex[]) myObs[1];
-		double K = (double) myObs[2];
 
 		assertEquals(-2.3190,P[0].getReal(),delta);
 		assertEquals(-1.5915 ,P[1].getReal(),delta);
@@ -203,7 +202,6 @@ public class MathStuffResiduenTest {
 		
 		Object[] myObs = MathStuff.stepResidue(B, A, 1, 10);
 		double[] y = (double[]) myObs[0];
-		double[] t = (double[]) myObs[1];
 
 		double[] yMatlabExpected = {0.0000, 0.0342, 0.1516 ,0.3378, 0.5568, 0.7735, 0.9616, 1.1048, 1.1970, 1.2400};
 		assertArrayEquals(yMatlabExpected,y,delta);

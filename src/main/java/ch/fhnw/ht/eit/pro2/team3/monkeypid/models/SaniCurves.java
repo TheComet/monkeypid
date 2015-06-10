@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class SaniCurves {
 
 	public class TuTgRatioTooLargeException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
 		public TuTgRatioTooLargeException(String message) {
 			super(message);
 		}

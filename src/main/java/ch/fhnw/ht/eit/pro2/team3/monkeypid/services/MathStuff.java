@@ -2,15 +2,12 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.services;
 
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
-import com.itextpdf.text.log.SysoCounter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
-
-import java.text.DecimalFormat;
 
 /**
  * Contains various common math functions we need.
@@ -32,27 +29,12 @@ public class MathStuff {
 		return ret;
 	}
 
-	/**
-	 * Returns the largest (bigger than 0.0) value in an array of doubles
-	 * @param arr The array to find the largest value of.
-	 * @return The largest value.
-	 */
-	public static double max(double[] arr) {
-		double largest = Double.MIN_VALUE;
-		for(double value : arr) {
-			if(value > largest) {
-				largest = value;
-			}
-		}
-		return largest;
-	}
-
     /**
      * Returns the largest (bigger than -infinity) value in an array of doubles
      * @param arr The array to find the largest value of.
      * @return The largest value.
      */
-	public static double maxFromNegativeInfinity(double[] arr) {
+	public static double max(double[] arr) {
 		double largest = Double.NEGATIVE_INFINITY;
 		for(double value : arr) {
 			if(value != 0.0  && value > largest) {
@@ -67,7 +49,7 @@ public class MathStuff {
      * @param arr The array to find the largest value of.
      * @return The largest value.
      */
-    public static double minFromPositivInfinity(double[] arr) {
+    public static double min(double[] arr) {
         double smallest = Double.POSITIVE_INFINITY;
         for(double value : arr) {
             if(value < smallest) {

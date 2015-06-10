@@ -2,7 +2,6 @@ package ch.fhnw.ht.eit.pro2.team3.monkeypid.models;
 
 import static org.junit.Assert.*;
 
-import org.apache.commons.math3.complex.Complex;
 import org.junit.Test;
 
 /**

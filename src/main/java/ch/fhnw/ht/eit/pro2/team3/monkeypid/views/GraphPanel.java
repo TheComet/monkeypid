@@ -126,7 +126,6 @@ public class GraphPanel extends JPanel implements IModelListener,
 			// 0.0f));
 			getDatasetRenderer().setSeriesToolTipGenerator(
 					getSeriesIndex(closedLoop), new XYToolTipGenerator() {
-						private static final long serialVersionUID = 1L;
 
 						@Override
 						public String generateToolTip(XYDataset dataset,

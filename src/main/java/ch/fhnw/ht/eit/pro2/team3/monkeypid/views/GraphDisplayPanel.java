@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Josua Stierli
  */
 public class GraphDisplayPanel extends JPanel implements ActionListener, IModelListener {
-
+	private static final long serialVersionUID = 1L;
 	private Controller controller;
 	private HashMap<String, JCheckBox> checkBoxes = new HashMap<>();
 	private View view;

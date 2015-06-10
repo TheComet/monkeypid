@@ -22,8 +22,6 @@ public class View extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Controller controller;
-
 	// the panels
 	public InputPanel inputPanel;
 	public OutputPanel outputPanel;
@@ -47,8 +45,6 @@ public class View extends JPanel implements ActionListener {
 	 */
 	public View(Controller controller) {
 		super(new GridBagLayout());
-
-		this.controller = controller;
 
 		// create the panels
 		inputPanel = new InputPanel(controller, this);
