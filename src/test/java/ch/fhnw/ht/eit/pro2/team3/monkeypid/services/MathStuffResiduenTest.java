@@ -8,7 +8,7 @@ import org.junit.Test;
 import ch.fhnw.ht.eit.pro2.team3.monkeypid.models.TransferFunction;
 
 /**
- * Test MathFunctions which are used by stepResidue()
+ * Test MathFunctions which are used by stepResidue
  */
 public class MathStuffResiduenTest {
 	double[] B = {4.0812, 1.1400};
@@ -64,7 +64,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
 	@Test
 	public void testResidueSimpleRoots() {
@@ -86,7 +86,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
 	@Test
 	public void testResidueSimpleRoots2() {
@@ -126,7 +126,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test poly()
+     * Test poly
      */
 	@Test
 	public void testResidueSimpleComplexPoly() {
@@ -209,7 +209,7 @@ public class MathStuffResiduenTest {
 	}
 
     /**
-     * Test Roots()
+     * Test Roots
      */
     @Test
     public void testResidueSimpleRoots3() {
@@ -231,7 +231,7 @@ public class MathStuffResiduenTest {
     }
 
     /**
-     * Test Roots()
+     * Test Roots
      */
     @Test
     public void testResidueSimpleRoots4() {

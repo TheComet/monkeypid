@@ -6,10 +6,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test the Math Functions
+ */
 public class MathStuffTest {
 
 	private double delta = 1e-8; // default floating point deviation
 
+    /**
+     * Test linspace
+     */
 	@Test
 	public void testLinspace0to10() throws Exception {
 		double[] l = MathStuff.linspace(0, 10, 11);
@@ -18,6 +24,9 @@ public class MathStuffTest {
 		}
 	}
 
+    /**
+     * Test linspace
+     */
 	@Test
 	public void testLinspace10to15() throws Exception {
 		double[] l = MathStuff.linspace(10, 15, 30);
@@ -28,6 +37,9 @@ public class MathStuffTest {
 		}
 	}
 
+    /**
+     * Test omegaToS
+     */
 	@Test
 	public void testOmegaToS() throws Exception {
 		double omega = 10;
@@ -36,6 +48,9 @@ public class MathStuffTest {
 		assertEquals(omega, actual.getImaginary(), delta);
 	}
 
+    /**
+     * Test Freqs
+     */
 	@Test
 	public void testFreqs() throws Exception {
 		TransferFunction g = new TransferFunction(
@@ -69,6 +84,9 @@ public class MathStuffTest {
 		assertEquals(-0.0192093117614242,results[10].getImaginary(), delta);
 	}
 
+    /**
+     * Test polyval
+     */
 	@Test
 	public void testPolyValNonZeroOmega() throws Exception {
 		double[] poly = new double[] {1.0, 2.0, 3.0};
@@ -79,6 +97,9 @@ public class MathStuffTest {
 		assertEquals(10.0, result.getImaginary(), delta);
 	}
 
+    /**
+     * Test polyval
+     */
 	@Test
 	public void testPolyValZeroOmega() throws Exception {
 		double[] poly = new double[] {1.0, 2.0, 3.0};
@@ -89,7 +110,9 @@ public class MathStuffTest {
 		assertEquals(0.0, result.getImaginary(), delta);
 	}
 
-
+    /**
+     * Test ones
+     */
 	@Test
 	public void testOnes() throws Exception {
 		double[] result = MathStuff.ones(10);
@@ -99,6 +122,9 @@ public class MathStuffTest {
 		}
 	}
 
+    /**
+     * Test real
+     */
 	@Test
 	public void testReal() throws Exception {
 		Complex[] cs = new Complex[5];
@@ -112,6 +138,9 @@ public class MathStuffTest {
 		}
 	}
 
+    /**
+     * Test imag
+     */
 	@Test
 	public void testImag() throws Exception {
 		Complex[] cs = new Complex[5];
@@ -125,6 +154,9 @@ public class MathStuffTest {
 		}
 	}
 
+    /**
+     * Test SymmetricMirrorConjugate
+     */
 	@Test
 	public void testSymmetricMirrorConjugate() throws Exception {
 		Complex[] values = new Complex[4];
@@ -155,6 +187,9 @@ public class MathStuffTest {
 		assertEquals(-2, result[7].getImaginary(), delta);
 	}
 
+    /**
+     * Test poly
+     */
 	@Test
 	public void testPoly() throws Exception {
 		double[] res = MathStuff.poly(new double[]{1, 2, 4});
@@ -164,6 +199,9 @@ public class MathStuffTest {
 		assertEquals(-8.0, res[3], delta);
 	}
 
+    /**
+     * Test ifft
+     */
 	@Test
 	public void testIfft() throws Exception {
 		Complex[] values = new Complex[4];
